@@ -28,7 +28,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
             if (borderRadius?.Value > 0.0)
                 graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(control.ClientRectangle, (int)borderRadius.Value));
-            
+
             PaintItems(graphics, control);
 
         }
@@ -78,7 +78,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
             }
 
-            return new Node("ListBoxItem", states);
+            return new Node("ListBoxItem", states: states);
 
         }
 

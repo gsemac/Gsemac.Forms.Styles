@@ -7,8 +7,7 @@ using System.Text;
 namespace Gsemac.Forms.Styles.StyleSheets {
 
     public class StyleSheetLexer :
-        IStyleSheetLexer,
-        IDisposable {
+        IStyleSheetLexer {
 
         // Public members
 

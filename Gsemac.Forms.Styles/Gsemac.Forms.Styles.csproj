@@ -44,6 +44,10 @@
   <ItemGroup>
     <Compile Include="Applicators\IStyleApplicator.cs" />
     <Compile Include="Controls\ListBoxControlRenderer.cs" />
+    <Compile Include="Extensions\SelectorLexerTokenExtensions.cs" />
+    <Compile Include="StyleSheets\ISelectorLexer.cs" />
+    <Compile Include="StyleSheets\ISelectorLexerToken.cs" />
+    <Compile Include="StyleSheets\LexerBase.cs" />
     <Compile Include="StyleSheets\Node.cs" />
     <Compile Include="StyleSheets\NodeBase.cs" />
     <Compile Include="Applicators\PropertyStyleApplicator.cs" />
@@ -72,6 +76,8 @@
     <Compile Include="StyleSheets\PropertyBase.cs" />
     <Compile Include="StyleSheets\Ruleset.cs" />
     <Compile Include="StyleSheets\Selector.cs" />
+    <Compile Include="StyleSheets\SelectorLexer.cs" />
+    <Compile Include="StyleSheets\SelectorLexerToken.cs" />
     <Compile Include="StyleSheets\StyleSheet.cs" />
     <Compile Include="StyleSheets\StyleSheetLexer.cs" />
     <Compile Include="StyleSheets\StyleSheetLexerToken.cs" />

@@ -12,11 +12,13 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public override string Id => string.Empty;
         public override NodeStates States { get; }
+        public override INode Parent { get; }
 
-        public Node(string className, NodeStates states = NodeStates.None) {
+        public Node(string className, INode Parent = null, NodeStates states = NodeStates.None) {
 
             classes = new[] { className };
             States = states;
+            this.Parent = Parent;
 
         }
 

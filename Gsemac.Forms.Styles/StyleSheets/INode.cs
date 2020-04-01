@@ -19,6 +19,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         string Id { get; }
         NodeStates States { get; }
 
+        INode Parent { get; }
+
     }
 
 }

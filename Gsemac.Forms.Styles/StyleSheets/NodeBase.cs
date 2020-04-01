@@ -11,6 +11,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public IEnumerable<string> Classes => GetClasses().Concat(GetPseudoClasses());
         public abstract string Id { get; }
         public abstract NodeStates States { get; }
+        public abstract INode Parent { get; }
 
         // Protected members
 

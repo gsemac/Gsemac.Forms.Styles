@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.Extensions;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -32,47 +35,74 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         // Private members
 
         private readonly string selector;
-        private readonly List<IEnumerable<string>> selectors = new List<IEnumerable<string>>();
+        private readonly List<List<ISelectorLexerToken>> selectors = new List<List<ISelectorLexerToken>>();
 
         private void ParseSelector(string selector) {
 
-            // Split the selector into its comma-delimited parts.
+            selectors.Clear();
 
-            IEnumerable<string> commaDelimitedParts = selector.Split(',')
-                    .Select(part => part.Trim())
-                    .Where(part => !string.IsNullOrWhiteSpace(part))
-                    .Distinct();
+            selectors.Add(new List<ISelectorLexerToken>());
 
-            // Split each part into its separate components.
-            // e.g. "#class1.class2" -> { "#class1", "class2" }
+            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(selector)))
+            using (SelectorLexer lexer = new SelectorLexer(stream)) {
 
-            foreach (string part in commaDelimitedParts)
-                selectors.Add(part.Split('.').Where(p => !string.IsNullOrWhiteSpace(p)));
+                foreach (ISelectorLexerToken token in lexer) {
+
+                    switch (token.Type) {
+
+                        case SelectorLexerTokenType.Comma:
+
+                            selectors.Add(new List<ISelectorLexerToken>());
+                            break;
+
+                        default:
+
+                            selectors.Last().Add(token);
+                            break;
+
+                    }
+
+                }
+
+            }
 
         }
-        private bool IsMatch(INode node, IEnumerable<string> selector) {
+        private bool IsMatch(INode node, IEnumerable<ISelectorLexerToken> selector) {
 
-            // Wildcards match anything.
+            // We'll handle the selector in reverse, since we're starting with a child node rather than a parent node.
 
-            if (selector.Any(part => part.Equals("*")))
-                return true;
+            bool isMatch = true;
 
-            // For any IDs in the selector, make sure that they match the node's ID.
+            foreach (ISelectorLexerToken token in selector.Reverse()) {
+                Console.WriteLine(token.Value);
+                switch (token.Type) {
 
-            IEnumerable<string> ids = selector.Where(part => part.StartsWith("#"))
-                .Select(part => part.TrimStart('#'));
+                    case SelectorLexerTokenType.Class:
 
-            if (!ids.All(id => id.Equals(node.Id, StringComparison.OrdinalIgnoreCase)))
-                return false;
+                        // Check if the node has at least one matching class.
 
-            // For any classes in the selector, make sure that the node has at least one match.
+                        if (!node.Classes.Any(c => c.Equals(token.GetName(), StringComparison.OrdinalIgnoreCase)) && !token.Value.Equals("*"))
+                            isMatch = false;
 
-            IEnumerable<string> classes = selector.Where(part => !part.StartsWith("#"));
+                        break;
 
-            if (!classes.All(@class => node.Classes.Any(nodeClass => nodeClass.Equals(@class, StringComparison.OrdinalIgnoreCase))))
-                return false;
+                    case SelectorLexerTokenType.Id:
 
-            return true;
+                        // Check if the node's ID matches.
+
+                        if (!node.Id.Equals(token.GetName(), StringComparison.OrdinalIgnoreCase))
+                            isMatch = false;
+
+                        break;
+
+                }
+
+                if (!isMatch)
+                    break;
+
+            }
+
+            return isMatch;
 
         }
 

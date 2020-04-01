@@ -57,8 +57,8 @@ namespace Gsemac.Forms.Styles.Controls {
                 IRuleset baseRules = GetRuleset(control);
 
                 IRuleset tabRules = GetRuleset(baseRules, new Node("Tab"));
-                IRuleset tabCheckedRules = GetRuleset(baseRules, new Node("Tab", NodeStates.Checked));
-                IRuleset tabHoverRules = GetRuleset(baseRules, new Node("Tab", NodeStates.Hover));
+                IRuleset tabCheckedRules = GetRuleset(baseRules, new Node("Tab", states: NodeStates.Checked));
+                IRuleset tabHoverRules = GetRuleset(baseRules, new Node("Tab", states: NodeStates.Hover));
 
                 ColorProperty tabBackgroundColor = tabRules.GetProperty(PropertyType.BackgroundColor) as ColorProperty;
                 ColorProperty tabColor = tabRules.GetProperty(PropertyType.Color) as ColorProperty;

@@ -12,6 +12,10 @@
     color: #8b9294;
 }
 
+.TabControl > .Panel {
+    border-radius: 0px;
+}
+
 .Tab:hover {
     background-color: #34373c;
     color: #dcddde;
