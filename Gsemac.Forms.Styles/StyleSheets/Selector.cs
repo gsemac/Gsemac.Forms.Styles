@@ -69,36 +69,56 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         }
         private bool IsMatch(INode node, IEnumerable<ISelectorLexerToken> selector) {
 
-            // We'll handle the selector in reverse, since we're starting with a child node rather than a parent node.
+            bool isMatch = node != null;
 
-            bool isMatch = true;
+            if (node != null) {
 
-            foreach (ISelectorLexerToken token in selector.Reverse()) {
-                Console.WriteLine(token.Value);
-                switch (token.Type) {
+                // We'll handle the selector in reverse, since we're starting with a child node rather than a parent node.
 
-                    case SelectorLexerTokenType.Class:
+                int tokenIndex = 0;
+                bool exitLoop = false;
 
-                        // Check if the node has at least one matching class.
+                foreach (ISelectorLexerToken token in selector.Reverse()) {
 
-                        if (!node.Classes.Any(c => c.Equals(token.GetName(), StringComparison.OrdinalIgnoreCase)) && !token.Value.Equals("*"))
-                            isMatch = false;
+                    ++tokenIndex;
 
-                        break;
+                    switch (token.Type) {
 
-                    case SelectorLexerTokenType.Id:
+                        case SelectorLexerTokenType.Class:
 
-                        // Check if the node's ID matches.
+                            // Check if the node has at least one matching class.
 
-                        if (!node.Id.Equals(token.GetName(), StringComparison.OrdinalIgnoreCase))
-                            isMatch = false;
+                            if (!node.Classes.Any(c => c.Equals(token.GetName(), StringComparison.OrdinalIgnoreCase)) && !token.Value.Equals("*"))
+                                isMatch = false;
 
+                            break;
+
+                        case SelectorLexerTokenType.Id:
+
+                            // Check if the node's ID matches.
+
+                            if (!node.Id.Equals(token.GetName(), StringComparison.OrdinalIgnoreCase))
+                                isMatch = false;
+
+                            break;
+
+                        case SelectorLexerTokenType.ChildCombinator:
+
+                            // Check the rest of the selector against the node's parent.
+
+                            if (!IsMatch(node.Parent, selector.Reverse().Skip(tokenIndex).Reverse()))
+                                isMatch = false;
+
+                            exitLoop = true;
+
+                            break;
+
+                    }
+
+                    if (!isMatch || exitLoop)
                         break;
 
                 }
-
-                if (!isMatch)
-                    break;
 
             }
 
