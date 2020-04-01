@@ -18,6 +18,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         string Name { get; }
         PropertyType Type { get; }
         object Value { get; }
+        bool Inheritable { get; }
 
     }
 

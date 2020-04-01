@@ -13,6 +13,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public T Value { get; }
         public string Name => Property.GetName(Type);
         public PropertyType Type { get; }
+        public bool Inheritable { get; }
 
         object IProperty.Value => Value;
 
@@ -24,10 +25,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Protected members
 
-        protected PropertyBase(PropertyType propertyType, T propertyValue) {
+        protected PropertyBase(PropertyType propertyType, T propertyValue, bool inheritable = true) {
 
             this.Type = propertyType;
             this.Value = propertyValue;
+            this.Inheritable = inheritable;
 
         }
 

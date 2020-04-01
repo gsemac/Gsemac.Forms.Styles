@@ -52,6 +52,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         }
         private bool IsMatch(INode node, IEnumerable<string> selector) {
 
+            // Wildcards match anything.
+
+            if (selector.Any(part => part.Equals("*")))
+                return true;
+
             // For any IDs in the selector, make sure that they match the node's ID.
 
             IEnumerable<string> ids = selector.Where(part => part.StartsWith("#"))

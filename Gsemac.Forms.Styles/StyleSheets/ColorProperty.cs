@@ -10,8 +10,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
     public class ColorProperty :
         PropertyBase<Color> {
 
-        public ColorProperty(PropertyType propertyType, Color propertyValue) :
-            base(propertyType, propertyValue) {
+        public ColorProperty(PropertyType propertyType, Color propertyValue, bool inheritable = true) :
+            base(propertyType, propertyValue, inheritable) {
         }
 
         public override string ToString() {

@@ -10,8 +10,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
-        public NumericProperty(PropertyType propertyType, double propertyValue) :
-            base(propertyType, propertyValue) {
+        public NumericProperty(PropertyType propertyType, double propertyValue, bool inheritable = true) :
+            base(propertyType, propertyValue, inheritable) {
         }
 
     }

@@ -29,6 +29,23 @@ namespace Gsemac.Forms.Styles.Controls {
             return styleSheet.GetRuleset(node);
 
         }
+        protected IRuleset GetRuleset(Control parent, INode node) {
+
+            IRuleset ruleset = GetRuleset(parent);
+
+            return GetRuleset(ruleset, node);
+
+        }
+        protected IRuleset GetRuleset(IRuleset parentRuleset, INode node) {
+
+            IRuleset ruleset = new Ruleset();
+
+            ruleset.InheritProperties(parentRuleset);
+            ruleset.AddProperties(GetRuleset(node));
+
+            return ruleset;
+
+        }
 
         protected bool MouseIntersectsWith(Control control) {
 
@@ -68,9 +85,9 @@ namespace Gsemac.Forms.Styles.Controls {
             NumericProperty borderRadius = rules.GetProperty(PropertyType.BorderRadius) as NumericProperty;
             NumericProperty borderWidth = rules.GetProperty(PropertyType.BorderWidth) as NumericProperty;
 
-            if (borderRadius != null && borderRadius.Value > 0)
+            if (borderRadius != null && borderRadius.Value > 0) 
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
+                           
             // Paint the background color.
 
             using (Brush brush = new SolidBrush(backgroundColor?.Value ?? SystemColors.Control)) {
@@ -92,7 +109,7 @@ namespace Gsemac.Forms.Styles.Controls {
                     pen.Alignment = PenAlignment.Center;
 
                     if (borderRadius is null || borderRadius.Value <= 0)
-                        graphics.DrawRectangle(pen, rectangle);
+                        graphics.DrawRectangle(pen, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1));
                     else
                         graphics.DrawRoundedRectangle(pen, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1), (int)borderRadius.Value);
 

@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Extensions;
+using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -19,8 +20,15 @@ namespace Gsemac.Forms.Styles.Controls {
 
         public void RenderControl(Graphics graphics, ListBox control) {
 
+            IRuleset ruleset = GetRuleset(control);
+
+            NumericProperty borderRadius = ruleset.GetProperty(PropertyType.BorderRadius) as NumericProperty;
+
             PaintBackground(graphics, control);
 
+            if (borderRadius?.Value > 0.0)
+                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(control.ClientRectangle, (int)borderRadius.Value));
+            
             PaintItems(graphics, control);
 
         }
@@ -42,14 +50,11 @@ namespace Gsemac.Forms.Styles.Controls {
 
             if (itemRect.IntersectsWith(clientRect)) {
 
-                IRuleset baseRuleset = GetRuleset(control);
-                IRuleset itemRuleset = GetRuleset(GetItemNode(control, itemindex));
+                IRuleset itemRuleset = GetRuleset(control, GetItemNode(control, itemindex));
 
-                baseRuleset.AddProperties(itemRuleset);
+                PaintBackground(graphics, itemRect, itemRuleset);
 
-                PaintBackground(graphics, itemRect, baseRuleset);
-
-                PaintForeground(graphics, control.GetItemText(item), control.Font, itemRect, baseRuleset);
+                PaintForeground(graphics, control.GetItemText(item), control.Font, itemRect, itemRuleset);
 
             }
 

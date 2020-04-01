@@ -1,6 +1,32 @@
-﻿.ListBox {
-    background-color: #36393e;
+﻿.Form {
+    background-color: #202225;
+}
+
+.Panel {
+    background-color: #36393f;
+}
+
+.TabControl {
+    background-color: #2f3136;
     color: #8b9294;
+}
+
+.Tab:hover {
+    background-color: #34373c;
+    color: #dcddde;
+}
+
+.Tab:checked {
+    background-color: #36393f;
+    color: white;
+}
+
+.ListBox {
+    background-color: #202225;
+    color: #8b9294;
+    border-width: 1px;
+    border-color: #202225;
+    border-radius: 2px;
 }
 
 .ListBoxItem:hover {

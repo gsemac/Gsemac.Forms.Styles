@@ -12,14 +12,16 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             switch (type) {
 
-                case PropertyType.BackgroundColor:
                 case PropertyType.BorderColor:
+                    return new ColorProperty(type, ParseColor(propertyValue), false);
+
+                case PropertyType.BackgroundColor:
                 case PropertyType.Color:
-                    return new ColorProperty(type, ParseColor(propertyValue));
+                    return new ColorProperty(type, ParseColor(propertyValue), true);
 
                 case PropertyType.BorderRadius:
                 case PropertyType.BorderWidth:
-                    return new NumericProperty(type, ParseNumber(propertyValue));
+                    return new NumericProperty(type, ParseNumber(propertyValue), false);
 
                 default:
                     throw new InvalidPropertyException(propertyName);
@@ -87,6 +89,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
         private static double ParseNumber(string input) {
+
+            if (input.EndsWith("px", System.StringComparison.OrdinalIgnoreCase))
+                input = input.Substring(0, input.IndexOf("px", System.StringComparison.OrdinalIgnoreCase));
 
             return double.Parse(input);
 

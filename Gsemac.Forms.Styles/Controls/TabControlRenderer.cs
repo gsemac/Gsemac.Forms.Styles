@@ -16,12 +16,11 @@ namespace Gsemac.Forms.Styles.Controls {
 
         public void RenderControl(Graphics graphics, TabControl control) {
 
-            //ColorProperty parentBackgroundColor = GetRuleset(control.Parent).GetProperty(PropertyType.BackgroundColor) as ColorProperty;
-
-            //graphics.Clear(parentBackgroundColor?.Value ?? Color.Transparent);
-
             Rectangle clientRect = control.ClientRectangle;
             Rectangle drawRect = new Rectangle(clientRect.X, clientRect.Y + 2, clientRect.Width, clientRect.Height - 2);
+
+            if (control.Parent != null)
+                PaintBackground(graphics, clientRect, GetRuleset(control.Parent));
 
             PaintBackground(graphics, drawRect, GetRuleset(control));
 
@@ -39,7 +38,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
         private void PaintTabsBackground(Graphics graphics, TabControl control) {
 
-            IRuleset tabsRules = GetRuleset(new Node("tabs"));
+            IRuleset tabsRules = GetRuleset(control, new Node("TabHeader"));
 
             if (control.TabPages.Count > 0) {
 
@@ -55,9 +54,11 @@ namespace Gsemac.Forms.Styles.Controls {
 
             if (control.TabPages.Count > 0) {
 
-                IRuleset tabRules = GetRuleset(new Node("tab"));
-                IRuleset tabCheckedRules = GetRuleset(new Node("tab", NodeStates.Checked));
-                IRuleset tabHoverRules = GetRuleset(new Node("tab", NodeStates.Hover));
+                IRuleset baseRules = GetRuleset(control);
+
+                IRuleset tabRules = GetRuleset(baseRules, new Node("Tab"));
+                IRuleset tabCheckedRules = GetRuleset(baseRules, new Node("Tab", NodeStates.Checked));
+                IRuleset tabHoverRules = GetRuleset(baseRules, new Node("Tab", NodeStates.Hover));
 
                 ColorProperty tabBackgroundColor = tabRules.GetProperty(PropertyType.BackgroundColor) as ColorProperty;
                 ColorProperty tabColor = tabRules.GetProperty(PropertyType.Color) as ColorProperty;
@@ -72,28 +73,32 @@ namespace Gsemac.Forms.Styles.Controls {
 
                     TabPage tabPage = control.TabPages[i];
                     Rectangle tabRect = control.GetTabRect(i);
+                    Rectangle drawRect = new Rectangle(tabRect.X, tabRect.Y, tabRect.Width, tabRect.Height + 2);
+
+                    if (i == 0)
+                        drawRect = new Rectangle(drawRect.X + 2, drawRect.Y, drawRect.Width - 2, drawRect.Height);
 
                     if (control.SelectedIndex == i) {
 
                         // Draw selected tab.
 
-                        tabRect = new Rectangle(tabRect.X, tabRect.Y - 2, tabRect.Width, tabRect.Height + 2);
+                        drawRect = new Rectangle(drawRect.X, drawRect.Y - 2, drawRect.Width, drawRect.Height + 2);
 
                         if (mouseRect.IntersectsWith(tabRect) && tabHoverBackgroundColor != null) {
 
                             using (Brush brush = new SolidBrush(tabHoverBackgroundColor.Value))
-                                graphics.FillRectangle(brush, tabRect);
+                                graphics.FillRectangle(brush, drawRect);
 
                         }
                         else {
 
                             if (tabCheckedBackgroundColor != null)
                                 using (Brush brush = new SolidBrush(tabCheckedBackgroundColor.Value))
-                                    graphics.FillRectangle(brush, tabRect);
+                                    graphics.FillRectangle(brush, drawRect);
 
                         }
 
-                        TextRenderer.DrawText(graphics, tabPage.Text, control.Font, tabRect, tabCheckedColor?.Value ?? SystemColors.ControlText, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                        TextRenderer.DrawText(graphics, tabPage.Text, control.Font, drawRect, tabCheckedColor?.Value ?? SystemColors.ControlText, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
                     }
                     else {
@@ -103,18 +108,18 @@ namespace Gsemac.Forms.Styles.Controls {
                         if (mouseRect.IntersectsWith(tabRect) && tabHoverBackgroundColor != null) {
 
                             using (Brush brush = new SolidBrush(tabHoverBackgroundColor.Value))
-                                graphics.FillRectangle(brush, tabRect);
+                                graphics.FillRectangle(brush, drawRect);
 
                         }
                         else {
 
                             if (tabBackgroundColor != null)
                                 using (Brush brush = new SolidBrush(tabBackgroundColor.Value))
-                                    graphics.FillRectangle(brush, tabRect);
+                                    graphics.FillRectangle(brush, drawRect);
 
                         }
 
-                        TextRenderer.DrawText(graphics, tabPage.Text, control.Font, tabRect, tabColor?.Value ?? SystemColors.ControlText, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                        TextRenderer.DrawText(graphics, tabPage.Text, control.Font, drawRect, tabColor?.Value ?? SystemColors.ControlText, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
                     }
 
