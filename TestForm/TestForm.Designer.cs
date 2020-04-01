@@ -97,7 +97,6 @@
             // 
             // listBox1
             // 
-            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 15;
             this.listBox1.Items.AddRange(new object[] {
@@ -106,7 +105,7 @@
             "item 3"});
             this.listBox1.Location = new System.Drawing.Point(136, 9);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 90);
+            this.listBox1.Size = new System.Drawing.Size(120, 79);
             this.listBox1.TabIndex = 5;
             // 
             // comboBox2

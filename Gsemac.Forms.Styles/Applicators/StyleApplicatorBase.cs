@@ -67,6 +67,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             public ControlStyles Styles { get; set; }
             public DrawMode DrawMode { get; set; }
+            public BorderStyle BorderStyle { get; set; }
 
             public void DoResetControl(Control control) {
 
@@ -114,6 +115,9 @@ namespace Gsemac.Forms.Styles.Applicators {
             if (TryGetDrawMode(control, out DrawMode drawMode))
                 info.DrawMode = drawMode;
 
+            if (TryGetBorderStyle(control, out BorderStyle borderStyle))
+                info.BorderStyle = borderStyle;
+
             control.ControlAdded += ControlAddedEventHandler;
 
             info.ResetControl += (c) => {
@@ -140,6 +144,7 @@ namespace Gsemac.Forms.Styles.Applicators {
                     ControlUtilities.SetStyle(control, ControlStyles.DoubleBuffer, false);
 
                 TrySetDrawMode(control, info.DrawMode);
+                TrySetBorderStyle(control, info.BorderStyle);
 
                 info.DoResetControl(control);
 
@@ -153,33 +158,71 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
-        private bool TryGetDrawMode(Control control, out DrawMode drawMode) {
+        private bool TryGetDrawMode(Control control, out DrawMode value) {
 
             PropertyInfo drawModeProperty = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
 
             if (drawModeProperty != null) {
 
-                drawMode = (DrawMode)drawModeProperty.GetValue(control, null);
+                value = (DrawMode)drawModeProperty.GetValue(control, null);
 
                 return true;
 
             }
             else {
 
-                drawMode = DrawMode.Normal;
+                value = DrawMode.Normal;
 
                 return false;
 
             }
 
         }
-        private bool TrySetDrawMode(Control control, DrawMode drawMode) {
+        private bool TrySetDrawMode(Control control, DrawMode value) {
 
             PropertyInfo drawModeProperty = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
 
             if (drawModeProperty != null) {
 
-                drawModeProperty.SetValue(control, drawMode, null);
+                drawModeProperty.SetValue(control, value, null);
+
+                return true;
+
+            }
+            else {
+
+                return false;
+
+            }
+
+        }
+        private bool TryGetBorderStyle(Control control, out BorderStyle value) {
+
+            PropertyInfo drawModeProperty = control.GetType().GetProperty("BorderStyle", BindingFlags.Public | BindingFlags.Instance);
+
+            if (drawModeProperty != null) {
+
+                value = (BorderStyle)drawModeProperty.GetValue(control, null);
+
+                return true;
+
+            }
+            else {
+
+                value = BorderStyle.None;
+
+                return false;
+
+            }
+
+        }
+        private bool TrySetBorderStyle(Control control, BorderStyle value) {
+
+            PropertyInfo drawModeProperty = control.GetType().GetProperty("BorderStyle", BindingFlags.Public | BindingFlags.Instance);
+
+            if (drawModeProperty != null) {
+
+                drawModeProperty.SetValue(control, value, null);
 
                 return true;
 

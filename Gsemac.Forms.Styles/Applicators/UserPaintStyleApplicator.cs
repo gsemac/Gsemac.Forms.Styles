@@ -60,6 +60,7 @@ namespace Gsemac.Forms.Styles.Applicators {
         private void ApplyStyles(ListBox control, ControlInfo info) {
 
             control.DrawMode = DrawMode.OwnerDrawFixed;
+            control.BorderStyle = BorderStyle.None;
 
             control.MouseMove += InvalidateHandler; // required for :hover
             control.MouseEnter += InvalidateHandler; // required for :hover
