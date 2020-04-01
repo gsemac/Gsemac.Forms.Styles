@@ -75,7 +75,6 @@
     <Compile Include="StyleSheets\StyleSheet.cs" />
     <Compile Include="StyleSheets\StyleSheetLexer.cs" />
     <Compile Include="StyleSheets\StyleSheetLexerToken.cs" />
-    <Compile Include="Controls\ControlUtilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,6 +4,7 @@
 
 .Panel {
     background-color: #36393f;
+    border-radius: 2px;
 }
 
 .TabControl {

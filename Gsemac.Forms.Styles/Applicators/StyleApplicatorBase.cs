@@ -91,6 +91,21 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
+        protected static bool GetStyle(Control control, ControlStyles styles) {
+
+            return (bool)control.GetType()
+                .GetMethod("GetStyle", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(control, new object[] { styles });
+
+        }
+        protected static void SetStyle(Control control, ControlStyles styles, bool value) {
+
+            control.GetType()
+                .GetMethod("SetStyle", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(control, new object[] { styles, value });
+
+        }
+
         // Private members
 
         private static readonly Dictionary<Control, ControlInfo> controlInfo = new Dictionary<Control, ControlInfo>();
@@ -103,13 +118,13 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             // Store the control's initial styles so they can be restored in the future.
 
-            if (ControlUtilities.GetStyle(control, ControlStyles.AllPaintingInWmPaint))
+            if (GetStyle(control, ControlStyles.AllPaintingInWmPaint))
                 info.Styles |= ControlStyles.AllPaintingInWmPaint;
 
-            if (ControlUtilities.GetStyle(control, ControlStyles.UserPaint))
+            if (GetStyle(control, ControlStyles.UserPaint))
                 info.Styles |= ControlStyles.UserPaint;
 
-            if (ControlUtilities.GetStyle(control, ControlStyles.DoubleBuffer))
+            if (GetStyle(control, ControlStyles.DoubleBuffer))
                 info.Styles |= ControlStyles.DoubleBuffer;
 
             if (TryGetDrawMode(control, out DrawMode drawMode))
@@ -135,13 +150,13 @@ namespace Gsemac.Forms.Styles.Applicators {
                 // Controls like Panel and TabPage will have UserPaint enabled by default, and it should not be disabled.
 
                 if (!info.Styles.HasFlag(ControlStyles.AllPaintingInWmPaint))
-                    ControlUtilities.SetStyle(control, ControlStyles.AllPaintingInWmPaint, false);
+                    SetStyle(control, ControlStyles.AllPaintingInWmPaint, false);
 
                 if (!info.Styles.HasFlag(ControlStyles.UserPaint))
-                    ControlUtilities.SetStyle(control, ControlStyles.UserPaint, false);
+                    SetStyle(control, ControlStyles.UserPaint, false);
 
                 if (!info.Styles.HasFlag(ControlStyles.DoubleBuffer))
-                    ControlUtilities.SetStyle(control, ControlStyles.DoubleBuffer, false);
+                    SetStyle(control, ControlStyles.DoubleBuffer, false);
 
                 TrySetDrawMode(control, info.DrawMode);
                 TrySetBorderStyle(control, info.BorderStyle);
