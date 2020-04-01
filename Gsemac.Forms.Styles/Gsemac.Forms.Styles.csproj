@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Applicators\IStyleApplicator.cs" />
+    <Compile Include="Controls\ListBoxControlRenderer.cs" />
     <Compile Include="StyleSheets\Node.cs" />
     <Compile Include="StyleSheets\NodeBase.cs" />
     <Compile Include="Applicators\PropertyStyleApplicator.cs" />

@@ -30,6 +30,20 @@ namespace Gsemac.Forms.Styles.Controls {
 
         }
 
+        protected bool MouseIntersectsWith(Control control) {
+
+            return MouseIntersectsWith(control, control.ClientRectangle);
+
+        }
+        protected bool MouseIntersectsWith(Control control, Rectangle rect) {
+
+            Point mousePos = control.PointToClient(Cursor.Position);
+            Rectangle mouseRect = new Rectangle(mousePos.X, mousePos.Y, 1, 1);
+
+            return rect.IntersectsWith(mouseRect);
+
+        }
+
         protected void PaintBackground(Graphics graphics, Control control) {
 
             IRuleset rules = GetRuleset(control);
@@ -89,7 +103,8 @@ namespace Gsemac.Forms.Styles.Controls {
             graphics.Restore(state);
 
         }
-        protected void PaintForeground(Graphics graphics, Control control, TextFormatFlags textFormatFlags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter) {
+
+        protected void PaintForeground(Graphics graphics, Control control, TextFormatFlags textFormatFlags = DefaultTextFormatFlags) {
 
             IRuleset rules = GetRuleset(control);
 
@@ -100,6 +115,16 @@ namespace Gsemac.Forms.Styles.Controls {
             TextRenderer.DrawText(graphics, control.Text, control.Font, control.ClientRectangle, color?.Value ?? SystemColors.ControlText, textFormatFlags);
 
         }
+        protected void PaintForeground(Graphics graphics, string text, Font font, Rectangle rectangle, IRuleset rules, TextFormatFlags textFormatFlags = DefaultTextFormatFlags) {
+
+            ColorProperty color = rules.GetProperty(PropertyType.Color) as ColorProperty;
+
+            // Paint the foreground text.
+
+            TextRenderer.DrawText(graphics, text, font, rectangle, color?.Value ?? SystemColors.ControlText, textFormatFlags);
+
+        }
+
         protected TextFormatFlags GetTextFormatFlags(ContentAlignment contentAlignment) {
 
             TextFormatFlags flags = TextFormatFlags.Default;
@@ -127,6 +152,8 @@ namespace Gsemac.Forms.Styles.Controls {
         }
 
         // Private members
+
+        private const TextFormatFlags DefaultTextFormatFlags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter;
 
         private readonly IStyleSheet styleSheet;
 

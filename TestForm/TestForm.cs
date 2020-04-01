@@ -17,7 +17,7 @@ namespace ThemeTesting {
 
         }
 
-        private void button1_Click(object sender, EventArgs e) {
+        private void Button1_Click(object sender, EventArgs e) {
 
             ClearStyles();
 
@@ -26,7 +26,7 @@ namespace ThemeTesting {
             applicator.ApplyStyles(this);
 
         }
-        private void button2_Click(object sender, EventArgs e) {
+        private void Button2_Click(object sender, EventArgs e) {
 
             ClearStyles();
 
@@ -35,7 +35,7 @@ namespace ThemeTesting {
             applicator.ApplyStyles(this);
 
         }
-        private void button4_Click(object sender, EventArgs e) {
+        private void Button4_Click(object sender, EventArgs e) {
 
             applicator.ClearStyles(this);
 
@@ -47,7 +47,7 @@ namespace ThemeTesting {
 
         private IStyleSheet LoadStyleSheet() {
 
-            using (FileStream fstream = new FileStream("theme.txt", FileMode.Open))
+            using (FileStream fstream = new FileStream("TestStyle.css", FileMode.Open))
                 return StyleSheet.FromStream(fstream);
 
         }

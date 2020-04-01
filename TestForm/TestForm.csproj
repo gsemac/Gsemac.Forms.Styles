@@ -81,5 +81,11 @@
       <Name>Gsemac.Forms.Styles</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestStyle.css" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>copy $(ProjectDir)\*.css $(ProjectDir)$(OutDir)</PreBuildEvent>
+  </PropertyGroup>
 </Project>

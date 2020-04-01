@@ -23,16 +23,20 @@ namespace Gsemac.Forms.Styles.Controls {
 
             switch (control) {
 
-                case TabControl tabControl:
-                    new TabControlRenderer(StyleSheet).RenderControl(graphics, tabControl);
+                case Button button:
+                    new ButtonControlRenderer(StyleSheet).RenderControl(graphics, button);
                     break;
 
                 case Label label:
                     new LabelControlRenderer(StyleSheet).RenderControl(graphics, label);
                     break;
 
-                case Button button:
-                    new ButtonControlRenderer(StyleSheet).RenderControl(graphics, button);
+                case ListBox listBox:
+                    new ListBoxControlRenderer(StyleSheet).RenderControl(graphics, listBox);
+                    break;
+
+                case TabControl tabControl:
+                    new TabControlRenderer(StyleSheet).RenderControl(graphics, tabControl);
                     break;
 
                 default:

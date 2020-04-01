@@ -1,0 +1,14 @@
+﻿.ListBox {
+    background-color: #36393e;
+    color: #8b9294;
+}
+
+.ListBoxItem:hover {
+    background-color: #34373c;
+    color: #dcddde;
+}
+
+.ListBoxItem:checked {
+    background-color: #393c43;
+    color: white;
+}

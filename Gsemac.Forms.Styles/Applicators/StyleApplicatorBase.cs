@@ -59,12 +59,20 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         // Protected members
 
+        protected delegate void ResetControlHandler(Control control);
+
         protected class ControlInfo {
+
+            public event ResetControlHandler ResetControl;
 
             public ControlStyles Styles { get; set; }
             public DrawMode DrawMode { get; set; }
-            public PaintEventHandler PaintEventHandler { get; set; }
-            public ControlEventHandler ControlAddedEventHandler { get; set; }
+
+            public void DoResetControl(Control control) {
+
+                ResetControl?.Invoke(control);
+
+            }
 
         }
 
@@ -73,7 +81,7 @@ namespace Gsemac.Forms.Styles.Applicators {
         protected virtual void OnClearStyles(Control control) {
         }
 
-        protected ControlInfo GetControlInfo(Control control) {
+        protected static ControlInfo GetControlInfo(Control control) {
 
             if (controlInfo.TryGetValue(control, out ControlInfo info))
                 return info;
@@ -103,14 +111,14 @@ namespace Gsemac.Forms.Styles.Applicators {
             if (ControlUtilities.GetStyle(control, ControlStyles.DoubleBuffer))
                 info.Styles |= ControlStyles.DoubleBuffer;
 
-            PropertyInfo drawModeProperty = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
+            if (TryGetDrawMode(control, out DrawMode drawMode))
+                info.DrawMode = drawMode;
 
-            if (drawModeProperty != null)
-                info.DrawMode = (DrawMode)drawModeProperty.GetValue(control, null);
+            control.ControlAdded += ControlAddedEventHandler;
 
-            info.ControlAddedEventHandler = ControlAddedEventHandler;
-
-            control.ControlAdded += info.ControlAddedEventHandler;
+            info.ResetControl += (c) => {
+                control.ControlAdded -= ControlAddedEventHandler;
+            };
 
             controlInfo[control] = info;
 
@@ -131,16 +139,9 @@ namespace Gsemac.Forms.Styles.Applicators {
                 if (!info.Styles.HasFlag(ControlStyles.DoubleBuffer))
                     ControlUtilities.SetStyle(control, ControlStyles.DoubleBuffer, false);
 
-                PropertyInfo drawModeProperty = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
+                TrySetDrawMode(control, info.DrawMode);
 
-                if (drawModeProperty != null)
-                    drawModeProperty.SetValue(control, info.DrawMode, null);
-
-                if (info.PaintEventHandler != null)
-                    control.Paint -= info.PaintEventHandler;
-
-                if (info.ControlAddedEventHandler != null)
-                    control.ControlAdded -= info.ControlAddedEventHandler;
+                info.DoResetControl(control);
 
                 controlInfo.Remove(control);
 
@@ -149,6 +150,45 @@ namespace Gsemac.Forms.Styles.Applicators {
             }
 
             return false;
+
+        }
+
+        private bool TryGetDrawMode(Control control, out DrawMode drawMode) {
+
+            PropertyInfo drawModeProperty = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
+
+            if (drawModeProperty != null) {
+
+                drawMode = (DrawMode)drawModeProperty.GetValue(control, null);
+
+                return true;
+
+            }
+            else {
+
+                drawMode = DrawMode.Normal;
+
+                return false;
+
+            }
+
+        }
+        private bool TrySetDrawMode(Control control, DrawMode drawMode) {
+
+            PropertyInfo drawModeProperty = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
+
+            if (drawModeProperty != null) {
+
+                drawModeProperty.SetValue(control, drawMode, null);
+
+                return true;
+
+            }
+            else {
+
+                return false;
+
+            }
 
         }
 

@@ -16,9 +16,9 @@ namespace Gsemac.Forms.Styles.Controls {
 
         public void RenderControl(Graphics graphics, TabControl control) {
 
-            ColorProperty parentBackgroundColor = GetRuleset(control.Parent).GetProperty(PropertyType.BackgroundColor) as ColorProperty;
+            //ColorProperty parentBackgroundColor = GetRuleset(control.Parent).GetProperty(PropertyType.BackgroundColor) as ColorProperty;
 
-            graphics.Clear(parentBackgroundColor?.Value ?? Color.Transparent);
+            //graphics.Clear(parentBackgroundColor?.Value ?? Color.Transparent);
 
             Rectangle clientRect = control.ClientRectangle;
             Rectangle drawRect = new Rectangle(clientRect.X, clientRect.Y + 2, clientRect.Width, clientRect.Height - 2);
