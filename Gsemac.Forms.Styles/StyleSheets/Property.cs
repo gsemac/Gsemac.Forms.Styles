@@ -20,6 +20,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     return new ColorProperty(type, ParseColor(propertyValue), true);
 
                 case PropertyType.BorderRadius:
+                case PropertyType.BorderTopLeftRadius:
+                case PropertyType.BorderTopRightRadius:
+                case PropertyType.BorderBottomRightRadius:
+                case PropertyType.BorderBottomLeftRadius:
                 case PropertyType.BorderWidth:
                     return new NumericProperty(type, ParseNumber(propertyValue), false);
 
@@ -42,6 +46,18 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                 case "border-radius":
                     return PropertyType.BorderRadius;
+
+                case "border-top-left-radius":
+                    return PropertyType.BorderTopLeftRadius;
+
+                case "border-top-right-radius":
+                    return PropertyType.BorderTopRightRadius;
+
+                case "border-bottom-left-radius":
+                    return PropertyType.BorderBottomLeftRadius;
+
+                case "border-bottom-right-radius":
+                    return PropertyType.BorderBottomRightRadius;
 
                 case "border-width":
                     return PropertyType.BorderWidth;
@@ -67,6 +83,18 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                 case PropertyType.BorderRadius:
                     return "border-radius";
+
+                case PropertyType.BorderTopLeftRadius:
+                    return "border-top-left-radius";
+
+                case PropertyType.BorderTopRightRadius:
+                    return "border-top-right-radius";
+
+                case PropertyType.BorderBottomLeftRadius:
+                    return "border-bottom-left-radius";
+
+                case PropertyType.BorderBottomRightRadius:
+                    return "border-bottom-right-radius";
 
                 case PropertyType.BorderWidth:
                     return "border-width";

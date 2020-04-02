@@ -2,6 +2,7 @@
 using Gsemac.Forms.Styles.StyleSheets;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Controls {
@@ -79,29 +80,30 @@ namespace Gsemac.Forms.Styles.Controls {
 
             GraphicsState state = graphics.Save();
 
-            ColorProperty backgroundColor = rules.GetProperty(PropertyType.BackgroundColor) as ColorProperty;
-
             ColorProperty borderColor = rules.GetProperty(PropertyType.BorderColor) as ColorProperty;
             NumericProperty borderRadius = rules.GetProperty(PropertyType.BorderRadius) as NumericProperty;
-            NumericProperty borderWidth = rules.GetProperty(PropertyType.BorderWidth) as NumericProperty;
 
-            if (borderRadius != null && borderRadius.Value > 0) 
+            if (borderRadius != null && borderRadius.Value > 0)
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                           
+
             // Paint the background color.
 
-            using (Brush brush = new SolidBrush(backgroundColor?.Value ?? SystemColors.Control)) {
+            if (rules.GetProperty(PropertyType.BackgroundColor) is ColorProperty backgroundColor) {
 
-                if (borderRadius is null || borderRadius.Value <= 0)
-                    graphics.FillRectangle(brush, rectangle);
-                else
-                    graphics.FillRoundedRectangle(brush, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1), (int)borderRadius.Value);
+                using (Brush brush = new SolidBrush(backgroundColor?.Value ?? SystemColors.Control)) {
+
+                    if (borderRadius is null || borderRadius.Value <= 0)
+                        graphics.FillRectangle(brush, rectangle);
+                    else
+                        graphics.FillRoundedRectangle(brush, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1), (int)borderRadius.Value);
+
+                }
 
             }
 
             // Draw outline.
 
-            if (borderWidth != null && borderWidth.Value > 0) {
+            if (rules.GetProperty(PropertyType.BorderWidth) is NumericProperty borderWidth && borderWidth.Value > 0) {
 
                 using (Brush brush = new SolidBrush(borderColor?.Value ?? Color.Black))
                 using (Pen pen = new Pen(brush, (float)borderWidth.Value)) {
@@ -165,6 +167,15 @@ namespace Gsemac.Forms.Styles.Controls {
                 flags |= TextFormatFlags.HorizontalCenter;
 
             return flags;
+
+        }
+
+        protected void ClipToRectangle(Graphics graphics, Rectangle clientRetangle, IRuleset ruleset) {
+
+            if (ruleset.GetProperty(PropertyType.BorderRadius) is NumericProperty borderRadius && borderRadius.Value > 0.0)
+                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(clientRetangle, (int)borderRadius.Value));
+            else
+                graphics.SetClip(clientRetangle);
 
         }
 

@@ -10,6 +10,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         BorderColor,
         BorderWidth,
         BorderRadius,
+        BorderTopLeftRadius,
+        BorderTopRightRadius,
+        BorderBottomRightRadius,
+        BorderBottomLeftRadius,
         Color
     }
 

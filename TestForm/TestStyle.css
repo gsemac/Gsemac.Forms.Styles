@@ -4,16 +4,22 @@
 
 .Panel {
     background-color: #36393f;
-    border-radius: 2px;
+    border-radius: 3px;
 }
 
 .TabControl {
     background-color: #2f3136;
     color: #8b9294;
+    border-radius: 3px;
 }
 
 .TabControl > .Panel {
     border-radius: 0px;
+}
+
+.Tab {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
 }
 
 .Tab:hover {
@@ -31,7 +37,7 @@
     color: #8b9294;
     border-width: 1px;
     border-color: #202225;
-    border-radius: 2px;
+    border-radius: 3px;
 }
 
 .ListBoxItem:hover {
@@ -41,5 +47,23 @@
 
 .ListBoxItem:checked {
     background-color: #393c43;
+    color: white;
+}
+
+.Label {
+    color: white;
+}
+
+.Button {
+    background-color: #2f3136;
+    border-radius: 2px;
+    color: #8b9294;
+}
+
+.Button:hover {
+    background-color: #34373c;
+}
+
+.Button:active {
     color: white;
 }
