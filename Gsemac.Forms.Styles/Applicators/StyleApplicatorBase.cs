@@ -1,6 +1,7 @@
 ﻿using Gsemac.Forms.Styles.Controls;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -68,6 +69,8 @@ namespace Gsemac.Forms.Styles.Applicators {
             public ControlStyles Styles { get; set; }
             public DrawMode DrawMode { get; set; }
             public BorderStyle BorderStyle { get; set; }
+            public Color ForeColor { get; set; }
+            public Color BackColor { get; set; }
 
             public void DoResetControl(Control control) {
 
@@ -133,6 +136,9 @@ namespace Gsemac.Forms.Styles.Applicators {
             if (TryGetBorderStyle(control, out BorderStyle borderStyle))
                 info.BorderStyle = borderStyle;
 
+            info.ForeColor = control.ForeColor;
+            info.BackColor = control.BackColor;
+
             control.ControlAdded += ControlAddedEventHandler;
 
             info.ResetControl += (c) => {
@@ -160,6 +166,9 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                 TrySetDrawMode(control, info.DrawMode);
                 TrySetBorderStyle(control, info.BorderStyle);
+
+                control.ForeColor = info.ForeColor;
+                control.BackColor = info.BackColor;
 
                 info.DoResetControl(control);
 

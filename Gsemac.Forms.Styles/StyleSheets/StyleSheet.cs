@@ -12,11 +12,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
-        public IRuleset GetRuleset(INode node) {
+        public IRuleset GetRuleset(INode node, bool inherit = true) {
 
             IRuleset result = new Ruleset();
 
-            if (node.Parent != null)
+            if (inherit && node.Parent != null)
                 result.InheritProperties(GetRuleset(node.Parent));
 
             foreach (IRuleset ruleset in rulesets.Where(r => r.Selector.IsMatch(node)))

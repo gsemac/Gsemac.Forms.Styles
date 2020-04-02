@@ -1,6 +1,7 @@
 ﻿using Gsemac.Forms.Styles.Controls;
 using Gsemac.Forms.Styles.StyleSheets;
 using System;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -26,25 +27,36 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
         protected override void OnApplyStyles(Control control) {
 
-            SetStyle(control, ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
-
             ControlInfo info = GetControlInfo(control);
 
-            control.Paint += PaintEventHandler;
+            if (control is TextBox textBox) {
 
-            info.ResetControl += (c) => {
-                control.Paint -= PaintEventHandler;
-            };
+                // TextBoxes require special treatment...
 
-            switch (control) {
+                ApplyStyles(textBox, info);
 
-                case ListBox listBox:
-                    ApplyStyles(listBox, info);
-                    break;
+            }
+            else {
 
-                case Panel panel:
-                    ApplyStyles(panel, info);
-                    break;
+                SetStyle(control, ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
+
+                control.Paint += PaintEventHandler;
+
+                info.ResetControl += (c) => {
+                    control.Paint -= PaintEventHandler;
+                };
+
+                switch (control) {
+
+                    case ListBox listBox:
+                        ApplyStyles(listBox, info);
+                        break;
+
+                    case Panel panel:
+                        ApplyStyles(panel, info);
+                        break;
+
+                }
 
             }
 
@@ -99,10 +111,69 @@ namespace Gsemac.Forms.Styles.Applicators {
             TrySetResizeRedraw(control, true);
 
             info.ResetControl += (c) => {
-
                 TrySetResizeRedraw(control, oldResetRedraw);
-
             };
+
+        }
+        private void ApplyStyles(TextBox control, ControlInfo info) {
+
+            if (control.Parent != null) {
+
+                // We need the TextBox to have a parent control so we can draw the TextBox in the parent's OnPaint.
+
+                ControlInfo parentControlInfo = GetControlInfo(control.Parent);
+
+                if (parentControlInfo != null) {
+
+                    void onPaint(object sender, PaintEventArgs e) {
+
+                        e.Graphics.TranslateTransform(control.Location.X, control.Location.Y);
+
+                        controlRenderer.RenderControl(e.Graphics, control);
+
+                        e.Graphics.TranslateTransform(-control.Location.X, -control.Location.Y);
+
+                    }
+
+                    control.Parent.Paint += onPaint;
+
+                    parentControlInfo.ResetControl += (c) => {
+                        control.Parent.Paint -= onPaint;
+                    };
+
+                    // Fortunately, we can set the colors of the TextBox itself directly.
+
+                    IRuleset ruleset = controlRenderer.GetRuleset(control);
+
+                    Point originalLocation = control.Location;
+                    int originalWidth = control.Width;
+                    int originalHeight = control.Height;
+
+                    if (ruleset.GetProperty(PropertyType.BackgroundColor) is ColorProperty backgroundColor)
+                        control.BackColor = backgroundColor.Value;
+
+                    if (ruleset.GetProperty(PropertyType.Color) is ColorProperty color)
+                        control.ForeColor = color.Value;
+
+                    control.Location = new Point(control.Location.X + 3, control.Location.Y + 3);
+                    control.Width -= 6;
+
+                    if (control.Multiline)
+                        control.Height -= 6;
+
+                    control.BorderStyle = BorderStyle.None;
+
+                    info.ResetControl += (c) => {
+
+                        c.Location = originalLocation;
+                        c.Width = originalWidth;
+                        c.Height = originalHeight;
+
+                    };
+
+                }
+
+            }
 
         }
 

@@ -43,6 +43,10 @@ namespace Gsemac.Forms.Styles.Controls {
                     new TabControlRenderer(StyleSheet).RenderControl(graphics, tabControl);
                     break;
 
+                case TextBox textBox:
+                    new TextBoxControlRenderer(StyleSheet).RenderControl(graphics, textBox);
+                    break;
+
                 default:
                     RenderGenericControl(graphics, control);
                     break;
@@ -52,7 +56,7 @@ namespace Gsemac.Forms.Styles.Controls {
         }
         public bool HasStyles(Control control) {
 
-            return GetRuleset(control).Any();
+            return GetRuleset(control, false).Any();
 
         }
 

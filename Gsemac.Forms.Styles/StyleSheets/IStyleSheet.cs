@@ -9,7 +9,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
     public interface IStyleSheet :
         IEnumerable<IRuleset> {
 
-        IRuleset GetRuleset(INode node);
+        IRuleset GetRuleset(INode node, bool inherit = true);
 
     }
 

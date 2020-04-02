@@ -23,7 +23,7 @@ namespace ThemeTesting {
 
             applicator = new UserPaintStyleApplicator(LoadStyleSheet());
 
-            applicator.ApplyStyles(this, ControlStyleOptions.Default & ~ControlStyleOptions.RulesRequired);
+            applicator.ApplyStyles(this);
 
         }
         private void Button2_Click(object sender, EventArgs e) {

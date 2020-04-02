@@ -11,9 +11,9 @@ namespace Gsemac.Forms.Styles.Controls {
 
         // Public members
 
-        public IRuleset GetRuleset(Control control) {
+        public IRuleset GetRuleset(Control control, bool inherit = true) {
 
-            return GetRuleset(new ControlNode(control));
+            return GetRuleset(new ControlNode(control), inherit);
 
         }
 
@@ -25,9 +25,9 @@ namespace Gsemac.Forms.Styles.Controls {
 
         }
 
-        protected IRuleset GetRuleset(INode node) {
+        protected IRuleset GetRuleset(INode node, bool inherit = true) {
 
-            return styleSheet.GetRuleset(node);
+            return styleSheet.GetRuleset(node, inherit);
 
         }
         protected IRuleset GetRuleset(Control parent, INode node) {
