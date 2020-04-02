@@ -35,7 +35,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public void InheritProperties(IEnumerable<IProperty> properties) {
 
             foreach (IProperty property in properties.Where(p => p.Inheritable))
-                AddProperty(property);
+                if (!HasProperty(property.Type))
+                    AddProperty(property);
 
         }
         public IProperty GetProperty(PropertyType propertyType) {

@@ -27,6 +27,10 @@ namespace Gsemac.Forms.Styles.Controls {
                     new ButtonControlRenderer(StyleSheet).RenderControl(graphics, button);
                     break;
 
+                case CheckBox checkBox:
+                    new CheckBoxControlRenderer(StyleSheet).RenderControl(graphics, checkBox);
+                    break;
+
                 case Label label:
                     new LabelControlRenderer(StyleSheet).RenderControl(graphics, label);
                     break;

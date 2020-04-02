@@ -16,6 +16,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             IRuleset result = new Ruleset();
 
+            if (node.Parent != null)
+                result.InheritProperties(GetRuleset(node.Parent));
+
             foreach (IRuleset ruleset in rulesets.Where(r => r.Selector.IsMatch(node)))
                 result.AddProperties(ruleset);
 

@@ -34,6 +34,17 @@ namespace Gsemac.Forms.Styles.Controls {
 
             }
 
+            switch (control) {
+
+                case CheckBox checkBox:
+
+                    if (checkBox.Checked)
+                        States |= NodeStates.Checked;
+
+                    break;
+
+            }
+
         }
 
         // Protected members

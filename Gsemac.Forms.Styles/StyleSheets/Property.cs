@@ -10,6 +10,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             PropertyType type = GetType(propertyName);
 
+            return Create(type, propertyValue);
+
+        }
+        public static IProperty Create(PropertyType type, string propertyValue) {
+
             switch (type) {
 
                 case PropertyType.BorderColor:
@@ -28,7 +33,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     return new NumericProperty(type, ParseNumber(propertyValue), false);
 
                 default:
-                    throw new InvalidPropertyException(propertyName);
+                    throw new InvalidPropertyException(((int)type).ToString());
 
             }
 
