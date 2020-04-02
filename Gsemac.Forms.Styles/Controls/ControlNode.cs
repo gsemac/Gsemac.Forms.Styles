@@ -27,10 +27,10 @@ namespace Gsemac.Forms.Styles.Controls {
 
             if (control.ClientRectangle.IntersectsWith(mouseRect)) {
 
+                States |= NodeStates.Hover;
+
                 if (Control.MouseButtons.HasFlag(MouseButtons.Left))
                     States |= NodeStates.Active;
-                else
-                    States |= NodeStates.Hover;
 
             }
 

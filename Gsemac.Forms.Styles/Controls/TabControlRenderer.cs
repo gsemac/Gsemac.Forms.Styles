@@ -43,7 +43,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
         private void PaintTabsBackground(Graphics graphics, TabControl control) {
 
-            IRuleset tabsRules = GetRuleset(control, new Node("TabHeader"));
+            IRuleset tabsRules = GetRuleset(new Node("TabHeader"));
 
             if (control.TabPages.Count > 0) {
 

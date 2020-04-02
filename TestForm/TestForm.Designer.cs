@@ -53,10 +53,10 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(156, 15);
+            this.tabControl1.Location = new System.Drawing.Point(182, 17);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(480, 389);
+            this.tabControl1.Size = new System.Drawing.Size(560, 449);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -72,24 +72,24 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(472, 361);
+            this.tabPage1.Size = new System.Drawing.Size(552, 421);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Downloads";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(10, 177);
+            this.numericUpDown1.Location = new System.Drawing.Point(12, 204);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 23);
+            this.numericUpDown1.Size = new System.Drawing.Size(140, 23);
             this.numericUpDown1.TabIndex = 7;
             // 
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(136, 105);
+            this.radioButton1.Location = new System.Drawing.Point(159, 121);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(94, 19);
+            this.radioButton1.Size = new System.Drawing.Size(110, 22);
             this.radioButton1.TabIndex = 6;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "radioButton1";
@@ -103,9 +103,9 @@
             "item 1",
             "item 2",
             "item 3"});
-            this.listBox1.Location = new System.Drawing.Point(136, 9);
+            this.listBox1.Location = new System.Drawing.Point(159, 10);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(120, 79);
+            this.listBox1.Size = new System.Drawing.Size(139, 79);
             this.listBox1.TabIndex = 5;
             // 
             // comboBox2
@@ -113,32 +113,32 @@
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(9, 137);
+            this.comboBox2.Location = new System.Drawing.Point(10, 158);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 23);
+            this.comboBox2.Size = new System.Drawing.Size(140, 23);
             this.comboBox2.TabIndex = 4;
             // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(9, 60);
+            this.comboBox1.Location = new System.Drawing.Point(10, 69);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 23);
+            this.comboBox1.Size = new System.Drawing.Size(140, 23);
             this.comboBox1.TabIndex = 3;
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(9, 101);
+            this.textBox1.Location = new System.Drawing.Point(10, 117);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(121, 23);
+            this.textBox1.Size = new System.Drawing.Size(140, 23);
             this.textBox1.TabIndex = 2;
             // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(6, 6);
+            this.checkBox1.Location = new System.Drawing.Point(7, 7);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(82, 19);
+            this.checkBox1.Size = new System.Drawing.Size(96, 22);
             this.checkBox1.TabIndex = 1;
             this.checkBox1.Text = "checkBox1";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -146,7 +146,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 28);
+            this.label1.Location = new System.Drawing.Point(7, 32);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 15);
             this.label1.TabIndex = 0;
@@ -157,16 +157,16 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 24);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(472, 361);
+            this.tabPage2.Size = new System.Drawing.Size(552, 421);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(12, 12);
+            this.button1.Location = new System.Drawing.Point(14, 14);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(138, 23);
+            this.button1.Size = new System.Drawing.Size(161, 27);
             this.button1.TabIndex = 1;
             this.button1.Text = "apply styles (userpaint)";
             this.button1.UseVisualStyleBackColor = true;
@@ -174,9 +174,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 41);
+            this.button2.Location = new System.Drawing.Point(14, 47);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(138, 23);
+            this.button2.Size = new System.Drawing.Size(161, 27);
             this.button2.TabIndex = 2;
             this.button2.Text = "apply styles (properties)";
             this.button2.UseVisualStyleBackColor = true;
@@ -187,25 +187,25 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(12, 99);
+            this.panel1.Location = new System.Drawing.Point(14, 114);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(138, 100);
+            this.panel1.Size = new System.Drawing.Size(161, 115);
             this.panel1.TabIndex = 4;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(53, 42);
+            this.label2.Location = new System.Drawing.Point(62, 48);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.Size = new System.Drawing.Size(38, 15);
             this.label2.TabIndex = 0;
             this.label2.Text = "label2";
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(12, 70);
+            this.button4.Location = new System.Drawing.Point(14, 81);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(138, 23);
+            this.button4.Size = new System.Drawing.Size(161, 27);
             this.button4.TabIndex = 5;
             this.button4.Text = "clear styles";
             this.button4.UseVisualStyleBackColor = true;
@@ -213,14 +213,15 @@
             // 
             // TestForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(648, 416);
+            this.ClientSize = new System.Drawing.Size(756, 480);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.tabControl1);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.Name = "TestForm";
             this.Text = "Form1";
             this.tabControl1.ResumeLayout(false);
