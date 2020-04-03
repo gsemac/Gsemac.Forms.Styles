@@ -11,7 +11,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         Active = 1,
         Hover = 2,
         Checked = 4,
-        Focus = 8
+        Focus = 8,
+        Disabled = 16
     }
 
     public interface INode {

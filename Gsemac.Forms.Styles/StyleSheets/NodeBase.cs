@@ -35,6 +35,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 if (States.HasFlag(NodeStates.Focus))
                     yield return $"{className}:focus";
 
+                if (States.HasFlag(NodeStates.Disabled))
+                    yield return $"{className}:disabled";
+
             }
 
         }

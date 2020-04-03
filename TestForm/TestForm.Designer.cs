@@ -89,7 +89,7 @@
             "item 3"});
             this.comboBox4.Location = new System.Drawing.Point(168, 84);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(140, 23);
+            this.comboBox4.Size = new System.Drawing.Size(140, 68);
             this.comboBox4.TabIndex = 10;
             // 
             // comboBox3

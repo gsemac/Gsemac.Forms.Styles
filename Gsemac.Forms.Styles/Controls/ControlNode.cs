@@ -48,6 +48,9 @@ namespace Gsemac.Forms.Styles.Controls {
             if (control.Focused)
                 States |= NodeStates.Focus;
 
+            if (!control.Enabled)
+                States |= NodeStates.Disabled;
+
         }
 
         // Protected members
