@@ -2,6 +2,7 @@
 using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -22,7 +23,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         protected override bool HasStyles(Control control) {
 
-            return controlRenderer.HasStyles(control);
+            return controlRenderer.StyleSheet.GetRuleset(new ControlNode(control), false).Any();
 
         }
         protected override void OnApplyStyles(Control control) {

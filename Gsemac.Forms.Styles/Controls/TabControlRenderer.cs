@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Controls {
 
     public class TabControlRenderer :
-        ControlRendererBase {
+        ControlRendererBase<TabControl> {
 
         // Public members
 
@@ -15,7 +15,7 @@ namespace Gsemac.Forms.Styles.Controls {
             base(styleSheet) {
         }
 
-        public void RenderControl(Graphics graphics, TabControl control) {
+        public override void RenderControl(Graphics graphics, TabControl control) {
 
             Rectangle clientRect = control.ClientRectangle;
             Rectangle drawRect = new Rectangle(clientRect.X, clientRect.Y + 2, clientRect.Width, clientRect.Height - 2);

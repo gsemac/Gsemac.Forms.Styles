@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Controls {
     public class LabelControlRenderer :
-        ControlRendererBase {
+        ControlRendererBase<Label> {
 
         // Public members
 
@@ -13,7 +13,7 @@ namespace Gsemac.Forms.Styles.Controls {
             base(styleSheet) {
         }
 
-        public void RenderControl(Graphics graphics, Label control) {
+        public override void RenderControl(Graphics graphics, Label control) {
 
             PaintBackground(graphics, control);
             PaintForeground(graphics, control);

@@ -1,10 +1,6 @@
-﻿using Gsemac.Forms.Styles.Controls;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators {
@@ -67,7 +63,12 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
-        protected abstract bool HasStyles(Control control);
+        protected virtual bool HasStyles(Control control) {
+
+            return true;
+
+        }
+
         protected abstract void OnApplyStyles(Control control);
         protected virtual void OnClearStyles(Control control) { }
 
@@ -194,7 +195,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
         private void ApplyStylesRecursive(Control control, ControlStyleOptions options) {
-            Console.WriteLine(control.GetType().Name);
+
             if (!options.HasFlag(ControlStyleOptions.RulesRequired) || HasStyles(control))
                 OnApplyStyles(control);
             else

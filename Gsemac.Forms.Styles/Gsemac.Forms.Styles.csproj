@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Applicators\IStyleApplicator.cs" />
     <Compile Include="Controls\CheckBoxControlRenderer.cs" />
+    <Compile Include="Controls\IControlRenderer.cs" />
     <Compile Include="Controls\ListBoxControlRenderer.cs" />
     <Compile Include="Controls\NumericUpDownRenderer.cs" />
     <Compile Include="Controls\TextBoxControlRenderer.cs" />

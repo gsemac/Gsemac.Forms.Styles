@@ -1,6 +1,5 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Controls {
@@ -10,16 +9,11 @@ namespace Gsemac.Forms.Styles.Controls {
 
         // Public members
 
-        public IStyleSheet StyleSheet { get; }
-
         public ControlRenderer(IStyleSheet styleSheet) :
             base(styleSheet) {
-
-            StyleSheet = styleSheet;
-
         }
 
-        public void RenderControl(Graphics graphics, Control control) {
+        public override void RenderControl(Graphics graphics, Control control) {
 
             switch (control) {
 
@@ -56,11 +50,6 @@ namespace Gsemac.Forms.Styles.Controls {
                     break;
 
             }
-
-        }
-        public bool HasStyles(Control control) {
-
-            return GetRuleset(control, false).Any();
 
         }
 

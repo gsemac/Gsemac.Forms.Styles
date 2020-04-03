@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Controls {
 
     public class NumericUpDownRenderer :
-    ControlRendererBase {
+    ControlRendererBase<NumericUpDown> {
 
         // Public members
 
@@ -17,7 +17,7 @@ namespace Gsemac.Forms.Styles.Controls {
             base(styleSheet) {
         }
 
-        public void RenderControl(Graphics graphics, NumericUpDown control) {
+        public override void RenderControl(Graphics graphics, NumericUpDown control) {
 
             IRuleset ruleset = GetRuleset(control);
 

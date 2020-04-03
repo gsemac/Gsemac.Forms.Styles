@@ -5,15 +5,15 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Controls {
 
     public class ButtonControlRenderer :
-        ControlRendererBase {
+        ControlRendererBase<Button> {
 
         // Public members
 
         public ButtonControlRenderer(IStyleSheet styleSheet) :
-            base(styleSheet) {
+                base(styleSheet) {
         }
 
-        public void RenderControl(Graphics graphics, Button control) {
+        public override void RenderControl(Graphics graphics, Button control) {
 
             PaintBackground(graphics, control);
             PaintForeground(graphics, control, GetTextFormatFlags(control.TextAlign));

@@ -1,5 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -7,27 +8,31 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Controls {
 
-    public abstract class ControlRendererBase {
+    public abstract class ControlRendererBase :
+        IControlRenderer {
 
         // Public members
 
-        public IRuleset GetRuleset(Control control, bool inherit = true) {
+        public IStyleSheet StyleSheet { get; }
 
-            return GetRuleset(new ControlNode(control), inherit);
-
-        }
+        public abstract void RenderControl(Graphics graphics, Control control);
 
         // Protected members
 
         protected ControlRendererBase(IStyleSheet styleSheet) {
 
-            this.styleSheet = styleSheet;
+            this.StyleSheet = styleSheet;
 
         }
 
+        protected IRuleset GetRuleset(Control control, bool inherit = true) {
+
+            return GetRuleset(new ControlNode(control), inherit);
+
+        }
         protected IRuleset GetRuleset(INode node, bool inherit = true) {
 
-            return styleSheet.GetRuleset(node, inherit);
+            return StyleSheet.GetRuleset(node, inherit);
 
         }
         protected IRuleset GetRuleset(Control parent, INode node) {
@@ -48,12 +53,12 @@ namespace Gsemac.Forms.Styles.Controls {
 
         }
 
-        protected bool MouseIntersectsWith(Control control) {
+        protected static bool MouseIntersectsWith(Control control) {
 
             return MouseIntersectsWith(control, control.ClientRectangle);
 
         }
-        protected bool MouseIntersectsWith(Control control, Rectangle rect) {
+        protected static bool MouseIntersectsWith(Control control, Rectangle rect) {
 
             Point mousePos = control.PointToClient(Cursor.Position);
             Rectangle mouseRect = new Rectangle(mousePos.X, mousePos.Y, 1, 1);
@@ -76,7 +81,7 @@ namespace Gsemac.Forms.Styles.Controls {
             PaintBackground(graphics, control.ClientRectangle, rules);
 
         }
-        protected void PaintBackground(Graphics graphics, Rectangle rectangle, IRuleset rules) {
+        protected static void PaintBackground(Graphics graphics, Rectangle rectangle, IRuleset rules) {
 
             GraphicsState state = graphics.Save();
 
@@ -134,7 +139,7 @@ namespace Gsemac.Forms.Styles.Controls {
             TextRenderer.DrawText(graphics, control.Text, control.Font, control.ClientRectangle, color?.Value ?? SystemColors.ControlText, textFormatFlags);
 
         }
-        protected void PaintForeground(Graphics graphics, string text, Font font, Rectangle rectangle, IRuleset rules, TextFormatFlags textFormatFlags = DefaultTextFormatFlags) {
+        protected static void PaintForeground(Graphics graphics, string text, Font font, Rectangle rectangle, IRuleset rules, TextFormatFlags textFormatFlags = DefaultTextFormatFlags) {
 
             ColorProperty color = rules.GetProperty(PropertyType.Color) as ColorProperty;
 
@@ -144,7 +149,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
         }
 
-        protected TextFormatFlags GetTextFormatFlags(ContentAlignment contentAlignment) {
+        protected static TextFormatFlags GetTextFormatFlags(ContentAlignment contentAlignment) {
 
             TextFormatFlags flags = TextFormatFlags.Default;
 
@@ -170,7 +175,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
         }
 
-        protected void ClipToRectangle(Graphics graphics, Rectangle clientRetangle, IRuleset ruleset) {
+        protected static void ClipToRectangle(Graphics graphics, Rectangle clientRetangle, IRuleset ruleset) {
 
             if (ruleset.GetProperty(PropertyType.BorderRadius) is NumericProperty borderRadius && borderRadius.Value > 0.0)
                 graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(clientRetangle, (int)borderRadius.Value));
@@ -183,7 +188,29 @@ namespace Gsemac.Forms.Styles.Controls {
 
         private const TextFormatFlags DefaultTextFormatFlags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter;
 
-        private readonly IStyleSheet styleSheet;
+    }
+
+    public abstract class ControlRendererBase<T> :
+        ControlRendererBase,
+        IControlRenderer<T> where T : Control {
+
+        // Public members
+
+        public override void RenderControl(Graphics graphics, Control control) {
+
+            if (control is T castedControl)
+                RenderControl(graphics, castedControl);
+            else
+                throw new ArgumentException("The given control cannot be rendered by this renderer.");
+
+        }
+        public abstract void RenderControl(Graphics graphics, T control);
+
+        // Protected members
+
+        protected ControlRendererBase(IStyleSheet styleSheet) :
+            base(styleSheet) {
+        }
 
     }
 

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Controls {
 
     public class TextBoxControlRenderer :
-        ControlRendererBase {
+        ControlRendererBase<TextBox> {
 
         // Public members
 
@@ -17,7 +17,7 @@ namespace Gsemac.Forms.Styles.Controls {
             base(styleSheet) {
         }
 
-        public void RenderControl(Graphics graphics, TextBox control) {
+        public override void RenderControl(Graphics graphics, TextBox control) {
 
             IRuleset ruleset = GetRuleset(control);
 

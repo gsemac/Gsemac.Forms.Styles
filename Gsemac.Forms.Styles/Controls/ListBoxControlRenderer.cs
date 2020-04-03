@@ -10,7 +10,7 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Controls {
 
     public class ListBoxControlRenderer :
-        ControlRendererBase {
+        ControlRendererBase<ListBox> {
 
         // Public members
 
@@ -18,7 +18,7 @@ namespace Gsemac.Forms.Styles.Controls {
             base(styleSheet) {
         }
 
-        public void RenderControl(Graphics graphics, ListBox control) {
+        public override void RenderControl(Graphics graphics, ListBox control) {
 
             IRuleset ruleset = GetRuleset(control);
 
