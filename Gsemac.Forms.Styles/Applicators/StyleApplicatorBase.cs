@@ -54,6 +54,9 @@ namespace Gsemac.Forms.Styles.Applicators {
             public Color ForeColor { get; set; }
             public Color BackColor { get; set; }
             public bool UseVisualStyleBackColor { get; set; }
+            public Point? Location { get; set; }
+            public int? Width { get; set; }
+            public int? Height { get; set; }
 
             public void DoResetControl(Control control) {
 
@@ -169,6 +172,15 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                 control.ForeColor = info.ForeColor;
                 control.BackColor = info.BackColor;
+
+                if (info.Location.HasValue)
+                    control.Location = info.Location.Value;
+
+                if (info.Width.HasValue)
+                    control.Width = info.Width.Value;
+
+                if (info.Height.HasValue)
+                    control.Height = info.Height.Value;
 
                 TrySetUseVisualStyleBackColor(control, info.UseVisualStyleBackColor);
 

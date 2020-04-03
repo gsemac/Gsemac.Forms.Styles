@@ -114,6 +114,27 @@ namespace Gsemac.Forms.Styles.Applicators {
             }
 
         }
+        private void AddTextBoxInvalidateParentHandlers(Control control, ControlInfo info) {
+
+            control.MouseMove += InvalidateParentHandler; // required for :hover
+            control.MouseEnter += InvalidateParentHandler; // required for :hover
+            control.MouseLeave += InvalidateParentHandler; // required for :hover
+            control.MouseDown += InvalidateParentHandler; // required for :active
+            control.GotFocus += InvalidateParentHandler; // required for :focus
+            control.LostFocus += InvalidateParentHandler; // required for :focus
+
+            info.ResetControl += (c) => {
+
+                control.MouseMove -= InvalidateParentHandler;
+                control.MouseEnter -= InvalidateParentHandler;
+                control.MouseLeave -= InvalidateParentHandler;
+                control.MouseDown -= InvalidateParentHandler;
+                control.GotFocus -= InvalidateParentHandler;
+                control.LostFocus -= InvalidateParentHandler;
+
+            };
+
+        }
 
         private void ApplyStyles(ListBox control, ControlInfo info) {
 
@@ -140,37 +161,16 @@ namespace Gsemac.Forms.Styles.Applicators {
         private void ApplyStyles(NumericUpDown control, ControlInfo info) {
 
             AddParentPaintHandler(control, info);
+            AddTextBoxInvalidateParentHandlers(control, info);
+
+            info.Location = control.Location;
+            info.Width = control.Width;
+            info.Height = control.Height;
 
             control.BorderStyle = BorderStyle.None;
 
-            Point originalLocation = control.Location;
-            int originalWidth = control.Width;
-            int originalHeight = control.Height;
-
             control.Location = new Point(control.Location.X + 2, control.Location.Y + 2);
             control.Width -= 3;
-
-            control.MouseMove += InvalidateParentHandler; // required for :hover
-            control.MouseEnter += InvalidateParentHandler; // required for :hover
-            control.MouseLeave += InvalidateParentHandler; // required for :hover
-            control.MouseDown += InvalidateParentHandler; // required for :active
-            control.GotFocus += InvalidateParentHandler; // required for :focus
-            control.LostFocus += InvalidateParentHandler; // required for :focus
-
-            info.ResetControl += (c) => {
-
-                c.Location = originalLocation;
-                c.Width = originalWidth;
-                c.Height = originalHeight;
-
-                control.MouseMove -= InvalidateParentHandler;
-                control.MouseEnter -= InvalidateParentHandler;
-                control.MouseLeave -= InvalidateParentHandler;
-                control.MouseDown -= InvalidateParentHandler;
-                control.GotFocus -= InvalidateParentHandler;
-                control.LostFocus -= InvalidateParentHandler;
-
-            };
 
         }
         private void ApplyStyles(Panel control, ControlInfo info) {
@@ -192,45 +192,22 @@ namespace Gsemac.Forms.Styles.Applicators {
             // We need the TextBox to have a parent control so we can draw the TextBox in the parent's OnPaint.
 
             AddParentPaintHandler(control, info);
+            AddTextBoxInvalidateParentHandlers(control, info);
 
             // Set up properties for the TextBox.
             // Borderless TextBoxes don't have the same offset/size as regular TextBoxes, so we need to adjust it.
 
-            control.BorderStyle = BorderStyle.None;
+            info.Location = control.Location;
+            info.Width = control.Width;
+            info.Height = control.Height;
 
-            Point originalLocation = control.Location;
-            int originalWidth = control.Width;
-            int originalHeight = control.Height;
+            control.BorderStyle = BorderStyle.None;
 
             control.Location = new Point(control.Location.X + 3, control.Location.Y + 3);
             control.Width -= 6;
 
             if (control.Multiline)
                 control.Height -= 6;
-
-            // Add event handlers.
-
-            control.MouseMove += InvalidateParentHandler; // required for :hover
-            control.MouseEnter += InvalidateParentHandler; // required for :hover
-            control.MouseLeave += InvalidateParentHandler; // required for :hover
-            control.MouseDown += InvalidateParentHandler; // required for :active
-            control.GotFocus += InvalidateParentHandler; // required for :focus
-            control.LostFocus += InvalidateParentHandler; // required for :focus
-
-            info.ResetControl += (c) => {
-
-                c.Location = originalLocation;
-                c.Width = originalWidth;
-                c.Height = originalHeight;
-
-                control.MouseMove -= InvalidateParentHandler;
-                control.MouseEnter -= InvalidateParentHandler;
-                control.MouseLeave -= InvalidateParentHandler;
-                control.MouseDown -= InvalidateParentHandler;
-                control.GotFocus -= InvalidateParentHandler;
-                control.LostFocus -= InvalidateParentHandler;
-
-            };
 
         }
 
