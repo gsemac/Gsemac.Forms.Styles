@@ -10,8 +10,6 @@ namespace Gsemac.Forms.Styles.Controls {
 
     public interface IControlRenderer {
 
-        IStyleSheet StyleSheet { get; }
-
         void RenderControl(Graphics graphics, Control control);
 
     }

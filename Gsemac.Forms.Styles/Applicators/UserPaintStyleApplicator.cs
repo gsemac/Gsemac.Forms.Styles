@@ -9,11 +9,12 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Applicators {
 
     public class UserPaintStyleApplicator :
-        StyleApplicatorBase {
+        StyleSheetStyleApplicatorBase {
 
         // Public members
 
-        public UserPaintStyleApplicator(IStyleSheet styleSheet) {
+        public UserPaintStyleApplicator(IStyleSheet styleSheet) :
+            base(styleSheet) {
 
             controlRenderer = new ControlRenderer(styleSheet);
 
@@ -21,11 +22,6 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         // Protected members
 
-        protected override bool HasStyles(Control control) {
-
-            return controlRenderer.StyleSheet.GetRuleset(new ControlNode(control), false).Any();
-
-        }
         protected override void OnApplyStyles(Control control) {
 
             ControlInfo info = GetControlInfo(control);

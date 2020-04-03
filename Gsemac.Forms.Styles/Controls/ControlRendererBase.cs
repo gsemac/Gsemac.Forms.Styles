@@ -13,11 +13,11 @@ namespace Gsemac.Forms.Styles.Controls {
 
         // Public members
 
-        public IStyleSheet StyleSheet { get; }
-
         public abstract void RenderControl(Graphics graphics, Control control);
 
         // Protected members
+
+        protected IStyleSheet StyleSheet { get; }
 
         protected ControlRendererBase(IStyleSheet styleSheet) {
 

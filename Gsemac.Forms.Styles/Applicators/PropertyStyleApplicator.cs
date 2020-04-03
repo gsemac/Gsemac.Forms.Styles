@@ -7,26 +7,19 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Applicators {
 
     public class PropertyStyleApplicator :
-        StyleApplicatorBase {
+        StyleSheetStyleApplicatorBase {
 
         // Public members
 
-        public PropertyStyleApplicator(IStyleSheet styleSheet) {
-
-            this.styleSheet = styleSheet;
-
+        public PropertyStyleApplicator(IStyleSheet styleSheet) :
+            base(styleSheet) {
         }
 
         // Protected members
 
-        protected override bool HasStyles(Control control) {
-
-            return styleSheet.GetRuleset(new ControlNode(control)).Any();
-
-        }
         protected override void OnApplyStyles(Control control) {
 
-            IRuleset rules = styleSheet.GetRuleset(new ControlNode(control));
+            IRuleset rules = StyleSheet.GetRuleset(new ControlNode(control));
 
             if (rules.GetProperty(PropertyType.BackgroundColor) is ColorProperty backgroundColor)
                 control.BackColor = backgroundColor.Value;
@@ -66,8 +59,6 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
 
         // Private members
-
-        private readonly IStyleSheet styleSheet;
 
         private void ApplyStyles(Button button, IRuleset rules) {
 
