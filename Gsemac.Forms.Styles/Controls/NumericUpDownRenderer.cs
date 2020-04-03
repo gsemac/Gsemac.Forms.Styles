@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Controls {
 
     public class NumericUpDownRenderer :
-    ControlRendererBase<NumericUpDown> {
+        ControlRendererBase<NumericUpDown> {
 
         // Public members
 
@@ -23,11 +23,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
             // Update the color of the NumericUpdateDown, which updates the color of the UpDownEdit (inheriting from TextBox).
 
-            if (ruleset.GetProperty(PropertyType.BackgroundColor) is ColorProperty backgroundColor)
-                control.BackColor = backgroundColor.Value;
-
-            if (ruleset.GetProperty(PropertyType.Color) is ColorProperty color)
-                control.ForeColor = color.Value;
+            SetColorProperties(control, ruleset);
 
             // Like TextBoxes, NumericUpDowns are 23 pixels high.
             // Because the NumericUpDown has BorderStyle.None, we need to adjust it to look like a bordered control.
@@ -41,7 +37,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
             Rectangle drawRect = new Rectangle(x, y, w, h);
 
-            PaintBackground(graphics, drawRect, GetRuleset(control));
+            PaintBackground(graphics, drawRect, ruleset);
 
         }
 

@@ -174,6 +174,15 @@ namespace Gsemac.Forms.Styles.Controls {
             return flags;
 
         }
+        protected static void SetColorProperties(Control control, IRuleset ruleset) {
+
+            if (ruleset.GetProperty(PropertyType.BackgroundColor) is ColorProperty backgroundColor)
+                control.BackColor = backgroundColor.Value;
+
+            if (ruleset.GetProperty(PropertyType.Color) is ColorProperty color)
+                control.ForeColor = color.Value;
+
+        }
 
         protected static void ClipToRectangle(Graphics graphics, Rectangle clientRetangle, IRuleset ruleset) {
 
