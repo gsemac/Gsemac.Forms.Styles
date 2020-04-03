@@ -78,6 +78,12 @@ namespace Gsemac.Forms.Styles.Applicators {
                 control.Invalidate();
 
         }
+        private void InvalidateParentHandler(object sender, EventArgs e) {
+
+            if (sender is Control control)
+                control.Parent.Invalidate();
+
+        }
 
         private void ApplyStyles(ListBox control, ControlInfo info) {
 
@@ -117,15 +123,17 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
         private void ApplyStyles(TextBox control, ControlInfo info) {
 
-            if (control.Parent != null) {
+            // We need the TextBox to have a parent control so we can draw the TextBox in the parent's OnPaint.
 
-                // We need the TextBox to have a parent control so we can draw the TextBox in the parent's OnPaint.
+            if (control.Parent != null) {
 
                 ControlInfo parentControlInfo = GetControlInfo(control.Parent);
 
                 if (parentControlInfo != null) {
 
-                    void onPaint(object sender, PaintEventArgs e) {
+                    // Add event handlers to the parent control.
+
+                    void paintHandler(object sender, PaintEventArgs e) {
 
                         e.Graphics.TranslateTransform(control.Location.X, control.Location.Y);
 
@@ -135,25 +143,16 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                     }
 
-                    control.Parent.Paint += onPaint;
+                    control.Parent.Paint += paintHandler;
 
-                    parentControlInfo.ResetControl += (c) => {
-                        control.Parent.Paint -= onPaint;
-                    };
+                    // Set up properties for the TextBox.
+                    // Borderless TextBoxes don't have the same offset/size as regular TextBoxes, so we need to adjust it.
 
-                    // Fortunately, we can set the colors of the TextBox itself directly.
-
-                    IRuleset ruleset = controlRenderer.GetRuleset(control);
+                    control.BorderStyle = BorderStyle.None;
 
                     Point originalLocation = control.Location;
                     int originalWidth = control.Width;
                     int originalHeight = control.Height;
-
-                    if (ruleset.GetProperty(PropertyType.BackgroundColor) is ColorProperty backgroundColor)
-                        control.BackColor = backgroundColor.Value;
-
-                    if (ruleset.GetProperty(PropertyType.Color) is ColorProperty color)
-                        control.ForeColor = color.Value;
 
                     control.Location = new Point(control.Location.X + 3, control.Location.Y + 3);
                     control.Width -= 6;
@@ -161,13 +160,29 @@ namespace Gsemac.Forms.Styles.Applicators {
                     if (control.Multiline)
                         control.Height -= 6;
 
-                    control.BorderStyle = BorderStyle.None;
+                    // Add event handlers.
+
+                    control.MouseMove += InvalidateParentHandler; // required for :hover
+                    control.MouseEnter += InvalidateParentHandler; // required for :hover
+                    control.MouseLeave += InvalidateParentHandler; // required for :hover
+                    control.MouseDown += InvalidateParentHandler; // required for :active
+                    control.GotFocus += InvalidateParentHandler; // required for :focus
+                    control.LostFocus += InvalidateParentHandler; // required for :focus
 
                     info.ResetControl += (c) => {
 
                         c.Location = originalLocation;
                         c.Width = originalWidth;
                         c.Height = originalHeight;
+
+                        control.MouseMove -= InvalidateParentHandler;
+                        control.MouseEnter -= InvalidateParentHandler;
+                        control.MouseLeave -= InvalidateParentHandler;
+                        control.MouseDown -= InvalidateParentHandler;
+                        control.GotFocus -= InvalidateParentHandler;
+                        control.LostFocus -= InvalidateParentHandler;
+
+                        control.Parent.Paint -= paintHandler;
 
                     };
 

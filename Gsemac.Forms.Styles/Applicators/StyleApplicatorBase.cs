@@ -146,6 +146,10 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             if (controlInfo.TryGetValue(control, out ControlInfo info)) {
 
+                // Remove event handlers before doing anything else to prevent them from modifying the control's appearance.
+
+                info.DoResetControl(control);
+
                 // Only disable styles that the control didn't have originally.
                 // Controls like Panel and TabPage will have UserPaint enabled by default, and it should not be disabled.
 
@@ -166,8 +170,6 @@ namespace Gsemac.Forms.Styles.Applicators {
                 control.BackColor = info.BackColor;
 
                 TrySetUseVisualStyleBackColor(control, info.UseVisualStyleBackColor);
-
-                info.DoResetControl(control);
 
                 controlInfo.Remove(control);
 

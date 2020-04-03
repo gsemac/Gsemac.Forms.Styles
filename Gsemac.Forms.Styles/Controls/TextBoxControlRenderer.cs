@@ -19,9 +19,20 @@ namespace Gsemac.Forms.Styles.Controls {
 
         public void RenderControl(Graphics graphics, TextBox control) {
 
-            Rectangle clientRect = control.ClientRectangle;
+            IRuleset ruleset = GetRuleset(control);
 
+            // Update the color of the TextBox itself.
+
+            if (ruleset.GetProperty(PropertyType.BackgroundColor) is ColorProperty backgroundColor)
+                control.BackColor = backgroundColor.Value;
+
+            if (ruleset.GetProperty(PropertyType.Color) is ColorProperty color)
+                control.ForeColor = color.Value;
+
+            // Draw the background the TextBox.
             // The height of regular TextBoxes is 23 pixels, with 3 pixels of horizontal padding.
+
+            Rectangle clientRect = control.ClientRectangle;
 
             int x = clientRect.X - 3;
             int y = clientRect.Y - 3;
@@ -34,7 +45,6 @@ namespace Gsemac.Forms.Styles.Controls {
             Rectangle drawRect = new Rectangle(x, y, w, h);
 
             PaintBackground(graphics, drawRect, GetRuleset(control));
-            //PaintForeground(graphics, control);
 
         }
 
