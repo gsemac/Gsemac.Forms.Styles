@@ -39,6 +39,10 @@ namespace Gsemac.Forms.Styles.Controls {
                     new ListBoxControlRenderer(StyleSheet).RenderControl(graphics, listBox);
                     break;
 
+                case NumericUpDown numericUpDown:
+                    new NumericUpDownRenderer(StyleSheet).RenderControl(graphics, numericUpDown);
+                    break;
+
                 case TabControl tabControl:
                     new TabControlRenderer(StyleSheet).RenderControl(graphics, tabControl);
                     break;

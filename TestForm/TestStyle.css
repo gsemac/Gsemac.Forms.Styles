@@ -88,7 +88,6 @@
 .TextBox {
     background-color: #202225;
     color: #8b9294;
-    border-color: #202225;
     border-radius: 3px;
 }
 
@@ -100,5 +99,14 @@
 }
 
 .NumericUpDown {
-    background-color: orange;
+    background-color: #202225;
+    color: #8b9294;
+    border-radius: 3px;
+}
+
+.NumericUpDown:focus {
+    border-width: 1px;
+    border-color: dodgerblue;
+    background-color: #393c43;
+    color: white;
 }

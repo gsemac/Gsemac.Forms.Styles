@@ -189,19 +189,19 @@ namespace Gsemac.Forms.Styles.Applicators {
                 RemoveControlInfo(control);
 
             if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren)
-                foreach (Control childControl in control.Controls)
+                foreach (Control childControl in GetStylableChildControls(control))
                     AddControlInfoRecursive(childControl, options);
 
         }
         private void ApplyStylesRecursive(Control control, ControlStyleOptions options) {
-
+            Console.WriteLine(control.GetType().Name);
             if (!options.HasFlag(ControlStyleOptions.RulesRequired) || HasStyles(control))
                 OnApplyStyles(control);
             else
                 OnClearStyles(control);
 
             if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren)
-                foreach (Control childControl in control.Controls)
+                foreach (Control childControl in GetStylableChildControls(control))
                     ApplyStylesRecursive(childControl, options);
 
             control.Invalidate();
@@ -364,6 +364,19 @@ namespace Gsemac.Forms.Styles.Applicators {
         private void ControlAddedEventHandler(object sender, ControlEventArgs e) {
 
             ApplyStyles(e.Control);
+
+        }
+
+        private IEnumerable<Control> GetStylableChildControls(Control control) {
+
+            foreach (Control childControl in control.Controls) {
+
+                if (childControl is TextBox && control is NumericUpDown)
+                    continue;
+
+                yield return childControl;
+
+            }
 
         }
 
