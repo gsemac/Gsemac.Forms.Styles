@@ -16,29 +16,14 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         public void ApplyStyles(Control control, ControlStyleOptions options = ControlStyleOptions.Default) {
 
-            if (!options.HasFlag(ControlStyleOptions.RulesRequired) || HasStyles(control)) {
+            // Save control info for all controls before applying styles, which prevents changes to inherited properties affecting what is saved.
+            // This is relevant for the BackColor and ForeColor properties of child controls.
 
-                AddControlInfo(control);
+            AddControlInfoRecursive(control, options);
 
-                OnApplyStyles(control);
+            // Apply styles.
 
-            }
-            else {
-
-                OnClearStyles(control);
-
-                RemoveControlInfo(control);
-
-            }
-
-            if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren) {
-
-                foreach (Control childControl in control.Controls)
-                    ApplyStyles(childControl, options);
-
-            }
-
-            control.Invalidate();
+            ApplyStylesRecursive(control, options);
 
         }
         public void ClearStyles(Control control, ControlStyleOptions options = ControlStyleOptions.Default) {
@@ -69,8 +54,10 @@ namespace Gsemac.Forms.Styles.Applicators {
             public ControlStyles Styles { get; set; }
             public DrawMode DrawMode { get; set; }
             public BorderStyle BorderStyle { get; set; }
+            public FlatStyle FlatStyle { get; set; }
             public Color ForeColor { get; set; }
             public Color BackColor { get; set; }
+            public bool UseVisualStyleBackColor { get; set; }
 
             public void DoResetControl(Control control) {
 
@@ -82,8 +69,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         protected abstract bool HasStyles(Control control);
         protected abstract void OnApplyStyles(Control control);
-        protected virtual void OnClearStyles(Control control) {
-        }
+        protected virtual void OnClearStyles(Control control) { }
 
         protected static ControlInfo GetControlInfo(Control control) {
 
@@ -136,8 +122,16 @@ namespace Gsemac.Forms.Styles.Applicators {
             if (TryGetBorderStyle(control, out BorderStyle borderStyle))
                 info.BorderStyle = borderStyle;
 
+            if (TryGetFlatStyle(control, out FlatStyle flatStyle))
+                info.FlatStyle = flatStyle;
+
             info.ForeColor = control.ForeColor;
             info.BackColor = control.BackColor;
+
+            // This property is important for restoring the visual style of controls like Buttons and TabPages.
+
+            if (TryGetUseVisualStyleBackColor(control, out bool useVisualStyleBackColor))
+                info.UseVisualStyleBackColor = useVisualStyleBackColor;
 
             control.ControlAdded += ControlAddedEventHandler;
 
@@ -166,9 +160,12 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                 TrySetDrawMode(control, info.DrawMode);
                 TrySetBorderStyle(control, info.BorderStyle);
+                TrySetFlatStyle(control, info.FlatStyle);
 
                 control.ForeColor = info.ForeColor;
                 control.BackColor = info.BackColor;
+
+                TrySetUseVisualStyleBackColor(control, info.UseVisualStyleBackColor);
 
                 info.DoResetControl(control);
 
@@ -182,13 +179,40 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
+        private void AddControlInfoRecursive(Control control, ControlStyleOptions options) {
+
+            if (!options.HasFlag(ControlStyleOptions.RulesRequired) || HasStyles(control))
+                AddControlInfo(control);
+            else
+                RemoveControlInfo(control);
+
+            if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren)
+                foreach (Control childControl in control.Controls)
+                    AddControlInfoRecursive(childControl, options);
+
+        }
+        private void ApplyStylesRecursive(Control control, ControlStyleOptions options) {
+
+            if (!options.HasFlag(ControlStyleOptions.RulesRequired) || HasStyles(control))
+                OnApplyStyles(control);
+            else
+                OnClearStyles(control);
+
+            if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren)
+                foreach (Control childControl in control.Controls)
+                    ApplyStylesRecursive(childControl, options);
+
+            control.Invalidate();
+
+        }
+
         private bool TryGetDrawMode(Control control, out DrawMode value) {
 
-            PropertyInfo drawModeProperty = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo property = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
 
-            if (drawModeProperty != null) {
+            if (property != null) {
 
-                value = (DrawMode)drawModeProperty.GetValue(control, null);
+                value = (DrawMode)property.GetValue(control, null);
 
                 return true;
 
@@ -204,11 +228,11 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
         private bool TrySetDrawMode(Control control, DrawMode value) {
 
-            PropertyInfo drawModeProperty = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo property = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
 
-            if (drawModeProperty != null) {
+            if (property != null) {
 
-                drawModeProperty.SetValue(control, value, null);
+                property.SetValue(control, value, null);
 
                 return true;
 
@@ -222,11 +246,11 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
         private bool TryGetBorderStyle(Control control, out BorderStyle value) {
 
-            PropertyInfo drawModeProperty = control.GetType().GetProperty("BorderStyle", BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo property = control.GetType().GetProperty("BorderStyle", BindingFlags.Public | BindingFlags.Instance);
 
-            if (drawModeProperty != null) {
+            if (property != null) {
 
-                value = (BorderStyle)drawModeProperty.GetValue(control, null);
+                value = (BorderStyle)property.GetValue(control, null);
 
                 return true;
 
@@ -242,11 +266,87 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
         private bool TrySetBorderStyle(Control control, BorderStyle value) {
 
-            PropertyInfo drawModeProperty = control.GetType().GetProperty("BorderStyle", BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo property = control.GetType().GetProperty("BorderStyle", BindingFlags.Public | BindingFlags.Instance);
 
-            if (drawModeProperty != null) {
+            if (property != null) {
 
-                drawModeProperty.SetValue(control, value, null);
+                property.SetValue(control, value, null);
+
+                return true;
+
+            }
+            else {
+
+                return false;
+
+            }
+
+        }
+        private bool TryGetFlatStyle(Control control, out FlatStyle value) {
+
+            PropertyInfo property = control.GetType().GetProperty("FlatStyle", BindingFlags.Public | BindingFlags.Instance);
+
+            if (property != null) {
+
+                value = (FlatStyle)property.GetValue(control, null);
+
+                return true;
+
+            }
+            else {
+
+                value = FlatStyle.Standard;
+
+                return false;
+
+            }
+
+        }
+        private bool TrySetFlatStyle(Control control, FlatStyle value) {
+
+            PropertyInfo property = control.GetType().GetProperty("FlatStyle", BindingFlags.Public | BindingFlags.Instance);
+
+            if (property != null) {
+
+                property.SetValue(control, value, null);
+
+                return true;
+
+            }
+            else {
+
+                return false;
+
+            }
+
+        }
+        private bool TryGetUseVisualStyleBackColor(Control control, out bool value) {
+
+            PropertyInfo property = control.GetType().GetProperty("UseVisualStyleBackColor", BindingFlags.Public | BindingFlags.Instance);
+
+            if (property != null) {
+
+                value = (bool)property.GetValue(control, null);
+
+                return true;
+
+            }
+            else {
+
+                value = true;
+
+                return false;
+
+            }
+
+        }
+        private bool TrySetUseVisualStyleBackColor(Control control, bool value) {
+
+            PropertyInfo property = control.GetType().GetProperty("UseVisualStyleBackColor", BindingFlags.Public | BindingFlags.Instance);
+
+            if (property != null) {
+
+                property.SetValue(control, value, null);
 
                 return true;
 
