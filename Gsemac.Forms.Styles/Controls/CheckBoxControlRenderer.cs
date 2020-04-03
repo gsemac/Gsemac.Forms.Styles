@@ -25,9 +25,11 @@ namespace Gsemac.Forms.Styles.Controls {
             PaintCheck(graphics, control);
 
             IRuleset ruleset = GetRuleset(control);
-            Rectangle clientRect = control.ClientRectangle;
 
-            PaintForeground(graphics, control.Text, control.Font, new Rectangle(clientRect.X + CheckWidth + 3, clientRect.Y, clientRect.Width, clientRect.Height), ruleset, GetTextFormatFlags(control.TextAlign));
+            Rectangle clientRect = control.ClientRectangle;
+            Rectangle drawRect = new Rectangle(clientRect.X + CheckWidth + 3, clientRect.Y - 1, clientRect.Width, clientRect.Height);
+
+            PaintForeground(graphics, control.Text, control.Font, drawRect, ruleset, GetTextFormatFlags(control.TextAlign));
 
         }
 
@@ -40,7 +42,7 @@ namespace Gsemac.Forms.Styles.Controls {
             IRuleset parentRuleset = GetRuleset(control);
             IRuleset ruleset = GetRuleset(new Node("Check", states: new ControlNode(control).States));
 
-            if(!ruleset.Any()) {
+            if (!ruleset.Any()) {
 
                 // Add default rules so that the checkbox is visible.
 
@@ -54,7 +56,7 @@ namespace Gsemac.Forms.Styles.Controls {
             ruleset.InheritProperties(parentRuleset);
 
             Rectangle clientRect = control.ClientRectangle;
-            Rectangle checkRect = new Rectangle(clientRect.X + 1, clientRect.Y + (int)((clientRect.Height / 2.0f) - (CheckWidth / 2.0f)), CheckWidth, CheckWidth);
+            Rectangle checkRect = new Rectangle(clientRect.X, clientRect.Y + (int)((clientRect.Height / 2.0f) - (CheckWidth / 2.0f)) - 1, CheckWidth, CheckWidth);
 
             PaintBackground(graphics, checkRect, ruleset);
 
