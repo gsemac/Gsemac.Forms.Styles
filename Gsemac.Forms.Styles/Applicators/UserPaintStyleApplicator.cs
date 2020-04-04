@@ -155,6 +155,7 @@ namespace Gsemac.Forms.Styles.Applicators {
                 control.SelectedIndexChanged -= InvalidateHandler;
                 control.MouseDown -= InvalidateHandler;
 
+
             };
 
         }
@@ -162,6 +163,36 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             AddParentPaintHandler(control, info);
             AddTextBoxInvalidateParentHandlers(control, info);
+
+            Control upDownButtonsControl = control.Controls.Cast<Control>()
+                .Where(c => c.GetType().FullName.Equals("System.Windows.Forms.UpDownBase+UpDownButtons"))
+                .FirstOrDefault();
+
+            if (upDownButtonsControl != null) {
+
+                void invalidateUpDownButtons(object sender, EventArgs e) {
+                    upDownButtonsControl.Invalidate();
+                }
+
+                control.MouseMove += invalidateUpDownButtons;
+                control.MouseEnter += invalidateUpDownButtons;
+                control.MouseLeave += invalidateUpDownButtons;
+                control.MouseDown += invalidateUpDownButtons;
+                control.GotFocus += invalidateUpDownButtons;
+                control.LostFocus += invalidateUpDownButtons;
+
+                info.ResetControl += (c) => {
+
+                    control.MouseMove -= invalidateUpDownButtons;
+                    control.MouseEnter -= invalidateUpDownButtons;
+                    control.MouseLeave -= invalidateUpDownButtons;
+                    control.MouseDown -= invalidateUpDownButtons;
+                    control.GotFocus -= invalidateUpDownButtons;
+                    control.LostFocus -= invalidateUpDownButtons;
+
+                };
+
+            }
 
             info.Location = control.Location;
             info.Width = control.Width;

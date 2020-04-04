@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -18,35 +19,67 @@ namespace Gsemac.Forms.Styles.Controls {
             switch (control) {
 
                 case Button button:
+
                     new ButtonControlRenderer(StyleSheet).RenderControl(graphics, button);
+
                     break;
 
                 case CheckBox checkBox:
+
                     new CheckBoxControlRenderer(StyleSheet).RenderControl(graphics, checkBox);
+
                     break;
 
                 case Label label:
+
                     new LabelControlRenderer(StyleSheet).RenderControl(graphics, label);
+
                     break;
 
                 case ListBox listBox:
+
                     new ListBoxControlRenderer(StyleSheet).RenderControl(graphics, listBox);
+
                     break;
 
                 case NumericUpDown numericUpDown:
+
                     new NumericUpDownRenderer(StyleSheet).RenderControl(graphics, numericUpDown);
+
                     break;
 
                 case TabControl tabControl:
+
                     new TabControlRenderer(StyleSheet).RenderControl(graphics, tabControl);
+
                     break;
 
                 case TextBox textBox:
+
                     new TextBoxControlRenderer(StyleSheet).RenderControl(graphics, textBox);
+
                     break;
 
                 default:
-                    RenderGenericControl(graphics, control);
+
+                    // These controls can't be checked for directly because they are internal types.
+
+                    switch (control.GetType().FullName) {
+
+                        case "System.Windows.Forms.UpDownBase+UpDownButtons":
+
+                            new UpDownButtonsControlRenderer(StyleSheet).RenderControl(graphics, control);
+
+                            break;
+
+                        default:
+
+                            RenderGenericControl(graphics, control);
+
+                            break;
+
+                    }
+
                     break;
 
             }

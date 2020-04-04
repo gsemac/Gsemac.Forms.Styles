@@ -110,3 +110,17 @@
     background-color: #393c43;
     color: white;
 }
+
+.UpDownButtons {
+    background-color: #2f3136;
+    border-radius: 1px;
+    color: #8b9294;
+}
+
+.UpDownButtons:hover {
+    background-color: #34373c;
+}
+
+.UpDownButtons:active {
+    background-color: #202225;
+}

@@ -67,9 +67,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
         }
 
-        protected void PaintBackground(Graphics graphics, Control control) {
-
-            IRuleset rules = GetRuleset(control);
+        protected void ClearBackground(Graphics graphics, Control control) {
 
             ColorProperty parentBackgroundColor = null;
 
@@ -77,6 +75,14 @@ namespace Gsemac.Forms.Styles.Controls {
                 parentBackgroundColor = GetRuleset(control.Parent).GetProperty(PropertyType.BackgroundColor) as ColorProperty;
 
             graphics.Clear(parentBackgroundColor?.Value ?? control.Parent?.BackColor ?? Color.Transparent);
+
+        }
+
+        protected void PaintBackground(Graphics graphics, Control control) {
+
+            ClearBackground(graphics, control);
+
+            IRuleset rules = GetRuleset(control);
 
             PaintBackground(graphics, control.ClientRectangle, rules);
 

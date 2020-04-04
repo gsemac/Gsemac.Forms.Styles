@@ -15,7 +15,10 @@ namespace Gsemac.Forms.Styles.Controls {
         public override NodeStates States { get; } = NodeStates.None;
         public override INode Parent => control.Parent != null ? new ControlNode(control.Parent) : null;
 
-        public ControlNode(Control control) {
+        public ControlNode(Control control) :
+            this(control, control.ClientRectangle) {
+        }
+        public ControlNode(Control control, Rectangle clientRectangle) {
 
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
@@ -25,7 +28,7 @@ namespace Gsemac.Forms.Styles.Controls {
             Point mousePos = control.PointToClient(Cursor.Position);
             Rectangle mouseRect = new Rectangle(mousePos.X, mousePos.Y, 1, 1);
 
-            if (control.ClientRectangle.IntersectsWith(mouseRect)) {
+            if (clientRectangle.IntersectsWith(mouseRect)) {
 
                 States |= NodeStates.Hover;
 
