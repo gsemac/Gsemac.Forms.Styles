@@ -28,12 +28,18 @@ namespace Gsemac.Forms.Styles.Controls {
             Rectangle topButtonRect = new Rectangle(clientRect.X, clientRect.Y, clientRect.Width, clientRect.Height / 2);
             Rectangle bottomButtonRect = new Rectangle(topButtonRect.X, clientRect.Y + clientRect.Height / 2, topButtonRect.Width, topButtonRect.Height);
 
+            Rectangle topButtonClickRect = topButtonRect;
+            Rectangle bottomButtonClickRect = bottomButtonRect;
+
+            topButtonClickRect.Offset(0, -1);
+            bottomButtonClickRect.Offset(0, -1);
+
             ClearBackground(graphics, control);
 
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            PaintButton(graphics, topButtonRect, TriangleOrientation.Up, GetRuleset(new ControlNode(control, topButtonRect)));
-            PaintButton(graphics, bottomButtonRect, TriangleOrientation.Down, GetRuleset(new ControlNode(control, bottomButtonRect)));
+            PaintButton(graphics, topButtonRect, TriangleOrientation.Up, GetRuleset(new ControlNode(control, topButtonClickRect)));
+            PaintButton(graphics, bottomButtonRect, TriangleOrientation.Down, GetRuleset(new ControlNode(control, bottomButtonClickRect)));
 
         }
 
