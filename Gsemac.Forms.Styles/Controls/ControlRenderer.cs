@@ -48,6 +48,12 @@ namespace Gsemac.Forms.Styles.Controls {
 
                     break;
 
+                case RadioButton radioButton:
+
+                    new RadioButtonControlRenderer(StyleSheet).RenderControl(graphics, radioButton);
+
+                    break;
+
                 case TabControl tabControl:
 
                     new TabControlRenderer(StyleSheet).RenderControl(graphics, tabControl);

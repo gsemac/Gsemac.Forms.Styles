@@ -48,6 +48,7 @@
     <Compile Include="Controls\IControlRenderer.cs" />
     <Compile Include="Controls\ListBoxControlRenderer.cs" />
     <Compile Include="Controls\NumericUpDownRenderer.cs" />
+    <Compile Include="Controls\RadioButtonControlRenderer.cs" />
     <Compile Include="Controls\TextBoxControlRenderer.cs" />
     <Compile Include="Controls\UpDownButtonsControlRenderer.cs" />
     <Compile Include="Extensions\SelectorLexerTokenExtensions.cs" />

@@ -78,11 +78,23 @@
     border-color: #8b9294;
     border-width: 1px;
     color: white;
-    border-radius: 1px;
 }
 
 .Check:hover {
     background-color: #34373c;
+}
+
+.CheckBox > .Check {
+    border-radius: 1px;
+}
+
+.RadioButton {
+    color: white;
+}
+
+.RadioButton > .Check {
+    color: white;
+    border-radius: 6px;
 }
 
 .TextBox {
