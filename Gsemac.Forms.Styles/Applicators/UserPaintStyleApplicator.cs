@@ -26,7 +26,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             ControlInfo info = GetControlInfo(control);
 
-            if (!(control is TextBox || control is NumericUpDown)) {
+            if (ControlSupportsUserPaint(control)) {
 
                 SetStyle(control, ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 
@@ -40,20 +40,34 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             switch (control) {
 
+                case ComboBox comboBox:
+
+                    ApplyStyles(comboBox, info);
+
+                    break;
+
                 case ListBox listBox:
+
                     ApplyStyles(listBox, info);
+
                     break;
 
                 case NumericUpDown numericUpDown:
+
                     ApplyStyles(numericUpDown, info);
+
                     break;
 
                 case Panel panel:
+
                     ApplyStyles(panel, info);
+
                     break;
 
                 case TextBox textBox:
+
                     ApplyStyles(textBox, info);
+
                     break;
 
             }
@@ -63,6 +77,22 @@ namespace Gsemac.Forms.Styles.Applicators {
         // Private members
 
         private readonly ControlRenderer controlRenderer;
+
+        private bool ControlSupportsUserPaint(Control control) {
+
+            // Controls that use TextBoxes generally need special treatment to render correctly.
+
+            if (control is TextBox || control is NumericUpDown)
+                return false;
+
+            // Only ComboBoxes with the DropDownList style do not use a TextBox, and can be fully painted.
+
+            if (control is ComboBox comboBox && comboBox.DropDownStyle != ComboBoxStyle.DropDownList)
+                return false;
+
+            return true;
+
+        }
 
         private void PaintEventHandler(object sender, PaintEventArgs e) {
 
@@ -136,6 +166,18 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
+        private void ApplyStyles(ComboBox control, ControlInfo info) {
+
+            if (control.DropDownStyle != ComboBoxStyle.DropDownList) {
+
+                //AddParentPaintHandler(control, info);
+                //AddTextBoxInvalidateParentHandlers(control, info);
+
+                //control.FlatStyle = FlatStyle.Flat;
+
+            }
+
+        }
         private void ApplyStyles(ListBox control, ControlInfo info) {
 
             control.DrawMode = DrawMode.OwnerDrawFixed;

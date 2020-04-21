@@ -149,6 +149,11 @@ namespace Gsemac.Forms.Styles.Controls {
             TextRenderer.DrawText(graphics, control.Text, control.Font, control.ClientRectangle, rules.Color?.Value ?? SystemColors.ControlText, textFormatFlags);
 
         }
+        protected void PaintForeground(Graphics graphics, Control control, Rectangle rectangle, TextFormatFlags textFormatFlags = DefaultTextFormatFlags) {
+
+            PaintForeground(graphics, control.Text, control.Font, rectangle, GetRuleset(control), textFormatFlags);
+
+        }
         protected static void PaintForeground(Graphics graphics, string text, Font font, Rectangle rectangle, IRuleset rules, TextFormatFlags textFormatFlags = DefaultTextFormatFlags) {
 
             // Paint the foreground text.

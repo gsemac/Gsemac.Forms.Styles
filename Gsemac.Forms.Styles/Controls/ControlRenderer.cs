@@ -30,6 +30,12 @@ namespace Gsemac.Forms.Styles.Controls {
 
                     break;
 
+                case ComboBox comboBox:
+
+                    new ComboBoxControlRenderer(StyleSheet).RenderControl(graphics, comboBox);
+
+                    break;
+
                 case Label label:
 
                     new LabelControlRenderer(StyleSheet).RenderControl(graphics, label);

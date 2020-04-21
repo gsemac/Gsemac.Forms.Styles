@@ -45,6 +45,7 @@
     <Compile Include="Applicators\IStyleApplicator.cs" />
     <Compile Include="Applicators\StyleSheetStyleApplicatorBase.cs" />
     <Compile Include="Controls\CheckBoxControlRenderer.cs" />
+    <Compile Include="Controls\ComboBoxControlRenderer.cs" />
     <Compile Include="Controls\IControlRenderer.cs" />
     <Compile Include="Controls\ListBoxControlRenderer.cs" />
     <Compile Include="Controls\NumericUpDownRenderer.cs" />
