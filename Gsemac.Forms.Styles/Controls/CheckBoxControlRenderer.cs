@@ -56,9 +56,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
             if (control.Checked) {
 
-                ColorProperty color = ruleset.GetProperty(PropertyType.Color) as ColorProperty;
-
-                using (Brush brush = new SolidBrush(color?.Value ?? SystemColors.ControlText))
+                using (Brush brush = new SolidBrush(ruleset.Color?.Value ?? SystemColors.ControlText))
                 using (Pen pen = new Pen(brush)) {
 
                     graphics.SmoothingMode = SmoothingMode.AntiAlias;

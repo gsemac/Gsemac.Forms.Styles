@@ -72,7 +72,7 @@ namespace Gsemac.Forms.Styles.Controls {
             ColorProperty parentBackgroundColor = null;
 
             if (control.Parent != null)
-                parentBackgroundColor = GetRuleset(control.Parent).GetProperty(PropertyType.BackgroundColor) as ColorProperty;
+                parentBackgroundColor = GetRuleset(control.Parent).BackgroundColor;
 
             graphics.Clear(parentBackgroundColor?.Value ?? control.Parent?.BackColor ?? Color.Transparent);
 
@@ -91,22 +91,28 @@ namespace Gsemac.Forms.Styles.Controls {
 
             GraphicsState state = graphics.Save();
 
-            ColorProperty borderColor = rules.GetProperty(PropertyType.BorderColor) as ColorProperty;
-            NumericProperty borderRadius = rules.GetProperty(PropertyType.BorderRadius) as NumericProperty;
+            BorderRadiusProperty borderRadius = rules.BorderRadius;
+            bool hasRightRadius = rules.BorderRadius?.Value.TopRight > 0 || rules.BorderRadius?.Value.BottomRight > 0;
+            bool hasBottomRadius = rules.BorderRadius?.Value.BottomLeft > 0 || rules.BorderRadius?.Value.BottomRight > 0;
 
-            if (borderRadius != null && borderRadius.Value > 0)
+            if (borderRadius.HasValue() && borderRadius.Value.IsGreaterThanZero())
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             // Paint the background color.
 
-            if (rules.GetProperty(PropertyType.BackgroundColor) is ColorProperty backgroundColor) {
+            if (rules.BackgroundColor.HasValue()) {
 
-                using (Brush brush = new SolidBrush(backgroundColor?.Value ?? SystemColors.Control)) {
+                using (Brush brush = new SolidBrush(rules.BackgroundColor?.Value ?? SystemColors.Control)) {
 
-                    if (borderRadius is null || borderRadius.Value <= 0)
+                    if (!borderRadius.HasValue() || !borderRadius.Value.IsGreaterThanZero())
                         graphics.FillRectangle(brush, rectangle);
-                    else
-                        graphics.FillRoundedRectangle(brush, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1), (int)borderRadius.Value);
+                    else {
+
+                        // If the rectangle has right or bottom corner radii, the bounds must be decreased to ensure the curve is not clipped.
+
+                        graphics.FillRoundedRectangle(brush, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - (hasRightRadius ? 1 : 0), rectangle.Height - (hasBottomRadius ? 1 : 0)), borderRadius.Value);
+
+                    }
 
                 }
 
@@ -114,17 +120,17 @@ namespace Gsemac.Forms.Styles.Controls {
 
             // Draw outline.
 
-            if (rules.GetProperty(PropertyType.BorderWidth) is NumericProperty borderWidth && borderWidth.Value > 0) {
+            if (rules.BorderWidth.HasValue()) {
 
-                using (Brush brush = new SolidBrush(borderColor?.Value ?? Color.Black))
-                using (Pen pen = new Pen(brush, (float)borderWidth.Value)) {
+                using (Brush brush = new SolidBrush(rules.BorderColor?.Value ?? Color.Black))
+                using (Pen pen = new Pen(brush, (float)rules.BorderWidth.Value)) {
 
                     pen.Alignment = PenAlignment.Center;
 
-                    if (borderRadius is null || borderRadius.Value <= 0)
+                    if (!borderRadius.HasValue() || !borderRadius.Value.IsGreaterThanZero())
                         graphics.DrawRectangle(pen, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1));
                     else
-                        graphics.DrawRoundedRectangle(pen, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1), (int)borderRadius.Value);
+                        graphics.DrawRoundedRectangle(pen, new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - 1, rectangle.Height - 1), borderRadius.Value);
 
                 }
 
@@ -138,20 +144,16 @@ namespace Gsemac.Forms.Styles.Controls {
 
             IRuleset rules = GetRuleset(control);
 
-            ColorProperty color = rules.GetProperty(PropertyType.Color) as ColorProperty;
-
             // Paint the foreground text.
 
-            TextRenderer.DrawText(graphics, control.Text, control.Font, control.ClientRectangle, color?.Value ?? SystemColors.ControlText, textFormatFlags);
+            TextRenderer.DrawText(graphics, control.Text, control.Font, control.ClientRectangle, rules.Color?.Value ?? SystemColors.ControlText, textFormatFlags);
 
         }
         protected static void PaintForeground(Graphics graphics, string text, Font font, Rectangle rectangle, IRuleset rules, TextFormatFlags textFormatFlags = DefaultTextFormatFlags) {
 
-            ColorProperty color = rules.GetProperty(PropertyType.Color) as ColorProperty;
-
             // Paint the foreground text.
 
-            TextRenderer.DrawText(graphics, text, font, rectangle, color?.Value ?? SystemColors.ControlText, textFormatFlags);
+            TextRenderer.DrawText(graphics, text, font, rectangle, rules.Color?.Value ?? SystemColors.ControlText, textFormatFlags);
 
         }
 
@@ -182,18 +184,18 @@ namespace Gsemac.Forms.Styles.Controls {
         }
         protected static void SetColorProperties(Control control, IRuleset ruleset) {
 
-            if (ruleset.GetProperty(PropertyType.BackgroundColor) is ColorProperty backgroundColor)
-                control.BackColor = backgroundColor.Value;
+            if (ruleset.BackgroundColor.HasValue())
+                control.BackColor = ruleset.BackgroundColor.Value;
 
-            if (ruleset.GetProperty(PropertyType.Color) is ColorProperty color)
-                control.ForeColor = color.Value;
+            if (ruleset.Color.HasValue())
+                control.ForeColor = ruleset.Color.Value;
 
         }
 
         protected static void ClipToRectangle(Graphics graphics, Rectangle clientRetangle, IRuleset ruleset) {
 
-            if (ruleset.GetProperty(PropertyType.BorderRadius) is NumericProperty borderRadius && borderRadius.Value > 0.0)
-                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(clientRetangle, (int)borderRadius.Value));
+            if (ruleset.BorderRadius?.Value.IsGreaterThanZero() ?? false)
+                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(clientRetangle, ruleset.BorderRadius.Value));
             else
                 graphics.SetClip(clientRetangle);
 

@@ -51,7 +51,9 @@
     <Compile Include="Controls\RadioButtonControlRenderer.cs" />
     <Compile Include="Controls\TextBoxControlRenderer.cs" />
     <Compile Include="Controls\UpDownButtonsControlRenderer.cs" />
+    <Compile Include="Extensions\PropertyExtensions.cs" />
     <Compile Include="Extensions\SelectorLexerTokenExtensions.cs" />
+    <Compile Include="StyleSheets\BorderRadiusProperty.cs" />
     <Compile Include="StyleSheets\ISelectorLexer.cs" />
     <Compile Include="StyleSheets\ISelectorLexerToken.cs" />
     <Compile Include="StyleSheets\LexerBase.cs" />
@@ -77,17 +79,19 @@
     <Compile Include="StyleSheets\IRuleset.cs" />
     <Compile Include="StyleSheets\IStyleSheetLexer.cs" />
     <Compile Include="StyleSheets\IStyleSheetLexerToken.cs" />
-    <Compile Include="StyleSheets\NumericProperty.cs" />
+    <Compile Include="StyleSheets\NumberProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StyleSheets\Property.cs" />
     <Compile Include="StyleSheets\PropertyBase.cs" />
     <Compile Include="StyleSheets\Ruleset.cs" />
+    <Compile Include="StyleSheets\RulesetBase.cs" />
     <Compile Include="StyleSheets\Selector.cs" />
     <Compile Include="StyleSheets\SelectorLexer.cs" />
     <Compile Include="StyleSheets\SelectorLexerToken.cs" />
     <Compile Include="StyleSheets\StyleSheet.cs" />
     <Compile Include="StyleSheets\StyleSheetLexer.cs" />
     <Compile Include="StyleSheets\StyleSheetLexerToken.cs" />
+    <Compile Include="Utilities\PropertyUtilities.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

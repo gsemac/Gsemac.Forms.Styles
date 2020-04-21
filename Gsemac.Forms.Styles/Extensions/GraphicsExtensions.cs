@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.StyleSheets;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -18,43 +19,56 @@ namespace Gsemac.Forms.Styles.Extensions {
 
         // RoundedRectangle code adapted from https://stackoverflow.com/a/33853557/5383169
 
-        public static GraphicsPath CreateRoundedRectangle(Rectangle bounds, int radius) {
+        public static GraphicsPath CreateRoundedRectangle(Rectangle bounds, BorderRadius borderRadius) {
 
-            int diameter = radius * 2;
+            return CreateRoundedRectangle(bounds, (int)borderRadius.TopLeft, (int)borderRadius.TopRight, (int)borderRadius.BottomLeft, (int)borderRadius.BottomRight);
 
-            Size size = new Size(diameter, diameter);
-            Rectangle arc = new Rectangle(bounds.Location, size);
+        }
+        public static GraphicsPath CreateRoundedRectangle(Rectangle bounds, int topLeft, int topRight, int bottomLeft, int bottomRight) {
+
+            int topLeftDiameter = topLeft * 2;
+            int topRightDiameter = topRight * 2;
+            int bottomLeftDiameter = bottomLeft * 2;
+            int bottomRightDiameter = bottomRight * 2;
 
             GraphicsPath path = new GraphicsPath();
 
-            if (radius == 0) {
+            if (topLeftDiameter <= 0 && topRightDiameter <= 0 && bottomLeftDiameter <= 0 && bottomRightDiameter <= 0) {
 
                 path.AddRectangle(bounds);
 
             }
             else {
 
-                // top left arc  
+                Size topLeftSize = new Size(topLeftDiameter, topLeftDiameter);
+                Size topRightSize = new Size(topRightDiameter, topRightDiameter);
+                Size bottomLeftSize = new Size(bottomLeftDiameter, bottomLeftDiameter);
+                Size bottomRightSize = new Size(bottomRightDiameter, bottomRightDiameter);
 
-                path.AddArc(arc, 180, 90);
+                Rectangle topLeftArc = new Rectangle(bounds.Location, topLeftSize);
+                Rectangle topRightArc = new Rectangle(new Point(bounds.Right - topRightDiameter, bounds.Location.Y), topRightSize);
+                Rectangle bottomLeftArc = new Rectangle(new Point(bounds.Left, bounds.Bottom - bottomLeftDiameter), bottomLeftSize);
+                Rectangle bottomRightArc = new Rectangle(new Point(bounds.Right - bottomRightDiameter, bounds.Bottom - bottomRightDiameter), bottomRightSize);
 
-                // top right arc  
+                if (topLeftDiameter > 0)
+                    path.AddArc(topLeftArc, 180, 90);
+                else
+                    path.AddLine(bounds.Location, bounds.Location);
 
-                arc.X = bounds.Right - diameter;
+                if (topRightDiameter > 0)
+                    path.AddArc(topRightArc, 270, 90);
+                else
+                    path.AddLine(new Point(bounds.Right, bounds.Top), new Point(bounds.Right, bounds.Top));
 
-                path.AddArc(arc, 270, 90);
+                if (bottomRightDiameter > 0)
+                    path.AddArc(bottomRightArc, 0, 90);
+                else
+                    path.AddLine(new Point(bounds.Right, bounds.Bottom), new Point(bounds.Right, bounds.Bottom));
 
-                // bottom right arc  
-
-                arc.Y = bounds.Bottom - diameter;
-
-                path.AddArc(arc, 0, 90);
-
-                // bottom left arc 
-
-                arc.X = bounds.Left;
-
-                path.AddArc(arc, 90, 90);
+                if (bottomLeftDiameter > 0)
+                    path.AddArc(bottomLeftArc, 90, 90);
+                else
+                    path.AddLine(new Point(bounds.Left, bounds.Bottom), new Point(bounds.Left, bounds.Bottom));
 
                 path.CloseFigure();
 
@@ -62,6 +76,7 @@ namespace Gsemac.Forms.Styles.Extensions {
 
             return path;
         }
+
         public static GraphicsPath CreateTriangle(Rectangle bounds, TriangleOrientation orientation) {
 
             GraphicsPath path = new GraphicsPath();
@@ -93,7 +108,7 @@ namespace Gsemac.Forms.Styles.Extensions {
 
         }
 
-        public static void DrawRoundedRectangle(this Graphics graphics, Pen pen, Rectangle bounds, int cornerRadius) {
+        public static void DrawRoundedRectangle(this Graphics graphics, Pen pen, Rectangle bounds, BorderRadius borderRadius) {
 
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
@@ -101,11 +116,11 @@ namespace Gsemac.Forms.Styles.Extensions {
             if (pen is null)
                 throw new ArgumentNullException(nameof(pen));
 
-            using (GraphicsPath path = CreateRoundedRectangle(bounds, cornerRadius))
+            using (GraphicsPath path = CreateRoundedRectangle(bounds, borderRadius))
                 graphics.DrawPath(pen, path);
 
         }
-        public static void FillRoundedRectangle(this Graphics graphics, Brush brush, Rectangle bounds, int cornerRadius) {
+        public static void FillRoundedRectangle(this Graphics graphics, Brush brush, Rectangle bounds, BorderRadius borderRadius) {
 
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
@@ -113,7 +128,7 @@ namespace Gsemac.Forms.Styles.Extensions {
             if (brush is null)
                 throw new ArgumentNullException(nameof(brush));
 
-            using (GraphicsPath path = CreateRoundedRectangle(bounds, cornerRadius))
+            using (GraphicsPath path = CreateRoundedRectangle(bounds, borderRadius))
                 graphics.FillPath(brush, path);
 
         }

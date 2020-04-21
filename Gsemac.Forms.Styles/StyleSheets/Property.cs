@@ -18,22 +18,24 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             switch (type) {
 
                 case PropertyType.BorderColor:
-                    return new ColorProperty(type, ParseColor(propertyValue), false);
+                    return new ColorProperty(type, propertyValue, false);
 
                 case PropertyType.BackgroundColor:
                 case PropertyType.Color:
-                    return new ColorProperty(type, ParseColor(propertyValue), true);
+                    return new ColorProperty(type, propertyValue, true);
 
                 case PropertyType.BorderRadius:
+                    return new BorderRadiusProperty(type, propertyValue, false);
+
                 case PropertyType.BorderTopLeftRadius:
                 case PropertyType.BorderTopRightRadius:
                 case PropertyType.BorderBottomRightRadius:
                 case PropertyType.BorderBottomLeftRadius:
                 case PropertyType.BorderWidth:
-                    return new NumericProperty(type, ParseNumber(propertyValue), false);
+                    return new NumberProperty(type, propertyValue, false);
 
                 default:
-                    throw new InvalidPropertyException(((int)type).ToString());
+                    throw new InvalidPropertyException(type.ToString());
 
             }
 
@@ -111,22 +113,6 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     throw new InvalidPropertyException(((int)propertyType).ToString());
 
             }
-
-        }
-
-        // Private members
-
-        private static Color ParseColor(string input) {
-
-            return ColorTranslator.FromHtml(input);
-
-        }
-        private static double ParseNumber(string input) {
-
-            if (input.EndsWith("px", System.StringComparison.OrdinalIgnoreCase))
-                input = input.Substring(0, input.IndexOf("px", System.StringComparison.OrdinalIgnoreCase));
-
-            return double.Parse(input);
 
         }
 

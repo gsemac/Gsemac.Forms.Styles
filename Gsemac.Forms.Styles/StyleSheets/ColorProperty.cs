@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Styles;
+using Gsemac.Forms.Styles.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,8 +11,13 @@ namespace Gsemac.Forms.Styles.StyleSheets {
     public class ColorProperty :
         PropertyBase<Color> {
 
+        // Public members
+
         public ColorProperty(PropertyType propertyType, Color propertyValue, bool inheritable = true) :
             base(propertyType, propertyValue, inheritable) {
+        }
+        public ColorProperty(PropertyType propertyType, string propertyValue, bool inheritable = true) :
+          base(propertyType, PropertyUtilities.ParseColor(propertyValue), inheritable) {
         }
 
         public override string ToString() {

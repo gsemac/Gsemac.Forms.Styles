@@ -22,12 +22,10 @@ namespace Gsemac.Forms.Styles.Controls {
 
             IRuleset ruleset = GetRuleset(control);
 
-            NumericProperty borderRadius = ruleset.GetProperty(PropertyType.BorderRadius) as NumericProperty;
-
             PaintBackground(graphics, control);
 
-            if (borderRadius?.Value > 0.0)
-                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(control.ClientRectangle, (int)borderRadius.Value));
+            if (ruleset.BorderRadius?.Value.IsGreaterThanZero() ?? false)
+                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(control.ClientRectangle, ruleset.BorderRadius.Value));
 
             PaintItems(graphics, control);
 

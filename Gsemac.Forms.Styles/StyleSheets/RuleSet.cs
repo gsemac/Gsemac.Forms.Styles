@@ -7,87 +7,154 @@ using System.Text;
 namespace Gsemac.Forms.Styles.StyleSheets {
 
     public class Ruleset :
-        IRuleset {
+        RulesetBase {
 
         // Public members
 
-        public ISelector Selector { get; }
-
         public Ruleset() {
         }
-        public Ruleset(string selector) {
-
-            this.Selector = new Selector(selector);
-
+        public Ruleset(string selector) :
+            base(selector) {
         }
 
-        public void AddProperty(IProperty property) {
+        public override void AddProperty(IProperty property) {
 
-            properties[property.Type] = property;
+            switch (property.Type) {
 
-        }
-        public void AddProperties(IEnumerable<IProperty> properties) {
+                case PropertyType.BorderTopLeftRadius:
+                case PropertyType.BorderTopRightRadius:
+                case PropertyType.BorderBottomLeftRadius:
+                case PropertyType.BorderBottomRightRadius:
 
-            foreach (IProperty property in properties)
-                AddProperty(property);
+                    AddBorderRadiusProperty(property);
 
-        }
-        public void InheritProperties(IEnumerable<IProperty> properties) {
+                    break;
 
-            foreach (IProperty property in properties.Where(p => p.Inheritable))
-                if (!HasProperty(property.Type))
-                    AddProperty(property);
+                default:
 
-        }
-        public IProperty GetProperty(PropertyType propertyType) {
+                    properties[property.Type] = property;
 
-            if (properties.TryGetValue(propertyType, out IProperty value))
-                return value;
-
-            return null;
-
-        }
-        public bool HasProperty(PropertyType propertyType) {
-
-            return properties.ContainsKey(propertyType);
-
-        }
-
-        public IEnumerator<IProperty> GetEnumerator() {
-
-            return properties.Values.GetEnumerator();
-
-        }
-        IEnumerator IEnumerable.GetEnumerator() {
-
-            return GetEnumerator();
-
-        }
-
-        public override string ToString() {
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append(Selector?.ToString() ?? "");
-            sb.AppendLine(" {");
-
-            foreach (IProperty property in properties.Values) {
-
-                sb.Append('\t');
-                sb.Append(property.ToString());
-                sb.AppendLine(";");
+                    break;
 
             }
 
-            sb.Append("}");
+        }
+        public override IProperty GetProperty(PropertyType propertyType) {
 
-            return sb.ToString();
+            IProperty result = null;
+
+            switch (propertyType) {
+
+                case PropertyType.BorderTopLeftRadius:
+                case PropertyType.BorderTopRightRadius:
+                case PropertyType.BorderBottomLeftRadius:
+                case PropertyType.BorderBottomRightRadius:
+
+                    result = GetBorderRadiusProperty(propertyType);
+
+                    break;
+
+                default:
+
+                    if (properties.TryGetValue(propertyType, out IProperty value))
+                        result = value;
+
+                    break;
+
+            }
+
+            return result;
+
+        }
+
+        public override IEnumerator<IProperty> GetEnumerator() {
+
+            return properties.Values.GetEnumerator();
 
         }
 
         // Private members
 
         private readonly Dictionary<PropertyType, IProperty> properties = new Dictionary<PropertyType, IProperty>();
+
+        private void AddBorderRadiusProperty(IProperty property) {
+
+            BorderRadiusProperty borderRadius = BorderRadius ?? new BorderRadiusProperty("0.0");
+
+            switch (property.Type) {
+
+                case PropertyType.BorderTopLeftRadius:
+
+                    borderRadius.Value.TopLeft = (double)property.Value;
+
+                    break;
+
+                case PropertyType.BorderTopRightRadius:
+
+                    borderRadius.Value.TopRight = (double)property.Value;
+
+                    break;
+
+                case PropertyType.BorderBottomLeftRadius:
+
+                    borderRadius.Value.BottomLeft = (double)property.Value;
+
+                    break;
+
+                case PropertyType.BorderBottomRightRadius:
+
+                    borderRadius.Value.BottomRight = (double)property.Value;
+
+                    break;
+
+            }
+
+            AddProperty(borderRadius);
+
+        }
+        private IProperty GetBorderRadiusProperty(PropertyType propertyType) {
+
+            IProperty result = null;
+
+            if (BorderRadius != null) {
+
+                double radiusValue = 0.0;
+
+                switch (propertyType) {
+
+                    case PropertyType.BorderTopLeftRadius:
+
+                        radiusValue = BorderRadius.Value.TopLeft;
+
+                        break;
+
+                    case PropertyType.BorderTopRightRadius:
+
+                        radiusValue = BorderRadius.Value.TopRight;
+
+                        break;
+
+                    case PropertyType.BorderBottomLeftRadius:
+
+                        radiusValue = BorderRadius.Value.BottomLeft;
+
+                        break;
+
+                    case PropertyType.BorderBottomRightRadius:
+
+                        radiusValue = BorderRadius.Value.BottomRight;
+
+                        break;
+
+                }
+
+                result = new NumberProperty(propertyType, radiusValue, false);
+
+            }
+
+            return result;
+
+        }
 
     }
 

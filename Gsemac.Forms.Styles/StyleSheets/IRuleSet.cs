@@ -10,6 +10,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         ISelector Selector { get; }
 
+        ColorProperty BackgroundColor { get; }
+        ColorProperty BorderColor { get; }
+        NumberProperty BorderWidth { get; }
+        BorderRadiusProperty BorderRadius { get; }
+        ColorProperty Color { get; }
+
         void AddProperty(IProperty property);
         void AddProperties(IEnumerable<IProperty> properties);
         void InheritProperties(IEnumerable<IProperty> properties);

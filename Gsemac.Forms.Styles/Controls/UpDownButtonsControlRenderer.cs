@@ -52,9 +52,7 @@ namespace Gsemac.Forms.Styles.Controls {
             clientRect.Inflate(new Size(-5, -3));
             clientRect.Offset(1, 0);
 
-            ColorProperty color = ruleset.GetProperty(PropertyType.Color) as ColorProperty;
-
-            using (Brush brush = new SolidBrush(color?.Value ?? Color.Black))
+            using (Brush brush = new SolidBrush(ruleset.Color?.Value ?? Color.Black))
                 graphics.FillTriangle(brush, clientRect, arrowOrientation);
 
         }

@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Styles.Controls;
+using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
 using System.Drawing;
 using System.Linq;
@@ -21,11 +22,11 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             IRuleset rules = StyleSheet.GetRuleset(new ControlNode(control));
 
-            if (rules.GetProperty(PropertyType.BackgroundColor) is ColorProperty backgroundColor)
-                control.BackColor = backgroundColor.Value;
+            if (rules.BackgroundColor.HasValue())
+                control.BackColor = rules.BackgroundColor.Value;
 
-            if (rules.GetProperty(PropertyType.Color) is ColorProperty color)
-                control.ForeColor = color.Value;
+            if (rules.Color.HasValue())
+                control.ForeColor = rules.Color.Value;
 
             switch (control) {
 
@@ -64,18 +65,18 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             button.FlatStyle = FlatStyle.Flat;
 
-            if (rules.GetProperty(PropertyType.BorderColor) is ColorProperty borderColor)
-                button.FlatAppearance.BorderColor = borderColor.Value;
+            if (rules.BorderColor.HasValue())
+                button.FlatAppearance.BorderColor = rules.BorderColor.Value;
 
-            if (rules.GetProperty(PropertyType.BorderWidth) is NumericProperty borderWidth)
-                button.FlatAppearance.BorderSize = (int)borderWidth.Value;
+            if (rules.BorderWidth.HasValue())
+                button.FlatAppearance.BorderSize = (int)rules.BorderWidth.Value;
 
         }
         private void ApplyStyles(ListBox listBox, IRuleset rules) {
 
-            if (rules.GetProperty(PropertyType.BorderWidth) is NumericProperty borderWidth) {
+            if (rules.BorderWidth.HasValue()) {
 
-                if (borderWidth.Value <= 0)
+                if (rules.BorderWidth.Value <= 0)
                     listBox.BorderStyle = BorderStyle.None;
                 else
                     listBox.BorderStyle = BorderStyle.FixedSingle;
@@ -85,9 +86,9 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
         private void ApplyStyles(NumericUpDown numericUpDown, IRuleset rules) {
 
-            if (rules.GetProperty(PropertyType.BorderWidth) is NumericProperty borderWidth) {
+            if (rules.BorderWidth.HasValue()) {
 
-                if (borderWidth.Value <= 0)
+                if (rules.BorderWidth.Value <= 0)
                     numericUpDown.BorderStyle = BorderStyle.None;
                 else
                     numericUpDown.BorderStyle = BorderStyle.FixedSingle;
@@ -97,9 +98,9 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
         private void ApplyStyles(TextBox textBox, IRuleset rules) {
 
-            if (rules.GetProperty(PropertyType.BorderWidth) is NumericProperty borderWidth) {
+            if (rules.BorderWidth.HasValue()) {
 
-                if (borderWidth.Value <= 0)
+                if (rules.BorderWidth.Value <= 0)
                     textBox.BorderStyle = BorderStyle.None;
                 else
                     textBox.BorderStyle = BorderStyle.FixedSingle;
