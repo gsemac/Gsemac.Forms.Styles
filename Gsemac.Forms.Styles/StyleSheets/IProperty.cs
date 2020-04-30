@@ -5,18 +5,6 @@ using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
-    public enum PropertyType {
-        BackgroundColor,
-        BorderColor,
-        BorderWidth,
-        BorderRadius,
-        BorderTopLeftRadius,
-        BorderTopRightRadius,
-        BorderBottomRightRadius,
-        BorderBottomLeftRadius,
-        Color
-    }
-
     public interface IProperty {
 
         string Name { get; }

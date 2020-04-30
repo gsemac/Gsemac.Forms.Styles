@@ -1,5 +1,4 @@
 ﻿using Gsemac.Forms.Styles;
-using Gsemac.Forms.Styles.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

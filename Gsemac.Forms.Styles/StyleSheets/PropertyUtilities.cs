@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Gsemac.Forms.Styles.Utilities {
+namespace Gsemac.Forms.Styles.StyleSheets {
 
     public static class PropertyUtilities {
 
@@ -38,8 +38,8 @@ namespace Gsemac.Forms.Styles.Utilities {
         }
         public static double ParseNumber(string input) {
 
-            if (input.EndsWith("px", System.StringComparison.OrdinalIgnoreCase))
-                input = input.Substring(0, input.IndexOf("px", System.StringComparison.OrdinalIgnoreCase));
+            if (input.EndsWith("px", StringComparison.OrdinalIgnoreCase))
+                input = input.Substring(0, input.IndexOf("px", StringComparison.OrdinalIgnoreCase));
 
             return double.Parse(input);
 
