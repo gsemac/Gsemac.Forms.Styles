@@ -79,10 +79,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                             currentRuleSet = new Ruleset(token.Value);
                             break;
 
-                        case StyleSheetLexerTokenType.OpenDeclaration:
+                        case StyleSheetLexerTokenType.DeclarationStart:
                             break;
 
-                        case StyleSheetLexerTokenType.CloseDeclaration:
+                        case StyleSheetLexerTokenType.DeclarationEnd:
                             rulesets.Add(currentRuleSet);
                             break;
 

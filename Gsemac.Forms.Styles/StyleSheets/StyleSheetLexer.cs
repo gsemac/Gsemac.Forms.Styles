@@ -19,48 +19,23 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public bool ReadNextToken(out IStyleSheetLexerToken token) {
 
-            token = null;
+            ReadNextTokens();
 
-            while (!reader.EndOfStream && token is null) {
+            if (tokens.Any()) {
 
-                // Skip leading whitespace.
+                token = tokens.Dequeue();
+                Console.WriteLine(token.Type.ToString() + ": " + token.Value);
+                return true;
 
-                SkipWhitespace();
+            }
+            else {
 
-                switch ((char)reader.Peek()) {
+                token = null;
 
-                    case '{':
-                        token = ReadOpenDeclaration();
-                        break;
-
-                    case '}':
-                        token = ReadCloseDeclaration();
-                        break;
-
-                    case ':':
-                        SkipCharacter();
-                        SkipWhitespace();
-                        token = ReadPropertyValue();
-                        break;
-
-                    case ';':
-                        SkipCharacter();
-                        break;
-
-                    default:
-
-                        if (insideDeclaration)
-                            token = ReadPropertyName();
-                        else
-                            token = ReadSelector();
-
-                        break;
-
-                }
+                return false;
 
             }
 
-            return token != null;
 
         }
 
@@ -93,6 +68,51 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         private bool insideDeclaration = false;
         private bool disposedValue = false;
 
+        private readonly Queue<IStyleSheetLexerToken> tokens = new Queue<IStyleSheetLexerToken>();
+
+        private void ReadNextTokens() {
+
+            if (!reader.EndOfStream) {
+
+                // Skip leading whitespace.
+
+                SkipWhitespace();
+
+                switch ((char)reader.Peek()) {
+
+                    case '{':
+                        ReadDeclarationStart();
+                        break;
+
+                    case '}':
+                        ReadDeclarationEnd();
+                        break;
+
+                    case ':':
+                        ReadPropertyValueSeparator();
+                        SkipWhitespace();
+                        ReadPropertyValue();
+                        break;
+
+                    case ';':
+                        ReadPropertyEnd();
+                        break;
+
+                    default:
+
+                        if (insideDeclaration)
+                            ReadPropertyName();
+                        else
+                            ReadSelector();
+
+                        break;
+
+                }
+
+            }
+
+        }
+
         private void SkipWhitespace() {
 
             while (char.IsWhiteSpace((char)reader.Peek()) && !reader.EndOfStream)
@@ -105,7 +125,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 reader.Read();
 
         }
-        private IStyleSheetLexerToken ReadOpenDeclaration() {
+
+        private void ReadDeclarationStart() {
 
             StringBuilder valueBuilder = new StringBuilder();
 
@@ -116,10 +137,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             insideDeclaration = true;
 
-            return new StyleSheetLexerToken(StyleSheetLexerTokenType.OpenDeclaration, valueBuilder.ToString());
+            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.DeclarationStart, valueBuilder.ToString()));
 
         }
-        private IStyleSheetLexerToken ReadCloseDeclaration() {
+        private void ReadDeclarationEnd() {
 
             StringBuilder valueBuilder = new StringBuilder();
 
@@ -130,37 +151,51 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             insideDeclaration = false;
 
-            return new StyleSheetLexerToken(StyleSheetLexerTokenType.CloseDeclaration, valueBuilder.ToString());
+            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.DeclarationEnd, valueBuilder.ToString()));
 
         }
-        private IStyleSheetLexerToken ReadPropertyName() {
+        private void ReadPropertyName() {
 
             StringBuilder valueBuilder = new StringBuilder();
 
             while (!char.IsWhiteSpace((char)reader.Peek()) && (char)reader.Peek() != ':' && !reader.EndOfStream)
                 valueBuilder.Append((char)reader.Read());
 
-            return new StyleSheetLexerToken(StyleSheetLexerTokenType.PropertyName, valueBuilder.ToString());
+            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.PropertyName, valueBuilder.ToString()));
 
         }
-        private IStyleSheetLexerToken ReadPropertyValue() {
+        private void ReadPropertyValueSeparator() {
+
+            string value = ((char)reader.Read()).ToString();
+
+            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.PropertyValueSeparator, value));
+
+        }
+        private void ReadPropertyValue() {
 
             StringBuilder valueBuilder = new StringBuilder();
 
             while ((char)reader.Peek() != ';' && !reader.EndOfStream)
                 valueBuilder.Append((char)reader.Read());
 
-            return new StyleSheetLexerToken(StyleSheetLexerTokenType.PropertyValue, valueBuilder.ToString());
+            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.PropertyValue, valueBuilder.ToString()));
 
         }
-        private IStyleSheetLexerToken ReadSelector() {
+        private void ReadPropertyEnd() {
+
+            string value = ((char)reader.Read()).ToString();
+
+            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.PropertyEnd, value));
+
+        }
+        private void ReadSelector() {
 
             StringBuilder valueBuilder = new StringBuilder();
 
             while ((char)reader.Peek() != '{' && !reader.EndOfStream)
                 valueBuilder.Append((char)reader.Read());
 
-            return new StyleSheetLexerToken(StyleSheetLexerTokenType.Selector, valueBuilder.ToString().Trim());
+            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Selector, valueBuilder.ToString().Trim()));
 
         }
 

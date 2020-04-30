@@ -7,10 +7,19 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
     public enum StyleSheetLexerTokenType {
         Selector,
-        OpenDeclaration,
-        CloseDeclaration,
+        DeclarationStart, // "{"
+        DeclarationEnd, // "}"
         PropertyName,
-        PropertyValue
+        PropertyValueSeparator, // ":"
+        PropertyValue,
+        PropertyEnd, // ";"
+        Color,
+        String,
+        Number,
+        Units, // "px", "em", etc.
+        Function, // "rgb", "url", etc.
+        FunctionArgumentsStart, // "("
+        FunctionArgumentsEnd // ")"
     }
 
     public interface IStyleSheetLexerToken {
