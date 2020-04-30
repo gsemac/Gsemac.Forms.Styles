@@ -24,7 +24,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (tokens.Any()) {
 
                 token = tokens.Dequeue();
-                Console.WriteLine(token.Type.ToString() + ": " + token.Value);
+
                 return true;
 
             }
@@ -119,12 +119,6 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 reader.Read();
 
         }
-        private void SkipCharacter() {
-
-            if (!reader.EndOfStream)
-                reader.Read();
-
-        }
 
         private void ReadDeclarationStart() {
 
@@ -173,12 +167,85 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         }
         private void ReadPropertyValue() {
 
-            StringBuilder valueBuilder = new StringBuilder();
+            StringBuilder buffer = new StringBuilder();
 
-            while ((char)reader.Peek() != ';' && !reader.EndOfStream)
-                valueBuilder.Append((char)reader.Read());
+            bool exitLoop = false;
 
-            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.PropertyValue, valueBuilder.ToString()));
+            SkipWhitespace();
+
+            while (!reader.EndOfStream && !exitLoop) {
+
+                char nextChar = (char)reader.Peek();
+
+                switch (nextChar) {
+
+                    case ';':
+                    case ')':
+
+                        // We've reached the end of the property or set of function arguments.
+
+                        if (buffer.Length > 0)
+                            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.String, buffer.ToString()));
+
+                        exitLoop = true;
+
+                        break;
+
+                    case ',':
+
+                        // We've reached the end of the current value (of a comma-delimited set of values).
+
+                        if (buffer.Length > 0)
+                            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.String, buffer.ToString().Trim()));
+
+                        buffer.Clear();
+
+                        tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.FunctionArgumentSeparator, ((char)reader.Read()).ToString()));
+
+                        SkipWhitespace();
+
+                        break;
+
+                    case '(':
+
+                        // We've reached the start of function arguments.
+                        // The contents of the buffer must have been a function name.
+
+                        tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Function, buffer.ToString()));
+
+                        buffer.Clear();
+
+                        ReadFunctionArguments();
+
+                        break;
+
+                    default:
+
+                        // Append the next character to the buffer (we're not sure what it is yet).
+
+                        buffer.Append((char)reader.Read());
+
+                        break;
+
+                }
+
+            }
+
+        }
+        private void ReadFunctionArguments() {
+
+            // Read the opening delimiter.
+
+            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.FunctionArgumentsStart, ((char)reader.Read()).ToString()));
+
+            // Read the function arguments.
+
+            ReadPropertyValue();
+
+            // Read the closing delimiter.
+
+            if (!reader.EndOfStream)
+                tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.FunctionArgumentsEnd, ((char)reader.Read()).ToString()));
 
         }
         private void ReadPropertyEnd() {

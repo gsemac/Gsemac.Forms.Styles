@@ -11,7 +11,6 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         DeclarationEnd, // "}"
         PropertyName,
         PropertyValueSeparator, // ":"
-        PropertyValue,
         PropertyEnd, // ";"
         Color,
         String,
@@ -19,6 +18,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         Units, // "px", "em", etc.
         Function, // "rgb", "url", etc.
         FunctionArgumentsStart, // "("
+        FunctionArgumentSeparator, // ","
         FunctionArgumentsEnd // ")"
     }
 

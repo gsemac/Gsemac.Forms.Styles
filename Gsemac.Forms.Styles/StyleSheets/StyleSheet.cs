@@ -90,7 +90,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                             currentPropertyName = token.Value;
                             break;
 
-                        case StyleSheetLexerTokenType.PropertyValue:
+                        case StyleSheetLexerTokenType.String:
                             currentRuleSet.AddProperty(Property.Create(currentPropertyName, token.Value));
                             break;
 
