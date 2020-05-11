@@ -1,10 +1,47 @@
-﻿.Form {
-    background-color: #202225;
+﻿.control {
+    color: #dcdcdc;
 }
 
-.Panel {
-    background-color: #36393f;
-    border-radius: 3px;
+.form {
+    background-color: #3c3f41;
+}
+
+.button {
+    background-color: #45494a;
+    border-color: #5c5c5c;
+    border-radius: 2px;
+    border-width: 1px;
+    color: #dcdcdc;
+}
+
+.button:hover {
+    background-color: #5f6566;
+}
+
+.button:active {
+    background-color: #2b2b2b;
+}
+
+.button:focus {
+    border-color: #6897bb;
+}
+
+.textbox {
+    background-color: #45494a;
+    border-color: #5c5c5c;
+    border-radius: 2px;
+    border-width: 1px;
+    color: #dcdcdc;
+}
+
+.textbox:focus {
+    border-color: #6897bb;
+}
+
+.panel {
+    background-color: #3c3f41;
+    border-color: #333333;
+    border-width: 1px;
 }
 
 .TabControl {
@@ -50,25 +87,6 @@
     color: white;
 }
 
-.Button {
-    background-color: #2f3136;
-    border-radius: 2px;
-    color: #8b9294;
-}
-
-.Button:hover {
-    background-color: #34373c;
-}
-
-.Button:active {
-    background-color: #36393f;
-    color: white;
-}
-
-.Label {
-    color: white;
-}
-
 .CheckBox {
     color: white;
 }
@@ -95,19 +113,6 @@
 .RadioButton > .Check {
     color: white;
     border-radius: 6px;
-}
-
-.TextBox {
-    background-color: #202225;
-    color: #8b9294;
-    border-radius: 3px;
-}
-
-.TextBox:focus {
-    border-width: 1px;
-    border-color: dodgerblue;
-    background-color: #393c43;
-    color: white;
 }
 
 .NumericUpDown {

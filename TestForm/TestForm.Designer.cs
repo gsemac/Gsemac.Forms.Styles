@@ -180,8 +180,6 @@
             // 
             // checkBox1
             // 
-            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.checkBox1.Location = new System.Drawing.Point(10, 169);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(82, 19);
@@ -205,7 +203,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(161, 27);
             this.button1.TabIndex = 1;
-            this.button1.Text = "apply styles (userpaint)";
+            this.button1.Text = "Apply styles (UserPaint)";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
@@ -215,7 +213,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(161, 27);
             this.button2.TabIndex = 2;
-            this.button2.Text = "apply styles (properties)";
+            this.button2.Text = "Apply styles (Properties)";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
@@ -244,7 +242,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(161, 27);
             this.button4.TabIndex = 5;
-            this.button4.Text = "clear styles";
+            this.button4.Text = "Clear styles";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 
