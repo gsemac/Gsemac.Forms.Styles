@@ -1,10 +1,9 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Controls {
+namespace Gsemac.Forms.Styles.StyleSheets {
 
     public class ControlNode :
         NodeBase {

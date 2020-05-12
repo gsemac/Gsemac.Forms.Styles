@@ -17,17 +17,11 @@ namespace Gsemac.Forms.Styles.Controls {
 
         public override void RenderControl(Graphics graphics, TabControl control) {
 
-            Rectangle clientRect = control.ClientRectangle;
-            Rectangle drawRect = new Rectangle(clientRect.X, clientRect.Y + 2, clientRect.Width, clientRect.Height - 2);
-
-            if (control.Parent != null)
-                PaintBackground(graphics, clientRect, GetRuleset(control.Parent));
+            // Paint the background.
 
             IRuleset ruleset = GetRuleset(control);
 
-            ClipToRectangle(graphics, control.ClientRectangle, ruleset);
-
-            PaintBackground(graphics, drawRect, ruleset);
+            PaintBackground(graphics, control, ruleset);
 
             // Paint the tabs background.
 
@@ -35,7 +29,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
             // Paint the tabs.
 
-            PaintTabs(graphics, control);
+            PaintTabs(graphics, control, ruleset);
 
         }
 
@@ -43,64 +37,55 @@ namespace Gsemac.Forms.Styles.Controls {
 
         private void PaintTabsBackground(Graphics graphics, TabControl control) {
 
-            IRuleset tabsRules = GetRuleset(new Node(string.Empty, "TabHeader"));
+            //IRuleset tabsRules = GetRuleset(new Node(string.Empty, "TabHeader"));
 
-            if (control.TabPages.Count > 0) {
+            //if (control.TabPages.Count > 0) {
 
-                Rectangle tabRect = control.GetTabRect(0);
-                Rectangle drawRect = new Rectangle(0, 2, control.Width + tabRect.X, tabRect.Height + tabRect.Y - 2);
+            //    Rectangle tabRect = control.GetTabRect(0);
+            //    Rectangle drawRect = new Rectangle(0, 2, control.Width + tabRect.X, tabRect.Height + tabRect.Y - 2);
 
-                PaintBackground(graphics, drawRect, tabsRules);
+            //    PaintBackground(graphics, drawRect, tabsRules);
 
-            }
+            //}
 
         }
-        private void PaintTabs(Graphics graphics, TabControl control) {
+        private void PaintTabs(Graphics graphics, TabControl control, IRuleset baseRuleset) {
 
             if (control.TabPages.Count > 0) {
-
-                IRuleset baseRules = GetRuleset(control);
-
-                IRuleset tabRules = GetRuleset(baseRules, new Node(string.Empty, "Tab"));
-                IRuleset tabCheckedRules = GetRuleset(baseRules, new Node(string.Empty, "Tab", states: NodeStates.Checked));
-                IRuleset tabHoverRules = GetRuleset(baseRules, new Node(string.Empty, "Tab", states: NodeStates.Hover));
-
-                Point mousePos = control.PointToClient(Cursor.Position);
-                Rectangle mouseRect = new Rectangle(mousePos.X, mousePos.Y, 1, 1);
 
                 for (int i = 0; i < control.TabPages.Count; ++i) {
 
                     TabPage tabPage = control.TabPages[i];
                     Rectangle tabRect = control.GetTabRect(i);
-                    Rectangle drawRect = new Rectangle(tabRect.X, tabRect.Y, tabRect.Width, tabRect.Height + 2);
+                    UserNode tabNode = new UserNode(control, tabRect);
 
-                    if (i == 0)
-                        drawRect = new Rectangle(drawRect.X + 2, drawRect.Y, drawRect.Width - 2, drawRect.Height);
+                    tabNode.AddClass("tab");
 
                     if (control.SelectedIndex == i) {
 
                         // Draw selected tab.
 
-                        drawRect = new Rectangle(drawRect.X, drawRect.Y - 2, drawRect.Width, drawRect.Height + 2);
+                        tabNode.AddState(NodeStates.Checked);
 
-                        if (mouseRect.IntersectsWith(tabRect))
-                            PaintBackground(graphics, drawRect, tabHoverRules);
-                        else
-                            PaintBackground(graphics, drawRect, tabCheckedRules);
+                        IRuleset tabRuleset = GetRuleset(tabNode);
 
-                        PaintForeground(graphics, tabPage.Text, control.Font, drawRect, tabCheckedRules, textFormatFlags: TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                        Rectangle drawRect = new Rectangle(tabRect.X - 2, tabRect.Y - 2, tabRect.Width + 2, tabRect.Height + 4);
+                        Rectangle textRect = new Rectangle(tabRect.X, tabRect.Y - 2, tabRect.Width, tabRect.Height);
+
+                        PaintBackground(graphics, drawRect, tabRuleset);
+                        PaintForeground(graphics, tabPage.Text, control.Font, textRect, tabRuleset, textFormatFlags: TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
                     }
                     else {
 
-                        // Draw non-selected tab.
+                        // Draw unselected tab.
 
-                        if (mouseRect.IntersectsWith(tabRect))
-                            PaintBackground(graphics, drawRect, tabHoverRules);
-                        else
-                            PaintBackground(graphics, drawRect, tabRules);
+                        IRuleset tabRuleset = GetRuleset(tabNode);
 
-                        PaintForeground(graphics, tabPage.Text, control.Font, drawRect, tabRules, textFormatFlags: TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                        Rectangle drawRect = new Rectangle(tabRect.X, tabRect.Y, tabRect.Width, tabRect.Height + 2);
+
+                        PaintBackground(graphics, drawRect, tabRuleset);
+                        PaintForeground(graphics, tabPage.Text, control.Font, tabRect, tabRuleset, textFormatFlags: TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
                     }
 

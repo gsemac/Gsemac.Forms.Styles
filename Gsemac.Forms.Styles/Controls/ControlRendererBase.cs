@@ -80,6 +80,11 @@ namespace Gsemac.Forms.Styles.Controls {
 
         protected void PaintBackground(Graphics graphics, Control control) {
 
+            PaintBackground(graphics, control, GetRuleset(control));
+
+        }
+        protected void PaintBackground(Graphics graphics, Control control, IRuleset ruleset) {
+
             ClearBackground(graphics, control);
 
             IRuleset rules = GetRuleset(control);
