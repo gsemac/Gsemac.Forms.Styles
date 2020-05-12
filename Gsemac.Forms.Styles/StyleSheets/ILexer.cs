@@ -5,10 +5,13 @@ using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
-    public interface ISelectorLexer :
+    public interface ILexer<T> :
         IDisposable {
 
-        bool ReadNextToken(out ISelectorLexerToken token);
+        bool EndOfStream { get; }
+
+        bool Read(out T token);
+        T Peek();
 
     }
 

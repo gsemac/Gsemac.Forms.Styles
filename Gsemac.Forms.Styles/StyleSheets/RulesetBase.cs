@@ -72,9 +72,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         protected RulesetBase() {
         }
-        protected RulesetBase(string selector) {
+        protected RulesetBase(ISelector selector) {
 
-            this.Selector = new Selector(selector);
+            this.Selector = selector;
 
         }
 

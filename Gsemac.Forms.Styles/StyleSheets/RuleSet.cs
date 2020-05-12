@@ -13,7 +13,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public Ruleset() {
         }
-        public Ruleset(string selector) :
+        public Ruleset(ISelector selector) :
             base(selector) {
         }
 

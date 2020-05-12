@@ -8,22 +8,12 @@ using System.Text;
 namespace Gsemac.Forms.Styles.StyleSheets {
 
     public abstract class LexerBase<T> :
-         IEnumerable<T>,
-         IDisposable {
+         ILexer<T> {
 
-        public abstract bool ReadNextToken(out T token);
+        public bool EndOfStream => EqualityComparer<T>.Default.Equals(Peek(), default);
 
-        public IEnumerator<T> GetEnumerator() {
-
-            while (ReadNextToken(out T token))
-                yield return token;
-
-        }
-        IEnumerator IEnumerable.GetEnumerator() {
-
-            return GetEnumerator();
-
-        }
+        public abstract bool Read(out T token);
+        public abstract T Peek();
 
         public void Dispose() {
 
@@ -43,7 +33,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         protected void SkipWhitespace() {
 
-            while (char.IsWhiteSpace((char)Reader.Peek()) && !Reader.EndOfStream)
+            while (!Reader.EndOfStream && char.IsWhiteSpace((char)Reader.Peek()))
                 Reader.Read();
 
         }

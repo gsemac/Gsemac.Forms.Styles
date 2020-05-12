@@ -17,6 +17,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
     public interface INode {
 
+        string Tag { get; }
         IEnumerable<string> Classes { get; }
         string Id { get; }
         NodeStates States { get; }

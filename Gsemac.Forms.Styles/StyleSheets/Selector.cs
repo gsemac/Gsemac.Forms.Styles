@@ -12,119 +12,106 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
-        public Selector(string selector) {
+        public Selector(ISelector selector) {
 
-            this.selector = selector;
+            this.selectors = new List<ISelector>() {
+                selector
+            };
 
-            ParseSelector(selector);
+        }
+        public Selector(IEnumerable<ISelector> selectors) {
+
+            this.selectors = selectors.ToArray();
 
         }
 
         public bool IsMatch(INode node) {
 
-            return selectors.Any(selector => IsMatch(node, selector));
+            return selectors.All(selector => selector.IsMatch(node));
 
         }
 
         public override string ToString() {
 
-            return selector;
+            return string.Join(string.Empty, selectors.Select(selector => selector.ToString()));
+
+        }
+
+        public static ISelector FromLexer(IStyleSheetLexer lexer) {
+
+            SelectorBuilder builder = new SelectorBuilder();
+
+            bool exitLoop = false;
+
+            while (!exitLoop && !lexer.EndOfStream) {
+
+                IStyleSheetLexerToken token = lexer.Peek();
+
+                switch (token.Type) {
+
+                    case StyleSheetLexerTokenType.Class:
+                        builder.AddClass(token.Value);
+                        break;
+
+                    case StyleSheetLexerTokenType.Id:
+                        builder.AddId(token.Value);
+                        break;
+
+                    case StyleSheetLexerTokenType.Tag:
+                        builder.AddTag(token.Value);
+                        break;
+
+                    case StyleSheetLexerTokenType.DescendantCombinator:
+                        builder.AddDescendantCombinator();
+                        break;
+
+                    case StyleSheetLexerTokenType.ChildCombinator:
+                        builder.AddChildCombinator();
+                        break;
+
+                    case StyleSheetLexerTokenType.AdjacentSiblingCombinator:
+                        builder.AddAdjacentSiblingCombinator();
+                        break;
+
+                    case StyleSheetLexerTokenType.GeneralSiblingCombinator:
+                        builder.AddGeneralSiblingCombinator();
+                        break;
+
+                    case StyleSheetLexerTokenType.SelectorSeparator:
+                        builder.AddSelector();
+                        break;
+
+                    default:
+                        exitLoop = true;
+                        break;
+
+                }
+
+                if (!exitLoop)
+                    lexer.Read(out _);
+
+            }
+
+            return builder.Build();
+
+        }
+        public static ISelector FromStream(Stream stream) {
+
+            using (IStyleSheetLexer lexer = new StyleSheetLexer(stream))
+                return FromLexer(lexer);
+
+        }
+
+        public static ISelector Parse(string selector) {
+
+            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(selector)))
+                return FromStream(stream);
 
         }
 
         // Private members
 
-        private readonly string selector;
-        private readonly List<List<ISelectorLexerToken>> selectors = new List<List<ISelectorLexerToken>>();
-
-        private void ParseSelector(string selector) {
-
-            selectors.Clear();
-
-            selectors.Add(new List<ISelectorLexerToken>());
-
-            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(selector)))
-            using (SelectorLexer lexer = new SelectorLexer(stream)) {
-
-                foreach (ISelectorLexerToken token in lexer) {
-
-                    switch (token.Type) {
-
-                        case SelectorLexerTokenType.Comma:
-
-                            selectors.Add(new List<ISelectorLexerToken>());
-                            break;
-
-                        default:
-
-                            selectors.Last().Add(token);
-                            break;
-
-                    }
-
-                }
-
-            }
-
-        }
-        private bool IsMatch(INode node, IEnumerable<ISelectorLexerToken> selector) {
-
-            bool isMatch = node != null;
-
-            if (node != null) {
-
-                // We'll handle the selector in reverse, since we're starting with a child node rather than a parent node.
-
-                int tokenIndex = 0;
-                bool exitLoop = false;
-
-                foreach (ISelectorLexerToken token in selector.Reverse()) {
-
-                    ++tokenIndex;
-
-                    switch (token.Type) {
-
-                        case SelectorLexerTokenType.Class:
-
-                            // Check if the node has at least one matching class.
-
-                            if (!node.Classes.Any(c => c.Equals(token.GetName(), StringComparison.OrdinalIgnoreCase)) && !token.Value.Equals("*"))
-                                isMatch = false;
-
-                            break;
-
-                        case SelectorLexerTokenType.Id:
-
-                            // Check if the node's ID matches.
-
-                            if (!node.Id.Equals(token.GetName(), StringComparison.OrdinalIgnoreCase))
-                                isMatch = false;
-
-                            break;
-
-                        case SelectorLexerTokenType.ChildCombinator:
-
-                            // Check the rest of the selector against the node's parent.
-
-                            if (!IsMatch(node.Parent, selector.Reverse().Skip(tokenIndex).Reverse()))
-                                isMatch = false;
-
-                            exitLoop = true;
-
-                            break;
-
-                    }
-
-                    if (!isMatch || exitLoop)
-                        break;
-
-                }
-
-            }
-
-            return isMatch;
-
-        }
+        private readonly IEnumerable<ISelector> selectors;
 
     }
 

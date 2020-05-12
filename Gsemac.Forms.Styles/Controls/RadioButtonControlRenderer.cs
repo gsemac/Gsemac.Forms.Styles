@@ -40,7 +40,7 @@ namespace Gsemac.Forms.Styles.Controls {
         private void PaintCheck(Graphics graphics, RadioButton control) {
 
             IRuleset parentRuleset = GetRuleset(control);
-            IRuleset ruleset = GetRuleset(new Node("Check", parent: new ControlNode(control), states: new ControlNode(control).States));
+            IRuleset ruleset = GetRuleset(new Node(string.Empty, "Check", parent: new ControlNode(control), states: new ControlNode(control).States));
 
             if (!ruleset.Any())
                 ruleset = CreateDefaultCheckRuleset();

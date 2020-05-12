@@ -76,7 +76,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
             }
 
-            return new Node("ListBoxItem", states: states);
+            return new Node(string.Empty, "ListBoxItem", states: states);
 
         }
 

@@ -68,22 +68,18 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             using (IStyleSheetLexer lexer = new StyleSheetLexer(stream)) {
 
-                IRuleset currentRuleSet = null;
+                IRuleset currentRuleset = null;
                 string currentPropertyName = string.Empty;
+                bool readSelector = false;
 
-                while (lexer.ReadNextToken(out IStyleSheetLexerToken token)) {
+                while (!lexer.EndOfStream) {
+
+                    IStyleSheetLexerToken token = lexer.Peek();
 
                     switch (token.Type) {
 
-                        case StyleSheetLexerTokenType.Selector:
-                            currentRuleSet = new Ruleset(token.Value);
-                            break;
-
-                        case StyleSheetLexerTokenType.DeclarationStart:
-                            break;
-
                         case StyleSheetLexerTokenType.DeclarationEnd:
-                            rulesets.Add(currentRuleSet);
+                            rulesets.Add(currentRuleset);
                             break;
 
                         case StyleSheetLexerTokenType.PropertyName:
@@ -91,14 +87,34 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                             break;
 
                         case StyleSheetLexerTokenType.String:
-                            currentRuleSet.AddProperty(Property.Create(currentPropertyName, token.Value));
+                            currentRuleset.AddProperty(Property.Create(currentPropertyName, token.Value));
+                            break;
+
+                        case StyleSheetLexerTokenType.Tag:
+                        case StyleSheetLexerTokenType.Class:
+                        case StyleSheetLexerTokenType.Id:
+
+                            currentRuleset = new Ruleset(ReadSelector(lexer));
+
+                            readSelector = true;
+
                             break;
 
                     }
 
+                    if (!readSelector)
+                        lexer.Read(out _);
+
+                    readSelector = false;
+
                 }
 
             }
+
+        }
+        private ISelector ReadSelector(IStyleSheetLexer lexer) {
+
+            return Selector.FromLexer(lexer);
 
         }
 

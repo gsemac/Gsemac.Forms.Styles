@@ -43,7 +43,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
         private void PaintTabsBackground(Graphics graphics, TabControl control) {
 
-            IRuleset tabsRules = GetRuleset(new Node("TabHeader"));
+            IRuleset tabsRules = GetRuleset(new Node(string.Empty, "TabHeader"));
 
             if (control.TabPages.Count > 0) {
 
@@ -61,9 +61,9 @@ namespace Gsemac.Forms.Styles.Controls {
 
                 IRuleset baseRules = GetRuleset(control);
 
-                IRuleset tabRules = GetRuleset(baseRules, new Node("Tab"));
-                IRuleset tabCheckedRules = GetRuleset(baseRules, new Node("Tab", states: NodeStates.Checked));
-                IRuleset tabHoverRules = GetRuleset(baseRules, new Node("Tab", states: NodeStates.Hover));
+                IRuleset tabRules = GetRuleset(baseRules, new Node(string.Empty, "Tab"));
+                IRuleset tabCheckedRules = GetRuleset(baseRules, new Node(string.Empty, "Tab", states: NodeStates.Checked));
+                IRuleset tabHoverRules = GetRuleset(baseRules, new Node(string.Empty, "Tab", states: NodeStates.Hover));
 
                 Point mousePos = control.PointToClient(Cursor.Position);
                 Rectangle mouseRect = new Rectangle(mousePos.X, mousePos.Y, 1, 1);

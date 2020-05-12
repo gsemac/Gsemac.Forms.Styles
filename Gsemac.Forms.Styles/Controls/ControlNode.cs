@@ -11,6 +11,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
         // Public members
 
+        public override string Tag => "Control";
         public override string Id => control.Name;
         public override NodeStates States { get; } = NodeStates.None;
         public override INode Parent => control.Parent != null ? new ControlNode(control.Parent) : null;

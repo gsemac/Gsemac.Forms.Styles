@@ -6,7 +6,7 @@ using System.Text;
 namespace Gsemac.Forms.Styles.StyleSheets {
 
     public enum StyleSheetLexerTokenType {
-        Selector,
+
         DeclarationStart, // "{"
         DeclarationEnd, // "}"
         PropertyName,
@@ -19,7 +19,17 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         Function, // "rgb", "url", etc.
         FunctionArgumentsStart, // "("
         FunctionArgumentSeparator, // ","
-        FunctionArgumentsEnd // ")"
+        FunctionArgumentsEnd, // ")"
+
+        Class, // ".name"
+        Id, // "#name"
+        Tag, // "name", "*"
+        DescendantCombinator, // " "
+        ChildCombinator, // ">"
+        AdjacentSiblingCombinator, // "+"
+        GeneralSiblingCombinator, // "~"
+        SelectorSeparator, // ","
+
     }
 
     public interface IStyleSheetLexerToken {

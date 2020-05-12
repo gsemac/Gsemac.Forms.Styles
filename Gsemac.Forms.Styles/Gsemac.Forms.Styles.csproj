@@ -54,10 +54,12 @@
     <Compile Include="Controls\TextBoxControlRenderer.cs" />
     <Compile Include="Controls\UpDownButtonsControlRenderer.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />
-    <Compile Include="Extensions\SelectorLexerTokenExtensions.cs" />
     <Compile Include="StyleSheets\BorderRadiusProperty.cs" />
-    <Compile Include="StyleSheets\ISelectorLexer.cs" />
-    <Compile Include="StyleSheets\ISelectorLexerToken.cs" />
+    <Compile Include="StyleSheets\ChildSelector.cs" />
+    <Compile Include="StyleSheets\ClassSelector.cs" />
+    <Compile Include="StyleSheets\IDSelector.cs" />
+    <Compile Include="StyleSheets\ILexer.cs" />
+    <Compile Include="StyleSheets\ISelectorBuilder.cs" />
     <Compile Include="StyleSheets\LexerBase.cs" />
     <Compile Include="StyleSheets\Node.cs" />
     <Compile Include="StyleSheets\NodeBase.cs" />
@@ -89,12 +91,13 @@
     <Compile Include="StyleSheets\Ruleset.cs" />
     <Compile Include="StyleSheets\RulesetBase.cs" />
     <Compile Include="StyleSheets\Selector.cs" />
-    <Compile Include="StyleSheets\SelectorLexer.cs" />
-    <Compile Include="StyleSheets\SelectorLexerToken.cs" />
+    <Compile Include="StyleSheets\SelectorBuilder.cs" />
     <Compile Include="StyleSheets\StyleSheet.cs" />
     <Compile Include="StyleSheets\StyleSheetLexer.cs" />
     <Compile Include="StyleSheets\StyleSheetLexerToken.cs" />
     <Compile Include="StyleSheets\PropertyUtilities.cs" />
+    <Compile Include="StyleSheets\TagSelector.cs" />
+    <Compile Include="StyleSheets\UnionSelector.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
