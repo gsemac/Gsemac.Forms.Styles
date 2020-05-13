@@ -122,14 +122,8 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Private members
 
-        private class CachedRulesets {
-
-            public IDictionary<NodeStates, IRuleset> Cache { get; } = new Dictionary<NodeStates, IRuleset>();
-
-        }
-
         private readonly StylesheetControlRendererOptions options = StylesheetControlRendererOptions.Default;
-        private readonly Dictionary<Control, CachedRulesets> rulesetCache = new Dictionary<Control, CachedRulesets>();
+        private readonly Dictionary<Control, IDictionary<NodeStates, IRuleset>> rulesetCache = new Dictionary<Control, IDictionary<NodeStates, IRuleset>>();
 
         private void RenderGenericControl(Graphics graphics, Control control) {
 
@@ -141,19 +135,19 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             INode node = new ControlNode(control);
 
-            if (!(rulesetCache.TryGetValue(control, out CachedRulesets cachedRulesets) && cachedRulesets.Cache.TryGetValue(node.States, out IRuleset ruleset)))
+            if (!(rulesetCache.TryGetValue(control, out IDictionary<NodeStates, IRuleset> cachedRulesets) && cachedRulesets.TryGetValue(node.States, out IRuleset ruleset)))
                 ruleset = GetRuleset(node, inherit);
 
             if (cachedRulesets is null) {
 
-                cachedRulesets = new CachedRulesets();
+                cachedRulesets = new Dictionary<NodeStates, IRuleset>();
 
                 rulesetCache[control] = cachedRulesets;
 
             }
 
             if (ruleset != null)
-                cachedRulesets.Cache[node.States] = ruleset;
+                cachedRulesets[node.States] = ruleset;
 
             return ruleset;
 
