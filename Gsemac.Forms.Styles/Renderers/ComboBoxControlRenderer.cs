@@ -8,30 +8,33 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Controls {
+namespace Gsemac.Forms.Styles.Renderers {
 
     public class ComboBoxControlRenderer :
         ControlRendererBase<ComboBox> {
 
         // Public members
 
-        public ComboBoxControlRenderer(IStyleSheet styleSheet) :
-            base(styleSheet) { }
+        public ComboBoxControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+
+            this.baseRenderer = baseRenderer;
+
+        }
 
         public override void RenderControl(Graphics graphics, ComboBox control) {
 
-            IRuleset ruleset = GetRuleset(control);
+            IRuleset ruleset = baseRenderer.GetRuleset(control);
 
-            SetColorProperties(control, ruleset);
+            StyleUtilities.ApplyColorProperties(control, ruleset);
 
             Rectangle clientRect = control.ClientRectangle;
 
-            PaintBackground(graphics, control);
+            baseRenderer.PaintBackground(graphics, control);
 
             // Match the foreground bounds of the default control.
             // The text is cut off behind the drop-down arrow.
 
-            PaintForeground(graphics, control, new Rectangle(clientRect.X + 1, clientRect.Y, clientRect.Width - 21, clientRect.Height));
+            baseRenderer.PaintForeground(graphics, control, new Rectangle(clientRect.X + 1, clientRect.Y, clientRect.Width - 21, clientRect.Height));
 
             PaintDropDownArrow(graphics, control);
 
@@ -39,10 +42,12 @@ namespace Gsemac.Forms.Styles.Controls {
 
         // Private members
 
+        private readonly IStyleSheetControlRenderer baseRenderer;
+
         private void PaintDropDownArrow(Graphics graphics, ComboBox control) {
 
             INode controlNode = new ControlNode(control);
-            IRuleset ruleset = GetRuleset(new UserNode(string.Empty, "DropDownArrow", parent: controlNode, states: controlNode.States));
+            IRuleset ruleset = baseRenderer.GetRuleset(new UserNode(string.Empty, "DropDownArrow", parent: controlNode, states: controlNode.States));
 
             // Create the arrow rectangle to match the bounds of the default control.
 
@@ -58,7 +63,7 @@ namespace Gsemac.Forms.Styles.Controls {
                 pen.StartCap = LineCap.Flat;
                 pen.EndCap = LineCap.Flat;
 
-                PointF bottomMidpoint = new PointF(arrowRect.Left + (arrowRect.Width / 2.0f), arrowRect.Bottom - 1);
+                PointF bottomMidpoint = new PointF(arrowRect.Left + arrowRect.Width / 2.0f, arrowRect.Bottom - 1);
 
                 graphics.DrawLine(pen, new PointF(arrowRect.Left, arrowRect.Top), bottomMidpoint);
                 graphics.DrawLine(pen, new PointF(arrowRect.Right, arrowRect.Top), bottomMidpoint);

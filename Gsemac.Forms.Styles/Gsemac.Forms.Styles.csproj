@@ -45,14 +45,17 @@
   <ItemGroup>
     <Compile Include="Applicators\IStyleApplicator.cs" />
     <Compile Include="Applicators\StyleSheetStyleApplicatorBase.cs" />
-    <Compile Include="Controls\CheckBoxControlRenderer.cs" />
-    <Compile Include="Controls\ComboBoxControlRenderer.cs" />
-    <Compile Include="Controls\IControlRenderer.cs" />
-    <Compile Include="Controls\ListBoxControlRenderer.cs" />
-    <Compile Include="Controls\NumericUpDownRenderer.cs" />
-    <Compile Include="Controls\RadioButtonControlRenderer.cs" />
-    <Compile Include="Controls\TextBoxControlRenderer.cs" />
-    <Compile Include="Controls\UpDownButtonsControlRenderer.cs" />
+    <Compile Include="Extensions\StyleSheetControlRendererExtensions.cs" />
+    <Compile Include="Renderers\CheckBoxControlRenderer.cs" />
+    <Compile Include="Renderers\ComboBoxControlRenderer.cs" />
+    <Compile Include="Renderers\ControlRendererBase.cs" />
+    <Compile Include="Renderers\IControlRenderer.cs" />
+    <Compile Include="Renderers\IStyleSheetControlRenderer.cs" />
+    <Compile Include="Renderers\ListBoxControlRenderer.cs" />
+    <Compile Include="Renderers\NumericUpDownControlRenderer.cs" />
+    <Compile Include="Renderers\RadioButtonControlRenderer.cs" />
+    <Compile Include="Renderers\TextBoxControlRenderer.cs" />
+    <Compile Include="Renderers\UpDownButtonsControlRenderer.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />
     <Compile Include="StyleSheets\BorderRadiusProperty.cs" />
     <Compile Include="StyleSheets\ChildSelector.cs" />
@@ -67,11 +70,11 @@
     <Compile Include="Applicators\StyleApplicatorBase.cs" />
     <Compile Include="StyleSheets\ColorProperty.cs" />
     <Compile Include="StyleSheets\ControlNode.cs" />
-    <Compile Include="Controls\ButtonControlRenderer.cs" />
-    <Compile Include="Controls\ControlRenderer.cs" />
-    <Compile Include="Controls\ControlRendererBase.cs" />
-    <Compile Include="Controls\LabelControlRenderer.cs" />
-    <Compile Include="Controls\TabControlRenderer.cs" />
+    <Compile Include="Renderers\ButtonControlRenderer.cs" />
+    <Compile Include="Renderers\StylesheetControlRenderer.cs" />
+    <Compile Include="Renderers\StylesheetControlRendererBase.cs" />
+    <Compile Include="Renderers\LabelControlRenderer.cs" />
+    <Compile Include="Renderers\TabControlControlRenderer.cs" />
     <Compile Include="Applicators\UserPaintStyleApplicator.cs" />
     <Compile Include="Extensions\GraphicsExtensions.cs" />
     <Compile Include="StyleSheets\INode.cs" />
@@ -98,6 +101,7 @@
     <Compile Include="StyleSheets\PropertyUtilities.cs" />
     <Compile Include="StyleSheets\TagSelector.cs" />
     <Compile Include="StyleSheets\UnionSelector.cs" />
+    <Compile Include="StyleUtilities.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

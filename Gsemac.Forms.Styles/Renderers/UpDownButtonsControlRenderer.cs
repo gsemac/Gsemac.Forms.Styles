@@ -8,15 +8,17 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Controls {
+namespace Gsemac.Forms.Styles.Renderers {
 
     public class UpDownButtonsControlRenderer :
         ControlRendererBase {
 
         // Public members
 
-        public UpDownButtonsControlRenderer(IStyleSheet styleSheet) :
-                base(styleSheet) {
+        public UpDownButtonsControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+
+            this.baseRenderer = baseRenderer;
+
         }
 
         public override void RenderControl(Graphics graphics, Control control) {
@@ -34,20 +36,22 @@ namespace Gsemac.Forms.Styles.Controls {
             topButtonClickRect.Offset(0, -1);
             bottomButtonClickRect.Offset(0, -1);
 
-            ClearBackground(graphics, control);
+            baseRenderer.ClearBackground(graphics, control);
 
             graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            PaintButton(graphics, topButtonRect, TriangleOrientation.Up, GetRuleset(new ControlNode(control, topButtonClickRect)));
-            PaintButton(graphics, bottomButtonRect, TriangleOrientation.Down, GetRuleset(new ControlNode(control, bottomButtonClickRect)));
+            PaintButton(graphics, topButtonRect, TriangleOrientation.Up, baseRenderer.GetRuleset(new ControlNode(control, topButtonClickRect)));
+            PaintButton(graphics, bottomButtonRect, TriangleOrientation.Down, baseRenderer.GetRuleset(new ControlNode(control, bottomButtonClickRect)));
 
         }
 
         // Private members
 
+        private readonly IStyleSheetControlRenderer baseRenderer;
+
         private void PaintButton(Graphics graphics, Rectangle clientRect, TriangleOrientation arrowOrientation, IRuleset ruleset) {
 
-            PaintBackground(graphics, clientRect, ruleset);
+            baseRenderer.PaintBackground(graphics, clientRect, ruleset);
 
             clientRect.Inflate(new Size(-5, -3));
             clientRect.Offset(1, 0);

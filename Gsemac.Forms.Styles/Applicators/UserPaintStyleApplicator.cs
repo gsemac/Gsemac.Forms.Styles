@@ -1,4 +1,4 @@
-﻿using Gsemac.Forms.Styles.Controls;
+﻿using Gsemac.Forms.Styles.Renderers;
 using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Drawing;
@@ -16,7 +16,7 @@ namespace Gsemac.Forms.Styles.Applicators {
         public UserPaintStyleApplicator(IStyleSheet styleSheet) :
             base(styleSheet) {
 
-            controlRenderer = new ControlRenderer(styleSheet);
+            controlRenderer = new StylesheetControlRenderer(styleSheet);
 
         }
 
@@ -76,7 +76,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         // Private members
 
-        private readonly ControlRenderer controlRenderer;
+        private readonly StylesheetControlRenderer controlRenderer;
 
         private bool ControlSupportsUserPaint(Control control) {
 

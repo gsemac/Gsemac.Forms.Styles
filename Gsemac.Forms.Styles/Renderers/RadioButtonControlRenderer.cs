@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Extensions;
+using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,40 +8,43 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Controls {
+namespace Gsemac.Forms.Styles.Renderers {
 
     public class RadioButtonControlRenderer :
     ControlRendererBase<RadioButton> {
 
         // Public members
 
-        public RadioButtonControlRenderer(IStyleSheet styleSheet) :
-            base(styleSheet) {
+        public RadioButtonControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+
+            this.baseRenderer = baseRenderer;
+
         }
 
         public override void RenderControl(Graphics graphics, RadioButton control) {
 
-            PaintBackground(graphics, control);
+            baseRenderer.PaintBackground(graphics, control);
 
             PaintCheck(graphics, control);
 
-            IRuleset ruleset = GetRuleset(control);
+            IRuleset ruleset = baseRenderer.GetRuleset(control);
 
             Rectangle clientRect = control.ClientRectangle;
             Rectangle drawRect = new Rectangle(clientRect.X + CheckWidth + 3, clientRect.Y, clientRect.Width, clientRect.Height);
 
-            PaintForeground(graphics, control.Text, control.Font, drawRect, ruleset, GetTextFormatFlags(control.TextAlign));
+            baseRenderer.PaintForeground(graphics, control.Text, control.Font, drawRect, ruleset, StyleUtilities.GetTextFormatFlags(control.TextAlign));
 
         }
 
         // Private members
 
+        private readonly IStyleSheetControlRenderer baseRenderer;
         private const int CheckWidth = 13;
 
         private void PaintCheck(Graphics graphics, RadioButton control) {
 
-            IRuleset parentRuleset = GetRuleset(control);
-            IRuleset ruleset = GetRuleset(new UserNode(string.Empty, "Check", parent: new ControlNode(control), states: new ControlNode(control).States));
+            IRuleset parentRuleset = baseRenderer.GetRuleset(control);
+            IRuleset ruleset = baseRenderer.GetRuleset(new UserNode(string.Empty, "Check", parent: new ControlNode(control), states: new ControlNode(control).States));
 
             if (!ruleset.Any())
                 ruleset = CreateDefaultCheckRuleset();
@@ -48,9 +52,9 @@ namespace Gsemac.Forms.Styles.Controls {
             ruleset.InheritProperties(parentRuleset);
 
             Rectangle clientRect = control.ClientRectangle;
-            Rectangle checkRect = new Rectangle(clientRect.X, clientRect.Y + (int)((clientRect.Height / 2.0f) - (CheckWidth / 2.0f)), CheckWidth, CheckWidth);
+            Rectangle checkRect = new Rectangle(clientRect.X, clientRect.Y + (int)(clientRect.Height / 2.0f - CheckWidth / 2.0f), CheckWidth, CheckWidth);
 
-            PaintBackground(graphics, checkRect, ruleset);
+            baseRenderer.PaintBackground(graphics, checkRect, ruleset);
 
             // Draw the checkmark.
 

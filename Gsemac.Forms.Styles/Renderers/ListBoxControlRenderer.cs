@@ -7,22 +7,24 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Controls {
+namespace Gsemac.Forms.Styles.Renderers {
 
     public class ListBoxControlRenderer :
         ControlRendererBase<ListBox> {
 
         // Public members
 
-        public ListBoxControlRenderer(IStyleSheet styleSheet) :
-            base(styleSheet) {
+        public ListBoxControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+
+            this.baseRenderer = baseRenderer;
+
         }
 
         public override void RenderControl(Graphics graphics, ListBox control) {
 
-            IRuleset ruleset = GetRuleset(control);
+            IRuleset ruleset = baseRenderer.GetRuleset(control);
 
-            PaintBackground(graphics, control);
+            baseRenderer.PaintBackground(graphics, control);
 
             if (ruleset.BorderRadius?.Value.IsGreaterThanZero() ?? false)
                 graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(control.ClientRectangle, ruleset.BorderRadius.Value));
@@ -32,6 +34,8 @@ namespace Gsemac.Forms.Styles.Controls {
         }
 
         // Private members
+
+        private readonly IStyleSheetControlRenderer baseRenderer;
 
         private void PaintItems(Graphics graphics, ListBox control) {
 
@@ -48,11 +52,11 @@ namespace Gsemac.Forms.Styles.Controls {
 
             if (itemRect.IntersectsWith(clientRect)) {
 
-                IRuleset itemRuleset = GetRuleset(control, GetItemNode(control, itemindex));
+                IRuleset itemRuleset = baseRenderer.GetRuleset(control, GetItemNode(control, itemindex));
 
-                PaintBackground(graphics, itemRect, itemRuleset);
+                baseRenderer.PaintBackground(graphics, itemRect, itemRuleset);
 
-                PaintForeground(graphics, control.GetItemText(item), control.Font, itemRect, itemRuleset);
+                baseRenderer.PaintForeground(graphics, control.GetItemText(item), control.Font, itemRect, itemRuleset);
 
             }
 
@@ -67,7 +71,7 @@ namespace Gsemac.Forms.Styles.Controls {
             if (control.SelectedItems.Contains(item))
                 states |= NodeStates.Checked;
 
-            if (MouseIntersectsWith(control, itemRect)) {
+            if (StyleUtilities.MouseIntersectsWith(control, itemRect)) {
 
                 if (Control.MouseButtons.HasFlag(MouseButtons.Left))
                     states |= NodeStates.Active;

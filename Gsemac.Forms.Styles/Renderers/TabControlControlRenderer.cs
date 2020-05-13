@@ -1,27 +1,28 @@
-﻿using Gsemac.Forms.Styles.Controls;
-using Gsemac.Forms.Styles.Extensions;
+﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Controls {
+namespace Gsemac.Forms.Styles.Renderers {
 
-    public class TabControlRenderer :
+    public class TabControlControlRenderer :
         ControlRendererBase<TabControl> {
 
         // Public members
 
-        public TabControlRenderer(IStyleSheet styleSheet) :
-            base(styleSheet) {
+        public TabControlControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+
+            this.baseRenderer = baseRenderer;
+
         }
 
         public override void RenderControl(Graphics graphics, TabControl control) {
 
             // Paint the background.
 
-            IRuleset ruleset = GetRuleset(control);
+            IRuleset ruleset = baseRenderer.GetRuleset(control);
 
-            PaintBackground(graphics, control, ruleset);
+            baseRenderer.PaintBackground(graphics, control, ruleset);
 
             // Paint the tabs background.
 
@@ -34,6 +35,8 @@ namespace Gsemac.Forms.Styles.Controls {
         }
 
         // Private members
+
+        private readonly IStyleSheetControlRenderer baseRenderer;
 
         private void PaintTabsBackground(Graphics graphics, TabControl control) {
 
@@ -67,25 +70,25 @@ namespace Gsemac.Forms.Styles.Controls {
 
                         tabNode.AddState(NodeStates.Checked);
 
-                        IRuleset tabRuleset = GetRuleset(tabNode);
+                        IRuleset tabRuleset = baseRenderer.GetRuleset(tabNode);
 
                         Rectangle drawRect = new Rectangle(tabRect.X - 2, tabRect.Y - 2, tabRect.Width + 2, tabRect.Height + 4);
                         Rectangle textRect = new Rectangle(tabRect.X, tabRect.Y - 2, tabRect.Width, tabRect.Height);
 
-                        PaintBackground(graphics, drawRect, tabRuleset);
-                        PaintForeground(graphics, tabPage.Text, control.Font, textRect, tabRuleset, textFormatFlags: TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                        baseRenderer.PaintBackground(graphics, drawRect, tabRuleset);
+                        baseRenderer.PaintForeground(graphics, tabPage.Text, control.Font, textRect, tabRuleset, textFormatFlags: TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
                     }
                     else {
 
                         // Draw unselected tab.
 
-                        IRuleset tabRuleset = GetRuleset(tabNode);
+                        IRuleset tabRuleset = baseRenderer.GetRuleset(tabNode);
 
                         Rectangle drawRect = new Rectangle(tabRect.X, tabRect.Y, tabRect.Width, tabRect.Height + 2);
 
-                        PaintBackground(graphics, drawRect, tabRuleset);
-                        PaintForeground(graphics, tabPage.Text, control.Font, tabRect, tabRuleset, textFormatFlags: TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+                        baseRenderer.PaintBackground(graphics, drawRect, tabRuleset);
+                        baseRenderer.PaintForeground(graphics, tabPage.Text, control.Font, tabRect, tabRuleset, textFormatFlags: TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
 
                     }
 
