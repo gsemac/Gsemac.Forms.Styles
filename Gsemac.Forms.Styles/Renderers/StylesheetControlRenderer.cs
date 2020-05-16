@@ -38,85 +38,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public override void RenderControl(Graphics graphics, Control control) {
 
-            switch (control) {
-
-                case Button button:
-
-                    new ButtonControlRenderer(this).RenderControl(graphics, button);
-
-                    break;
-
-                case CheckBox checkBox:
-
-                    new CheckBoxControlRenderer(this).RenderControl(graphics, checkBox);
-
-                    break;
-
-                case ComboBox comboBox:
-
-                    new ComboBoxControlRenderer(this).RenderControl(graphics, comboBox);
-
-                    break;
-
-                case Label label:
-
-                    new LabelControlRenderer(this).RenderControl(graphics, label);
-
-                    break;
-
-                case ListBox listBox:
-
-                    new ListBoxControlRenderer(this).RenderControl(graphics, listBox);
-
-                    break;
-
-                case NumericUpDown numericUpDown:
-
-                    new NumericUpDownControlRenderer(this).RenderControl(graphics, numericUpDown);
-
-                    break;
-
-                case RadioButton radioButton:
-
-                    new RadioButtonControlRenderer(this).RenderControl(graphics, radioButton);
-
-                    break;
-
-                case TabControl tabControl:
-
-                    new TabControlControlRenderer(this).RenderControl(graphics, tabControl);
-
-                    break;
-
-                case TextBox textBox:
-
-                    new TextBoxControlRenderer(this).RenderControl(graphics, textBox);
-
-                    break;
-
-                default:
-
-                    // These controls can't be checked for directly because they are internal types.
-
-                    switch (control.GetType().FullName) {
-
-                        case "System.Windows.Forms.UpDownBase+UpDownButtons":
-
-                            new UpDownButtonsControlRenderer(this).RenderControl(graphics, control);
-
-                            break;
-
-                        default:
-
-                            RenderGenericControl(graphics, control);
-
-                            break;
-
-                    }
-
-                    break;
-
-            }
+            GetControlRenderer(control).RenderControl(graphics, control);
 
         }
 
@@ -125,12 +47,57 @@ namespace Gsemac.Forms.Styles.Renderers {
         private readonly StylesheetControlRendererOptions options = StylesheetControlRendererOptions.Default;
         private readonly Dictionary<Control, IDictionary<NodeStates, IRuleset>> rulesetCache = new Dictionary<Control, IDictionary<NodeStates, IRuleset>>();
 
-        private void RenderGenericControl(Graphics graphics, Control control) {
+        private IControlRenderer GetControlRenderer(Control control) {
 
-            this.PaintBackground(graphics, control);
+            switch (control) {
+
+                case Button _:
+                    return new ButtonControlRenderer(this);
+
+                case CheckBox _:
+                    return new CheckBoxControlRenderer(this);
+
+                case ComboBox _:
+                    return new ComboBoxControlRenderer(this);
+
+                case Label _:
+                    return new LabelControlRenderer(this);
+
+                case ListBox _:
+                    return new ListBoxControlRenderer(this);
+
+                case NumericUpDown _:
+                    return new NumericUpDownControlRenderer(this);
+
+                case RadioButton _:
+                    return new RadioButtonControlRenderer(this);
+
+                case TabControl _:
+                    return new TabControlControlRenderer(this);
+
+                case TextBox _:
+                    return new TextBoxControlRenderer(this);
+
+                case GroupBox _:
+                    return new GroupBoxControlRenderer(this);
+
+                default:
+
+                    // Some controls can't be checked for directly because they are internal types.
+
+                    switch (control.GetType().FullName) {
+
+                        case "System.Windows.Forms.UpDownBase+UpDownButtons":
+                            return new UpDownButtonsControlRenderer(this);
+
+                        default:
+                            return new GenericControlRenderer(this);
+
+                    }
+
+            }
 
         }
-
         private IRuleset GetRulesetFromCache(Control control, bool inherit) {
 
             INode node = new ControlNode(control);

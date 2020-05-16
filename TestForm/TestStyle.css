@@ -11,7 +11,6 @@
     border-color: #5c5c5c;
     border-radius: 2px;
     border-width: 1px;
-    color: #dcdcdc;
 }
 
 .button:hover {
@@ -26,10 +25,11 @@
     border-color: #6897bb;
 }
 
-.panel {
+.panel, .groupbox {
     background-color: #3c3f41;
     border-color: #333333;
     border-width: 1px;
+    border-radius: 2px;
 }
 
 .tabcontrol {
@@ -42,11 +42,6 @@
     background-color: red;
 }
 
-.tabcontrol > .panel {
-    background-color: #313335;
-    border-width: 0px;
-}
-
 .tab {
     background-color: #2b2b2b;
 }
@@ -57,12 +52,6 @@
 
 .tab:checked {
     background-color: #4b6eaf;
-}
-
-.groupbox {
-    background-color: #3c3f41;
-    border-color: #333333;
-    border-width: 1px;
 }
 
 .ListBox {

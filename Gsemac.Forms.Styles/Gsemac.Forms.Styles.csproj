@@ -49,6 +49,8 @@
     <Compile Include="Renderers\CheckBoxControlRenderer.cs" />
     <Compile Include="Renderers\ComboBoxControlRenderer.cs" />
     <Compile Include="Renderers\ControlRendererBase.cs" />
+    <Compile Include="Renderers\GenericControlRenderer.cs" />
+    <Compile Include="Renderers\GroupBoxControlRenderer.cs" />
     <Compile Include="Renderers\IControlRenderer.cs" />
     <Compile Include="Renderers\IStyleSheetControlRenderer.cs" />
     <Compile Include="Renderers\ListBoxControlRenderer.cs" />
