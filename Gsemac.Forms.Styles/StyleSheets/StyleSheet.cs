@@ -70,7 +70,6 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                 IRuleset currentRuleset = null;
                 string currentPropertyName = string.Empty;
-                bool readSelector = false;
 
                 while (!lexer.EndOfStream) {
 
@@ -87,34 +86,104 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                             break;
 
                         case StyleSheetLexerTokenType.String:
-                            currentRuleset.AddProperty(Property.Create(currentPropertyName, token.Value));
-                            break;
+                        case StyleSheetLexerTokenType.Function:
+                            currentRuleset.AddProperty(Property.Create(currentPropertyName, ReadPropertyValue(lexer)));
+                            continue;
 
                         case StyleSheetLexerTokenType.Tag:
                         case StyleSheetLexerTokenType.Class:
                         case StyleSheetLexerTokenType.Id:
-
                             currentRuleset = new Ruleset(ReadSelector(lexer));
-
-                            readSelector = true;
-
-                            break;
+                            continue;
 
                     }
 
-                    if (!readSelector)
-                        lexer.Read(out _);
+                    // Consume the current token.
 
-                    readSelector = false;
+                    lexer.Read(out _);
 
                 }
 
             }
 
         }
+
         private ISelector ReadSelector(IStyleSheetLexer lexer) {
 
             return Selector.FromLexer(lexer);
+
+        }
+        private object ReadPropertyValue(IStyleSheetLexer lexer) {
+
+            object result = null;
+
+            if (lexer.Read(out IStyleSheetLexerToken token)) {
+
+                switch (token.Type) {
+
+                    case StyleSheetLexerTokenType.String:
+                        result = token.Value;
+                        break;
+
+                    case StyleSheetLexerTokenType.Function:
+                        result = ReadFunction(lexer, token.Value);
+                        break;
+
+                }
+
+            }
+
+            return result;
+
+        }
+        private object ReadFunction(IStyleSheetLexer lexer, string functionName) {
+
+            List<object> functionArguments = new List<object>();
+
+            bool exitLoop = false;
+
+            while (!exitLoop && lexer.Read(out IStyleSheetLexerToken token)) {
+
+                switch (token.Type) {
+
+                    case StyleSheetLexerTokenType.String:
+                        functionArguments.Add(token.Value);
+                        break;
+
+                    case StyleSheetLexerTokenType.Number:
+                        functionArguments.Add(PropertyUtilities.ParseNumber(token.Value));
+                        break;
+
+                    case StyleSheetLexerTokenType.Function:
+                        functionArguments.Add(ReadFunction(lexer, token.Value));
+                        break;
+
+                    case StyleSheetLexerTokenType.FunctionArgumentsStart:
+                        break;
+
+                    case StyleSheetLexerTokenType.FunctionArgumentSeparator:
+                        break;
+
+                    case StyleSheetLexerTokenType.FunctionArgumentsEnd:
+                        exitLoop = true;
+                        break;
+
+                    default:
+                        throw new UnexpectedTokenException(token.Type.ToString());
+
+                }
+
+            }
+
+            switch ((functionName ?? "").Trim().ToLowerInvariant()) {
+
+                case "rgb":
+                    return PropertyUtilities.Rgb(Convert.ToInt32(functionArguments[0]), Convert.ToInt32(functionArguments[1]), Convert.ToInt32(functionArguments[2]));
+
+                default:
+                    throw new InvalidFunctionException(functionName);
+
+            }
 
         }
 

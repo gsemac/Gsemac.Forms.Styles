@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -6,33 +7,33 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
-        public static IProperty Create(string propertyName, string propertyValue) {
+        public static IProperty Create(string propertyName, object propertyValue) {
 
             PropertyType type = GetType(propertyName);
 
             return Create(type, propertyValue);
 
         }
-        public static IProperty Create(PropertyType type, string propertyValue) {
+        public static IProperty Create(PropertyType type, object propertyValue) {
 
             switch (type) {
 
                 case PropertyType.BorderColor:
-                    return new ColorProperty(type, propertyValue, false);
+                    return new ColorProperty(type, ToColor(propertyValue), false);
 
                 case PropertyType.BackgroundColor:
                 case PropertyType.Color:
-                    return new ColorProperty(type, propertyValue, true);
+                    return new ColorProperty(type, ToColor(propertyValue), true);
 
                 case PropertyType.BorderRadius:
-                    return new BorderRadiusProperty(type, propertyValue, false);
+                    return new BorderRadiusProperty(type, (string)propertyValue, false);
 
                 case PropertyType.BorderTopLeftRadius:
                 case PropertyType.BorderTopRightRadius:
                 case PropertyType.BorderBottomRightRadius:
                 case PropertyType.BorderBottomLeftRadius:
                 case PropertyType.BorderWidth:
-                    return new NumberProperty(type, propertyValue, false);
+                    return new NumberProperty(type, ToNumber(propertyValue), false);
 
                 default:
                     throw new InvalidPropertyException(type.ToString());
@@ -110,9 +111,32 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     return "color";
 
                 default:
-                    throw new InvalidPropertyException(((int)propertyType).ToString());
+                    throw new InvalidPropertyException(propertyType.ToString());
 
             }
+
+        }
+
+        // Private members
+
+        private static Color ToColor(object value) {
+
+            if (value is Color)
+                return (Color)value;
+            else if (value is string)
+                return PropertyUtilities.ParseColor((string)value);
+            else
+                throw new ArgumentException(nameof(value));
+
+        }
+        private static double ToNumber(object value) {
+
+            if (value is double)
+                return (double)value;
+            else if (value is string)
+                return PropertyUtilities.ParseNumber((string)value);
+            else
+                throw new ArgumentException(nameof(value));
 
         }
 
