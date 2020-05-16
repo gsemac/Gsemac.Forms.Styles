@@ -48,8 +48,7 @@ namespace ThemeTesting {
 
         private IStyleSheet LoadStyleSheet() {
 
-            using (FileStream fstream = new FileStream("TestStyle.css", FileMode.Open))
-                return StyleSheet.FromStream(fstream);
+            return StyleSheet.FromFile("TestStyle.css");
 
         }
         private void ClearStyles() {

@@ -83,7 +83,6 @@
     <Compile Include="Extensions\GraphicsExtensions.cs" />
     <Compile Include="StyleSheets\INode.cs" />
     <Compile Include="StyleSheets\InvalidPropertyException.cs" />
-    <Compile Include="StyleSheets\InvalidTokenException.cs" />
     <Compile Include="StyleSheets\ISelector.cs" />
     <Compile Include="StyleSheets\IStyleSheet.cs" />
     <Compile Include="StyleSheets\IProperty.cs" />

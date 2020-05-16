@@ -80,6 +80,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         ReadPropertyEnd();
                         break;
 
+                    case '/':
+                        ReadComment();
+                        break;
+
                     default:
 
                         if (insideDeclaration)
@@ -94,6 +98,16 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             }
 
         }
+        private string ReadNextChars(int count) {
+
+            StringBuilder valueBuilder = new StringBuilder();
+
+            for (int i = 0; !Reader.EndOfStream && i < count; ++i)
+                valueBuilder.Append((char)Reader.Read());
+
+            return valueBuilder.ToString();
+
+        }
 
         private void ReadDeclarationStart() {
 
@@ -102,7 +116,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             valueBuilder.Append((char)Reader.Read());
 
             if (insideDeclaration)
-                throw new InvalidTokenException(valueBuilder.ToString());
+                throw new UnexpectedTokenException(valueBuilder.ToString());
 
             insideDeclaration = true;
 
@@ -116,7 +130,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             valueBuilder.Append((char)Reader.Read());
 
             if (!insideDeclaration)
-                throw new InvalidTokenException(valueBuilder.ToString());
+                throw new UnexpectedTokenException(valueBuilder.ToString());
 
             insideDeclaration = false;
 
@@ -192,6 +206,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                         ReadFunctionArguments();
 
+                        break;
+
+                    case '/':
+                        ReadComment();
                         break;
 
                     default:
@@ -290,6 +308,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         ReadSelectorSeparator();
                         SkipWhitespace();
 
+                        break;
+
+                    case '/':
+                        ReadComment();
                         break;
 
                     case '{':
@@ -403,6 +425,52 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         private void ReadSelectorSeparator() {
 
             tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.SelectorSeparator, ((char)Reader.Read()).ToString()));
+
+        }
+
+        private void ReadComment() {
+
+            const string commentStartMarker = "/*";
+            const string commendEndMarker = "*/";
+
+            string value = ReadNextChars(2);
+
+            if (value != commentStartMarker)
+                throw new UnexpectedTokenException(value);
+
+            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.CommentStart, commentStartMarker));
+
+            StringBuilder valueBuilder = new StringBuilder();
+
+            bool commentIsClosed = false;
+
+            while (!Reader.EndOfStream) {
+
+                valueBuilder.Append((char)Reader.Read());
+
+                if (valueBuilder.Length >= 2 && valueBuilder.ToString(valueBuilder.Length - 2, 2) == commendEndMarker) {
+
+                    commentIsClosed = true;
+
+                    break;
+
+                }
+
+            }
+
+            if (valueBuilder.Length > 0) {
+
+                string comment = valueBuilder.ToString();
+
+                if (commentIsClosed)
+                    comment = comment.Substring(0, comment.Length - 2);
+
+                tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Comment, comment));
+
+                if (commentIsClosed)
+                    tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.CommentEnd, commendEndMarker));
+
+            }
 
         }
 
