@@ -57,6 +57,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             return result;
 
         }
+        public static StyleSheet FromFile(string filePath) {
+
+            using (FileStream fstream = new FileStream(filePath, FileMode.Open))
+                return FromStream(fstream);
+
+        }
 
         // Private members
 

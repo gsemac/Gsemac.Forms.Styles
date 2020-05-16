@@ -71,7 +71,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             if (control.SelectedItems.Contains(item))
                 states |= NodeStates.Checked;
 
-            if (StyleUtilities.MouseIntersectsWith(control, itemRect)) {
+            if (RenderUtilities.MouseIntersectsWith(control, itemRect)) {
 
                 if (Control.MouseButtons.HasFlag(MouseButtons.Left))
                     states |= NodeStates.Active;

@@ -18,7 +18,7 @@ namespace Gsemac.Forms.Styles.Renderers {
         public override void RenderControl(Graphics graphics, Button control) {
 
             baseRenderer.PaintBackground(graphics, control);
-            baseRenderer.PaintForeground(graphics, control, StyleUtilities.GetTextFormatFlags(control.TextAlign));
+            baseRenderer.PaintForeground(graphics, control, RenderUtilities.GetTextFormatFlags(control.TextAlign));
 
         }
 

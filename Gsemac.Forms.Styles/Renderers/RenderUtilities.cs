@@ -5,21 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles {
+namespace Gsemac.Forms.Styles.Renderers {
 
-    public static class StyleUtilities {
-
-        public static void ApplyStylesFromFile(Control control, string filePath) {
-
-            using (FileStream fstream = new FileStream(filePath, FileMode.Open)) {
-
-                IStyleSheet styleSheet = StyleSheet.FromStream(fstream);
-
-                new UserPaintStyleApplicator(styleSheet).ApplyStyles(control);
-
-            }
-
-        }
+    public static class RenderUtilities {
 
         public static bool MouseIntersectsWith(Control control) {
 

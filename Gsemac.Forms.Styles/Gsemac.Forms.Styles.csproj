@@ -103,7 +103,7 @@
     <Compile Include="StyleSheets\PropertyUtilities.cs" />
     <Compile Include="StyleSheets\TagSelector.cs" />
     <Compile Include="StyleSheets\UnionSelector.cs" />
-    <Compile Include="StyleUtilities.cs" />
+    <Compile Include="Renderers\RenderUtilities.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

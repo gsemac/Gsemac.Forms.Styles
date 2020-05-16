@@ -32,7 +32,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle clientRect = control.ClientRectangle;
             Rectangle drawRect = new Rectangle(clientRect.X + CheckWidth + 3, clientRect.Y - 1, clientRect.Width, clientRect.Height);
 
-            baseRenderer.PaintForeground(graphics, control.Text, control.Font, drawRect, ruleset, StyleUtilities.GetTextFormatFlags(control.TextAlign));
+            baseRenderer.PaintForeground(graphics, control.Text, control.Font, drawRect, ruleset, RenderUtilities.GetTextFormatFlags(control.TextAlign));
 
         }
 
