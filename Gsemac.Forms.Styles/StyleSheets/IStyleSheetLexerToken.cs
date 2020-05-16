@@ -12,10 +12,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         PropertyName,
         PropertyValueSeparator, // ":"
         PropertyEnd, // ";"
-        Color,
-        String,
-        Number,
-        Units, // "px", "em", etc.
+        Value,
         Function, // "rgb", "url", etc.
         FunctionArgumentsStart, // "("
         FunctionArgumentSeparator, // ","

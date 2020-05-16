@@ -160,7 +160,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         // We've reached the end of the property or set of function arguments.
 
                         if (buffer.Length > 0)
-                            AddPropertyValueToken(buffer.ToString());
+                            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Value, buffer.ToString().Trim()));
 
                         exitLoop = true;
 
@@ -171,7 +171,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         // We've reached the end of the current value (of a comma-delimited set of values).
 
                         if (buffer.Length > 0)
-                            AddPropertyValueToken(buffer.ToString());
+                            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Value, buffer.ToString().Trim()));
 
                         buffer.Clear();
 
@@ -403,22 +403,6 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         private void ReadSelectorSeparator() {
 
             tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.SelectorSeparator, ((char)Reader.Read()).ToString()));
-
-        }
-
-        private void AddPropertyValueToken(string value) {
-
-            value = value?.Trim();
-
-            StyleSheetLexerTokenType tokenType = StyleSheetLexerTokenType.String;
-
-            bool isNumeric = !string.IsNullOrEmpty(value) && double.TryParse(value, out _);
-            //bool isColor = !string.IsNullOrEmpty(value) && value.StartsWith("#");
-
-            if (isNumeric)
-                tokenType = StyleSheetLexerTokenType.Number;
-
-            tokens.Enqueue(new StyleSheetLexerToken(tokenType, value));
 
         }
 

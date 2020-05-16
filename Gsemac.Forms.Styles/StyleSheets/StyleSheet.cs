@@ -85,7 +85,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                             currentPropertyName = token.Value;
                             break;
 
-                        case StyleSheetLexerTokenType.String:
+                        case StyleSheetLexerTokenType.Value:
                         case StyleSheetLexerTokenType.Function:
                             currentRuleset.AddProperty(Property.Create(currentPropertyName, ReadPropertyValue(lexer)));
                             continue;
@@ -121,7 +121,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                 switch (token.Type) {
 
-                    case StyleSheetLexerTokenType.String:
+                    case StyleSheetLexerTokenType.Value:
                         result = token.Value;
                         break;
 
@@ -146,12 +146,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                 switch (token.Type) {
 
-                    case StyleSheetLexerTokenType.String:
+                    case StyleSheetLexerTokenType.Value:
                         functionArguments.Add(token.Value);
-                        break;
-
-                    case StyleSheetLexerTokenType.Number:
-                        functionArguments.Add(PropertyUtilities.ParseNumber(token.Value));
                         break;
 
                     case StyleSheetLexerTokenType.Function:
