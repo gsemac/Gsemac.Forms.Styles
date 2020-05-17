@@ -40,12 +40,6 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             switch (control) {
 
-                case ComboBox comboBox:
-
-                    ApplyStyles(comboBox, info);
-
-                    break;
-
                 case ListBox listBox:
 
                     ApplyStyles(listBox, info);
@@ -70,6 +64,12 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                     break;
 
+                case ToolStrip toolStrip:
+
+                    ApplyStyles(toolStrip, info);
+
+                    break;
+
             }
 
         }
@@ -81,8 +81,9 @@ namespace Gsemac.Forms.Styles.Applicators {
         private bool ControlSupportsUserPaint(Control control) {
 
             // Controls that use TextBoxes generally need special treatment to render correctly.
+            // ToolStrips and MenuStrips (which inherit from ToolStrip) are drawn through the custom ToolStripRenderers supplied to the "Renderer" property.
 
-            if (control is TextBox || control is NumericUpDown)
+            if (control is TextBox || control is NumericUpDown || control is ToolStrip)
                 return false;
 
             // Only ComboBoxes with the DropDownList style do not use a TextBox, and can be fully painted.
@@ -166,18 +167,6 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
-        private void ApplyStyles(ComboBox control, ControlInfo info) {
-
-            if (control.DropDownStyle != ComboBoxStyle.DropDownList) {
-
-                //AddParentPaintHandler(control, info);
-                //AddTextBoxInvalidateParentHandlers(control, info);
-
-                //control.FlatStyle = FlatStyle.Flat;
-
-            }
-
-        }
         private void ApplyStyles(ListBox control, ControlInfo info) {
 
             control.DrawMode = DrawMode.OwnerDrawFixed;
@@ -281,6 +270,19 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             if (control.Multiline)
                 control.Height -= 6;
+
+        }
+        private void ApplyStyles(ToolStrip control, ControlInfo info) {
+
+            System.Windows.Forms.ToolStripRenderer originalRenderer = control.Renderer;
+
+            control.Renderer = new Renderers.ToolStripRenderer(controlRenderer);
+
+            info.ResetControl += (c) => {
+
+                (c as ToolStrip).Renderer = originalRenderer;
+
+            };
 
         }
 

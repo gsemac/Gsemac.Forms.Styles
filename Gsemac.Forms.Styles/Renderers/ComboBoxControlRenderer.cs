@@ -47,7 +47,12 @@ namespace Gsemac.Forms.Styles.Renderers {
         private void PaintDropDownArrow(Graphics graphics, ComboBox control) {
 
             INode controlNode = new ControlNode(control);
-            IRuleset ruleset = baseRenderer.GetRuleset(new UserNode(string.Empty, "DropDownArrow", parent: controlNode, states: controlNode.States));
+            UserNode dropDownArrowNode = new UserNode(string.Empty, new[] { "DropDownArrow" });
+
+            dropDownArrowNode.SetParent(controlNode);
+            dropDownArrowNode.SetStates(controlNode.States);
+
+            IRuleset ruleset = baseRenderer.GetRuleset(dropDownArrowNode);
 
             // Create the arrow rectangle to match the bounds of the default control.
 

@@ -57,6 +57,7 @@
     <Compile Include="Renderers\NumericUpDownControlRenderer.cs" />
     <Compile Include="Renderers\RadioButtonControlRenderer.cs" />
     <Compile Include="Renderers\TextBoxControlRenderer.cs" />
+    <Compile Include="Renderers\ToolStripRenderer.cs" />
     <Compile Include="Renderers\UpDownButtonsControlRenderer.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />
     <Compile Include="StyleSheets\BorderRadiusProperty.cs" />

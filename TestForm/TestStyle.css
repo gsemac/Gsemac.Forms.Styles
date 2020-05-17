@@ -63,6 +63,32 @@
     background-color: #4b6eaf;
 }
 
+.toolstrip {
+    background-color: rgb(60, 63, 65);
+}
+
+.toolstripitem:hover {
+    background-color: rgb(122, 128, 132);
+    border-radius: 1px;
+}
+
+.toolstripitem:active {
+    background-color: rgb(92, 92, 92);
+    border-radius: 1px;
+}
+
+.toolstripdropdown {
+    border-width: 1px;
+    border-color: rgb(81, 81, 81);
+}
+
+.toolstripseparator {
+    background-color: rgb(81, 81, 81);
+}
+
+.menustrip {
+}
+
 .ListBox {
     background-color: #202225;
     color: #8b9294;

@@ -43,8 +43,14 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         private void PaintCheck(Graphics graphics, RadioButton control) {
 
+            INode controlNode = new ControlNode(control);
+            UserNode checkNode = new UserNode(string.Empty, new[] { "Check" });
+
+            checkNode.SetParent(controlNode);
+            checkNode.SetStates(controlNode.States);
+
             IRuleset parentRuleset = baseRenderer.GetRuleset(control);
-            IRuleset ruleset = baseRenderer.GetRuleset(new UserNode(string.Empty, "Check", parent: new ControlNode(control), states: new ControlNode(control).States));
+            IRuleset ruleset = baseRenderer.GetRuleset(checkNode);
 
             if (!ruleset.Any())
                 ruleset = CreateDefaultCheckRuleset();

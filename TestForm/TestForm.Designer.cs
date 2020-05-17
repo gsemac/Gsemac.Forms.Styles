@@ -26,6 +26,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
@@ -43,24 +47,23 @@
             this.label2 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.menuItem1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItem2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.menuItem3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItem4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -97,6 +100,39 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Basic controls";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.numericUpDown2);
+            this.groupBox1.Controls.Add(this.textBox4);
+            this.groupBox1.Controls.Add(this.textBox3);
+            this.groupBox1.Location = new System.Drawing.Point(168, 169);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(140, 130);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(6, 83);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(128, 23);
+            this.numericUpDown2.TabIndex = 2;
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(6, 54);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(128, 23);
+            this.textBox4.TabIndex = 1;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(6, 25);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(128, 23);
+            this.textBox3.TabIndex = 0;
             // 
             // radioButton2
             // 
@@ -273,6 +309,24 @@
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // menuItem1ToolStripMenuItem
+            // 
+            this.menuItem1ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItem2ToolStripMenuItem,
+            this.menuItem3ToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.menuItem4ToolStripMenuItem});
+            this.menuItem1ToolStripMenuItem.Name = "menuItem1ToolStripMenuItem";
+            this.menuItem1ToolStripMenuItem.Size = new System.Drawing.Size(86, 20);
+            this.menuItem1ToolStripMenuItem.Text = "Menu item 1";
+            // 
+            // menuItem2ToolStripMenuItem
+            // 
+            this.menuItem2ToolStripMenuItem.Name = "menuItem2ToolStripMenuItem";
+            this.menuItem2ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+            this.menuItem2ToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.menuItem2ToolStripMenuItem.Text = "Menu item 2";
+            // 
             // toolStrip1
             // 
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
@@ -285,20 +339,6 @@
             this.toolStrip1.Size = new System.Drawing.Size(681, 25);
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // menuItem1ToolStripMenuItem
-            // 
-            this.menuItem1ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuItem2ToolStripMenuItem});
-            this.menuItem1ToolStripMenuItem.Name = "menuItem1ToolStripMenuItem";
-            this.menuItem1ToolStripMenuItem.Size = new System.Drawing.Size(86, 20);
-            this.menuItem1ToolStripMenuItem.Text = "menu item 1";
-            // 
-            // menuItem2ToolStripMenuItem
-            // 
-            this.menuItem2ToolStripMenuItem.Name = "menuItem2ToolStripMenuItem";
-            this.menuItem2ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.menuItem2ToolStripMenuItem.Text = "menu item 2";
             // 
             // toolStripButton1
             // 
@@ -320,38 +360,22 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // groupBox1
+            // menuItem3ToolStripMenuItem
             // 
-            this.groupBox1.Controls.Add(this.numericUpDown2);
-            this.groupBox1.Controls.Add(this.textBox4);
-            this.groupBox1.Controls.Add(this.textBox3);
-            this.groupBox1.Location = new System.Drawing.Point(168, 169);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(140, 130);
-            this.groupBox1.TabIndex = 14;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.menuItem3ToolStripMenuItem.Name = "menuItem3ToolStripMenuItem";
+            this.menuItem3ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.menuItem3ToolStripMenuItem.Text = "Menu item 3";
             // 
-            // numericUpDown2
+            // menuItem4ToolStripMenuItem
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(6, 83);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(128, 23);
-            this.numericUpDown2.TabIndex = 2;
+            this.menuItem4ToolStripMenuItem.Name = "menuItem4ToolStripMenuItem";
+            this.menuItem4ToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.menuItem4ToolStripMenuItem.Text = "Menu item 4";
             // 
-            // textBox4
+            // toolStripSeparator2
             // 
-            this.textBox4.Location = new System.Drawing.Point(6, 54);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(128, 23);
-            this.textBox4.TabIndex = 1;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(6, 25);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(128, 23);
-            this.textBox3.TabIndex = 0;
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(180, 6);
             // 
             // TestForm
             // 
@@ -372,6 +396,9 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -379,9 +406,6 @@
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -418,5 +442,8 @@
         private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.ToolStripMenuItem menuItem3ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem menuItem4ToolStripMenuItem;
     }
 }

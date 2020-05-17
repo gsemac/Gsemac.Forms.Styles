@@ -60,7 +60,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                     TabPage tabPage = control.TabPages[i];
                     Rectangle tabRect = control.GetTabRect(i);
-                    UserNode tabNode = new UserNode(control, tabRect);
+                    UserNode tabNode = new UserNode(tabRect, control.PointToClient(Cursor.Position));
 
                     tabNode.AddClass("tab");
 

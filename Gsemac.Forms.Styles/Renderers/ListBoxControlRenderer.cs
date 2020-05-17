@@ -80,7 +80,11 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             }
 
-            return new UserNode(string.Empty, "ListBoxItem", states: states);
+            UserNode node = new UserNode(string.Empty, new[] { "ListBoxItem" });
+
+            node.SetStates(states);
+
+            return node;
 
         }
 

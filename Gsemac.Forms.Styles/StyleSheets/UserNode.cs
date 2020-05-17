@@ -13,13 +13,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public override string Tag => tag;
         public override string Id => id;
         public override NodeStates States => states;
-        public override INode Parent { get; }
+        public override INode Parent => parent;
 
-        public UserNode(Control baseControl, Rectangle clientRectangle) {
+        public UserNode(Rectangle clientRectangle, Point cursorPosition) {
 
-            Point cursorPos = Cursor.Position;
-            Point cursotRelativePos = baseControl.PointToClient(cursorPos);
-            Rectangle cursorRect = new Rectangle(cursotRelativePos.X, cursotRelativePos.Y, 1, 1);
+            Rectangle cursorRect = new Rectangle(cursorPosition.X, cursorPosition.Y, 1, 1);
 
             if (clientRectangle.IntersectsWith(cursorRect)) {
 
@@ -31,12 +29,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             }
 
         }
-        public UserNode(string tag, string className, INode parent = null, NodeStates states = NodeStates.None) {
+        public UserNode(string tag, IEnumerable<string> classes) {
 
             this.tag = tag;
-            this.classes.Add(className);
-            this.states = states;
-            this.Parent = parent;
+
+            foreach (string @class in classes)
+                AddClass(@class);
 
         }
 
@@ -56,6 +54,13 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             tag = value;
 
         }
+        public void SetClass(string value) {
+
+            classes.Clear();
+
+            AddClass(value);
+
+        }
         public void SetId(string value) {
 
             id = value;
@@ -64,6 +69,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public void SetStates(NodeStates value) {
 
             states = value;
+
+        }
+        public void SetParent(INode node) {
+
+            parent = node;
 
         }
 
@@ -80,6 +90,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         private readonly List<string> classes = new List<string>();
         private string tag = "";
         private string id = "";
+        private INode parent = null;
         private NodeStates states = NodeStates.None;
 
     }
