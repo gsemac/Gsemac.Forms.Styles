@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -11,9 +12,22 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         ISelector Selector { get; }
 
         ColorProperty BackgroundColor { get; }
-        ColorProperty BorderColor { get; }
-        NumberProperty BorderWidth { get; }
-        BorderRadiusProperty BorderRadius { get; }
+        ColorProperty BorderBottomColor { get; }
+        NumberProperty BorderBottomLeftRadius { get; }
+        NumberProperty BorderBottomRightRadius { get; }
+        BorderStyleProperty BorderBottomStyle { get; }
+        NumberProperty BorderBottomWidth { get; }
+        ColorProperty BorderLeftColor { get; }
+        BorderStyleProperty BorderLeftStyle { get; }
+        NumberProperty BorderLeftWidth { get; }
+        ColorProperty BorderRightColor { get; }
+        BorderStyleProperty BorderRightStyle { get; }
+        NumberProperty BorderRightWidth { get; }
+        ColorProperty BorderTopColor { get; }
+        NumberProperty BorderTopLeftRadius { get; }
+        NumberProperty BorderTopRightRadius { get; }
+        BorderStyleProperty BorderTopStyle { get; }
+        NumberProperty BorderTopWidth { get; }
         ColorProperty Color { get; }
 
         void AddProperty(IProperty property);

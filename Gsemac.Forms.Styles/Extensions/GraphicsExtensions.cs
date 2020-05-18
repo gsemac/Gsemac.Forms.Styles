@@ -19,11 +19,6 @@ namespace Gsemac.Forms.Styles.Extensions {
 
         // RoundedRectangle code adapted from https://stackoverflow.com/a/33853557/5383169
 
-        public static GraphicsPath CreateRoundedRectangle(Rectangle bounds, BorderRadius borderRadius) {
-
-            return CreateRoundedRectangle(bounds, (int)borderRadius.TopLeft, (int)borderRadius.TopRight, (int)borderRadius.BottomLeft, (int)borderRadius.BottomRight);
-
-        }
         public static GraphicsPath CreateRoundedRectangle(Rectangle bounds, int topLeft, int topRight, int bottomLeft, int bottomRight) {
 
             int topLeftDiameter = topLeft * 2;
@@ -108,7 +103,7 @@ namespace Gsemac.Forms.Styles.Extensions {
 
         }
 
-        public static void DrawRoundedRectangle(this Graphics graphics, Pen pen, Rectangle bounds, BorderRadius borderRadius) {
+        public static void DrawRoundedRectangle(this Graphics graphics, Pen pen, Rectangle bounds, int topLeft, int topRight, int bottomLeft, int bottomRight) {
 
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
@@ -116,11 +111,11 @@ namespace Gsemac.Forms.Styles.Extensions {
             if (pen is null)
                 throw new ArgumentNullException(nameof(pen));
 
-            using (GraphicsPath path = CreateRoundedRectangle(bounds, borderRadius))
+            using (GraphicsPath path = CreateRoundedRectangle(bounds, topLeft, topRight, bottomLeft, bottomRight))
                 graphics.DrawPath(pen, path);
 
         }
-        public static void FillRoundedRectangle(this Graphics graphics, Brush brush, Rectangle bounds, BorderRadius borderRadius) {
+        public static void FillRoundedRectangle(this Graphics graphics, Brush brush, Rectangle bounds, int topLeft, int topRight, int bottomLeft, int bottomRight) {
 
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
@@ -128,7 +123,7 @@ namespace Gsemac.Forms.Styles.Extensions {
             if (brush is null)
                 throw new ArgumentNullException(nameof(brush));
 
-            using (GraphicsPath path = CreateRoundedRectangle(bounds, borderRadius))
+            using (GraphicsPath path = CreateRoundedRectangle(bounds, topLeft, topRight, bottomLeft, bottomRight))
                 graphics.FillPath(brush, path);
 
         }
@@ -155,6 +150,12 @@ namespace Gsemac.Forms.Styles.Extensions {
 
             using (GraphicsPath path = CreateTriangle(bounds, orientation))
                 graphics.FillPath(brush, path);
+
+        }
+
+        public static void AddPoint(this GraphicsPath path, Point point) {
+
+            path.AddLine(point, point);
 
         }
 

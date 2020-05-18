@@ -170,7 +170,7 @@ namespace Gsemac.Forms.Styles.Applicators {
         private void ApplyStyles(ListBox control, ControlInfo info) {
 
             control.DrawMode = DrawMode.OwnerDrawFixed;
-            control.BorderStyle = BorderStyle.None;
+            control.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             control.MouseMove += InvalidateHandler; // required for :hover
             control.MouseEnter += InvalidateHandler; // required for :hover
@@ -229,7 +229,7 @@ namespace Gsemac.Forms.Styles.Applicators {
             info.Width = control.Width;
             info.Height = control.Height;
 
-            control.BorderStyle = BorderStyle.None;
+            control.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
             control.Location = new Point(control.Location.X + 2, control.Location.Y + 2);
             control.Width -= 3;
@@ -263,9 +263,9 @@ namespace Gsemac.Forms.Styles.Applicators {
             info.Width = control.Width;
             info.Height = control.Height;
 
-            control.BorderStyle = BorderStyle.None;
+            control.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
-            control.Location = new Point(control.Location.X + 3, control.Location.Y + 3);
+            control.Location = new Point(control.Location.X + 3, control.Location.Y + 4);
             control.Width -= 6;
 
             if (control.Multiline)

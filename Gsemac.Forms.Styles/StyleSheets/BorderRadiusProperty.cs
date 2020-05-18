@@ -5,12 +5,21 @@ using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
-    public class BorderRadius {
+    public class BorderRadii {
 
         public double TopLeft { get; set; } = 0.0;
         public double TopRight { get; set; } = 0.0;
         public double BottomLeft { get; set; } = 0.0;
         public double BottomRight { get; set; } = 0.0;
+
+        public BorderRadii(double value) {
+
+            TopLeft = value;
+            TopRight = value;
+            BottomLeft = value;
+            BottomRight = value;
+
+        }
 
         public bool IsGreaterThanZero() {
 
@@ -24,36 +33,18 @@ namespace Gsemac.Forms.Styles.StyleSheets {
     }
 
     public class BorderRadiusProperty :
-        PropertyBase<BorderRadius> {
+        PropertyBase<BorderRadii> {
 
         // Public members
 
-        public BorderRadiusProperty(BorderRadius propertyValue) :
-            this(PropertyType.BorderRadius, propertyValue, false) {
+        public BorderRadiusProperty() :
+            this(0.0) {
         }
-        public BorderRadiusProperty(string propertyValue) :
-            this(PropertyType.BorderRadius, propertyValue, false) {
-
+        public BorderRadiusProperty(BorderRadii propertyValue, bool inheritable = false) :
+            base(PropertyType.BorderRadius, propertyValue, inheritable) {
         }
-        public BorderRadiusProperty(PropertyType propertyType, BorderRadius propertyValue, bool inheritable = true) :
-            base(propertyType, propertyValue, inheritable) {
-        }
-        public BorderRadiusProperty(PropertyType propertyType, string propertyValue, bool inheritable = true) :
-           base(propertyType, ParseBorderRadius(propertyValue), inheritable) {
-        }
-
-        // Private members
-
-        private static BorderRadius ParseBorderRadius(string input) {
-
-            double value = PropertyUtilities.ParseNumber(input);
-
-            return new BorderRadius() {
-                TopLeft = value,
-                TopRight = value,
-                BottomLeft = value,
-                BottomRight = value
-            };
+        public BorderRadiusProperty(double propertyValue, bool inheritable = false) :
+            base(PropertyType.BorderRadius, new BorderRadii(propertyValue), inheritable) {
 
         }
 

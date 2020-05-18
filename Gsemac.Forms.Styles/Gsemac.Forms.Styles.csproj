@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Applicators\IStyleApplicator.cs" />
     <Compile Include="Applicators\StyleSheetStyleApplicatorBase.cs" />
+    <Compile Include="Collections\OrderedDictionary.cs" />
     <Compile Include="Extensions\StyleSheetControlRendererExtensions.cs" />
     <Compile Include="Renderers\CheckBoxControlRenderer.cs" />
     <Compile Include="Renderers\ComboBoxControlRenderer.cs" />
@@ -60,7 +61,9 @@
     <Compile Include="Renderers\ToolStripRenderer.cs" />
     <Compile Include="Renderers\UpDownButtonsControlRenderer.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />
+    <Compile Include="StyleSheets\BorderProperty.cs" />
     <Compile Include="StyleSheets\BorderRadiusProperty.cs" />
+    <Compile Include="StyleSheets\BorderStyleProperty.cs" />
     <Compile Include="StyleSheets\ChildSelector.cs" />
     <Compile Include="StyleSheets\ClassSelector.cs" />
     <Compile Include="StyleSheets\IDSelector.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -14,9 +15,22 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public ISelector Selector { get; }
 
         public ColorProperty BackgroundColor => GetProperty(PropertyType.BackgroundColor) as ColorProperty;
-        public ColorProperty BorderColor => GetProperty(PropertyType.BorderColor) as ColorProperty;
-        public NumberProperty BorderWidth => GetProperty(PropertyType.BorderWidth) as NumberProperty;
-        public BorderRadiusProperty BorderRadius => GetProperty(PropertyType.BorderRadius) as BorderRadiusProperty;
+        public ColorProperty BorderBottomColor => GetProperty(PropertyType.BorderBottomColor) as ColorProperty;
+        public NumberProperty BorderBottomLeftRadius => GetProperty(PropertyType.BorderBottomLeftRadius) as NumberProperty;
+        public NumberProperty BorderBottomRightRadius => GetProperty(PropertyType.BorderBottomRightRadius) as NumberProperty;
+        public BorderStyleProperty BorderBottomStyle => GetProperty(PropertyType.BorderBottomStyle) as BorderStyleProperty;
+        public NumberProperty BorderBottomWidth => GetProperty(PropertyType.BorderBottomWidth) as NumberProperty;
+        public ColorProperty BorderLeftColor => GetProperty(PropertyType.BorderLeftColor) as ColorProperty;
+        public BorderStyleProperty BorderLeftStyle => GetProperty(PropertyType.BorderLeftStyle) as BorderStyleProperty;
+        public NumberProperty BorderLeftWidth => GetProperty(PropertyType.BorderLeftWidth) as NumberProperty;
+        public ColorProperty BorderRightColor => GetProperty(PropertyType.BorderRightColor) as ColorProperty;
+        public BorderStyleProperty BorderRightStyle => GetProperty(PropertyType.BorderRightStyle) as BorderStyleProperty;
+        public NumberProperty BorderRightWidth => GetProperty(PropertyType.BorderRightWidth) as NumberProperty;
+        public ColorProperty BorderTopColor => GetProperty(PropertyType.BorderTopColor) as ColorProperty;
+        public NumberProperty BorderTopLeftRadius => GetProperty(PropertyType.BorderTopLeftRadius) as NumberProperty;
+        public NumberProperty BorderTopRightRadius => GetProperty(PropertyType.BorderTopRightRadius) as NumberProperty;
+        public BorderStyleProperty BorderTopStyle => GetProperty(PropertyType.BorderTopStyle) as BorderStyleProperty;
+        public NumberProperty BorderTopWidth => GetProperty(PropertyType.BorderTopWidth) as NumberProperty;
         public ColorProperty Color => GetProperty(PropertyType.Color) as ColorProperty;
 
         public abstract void AddProperty(IProperty property);

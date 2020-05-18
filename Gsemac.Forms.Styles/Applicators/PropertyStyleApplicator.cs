@@ -64,47 +64,61 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             button.FlatStyle = FlatStyle.Flat;
 
-            if (rules.BorderColor.HasValue())
-                button.FlatAppearance.BorderColor = rules.BorderColor.Value;
+            double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
+                 .Cast<NumberProperty>()
+                 .Select(p => p.Value)
+                 .LastOrDefault();
 
-            if (rules.BorderWidth.HasValue())
-                button.FlatAppearance.BorderSize = (int)rules.BorderWidth.Value;
+            Color borderColor = rules.Where(p => p.IsBorderColorProperty())
+                 .Cast<ColorProperty>()
+                 .Select(p => p.Value)
+                 .LastOrDefault();
+
+            if (borderWidth > 0) {
+
+                button.FlatAppearance.BorderColor = borderColor;
+                button.FlatAppearance.BorderSize = (int)borderWidth;
+
+            }
 
         }
         private void ApplyStyles(ListBox listBox, IRuleset rules) {
 
-            if (rules.BorderWidth.HasValue()) {
+            double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
+                 .Cast<NumberProperty>()
+                 .Select(p => p.Value)
+                 .LastOrDefault();
 
-                if (rules.BorderWidth.Value <= 0)
-                    listBox.BorderStyle = BorderStyle.None;
-                else
-                    listBox.BorderStyle = BorderStyle.FixedSingle;
-
-            }
+            if (borderWidth <= 0)
+                listBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            else
+                listBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 
         }
         private void ApplyStyles(NumericUpDown numericUpDown, IRuleset rules) {
 
-            if (rules.BorderWidth.HasValue()) {
+            double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
+               .Cast<NumberProperty>()
+               .Select(p => p.Value)
+               .LastOrDefault();
 
-                if (rules.BorderWidth.Value <= 0)
-                    numericUpDown.BorderStyle = BorderStyle.None;
-                else
-                    numericUpDown.BorderStyle = BorderStyle.FixedSingle;
-
-            }
+            if (borderWidth <= 0)
+                numericUpDown.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            else
+                numericUpDown.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 
         }
         private void ApplyStyles(TextBox textBox, IRuleset rules) {
 
-            if (rules.BorderWidth.HasValue()) {
+            double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
+              .Cast<NumberProperty>()
+              .Select(p => p.Value)
+              .LastOrDefault();
 
-                if (rules.BorderWidth.Value <= 0)
-                    textBox.BorderStyle = BorderStyle.None;
-                else
-                    textBox.BorderStyle = BorderStyle.FixedSingle;
-
-            }
+            if (borderWidth <= 0)
+                textBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            else
+                textBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 
         }
 

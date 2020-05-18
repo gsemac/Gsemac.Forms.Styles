@@ -93,7 +93,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                         case StyleSheetLexerTokenType.Value:
                         case StyleSheetLexerTokenType.Function:
-                            currentRuleset.AddProperty(Property.Create(currentPropertyName, ReadPropertyValue(lexer)));
+                            currentRuleset.AddProperty(Property.Create(currentPropertyName, ReadPropertyValues(lexer)));
                             continue;
 
                         case StyleSheetLexerTokenType.Tag:
@@ -119,27 +119,33 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             return Selector.FromLexer(lexer);
 
         }
-        private object ReadPropertyValue(IStyleSheetLexer lexer) {
+        private object[] ReadPropertyValues(IStyleSheetLexer lexer) {
 
-            object result = null;
+            List<object> values = new List<object>();
 
-            if (lexer.Read(out IStyleSheetLexerToken token)) {
+            bool exitLoop = false;
+
+            while (!exitLoop && !lexer.EndOfStream && lexer.Read(out IStyleSheetLexerToken token)) {
 
                 switch (token.Type) {
 
                     case StyleSheetLexerTokenType.Value:
-                        result = token.Value;
+                        values.Add(token.Value);
                         break;
 
                     case StyleSheetLexerTokenType.Function:
-                        result = ReadFunction(lexer, token.Value);
+                        values.Add(ReadFunction(lexer, token.Value));
+                        break;
+
+                    case StyleSheetLexerTokenType.PropertyEnd:
+                        exitLoop = true;
                         break;
 
                 }
 
             }
 
-            return result;
+            return values.ToArray();
 
         }
         private object ReadFunction(IStyleSheetLexer lexer, string functionName) {

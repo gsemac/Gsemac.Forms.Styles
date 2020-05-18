@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.Collections;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -21,49 +23,37 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             switch (property.Type) {
 
-                case PropertyType.BorderTopLeftRadius:
-                case PropertyType.BorderTopRightRadius:
-                case PropertyType.BorderBottomLeftRadius:
-                case PropertyType.BorderBottomRightRadius:
-
+                case PropertyType.BorderRadius:
                     AddBorderRadiusProperty(property);
-
                     break;
 
-                default:
+                case PropertyType.Border:
+                    AddBorderProperties(property);
+                    break;
 
-                    properties[property.Type] = property;
+                case PropertyType.BorderWidth:
+                    AddBorderWidthProperties(property);
+                    break;
 
+                case PropertyType.BorderStyle:
+                    AddBorderStyleProperties(property);
+                    break;
+
+                case PropertyType.BorderColor:
+                    AddBorderColorProperties(property);
                     break;
 
             }
+
+            properties[property.Type] = property;
 
         }
         public override IProperty GetProperty(PropertyType propertyType) {
 
-            IProperty result = null;
-
-            switch (propertyType) {
-
-                case PropertyType.BorderTopLeftRadius:
-                case PropertyType.BorderTopRightRadius:
-                case PropertyType.BorderBottomLeftRadius:
-                case PropertyType.BorderBottomRightRadius:
-
-                    result = GetBorderRadiusProperty(propertyType);
-
-                    break;
-
-                default:
-
-                    if (properties.TryGetValue(propertyType, out IProperty value))
-                        result = value;
-
-                    break;
-
-            }
-
-            return result;
+            if (properties.TryGetValue(propertyType, out IProperty property))
+                return property;
+            else
+                return null;
 
         }
 
@@ -75,84 +65,61 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Private members
 
-        private readonly Dictionary<PropertyType, IProperty> properties = new Dictionary<PropertyType, IProperty>();
+        private readonly IDictionary<PropertyType, IProperty> properties = new OrderedDictionary<PropertyType, IProperty>();
 
-        private void AddBorderRadiusProperty(IProperty property) {
+        private void AddBorderProperties(IProperty property) {
 
-            BorderRadiusProperty borderRadius = BorderRadius ?? new BorderRadiusProperty("0.0");
+            BorderProperty borderProperty = property as BorderProperty;
 
-            switch (property.Type) {
+            AddProperty(Property.Create(PropertyType.BorderTopWidth, borderProperty.Value.Width));
+            AddProperty(Property.Create(PropertyType.BorderTopStyle, borderProperty.Value.Style));
+            AddProperty(Property.Create(PropertyType.BorderTopColor, borderProperty.Value.Color));
 
-                case PropertyType.BorderTopLeftRadius:
+            AddProperty(Property.Create(PropertyType.BorderRightWidth, borderProperty.Value.Width));
+            AddProperty(Property.Create(PropertyType.BorderRightStyle, borderProperty.Value.Style));
+            AddProperty(Property.Create(PropertyType.BorderRightColor, borderProperty.Value.Color));
 
-                    borderRadius.Value.TopLeft = (double)property.Value;
+            AddProperty(Property.Create(PropertyType.BorderBottomWidth, borderProperty.Value.Width));
+            AddProperty(Property.Create(PropertyType.BorderBottomStyle, borderProperty.Value.Style));
+            AddProperty(Property.Create(PropertyType.BorderBottomColor, borderProperty.Value.Color));
 
-                    break;
-
-                case PropertyType.BorderTopRightRadius:
-
-                    borderRadius.Value.TopRight = (double)property.Value;
-
-                    break;
-
-                case PropertyType.BorderBottomLeftRadius:
-
-                    borderRadius.Value.BottomLeft = (double)property.Value;
-
-                    break;
-
-                case PropertyType.BorderBottomRightRadius:
-
-                    borderRadius.Value.BottomRight = (double)property.Value;
-
-                    break;
-
-            }
-
-            AddProperty(borderRadius);
+            AddProperty(Property.Create(PropertyType.BorderLeftWidth, borderProperty.Value.Width));
+            AddProperty(Property.Create(PropertyType.BorderLeftStyle, borderProperty.Value.Style));
+            AddProperty(Property.Create(PropertyType.BorderLeftColor, borderProperty.Value.Color));
 
         }
-        private IProperty GetBorderRadiusProperty(PropertyType propertyType) {
+        private void AddBorderWidthProperties(IProperty property) {
 
-            IProperty result = null;
+            AddProperty(Property.Create(PropertyType.BorderTopWidth, property.Value));
+            AddProperty(Property.Create(PropertyType.BorderRightWidth, property.Value));
+            AddProperty(Property.Create(PropertyType.BorderBottomWidth, property.Value));
+            AddProperty(Property.Create(PropertyType.BorderLeftWidth, property.Value));
 
-            if (BorderRadius != null) {
+        }
+        private void AddBorderStyleProperties(IProperty property) {
 
-                double radiusValue = 0.0;
+            AddProperty(Property.Create(PropertyType.BorderTopStyle, property.Value));
+            AddProperty(Property.Create(PropertyType.BorderRightStyle, property.Value));
+            AddProperty(Property.Create(PropertyType.BorderBottomStyle, property.Value));
+            AddProperty(Property.Create(PropertyType.BorderLeftStyle, property.Value));
 
-                switch (propertyType) {
+        }
+        private void AddBorderColorProperties(IProperty property) {
 
-                    case PropertyType.BorderTopLeftRadius:
+            AddProperty(Property.Create(PropertyType.BorderTopColor, property.Value));
+            AddProperty(Property.Create(PropertyType.BorderRightColor, property.Value));
+            AddProperty(Property.Create(PropertyType.BorderBottomColor, property.Value));
+            AddProperty(Property.Create(PropertyType.BorderLeftColor, property.Value));
 
-                        radiusValue = BorderRadius.Value.TopLeft;
+        }
+        private void AddBorderRadiusProperty(IProperty property) {
 
-                        break;
+            BorderRadiusProperty borderRadiusProperty = property as BorderRadiusProperty;
 
-                    case PropertyType.BorderTopRightRadius:
-
-                        radiusValue = BorderRadius.Value.TopRight;
-
-                        break;
-
-                    case PropertyType.BorderBottomLeftRadius:
-
-                        radiusValue = BorderRadius.Value.BottomLeft;
-
-                        break;
-
-                    case PropertyType.BorderBottomRightRadius:
-
-                        radiusValue = BorderRadius.Value.BottomRight;
-
-                        break;
-
-                }
-
-                result = new NumberProperty(propertyType, radiusValue, false);
-
-            }
-
-            return result;
+            AddProperty(Property.Create(PropertyType.BorderTopLeftRadius, borderRadiusProperty.Value.TopLeft));
+            AddProperty(Property.Create(PropertyType.BorderTopRightRadius, borderRadiusProperty.Value.TopRight));
+            AddProperty(Property.Create(PropertyType.BorderBottomLeftRadius, borderRadiusProperty.Value.BottomLeft));
+            AddProperty(Property.Create(PropertyType.BorderBottomRightRadius, borderRadiusProperty.Value.BottomRight));
 
         }
 

@@ -26,8 +26,15 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             baseRenderer.PaintBackground(graphics, control);
 
-            if (ruleset.BorderRadius?.Value.IsGreaterThanZero() ?? false)
-                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(control.ClientRectangle, ruleset.BorderRadius.Value));
+            if (ruleset.Any(p => p.IsBorderRadiusProperty())) {
+
+                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(control.ClientRectangle,
+                    (int)(ruleset.BorderTopLeftRadius?.Value ?? 0),
+                    (int)(ruleset.BorderTopRightRadius?.Value ?? 0),
+                    (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0),
+                    (int)(ruleset.BorderBottomRightRadius?.Value ?? 0)));
+
+            }
 
             PaintItems(graphics, control);
 

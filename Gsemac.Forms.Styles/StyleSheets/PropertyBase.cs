@@ -25,17 +25,17 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Protected members
 
-        protected PropertyBase(PropertyType propertyType, T propertyValue, bool inheritable = true) {
+        protected PropertyBase(PropertyType type, T value, bool inheritable = true) {
 
-            this.Type = propertyType;
-            this.Value = propertyValue;
+            this.Type = type;
+            this.Value = value;
             this.Inheritable = inheritable;
 
         }
 
-        protected string ToString(string propertyValue) {
+        protected string ToString(string value) {
 
-            return string.Format("{0}: {1}", Name, propertyValue);
+            return string.Format("{0}: {1}", Name, value);
 
         }
 

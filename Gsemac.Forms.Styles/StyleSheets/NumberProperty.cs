@@ -17,14 +17,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             base(propertyType, PropertyUtilities.ParseNumber(propertyValue), inheritable) {
         }
 
-        // Protected members
+        public override string ToString() {
 
-        protected static double ParseNumber(string input) {
-
-            if (input.EndsWith("px", System.StringComparison.OrdinalIgnoreCase))
-                input = input.Substring(0, input.IndexOf("px", System.StringComparison.OrdinalIgnoreCase));
-
-            return double.Parse(input);
+            return ToString($"{Value}px");
 
         }
 
