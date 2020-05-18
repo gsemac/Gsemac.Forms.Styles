@@ -123,8 +123,14 @@ namespace Gsemac.Forms.Styles.Extensions {
             if (brush is null)
                 throw new ArgumentNullException(nameof(brush));
 
-            using (GraphicsPath path = CreateRoundedRectangle(bounds, topLeft, topRight, bottomLeft, bottomRight))
+            using (GraphicsPath path = CreateRoundedRectangle(bounds, topLeft, topRight, bottomLeft, bottomRight)) {
+
                 graphics.FillPath(brush, path);
+
+                using (Pen pen = new Pen(brush))
+                    graphics.DrawPath(pen, path);
+
+            }
 
         }
 

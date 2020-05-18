@@ -1,11 +1,9 @@
 ﻿* {
-    color: #dcdcdc; /*comment 1*/
+    color: #dcdcdc;
 }
 
-/*comment 2*/
-.form /*comment 3*/ {
-    /*comment 4*/
-    background-color: /*comment 5*/ #3c3f41;
+.form {
+    background-color: #3c3f41;
 }
 
 .button, .textbox {
@@ -30,26 +28,24 @@
 .panel, .groupbox {
     background-color: #3c3f41;
     border-color: #333333;
-    border-width: 1px;
     border-radius: 2px;
+    border-width: 1px;
 }
 
 .tabcontrol {
     background-color: #313335;
-    border-color: #333333;
-    border-width: 1px;
+    border-bottom-width: 3px;
+    border-color: #3c3f41;
+    border-width: 3px;
 }
 
-.tabheader {
-    background-color: red;
-}
-
-/*
 .tabcontrol > .panel {
-    background-color: #313335;
     border-width: 0px;
+    border-radius: 0px;
+    border-color: #313335;
+    border-top-color: #4b6eaf;
+    border-top-width: 2px;
 }
-*/
 
 .tab {
     background-color: #2b2b2b;
@@ -61,10 +57,16 @@
 
 .tab:checked {
     background-color: #4b6eaf;
+    border-radius: 1px 1px 0px 0px;
 }
 
 .toolstrip {
     background-color: rgb(60, 63, 65);
+    border-bottom-color: #333333;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-top-color: #515151;
+    border-top-width: 1px;
 }
 
 .toolstripitem:hover {
@@ -84,9 +86,6 @@
 
 .toolstripseparator {
     background-color: rgb(81, 81, 81);
-}
-
-.menustrip {
 }
 
 .ListBox {

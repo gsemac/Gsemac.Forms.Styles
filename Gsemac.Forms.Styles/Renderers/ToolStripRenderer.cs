@@ -24,7 +24,10 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e) {
 
-            baseRenderer.PaintBackground(e.Graphics, e.ToolStrip);
+            IRuleset ruleset = baseRenderer.GetRuleset(e.ToolStrip);
+            Rectangle clientRect = e.ToolStrip.ClientRectangle;
+
+            baseRenderer.PaintBackground(e.Graphics, clientRect, ruleset);
 
         }
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e) {
@@ -51,7 +54,7 @@ namespace Gsemac.Forms.Styles.Renderers {
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e) {
 
             Rectangle separatorRect = e.Vertical ?
-                new Rectangle(e.Item.Width / 2, 0, 1, e.Item.Height) :
+                new Rectangle(e.Item.Width / 2, 4, 1, e.Item.Height - 8) :
                 new Rectangle(0, e.Item.Height / 2, e.Item.Width, 1);
 
             baseRenderer.PaintBackground(e.Graphics, separatorRect, GetToolStripSeparatorRuleset(e.ToolStrip));

@@ -5,19 +5,43 @@ using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
-    public class BorderRadii {
+    public class BorderRadius {
 
         public double TopLeft { get; set; } = 0.0;
         public double TopRight { get; set; } = 0.0;
         public double BottomLeft { get; set; } = 0.0;
         public double BottomRight { get; set; } = 0.0;
 
-        public BorderRadii(double value) {
+        public BorderRadius(double value) {
 
             TopLeft = value;
             TopRight = value;
             BottomLeft = value;
             BottomRight = value;
+
+        }
+        public BorderRadius(double topLeftBottomRight, double topRightBottomLeft) {
+
+            TopLeft = topLeftBottomRight;
+            TopRight = topRightBottomLeft;
+            BottomLeft = topRightBottomLeft;
+            BottomRight = topLeftBottomRight;
+
+        }
+        public BorderRadius(double topLeft, double topRightBottomLeft, double bottomRight) {
+
+            TopLeft = topLeft;
+            TopRight = topRightBottomLeft;
+            BottomLeft = topRightBottomLeft;
+            BottomRight = bottomRight;
+
+        }
+        public BorderRadius(double topLeft, double topRight, double bottomRight, double bottomLeft) {
+
+            TopLeft = topLeft;
+            TopRight = topRight;
+            BottomLeft = bottomLeft;
+            BottomRight = bottomRight;
 
         }
 
@@ -33,18 +57,18 @@ namespace Gsemac.Forms.Styles.StyleSheets {
     }
 
     public class BorderRadiusProperty :
-        PropertyBase<BorderRadii> {
+        PropertyBase<BorderRadius> {
 
         // Public members
 
         public BorderRadiusProperty() :
             this(0.0) {
         }
-        public BorderRadiusProperty(BorderRadii propertyValue, bool inheritable = false) :
+        public BorderRadiusProperty(BorderRadius propertyValue, bool inheritable = false) :
             base(PropertyType.BorderRadius, propertyValue, inheritable) {
         }
         public BorderRadiusProperty(double propertyValue, bool inheritable = false) :
-            base(PropertyType.BorderRadius, new BorderRadii(propertyValue), inheritable) {
+            base(PropertyType.BorderRadius, new BorderRadius(propertyValue), inheritable) {
 
         }
 

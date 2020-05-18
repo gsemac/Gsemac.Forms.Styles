@@ -108,8 +108,10 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle drawRect = new Rectangle(
                 rectangle.X + (int)(leftWidth / 2),
                 rectangle.Y + (int)(topWidth / 2),
-                rectangle.Width - (int)(rightWidth / 2 + leftWidth / 2),
-                rectangle.Height - (int)(bottomWidth / 2 + topWidth / 2));
+                rectangle.Width - ((int)leftWidth / 2 + (int)(rightWidth / 2)),
+                rectangle.Height - ((int)(topWidth / 2) + (int)(bottomWidth / 2)));
+
+            drawRect = new Rectangle(drawRect.X, drawRect.Y, drawRect.Width - 1, drawRect.Height - 1);
 
             using (Pen pen = new Pen(Color.Black)) {
 

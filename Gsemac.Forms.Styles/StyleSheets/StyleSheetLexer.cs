@@ -166,6 +166,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                 char nextChar = (char)Reader.Peek();
 
+                if (char.IsWhiteSpace(nextChar))
+                    nextChar = ' ';
+
                 switch (nextChar) {
 
                     case ';':
@@ -181,6 +184,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         break;
 
                     case ',':
+                    case ' ':
 
                         // We've reached the end of the current value (of a comma-delimited set of values).
 

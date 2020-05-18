@@ -30,7 +30,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             // Paint the tabs.
 
-            PaintTabs(graphics, control, ruleset);
+            PaintTabs(graphics, control);
 
         }
 
@@ -52,7 +52,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             //}
 
         }
-        private void PaintTabs(Graphics graphics, TabControl control, IRuleset baseRuleset) {
+        private void PaintTabs(Graphics graphics, TabControl control) {
 
             if (control.TabPages.Count > 0) {
 
@@ -64,6 +64,9 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                     tabNode.AddClass("tab");
 
+                    if (i == 0)
+                        tabRect = new Rectangle(tabRect.X + 2, tabRect.Y, tabRect.Width - 2, tabRect.Height);
+
                     if (control.SelectedIndex == i) {
 
                         // Draw selected tab.
@@ -74,6 +77,9 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                         Rectangle drawRect = new Rectangle(tabRect.X - 2, tabRect.Y - 2, tabRect.Width + 2, tabRect.Height + 4);
                         Rectangle textRect = new Rectangle(tabRect.X, tabRect.Y - 2, tabRect.Width, tabRect.Height);
+
+                        if (i == 0)
+                            drawRect = new Rectangle(drawRect.X + 2, drawRect.Y, drawRect.Width - 2, drawRect.Height);
 
                         baseRenderer.PaintBackground(graphics, drawRect, tabRuleset);
                         baseRenderer.PaintForeground(graphics, tabPage.Text, control.Font, textRect, tabRuleset, textFormatFlags: TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);

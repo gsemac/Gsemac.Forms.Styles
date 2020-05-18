@@ -37,32 +37,32 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     return new ColorProperty(type, ToColor(values[0]), false);
 
                 case PropertyType.BackgroundColor:
-                case PropertyType.Color:
-                case PropertyType.BorderTopColor:
-                case PropertyType.BorderRightColor:
                 case PropertyType.BorderBottomColor:
                 case PropertyType.BorderLeftColor:
+                case PropertyType.BorderRightColor:
+                case PropertyType.BorderTopColor:
+                case PropertyType.Color:
                     return new ColorProperty(type, ToColor(values[0]), true);
 
                 case PropertyType.BorderRadius:
-                    return new BorderRadiusProperty(ToNumber(values[0]));
+                    return new BorderRadiusProperty(ToBorderRadius(values));
 
-                case PropertyType.BorderTopLeftRadius:
-                case PropertyType.BorderTopRightRadius:
-                case PropertyType.BorderBottomRightRadius:
                 case PropertyType.BorderBottomLeftRadius:
-                case PropertyType.BorderWidth:
-                case PropertyType.BorderTopWidth:
-                case PropertyType.BorderRightWidth:
+                case PropertyType.BorderBottomRightRadius:
                 case PropertyType.BorderBottomWidth:
                 case PropertyType.BorderLeftWidth:
+                case PropertyType.BorderRightWidth:
+                case PropertyType.BorderTopLeftRadius:
+                case PropertyType.BorderTopRightRadius:
+                case PropertyType.BorderTopWidth:
+                case PropertyType.BorderWidth:
                     return new NumberProperty(type, ToNumber(values[0]), false);
 
-                case PropertyType.BorderStyle:
-                case PropertyType.BorderTopStyle:
-                case PropertyType.BorderRightStyle:
                 case PropertyType.BorderBottomStyle:
                 case PropertyType.BorderLeftStyle:
+                case PropertyType.BorderRightStyle:
+                case PropertyType.BorderStyle:
+                case PropertyType.BorderTopStyle:
                     return new BorderStyleProperty(type, ToBorderStyle(values[0]));
 
                 default:
@@ -151,6 +151,18 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                .FirstOrDefault() ?? default;
 
             return new Border(borderWidth, borderStyle.Value, borderColor);
+
+        }
+        private static BorderRadius ToBorderRadius(object[] values) {
+
+            if (values.Count() == 4)
+                return new BorderRadius(ToNumber(values[0]), ToNumber(values[1]), ToNumber(values[2]), ToNumber(values[3]));
+            else if (values.Count() == 3)
+                return new BorderRadius(ToNumber(values[0]), ToNumber(values[1]), ToNumber(values[2]));
+            else if (values.Count() == 2)
+                return new BorderRadius(ToNumber(values[0]), ToNumber(values[1]));
+            else
+                return new BorderRadius(ToNumber(values[0]));
 
         }
 
