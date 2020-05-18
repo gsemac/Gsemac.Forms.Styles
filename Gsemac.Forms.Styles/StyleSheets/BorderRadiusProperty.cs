@@ -45,12 +45,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
-        public bool IsGreaterThanZero() {
+        public override string ToString() {
 
-            return TopLeft > 0.0 ||
-                TopRight > 0.0 ||
-                BottomLeft > 0.0 ||
-                BottomRight > 0.0;
+            return $"{TopLeft}px {TopRight}px {BottomLeft}px {BottomRight}px";
 
         }
 
