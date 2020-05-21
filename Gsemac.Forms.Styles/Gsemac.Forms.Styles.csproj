@@ -53,10 +53,12 @@
     <Compile Include="Renderers\GenericControlRenderer.cs" />
     <Compile Include="Renderers\GroupBoxControlRenderer.cs" />
     <Compile Include="Renderers\IControlRenderer.cs" />
+    <Compile Include="Renderers\IStyleRenderer.cs" />
     <Compile Include="Renderers\IStyleSheetControlRenderer.cs" />
     <Compile Include="Renderers\ListBoxControlRenderer.cs" />
     <Compile Include="Renderers\NumericUpDownControlRenderer.cs" />
     <Compile Include="Renderers\RadioButtonControlRenderer.cs" />
+    <Compile Include="Renderers\StyleRenderer.cs" />
     <Compile Include="Renderers\TextBoxControlRenderer.cs" />
     <Compile Include="Renderers\ToolStripRenderer.cs" />
     <Compile Include="Renderers\UpDownButtonsControlRenderer.cs" />
