@@ -19,6 +19,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         string Tag { get; }
         IEnumerable<string> Classes { get; }
+        IEnumerable<string> PseudoClasses { get; }
         string Id { get; }
         NodeStates States { get; }
 

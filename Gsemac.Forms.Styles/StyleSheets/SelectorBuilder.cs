@@ -20,6 +20,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             rhsSelector.Add(new ClassSelector(name));
 
         }
+        public void AddPseudoClass(string name) {
+
+            rhsSelector.Add(new PseudoClassSelector(name));
+
+        }
         public void AddTag(string name) {
 
             rhsSelector.Add(new TagSelector(name));

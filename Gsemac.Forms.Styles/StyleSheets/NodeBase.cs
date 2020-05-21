@@ -8,7 +8,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
-        public IEnumerable<string> Classes => GetClasses().Concat(GetPseudoClasses());
+        public abstract IEnumerable<string> Classes { get; }
+        public virtual IEnumerable<string> PseudoClasses => GetPseudoClasses();
         public abstract string Tag { get; }
         public abstract string Id { get; }
         public abstract NodeStates States { get; }
@@ -18,7 +19,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             IHashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
 
-            foreach (string @class in GetClasses())
+            foreach (string @class in Classes)
                 hashCodeBuilder.Add(@class);
 
             hashCodeBuilder.Add(Tag);
@@ -35,32 +36,24 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
-        // Protected members
-
-        protected abstract IEnumerable<string> GetClasses();
-
         // Private members
 
         private IEnumerable<string> GetPseudoClasses() {
 
-            foreach (string className in GetClasses()) {
+            if (States.HasFlag(NodeStates.Active))
+                yield return ":active";
 
-                if (States.HasFlag(NodeStates.Active))
-                    yield return $"{className}:active";
+            if (States.HasFlag(NodeStates.Hover))
+                yield return ":hover";
 
-                if (States.HasFlag(NodeStates.Hover))
-                    yield return $"{className}:hover";
+            if (States.HasFlag(NodeStates.Checked))
+                yield return ":checked";
 
-                if (States.HasFlag(NodeStates.Checked))
-                    yield return $"{className}:checked";
+            if (States.HasFlag(NodeStates.Focus))
+                yield return ":focus";
 
-                if (States.HasFlag(NodeStates.Focus))
-                    yield return $"{className}:focus";
-
-                if (States.HasFlag(NodeStates.Disabled))
-                    yield return $"{className}:disabled";
-
-            }
+            if (States.HasFlag(NodeStates.Disabled))
+                yield return ":disabled";
 
         }
 

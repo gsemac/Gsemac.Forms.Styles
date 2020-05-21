@@ -21,7 +21,7 @@ namespace ThemeTesting {
             ClearStyles();
 
             applicator = new UserPaintStyleApplicator(LoadStyleSheet());
- 
+            Console.WriteLine(LoadStyleSheet().ToString());
             applicator.ApplyStyles(this);
       
         }

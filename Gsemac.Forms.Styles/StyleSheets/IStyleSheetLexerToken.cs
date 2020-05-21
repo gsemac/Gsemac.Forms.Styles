@@ -14,6 +14,7 @@
         FunctionArgumentsEnd, // ")"
 
         Class, // ".name"
+        PseudoClass, // ":focus"
         Id, // "#name"
         Tag, // "name", "*"
         DescendantCombinator, // " "

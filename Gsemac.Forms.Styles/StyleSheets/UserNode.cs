@@ -10,6 +10,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
+        public override IEnumerable<string> Classes => classes;
         public override string Tag => tag;
         public override string Id => id;
         public override NodeStates States => states;
@@ -74,14 +75,6 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public void SetParent(INode node) {
 
             parent = node;
-
-        }
-
-        // Protected members
-
-        protected override IEnumerable<string> GetClasses() {
-
-            return classes;
 
         }
 

@@ -9,6 +9,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         void AddId(string name);
         void AddClass(string name);
+        void AddPseudoClass(string name);
         void AddTag(string name);
 
         void AddSelector();

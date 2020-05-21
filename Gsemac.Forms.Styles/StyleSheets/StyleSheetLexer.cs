@@ -48,7 +48,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Private members
 
-        private readonly char[] reservedChars = { ' ', '>', '+', '~', ',', '.', '#', '{', '}' };
+        private readonly char[] reservedChars = { ' ', '>', '+', '~', ',', '.', '#', '{', '}', ':' };
         private readonly Queue<IStyleSheetLexerToken> tokens = new Queue<IStyleSheetLexerToken>();
         private bool insideDeclaration = false;
 
@@ -286,6 +286,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                         break;
 
+                    case ':':
+                        ReadPseudoClass();
+                        break;
+
                     case ' ':
 
                         possibleDescendantCombinator = true;
@@ -378,6 +382,25 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             if (valueBuilder.Length > 0)
                 tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Class, valueBuilder.ToString()));
+
+        }
+        private void ReadPseudoClass() {
+
+            StringBuilder valueBuilder = new StringBuilder();
+
+            while (!Reader.EndOfStream) {
+
+                char nextChar = (char)Reader.Peek();
+
+                if (char.IsWhiteSpace(nextChar) || (nextChar != ':' && reservedChars.Contains(nextChar)))
+                    break;
+
+                valueBuilder.Append((char)Reader.Read());
+
+            }
+
+            if (valueBuilder.Length > 0)
+                tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.PseudoClass, valueBuilder.ToString()));
 
         }
         private void ReadTag() {

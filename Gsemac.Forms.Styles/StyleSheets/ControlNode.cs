@@ -10,6 +10,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
+        public override IEnumerable<string> Classes => GetClasses();
         public override string Tag => "Control";
         public override string Id => control.Name;
         public override NodeStates States { get; } = NodeStates.None;
@@ -67,9 +68,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
-        // Protected members
+        // Private members
 
-        protected override IEnumerable<string> GetClasses() {
+        private readonly Control control;
+
+        private IEnumerable<string> GetClasses() {
 
             Type currentType = control.GetType();
 
@@ -84,10 +87,6 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             yield return typeof(Control).Name;
 
         }
-
-        // Private members
-
-        private readonly Control control;
 
     }
 

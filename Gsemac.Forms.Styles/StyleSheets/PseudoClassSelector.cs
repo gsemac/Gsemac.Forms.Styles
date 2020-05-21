@@ -5,14 +5,14 @@ using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
-    public class ClassSelector :
-        ISelector {
+    public class PseudoClassSelector :
+      ISelector {
 
         // Public members
 
-        public ClassSelector(string name) {
+        public PseudoClassSelector(string name) {
 
-            this.className = name?.TrimStart('.');
+            this.className = name?.TrimStart(':');
 
         }
 
@@ -21,13 +21,13 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (string.IsNullOrEmpty(className))
                 return false;
 
-            return node.Classes.Any(c => c.TrimStart('.').Equals(className, StringComparison.OrdinalIgnoreCase));
+            return node.PseudoClasses.Any(c => c.TrimStart(':').Equals(className, StringComparison.OrdinalIgnoreCase));
 
         }
 
         public override string ToString() {
 
-            return $".{className}";
+            return $":{className}";
 
         }
 
