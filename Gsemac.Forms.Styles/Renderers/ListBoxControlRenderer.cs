@@ -1,10 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -14,43 +10,27 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
-        public ListBoxControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+        public override void PaintControl(ListBox control, ControlPaintArgs e) {
 
-            this.baseRenderer = baseRenderer;
+            e.PaintBackground();
 
-        }
+            e.ClipToBorder();
 
-        public override void RenderControl(Graphics graphics, ListBox control) {
+            PaintItems(control, e);
 
-            IRuleset ruleset = baseRenderer.GetRuleset(control);
-
-            baseRenderer.PaintBackground(graphics, control);
-
-            if (ruleset.Any(p => p.IsBorderRadiusProperty())) {
-
-                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(control.ClientRectangle,
-                    (int)(ruleset.BorderTopLeftRadius?.Value ?? 0),
-                    (int)(ruleset.BorderTopRightRadius?.Value ?? 0),
-                    (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0),
-                    (int)(ruleset.BorderBottomRightRadius?.Value ?? 0)));
-
-            }
-
-            PaintItems(graphics, control);
+            e.PaintBorder();
 
         }
 
         // Private members
 
-        private readonly IStyleSheetControlRenderer baseRenderer;
-
-        private void PaintItems(Graphics graphics, ListBox control) {
+        private void PaintItems(ListBox control, ControlPaintArgs e) {
 
             for (int i = 0; i < control.Items.Count; ++i)
-                PaintItem(graphics, control, i);
+                PaintItem(control, e, i);
 
         }
-        private void PaintItem(Graphics graphics, ListBox control, int itemindex) {
+        private void PaintItem(ListBox control, ControlPaintArgs e, int itemindex) {
 
             Rectangle clientRect = control.ClientRectangle;
             Rectangle itemRect = control.GetItemRectangle(itemindex);
@@ -61,18 +41,19 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             if (itemRect.IntersectsWith(clientRect)) {
 
-                IRuleset itemRuleset = GetItemRuleset(control, itemindex);
+                IRuleset itemRuleset = GetItemRuleset(control, e, itemindex);
 
-                baseRenderer.PaintBackground(graphics, itemRect, itemRuleset);
+                e.StyleRenderer.PaintBackground(e.Graphics, itemRect, itemRuleset);
+                e.StyleRenderer.PaintBorder(e.Graphics, itemRect, itemRuleset);
 
                 Rectangle textRect = new Rectangle(itemRect.X - 1, itemRect.Y, itemRect.Width + 1, itemRect.Height);
 
-                baseRenderer.PaintForeground(graphics, control.GetItemText(item), control.Font, textRect, itemRuleset);
+                e.StyleRenderer.PaintText(e.Graphics, textRect, itemRuleset, control.GetItemText(item), control.Font);
 
             }
 
         }
-        private INode GetItemNode(ListBox control, int itemindex) {
+        private INode CreateItemNode(ListBox control, int itemindex) {
 
             object item = control.Items[itemindex];
             Rectangle itemRect = control.GetItemRectangle(itemindex);
@@ -104,9 +85,9 @@ namespace Gsemac.Forms.Styles.Renderers {
             return node;
 
         }
-        private IRuleset GetItemRuleset(ListBox control, int itemindex) {
+        private IRuleset GetItemRuleset(ListBox control, ControlPaintArgs e, int itemindex) {
 
-            return baseRenderer.GetRuleset(control, GetItemNode(control, itemindex));
+            return e.StyleSheet.GetRuleset(CreateItemNode(control, itemindex), control);
 
         }
 

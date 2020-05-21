@@ -14,6 +14,27 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public abstract NodeStates States { get; }
         public abstract INode Parent { get; }
 
+        public override int GetHashCode() {
+
+            IHashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+
+            foreach (string @class in GetClasses())
+                hashCodeBuilder.Add(@class);
+
+            hashCodeBuilder.Add(Tag);
+            hashCodeBuilder.Add(Id);
+            hashCodeBuilder.Add((int)States);
+            hashCodeBuilder.Add(Parent);
+
+            return hashCodeBuilder.GetHashCode();
+
+        }
+        public override bool Equals(object obj) {
+
+            return obj.GetHashCode() == GetHashCode();
+
+        }
+
         // Protected members
 
         protected abstract IEnumerable<string> GetClasses();

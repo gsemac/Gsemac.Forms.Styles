@@ -14,16 +14,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public IRuleset GetRuleset(INode node, bool inherit = true) {
 
-            IRuleset result = new Ruleset();
-
-            if (inherit && node.Parent != null)
-                result.InheritProperties(GetRuleset(node.Parent));
-
-            foreach (IRuleset ruleset in rulesets.Where(r => r.Selector.IsMatch(node)))
-                result.AddProperties(ruleset);
-
-            return result;
-
+            return GetRuleset(node, inherit, options.HasFlag(StylesheetOptions.CacheRulesets));
         }
 
         public IEnumerator<IRuleset> GetEnumerator() {
@@ -48,27 +39,39 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
-        public static StyleSheet FromStream(Stream stream) {
+        public static StyleSheet Parse(string input, StylesheetOptions options = StylesheetOptions.Default) {
 
-            StyleSheet result = new StyleSheet();
+            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(input)))
+                return FromStream(stream, options);
+
+        }
+        public static StyleSheet FromStream(Stream stream, StylesheetOptions options = StylesheetOptions.Default) {
+
+            StyleSheet result = new StyleSheet(options);
 
             result.ReadStream(stream);
 
             return result;
 
         }
-        public static StyleSheet FromFile(string filePath) {
+        public static StyleSheet FromFile(string filePath, StylesheetOptions options = StylesheetOptions.Default) {
 
             using (FileStream fstream = new FileStream(filePath, FileMode.Open))
-                return FromStream(fstream);
+                return FromStream(fstream, options);
 
         }
 
         // Private members
 
-        private readonly List<IRuleset> rulesets = new List<IRuleset>();
+        private readonly StylesheetOptions options = StylesheetOptions.Default;
+        private readonly IList<IRuleset> rulesets = new List<IRuleset>();
+        private readonly IDictionary<INode, IRuleset> cache = new Dictionary<INode, IRuleset>();
 
-        private StyleSheet() { }
+        private StyleSheet(StylesheetOptions options = StylesheetOptions.Default) {
+
+            this.options = options;
+
+        }
 
         private void ReadStream(Stream stream) {
 
@@ -190,6 +193,50 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                 default:
                     throw new InvalidFunctionException(functionName);
+
+            }
+
+        }
+
+        private IRuleset GetRuleset(INode node, bool inherit, bool useCache) {
+
+            IRuleset result = null;
+
+            if (useCache) {
+
+                result = GetRulesetFromCache(node, inherit);
+
+            }
+            else {
+
+                result = new Ruleset();
+
+                if (inherit && node.Parent != null)
+                    result.InheritProperties(GetRuleset(node.Parent, inherit));
+
+                foreach (IRuleset ruleset in rulesets.Where(r => r.Selector.IsMatch(node)))
+                    result.AddProperties(ruleset);
+
+            }
+
+            return result;
+
+        }
+        private IRuleset GetRulesetFromCache(INode node, bool inherit) {
+
+            if (cache.TryGetValue(node, out IRuleset ruleset)) {
+
+                return ruleset;
+
+            }
+            else {
+
+                ruleset = GetRuleset(node, inherit, false);
+
+                if (ruleset != null)
+                    cache[node] = ruleset;
+
+                return ruleset;
 
             }
 

@@ -14,9 +14,10 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
-        public ToolStripRenderer(IStyleSheetControlRenderer baseRenderer) {
+        public ToolStripRenderer(IStyleSheet styleSheet, IStyleRenderer styleRenderer) {
 
-            this.baseRenderer = baseRenderer;
+            this.styleSheet = styleSheet;
+            this.styleRenderer = styleRenderer;
 
         }
 
@@ -24,46 +25,56 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e) {
 
-            IRuleset ruleset = baseRenderer.GetRuleset(e.ToolStrip);
+            IRuleset ruleset = styleSheet.GetRuleset(e.ToolStrip);
             Rectangle clientRect = e.ToolStrip.ClientRectangle;
 
-            baseRenderer.PaintBackground(e.Graphics, clientRect, ruleset);
+            styleRenderer.PaintBackground(e.Graphics, clientRect, ruleset);
+            styleRenderer.PaintBorder(e.Graphics, clientRect, ruleset);
 
         }
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e) {
 
+            IRuleset ruleset = GetToolStripItemRuleset(e.ToolStrip, e.Item);
             Rectangle backgroundRect = new Rectangle(2, 0, e.Item.Width - 3, e.Item.Height);
 
-            baseRenderer.PaintBackground(e.Graphics, backgroundRect, GetToolStripItemRuleset(e.ToolStrip, e.Item));
+            styleRenderer.PaintBackground(e.Graphics, backgroundRect, ruleset);
+            styleRenderer.PaintBorder(e.Graphics, backgroundRect, ruleset);
 
         }
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e) {
 
             IRuleset textRuleset = GetToolStripItemRuleset(e.ToolStrip, e.Item);
 
-            baseRenderer.PaintForeground(e.Graphics, e.Text, e.TextFont, e.TextRectangle, textRuleset, e.TextFormat);
+            styleRenderer.PaintText(e.Graphics, e.TextRectangle, textRuleset, e.Text, e.TextFont, e.TextFormat);
 
         }
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e) {
 
             // This method is called when rendering the border around the ToolStripDropDown.
 
-            baseRenderer.PaintBackground(e.Graphics, e.ToolStrip.ClientRectangle, GetToolStripDropDownRuleset(e.ToolStrip));
+            IRuleset ruleset = GetToolStripDropDownRuleset(e.ToolStrip);
+
+            styleRenderer.PaintBackground(e.Graphics, e.ToolStrip.ClientRectangle, ruleset);
+            styleRenderer.PaintBorder(e.Graphics, e.ToolStrip.ClientRectangle, ruleset);
 
         }
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e) {
+
+            IRuleset ruleset = GetToolStripSeparatorRuleset(e.ToolStrip);
 
             Rectangle separatorRect = e.Vertical ?
                 new Rectangle(e.Item.Width / 2, 4, 1, e.Item.Height - 8) :
                 new Rectangle(0, e.Item.Height / 2, e.Item.Width, 1);
 
-            baseRenderer.PaintBackground(e.Graphics, separatorRect, GetToolStripSeparatorRuleset(e.ToolStrip));
+            styleRenderer.PaintBackground(e.Graphics, separatorRect, ruleset);
+            styleRenderer.PaintBorder(e.Graphics, separatorRect, ruleset);
 
         }
 
         // Private members
 
-        private readonly IStyleSheetControlRenderer baseRenderer;
+        private readonly IStyleSheet styleSheet;
+        private readonly IStyleRenderer styleRenderer;
 
         INode GetToolStripItemNode(ToolStripItem item) {
 
@@ -94,17 +105,17 @@ namespace Gsemac.Forms.Styles.Renderers {
         }
         IRuleset GetToolStripItemRuleset(ToolStrip parent, ToolStripItem item) {
 
-            return baseRenderer.GetRuleset(parent, GetToolStripItemNode(item));
+            return styleSheet.GetRuleset(GetToolStripItemNode(item), parent);
 
         }
         IRuleset GetToolStripDropDownRuleset(ToolStrip parent) {
 
-            return baseRenderer.GetRuleset(parent, GetToolStripDropDownNode());
+            return styleSheet.GetRuleset(GetToolStripDropDownNode(), parent);
 
         }
         IRuleset GetToolStripSeparatorRuleset(ToolStrip parent) {
 
-            return baseRenderer.GetRuleset(parent, getToolStripSeparatorNode());
+            return styleSheet.GetRuleset(getToolStripSeparatorNode(), parent);
 
         }
 

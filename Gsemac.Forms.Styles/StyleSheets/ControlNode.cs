@@ -14,7 +14,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public override string Id => control.Name;
         public override NodeStates States { get; } = NodeStates.None;
         public override INode Parent => control.Parent != null ? new ControlNode(control.Parent) : null;
-
+        public int HashCode => GetHashCode();
         public ControlNode(Control control) :
             this(control, control.ClientRectangle) {
         }
@@ -53,6 +53,17 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             if (!control.Enabled)
                 States |= NodeStates.Disabled;
+
+        }
+
+        public override int GetHashCode() {
+
+            IHashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+
+            hashCodeBuilder.Add(control);
+            hashCodeBuilder.Add((int)States);
+
+            return hashCodeBuilder.GetHashCode();
 
         }
 

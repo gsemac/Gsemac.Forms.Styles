@@ -16,7 +16,7 @@ namespace Gsemac.Forms.Styles.Applicators {
         public UserPaintStyleApplicator(IStyleSheet styleSheet) :
             base(styleSheet) {
 
-            controlRenderer = new StylesheetControlRenderer(styleSheet);
+            controlRenderer = new ControlRenderer();
 
         }
 
@@ -76,7 +76,8 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         // Private members
 
-        private readonly StylesheetControlRenderer controlRenderer;
+        private readonly ControlRenderer controlRenderer;
+        private readonly IStyleRenderer styleRenderer = new StyleRenderer();
 
         private bool ControlSupportsUserPaint(Control control) {
 
@@ -98,7 +99,7 @@ namespace Gsemac.Forms.Styles.Applicators {
         private void PaintEventHandler(object sender, PaintEventArgs e) {
 
             if (sender is Control control)
-                controlRenderer.RenderControl(e.Graphics, control);
+                controlRenderer.PaintControl(control, CreateControlPaintArgs(control, e));
 
         }
         private void InvalidateHandler(object sender, EventArgs e) {
@@ -128,7 +129,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                         e.Graphics.TranslateTransform(control.Location.X, control.Location.Y);
 
-                        controlRenderer.RenderControl(e.Graphics, control);
+                        controlRenderer.PaintControl(control, CreateControlPaintArgs(control, e));
 
                         e.Graphics.TranslateTransform(-control.Location.X, -control.Location.Y);
 
@@ -276,7 +277,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             System.Windows.Forms.ToolStripRenderer originalRenderer = control.Renderer;
 
-            control.Renderer = new Renderers.ToolStripRenderer(controlRenderer);
+            control.Renderer = new Renderers.ToolStripRenderer(StyleSheet, styleRenderer);
 
             info.ResetControl += (c) => {
 
@@ -322,6 +323,12 @@ namespace Gsemac.Forms.Styles.Applicators {
                 return false;
 
             }
+
+        }
+
+        private ControlPaintArgs CreateControlPaintArgs(Control control, PaintEventArgs paintEventArgs) {
+
+            return new ControlPaintArgs(control, paintEventArgs.Graphics, StyleSheet, styleRenderer);
 
         }
 

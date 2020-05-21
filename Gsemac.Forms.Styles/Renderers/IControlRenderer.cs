@@ -1,23 +1,17 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
 
     public interface IControlRenderer {
 
-        void RenderControl(Graphics graphics, Control control);
+        void PaintControl(Control control, ControlPaintArgs args);
 
     }
 
     public interface IControlRenderer<T> :
       IControlRenderer where T : Control {
 
-        void RenderControl(Graphics graphics, T control);
+        void PaintControl(T control, ControlPaintArgs args);
 
     }
 

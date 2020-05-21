@@ -89,8 +89,8 @@
 }
 
 .listbox {
-    background-color: #2b2b2b;
-    border-color: #333333;
+    background-color: #45494a;
+    border-color: #5c5c5c;
     border-width: 1px;
 }
 
@@ -102,11 +102,11 @@
     background-color: #3c3f41;
 }
 
-.listboxitem:checked {
+.listboxitem:checked, .listboxitem:active {
     background-color: #5c5c5c;
 }
 
-.listbox:focus > .listboxitem:checked {
+.listbox:focus > .listboxitem:checked, .listbox:focus > .listboxitem:active {
     background-color: #4b6eaf;
 }
 

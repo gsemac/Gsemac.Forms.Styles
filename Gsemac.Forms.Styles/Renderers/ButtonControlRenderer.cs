@@ -1,5 +1,5 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
-using System.Drawing;
+using Gsemac.Forms.Styles.StyleSheets;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -9,22 +9,15 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
-        public ButtonControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+        public override void PaintControl(Button control, ControlPaintArgs e) {
 
-            this.baseRenderer = baseRenderer;
+            TextFormatFlags textFormatFlags = RenderUtilities.GetTextFormatFlags(control.TextAlign);
 
-        }
-
-        public override void RenderControl(Graphics graphics, Button control) {
-
-            baseRenderer.PaintBackground(graphics, control);
-            baseRenderer.PaintForeground(graphics, control, RenderUtilities.GetTextFormatFlags(control.TextAlign));
+            e.PaintBackground();
+            e.PaintText(textFormatFlags);
+            e.PaintBorder();
 
         }
-
-        // Private members
-
-        private readonly IStyleSheetControlRenderer baseRenderer;
 
     }
 

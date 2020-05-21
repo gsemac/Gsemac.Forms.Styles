@@ -1,10 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -14,15 +10,9 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
-        public NumericUpDownControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+        public override void PaintControl(NumericUpDown control, ControlPaintArgs e) {
 
-            this.baseRenderer = baseRenderer;
-
-        }
-
-        public override void RenderControl(Graphics graphics, NumericUpDown control) {
-
-            IRuleset ruleset = baseRenderer.GetRuleset(control);
+            IRuleset ruleset = e.StyleSheet.GetRuleset(control);
 
             // Update the color of the NumericUpdateDown, which updates the color of the UpDownEdit (inheriting from TextBox).
 
@@ -62,13 +52,10 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             Rectangle drawRect = new Rectangle(x, y, w, h);
 
-            baseRenderer.PaintBackground(graphics, drawRect, ruleset);
+            e.StyleRenderer.PaintBackground(e.Graphics, drawRect, ruleset);
+            e.StyleRenderer.PaintBorder(e.Graphics, drawRect, ruleset);
 
         }
-
-        // Private members
-
-        private readonly IStyleSheetControlRenderer baseRenderer;
 
     }
 

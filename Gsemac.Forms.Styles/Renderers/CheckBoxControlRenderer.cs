@@ -15,33 +15,27 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
-        public CheckBoxControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+        public override void PaintControl(CheckBox control, ControlPaintArgs e) {
 
-            this.baseRenderer = baseRenderer;
+            e.PaintBackground();
+            e.PaintBorder();
 
-        }
+            PaintCheck(control, e);
 
-        public override void RenderControl(Graphics graphics, CheckBox control) {
-
-            baseRenderer.PaintBackground(graphics, control);
-
-            PaintCheck(graphics, control);
-
-            IRuleset ruleset = baseRenderer.GetRuleset(control);
+            IRuleset ruleset = e.StyleSheet.GetRuleset(control);
 
             Rectangle clientRect = control.ClientRectangle;
             Rectangle drawRect = new Rectangle(clientRect.X + CheckWidth + 3, clientRect.Y - 1, clientRect.Width, clientRect.Height);
 
-            baseRenderer.PaintForeground(graphics, control.Text, control.Font, drawRect, ruleset, RenderUtilities.GetTextFormatFlags(control.TextAlign));
+            e.StyleRenderer.PaintText(e.Graphics, drawRect, ruleset, control.Text, control.Font, RenderUtilities.GetTextFormatFlags(control.TextAlign));
 
         }
 
         // Private members
 
-        private readonly IStyleSheetControlRenderer baseRenderer;
         private const int CheckWidth = 13;
 
-        private void PaintCheck(Graphics graphics, CheckBox control) {
+        private void PaintCheck(CheckBox control, ControlPaintArgs e) {
 
             INode controlNode = new ControlNode(control);
             UserNode checkNode = new UserNode(string.Empty, new[] { "Check" });
@@ -49,35 +43,35 @@ namespace Gsemac.Forms.Styles.Renderers {
             checkNode.SetParent(controlNode);
             checkNode.SetStates(controlNode.States);
 
-            IRuleset parentRuleset = baseRenderer.GetRuleset(control);
-            IRuleset ruleset = baseRenderer.GetRuleset(checkNode);
+            IRuleset parentRuleset = e.StyleSheet.GetRuleset(control);
+            IRuleset ruleset = e.StyleSheet.GetRuleset(checkNode, inherit: false);
 
             if (!ruleset.Any())
                 ruleset = CreateDefaultCheckRuleset();
 
             ruleset.InheritProperties(parentRuleset);
 
-            Rectangle clientRect = control.ClientRectangle;
+            Rectangle clientRect = e.Control.ClientRectangle;
             Rectangle checkRect = new Rectangle(clientRect.X, clientRect.Y + (int)(clientRect.Height / 2.0f - CheckWidth / 2.0f) - 1, CheckWidth, CheckWidth);
 
-            baseRenderer.PaintBackground(graphics, checkRect, ruleset);
+            e.StyleRenderer.PaintBackground(e.Graphics, checkRect, ruleset);
+            e.StyleRenderer.PaintBorder(e.Graphics, checkRect, ruleset);
 
             // Draw the checkmark.
 
             if (control.Checked) {
 
-                using (Brush brush = new SolidBrush(ruleset.Color?.Value ?? SystemColors.ControlText))
-                using (Pen pen = new Pen(brush)) {
+                using (Pen pen = new Pen(ruleset.Color?.Value ?? SystemColors.ControlText)) {
 
-                    graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
                     pen.Alignment = PenAlignment.Center;
                     pen.Width = 2.0f;
                     pen.StartCap = LineCap.Square;
                     pen.EndCap = LineCap.Square;
 
-                    graphics.DrawLine(pen, checkRect.X + 3, checkRect.Y + checkRect.Height / 2.0f, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5);
-                    graphics.DrawLine(pen, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5, checkRect.X + checkRect.Width - 4, checkRect.Y + 3);
+                    e.Graphics.DrawLine(pen, checkRect.X + 3, checkRect.Y + checkRect.Height / 2.0f, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5);
+                    e.Graphics.DrawLine(pen, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5, checkRect.X + checkRect.Width - 4, checkRect.Y + 3);
 
                 }
 

@@ -22,7 +22,7 @@ namespace ThemeTesting {
             ClearStyles();
 
             applicator = new UserPaintStyleApplicator(LoadStyleSheet());
-
+ 
             applicator.ApplyStyles(this);
       
         }

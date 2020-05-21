@@ -1,11 +1,8 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -15,33 +12,28 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
-        public RadioButtonControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+        public override void PaintControl(RadioButton control, ControlPaintArgs e) {
 
-            this.baseRenderer = baseRenderer;
+            e.PaintBackground();
+            e.PaintBorder();
 
-        }
+            PaintCheck(control, e);
 
-        public override void RenderControl(Graphics graphics, RadioButton control) {
-
-            baseRenderer.PaintBackground(graphics, control);
-
-            PaintCheck(graphics, control);
-
-            IRuleset ruleset = baseRenderer.GetRuleset(control);
+            IRuleset ruleset = e.StyleSheet.GetRuleset(control);
 
             Rectangle clientRect = control.ClientRectangle;
-            Rectangle drawRect = new Rectangle(clientRect.X + CheckWidth + 3, clientRect.Y, clientRect.Width, clientRect.Height);
+            Rectangle textRect = new Rectangle(clientRect.X + CheckWidth + 3, clientRect.Y, clientRect.Width, clientRect.Height);
+            TextFormatFlags textFormatFlags = RenderUtilities.GetTextFormatFlags(control.TextAlign);
 
-            baseRenderer.PaintForeground(graphics, control.Text, control.Font, drawRect, ruleset, RenderUtilities.GetTextFormatFlags(control.TextAlign));
+            e.StyleRenderer.PaintText(e.Graphics, textRect, ruleset, control.Text, control.Font, textFormatFlags);
 
         }
 
         // Private members
 
-        private readonly IStyleSheetControlRenderer baseRenderer;
         private const int CheckWidth = 13;
 
-        private void PaintCheck(Graphics graphics, RadioButton control) {
+        private void PaintCheck(RadioButton control, ControlPaintArgs e) {
 
             INode controlNode = new ControlNode(control);
             UserNode checkNode = new UserNode(string.Empty, new[] { "Check" });
@@ -49,8 +41,8 @@ namespace Gsemac.Forms.Styles.Renderers {
             checkNode.SetParent(controlNode);
             checkNode.SetStates(controlNode.States);
 
-            IRuleset parentRuleset = baseRenderer.GetRuleset(control);
-            IRuleset ruleset = baseRenderer.GetRuleset(checkNode);
+            IRuleset parentRuleset = e.StyleSheet.GetRuleset(control);
+            IRuleset ruleset = e.StyleSheet.GetRuleset(checkNode, inherit: false);
 
             if (!ruleset.Any())
                 ruleset = CreateDefaultCheckRuleset();
@@ -60,21 +52,21 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle clientRect = control.ClientRectangle;
             Rectangle checkRect = new Rectangle(clientRect.X, clientRect.Y + (int)(clientRect.Height / 2.0f - CheckWidth / 2.0f), CheckWidth, CheckWidth);
 
-            baseRenderer.PaintBackground(graphics, checkRect, ruleset);
+            e.StyleRenderer.PaintBackground(e.Graphics, checkRect, ruleset);
+            //e.StyleRenderer.PaintBorder(e.Graphics, checkRect, ruleset);
 
             // Draw the checkmark.
 
             if (control.Checked) {
 
-                using (Brush brush = new SolidBrush(ruleset.Color?.Value ?? SystemColors.ControlText))
-                using (Pen pen = new Pen(brush)) {
+                using (Brush brush = new SolidBrush(ruleset.Color?.Value ?? SystemColors.ControlText)) {
 
-                    graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
                     checkRect.Inflate(-3, -3);
 
-                    graphics.FillEllipse(brush, checkRect);
+                    e.Graphics.FillEllipse(brush, checkRect);
 
                 }
 

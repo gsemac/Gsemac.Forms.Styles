@@ -1,11 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -15,15 +10,9 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
-        public TextBoxControlRenderer(IStyleSheetControlRenderer baseRenderer) {
+        public override void PaintControl(TextBox control, ControlPaintArgs e) {
 
-            this.baseRenderer = baseRenderer;
-
-        }
-
-        public override void RenderControl(Graphics graphics, TextBox control) {
-
-            IRuleset ruleset = baseRenderer.GetRuleset(control);
+            IRuleset ruleset = e.StyleSheet.GetRuleset(control);
 
             // Update the color of the TextBox itself.
 
@@ -70,15 +59,12 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             //graphics.SetClip(drawRect);
 
-            baseRenderer.PaintBackground(graphics, drawRect, ruleset);
+            e.StyleRenderer.PaintBackground(e.Graphics, drawRect, ruleset);
+            e.StyleRenderer.PaintBorder(e.Graphics, drawRect, ruleset);
 
             //graphics.Restore(graphicsState);
 
         }
-
-        // Private members
-
-        private readonly IStyleSheetControlRenderer baseRenderer;
 
     }
 
