@@ -55,15 +55,19 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle clientRect = control.ClientRectangle;
             Rectangle itemRect = control.GetItemRectangle(itemindex);
 
+            itemRect = new Rectangle(itemRect.X + 1, itemRect.Y + 1, itemRect.Width - 2, itemRect.Height);
+
             object item = control.Items[itemindex];
 
             if (itemRect.IntersectsWith(clientRect)) {
 
-                IRuleset itemRuleset = baseRenderer.GetRuleset(control, GetItemNode(control, itemindex));
+                IRuleset itemRuleset = GetItemRuleset(control, itemindex);
 
                 baseRenderer.PaintBackground(graphics, itemRect, itemRuleset);
 
-                baseRenderer.PaintForeground(graphics, control.GetItemText(item), control.Font, itemRect, itemRuleset);
+                Rectangle textRect = new Rectangle(itemRect.X - 1, itemRect.Y, itemRect.Width + 1, itemRect.Height);
+
+                baseRenderer.PaintForeground(graphics, control.GetItemText(item), control.Font, textRect, itemRuleset);
 
             }
 
@@ -89,9 +93,20 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             UserNode node = new UserNode(string.Empty, new[] { "ListBoxItem" });
 
+            node.SetParent(new ControlNode(control));
             node.SetStates(states);
 
+            if (itemindex % 2 == 0)
+                node.AddClass("even");
+            else
+                node.AddClass("odd");
+
             return node;
+
+        }
+        private IRuleset GetItemRuleset(ListBox control, int itemindex) {
+
+            return baseRenderer.GetRuleset(control, GetItemNode(control, itemindex));
 
         }
 

@@ -88,22 +88,26 @@
     background-color: rgb(81, 81, 81);
 }
 
-.ListBox {
-    background-color: #202225;
-    color: #8b9294;
+.listbox {
+    background-color: #2b2b2b;
+    border-color: #333333;
     border-width: 1px;
-    border-color: #202225;
-    border-radius: 3px;
 }
 
-.ListBoxItem:hover {
-    background-color: #34373c;
-    color: #dcddde;
+.listboxitem.even {
+    background-color: #393c3e;
 }
 
-.ListBoxItem:checked {
-    background-color: #393c43;
-    color: white;
+.listboxitem.odd {
+    background-color: #3c3f41;
+}
+
+.listboxitem:checked {
+    background-color: #5c5c5c;
+}
+
+.listbox:focus > .listboxitem:checked {
+    background-color: #4b6eaf;
 }
 
 .CheckBox {
