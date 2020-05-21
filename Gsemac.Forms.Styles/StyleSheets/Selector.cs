@@ -37,6 +37,18 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
+        public static ISelector Parse(string selector) {
+
+            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(selector)))
+                return FromStream(stream);
+
+        }
+        public static ISelector FromStream(Stream stream) {
+
+            using (IStyleSheetLexer lexer = new StyleSheetLexer(stream))
+                return FromLexer(lexer);
+
+        }
         public static ISelector FromLexer(IStyleSheetLexer lexer) {
 
             SelectorBuilder builder = new SelectorBuilder();
@@ -93,19 +105,6 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             }
 
             return builder.Build();
-
-        }
-        public static ISelector FromStream(Stream stream) {
-
-            using (IStyleSheetLexer lexer = new StyleSheetLexer(stream))
-                return FromLexer(lexer);
-
-        }
-
-        public static ISelector Parse(string selector) {
-
-            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(selector)))
-                return FromStream(stream);
 
         }
 

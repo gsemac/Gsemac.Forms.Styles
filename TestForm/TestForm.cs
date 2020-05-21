@@ -1,7 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Applicators;
 using Gsemac.Forms.Styles.StyleSheets;
 using System;
-using System.IO;
 using System.Windows.Forms;
 
 namespace ThemeTesting {

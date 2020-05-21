@@ -12,49 +12,49 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public void AddId(string name) {
 
-            currentSelector.Add(new IDSelector(name));
+            rhsSelector.Add(new IDSelector(name));
 
         }
         public void AddClass(string name) {
 
-            currentSelector.Add(new ClassSelector(name));
+            rhsSelector.Add(new ClassSelector(name));
 
         }
         public void AddTag(string name) {
 
-            currentSelector.Add(new TagSelector(name));
+            rhsSelector.Add(new TagSelector(name));
 
         }
 
         public void AddSelector() {
 
-            CommitCurrentSelector();
+            CommitCurrentSelector(false);
 
         }
         public void AddDescendantCombinator() {
 
-            CommitCurrentSelector();
+            CommitCurrentSelector(true);
 
             currentCombinator = CombinatorType.Descendant;
 
         }
         public void AddChildCombinator() {
 
-            CommitCurrentSelector();
+            CommitCurrentSelector(true);
 
             currentCombinator = CombinatorType.Child;
 
         }
         public void AddAdjacentSiblingCombinator() {
 
-            CommitCurrentSelector();
+            CommitCurrentSelector(true);
 
             currentCombinator = CombinatorType.AdjacentSibling;
 
         }
         public void AddGeneralSiblingCombinator() {
 
-            CommitCurrentSelector();
+            CommitCurrentSelector(true);
 
             currentCombinator = CombinatorType.GeneralSibling;
 
@@ -62,17 +62,17 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public ISelector Build() {
 
-            CommitCurrentSelector();
+            CommitCurrentSelector(false);
 
-            return lastSelector;
+            return (completedSelectors.Count() == 1) ? completedSelectors.First() : new UnionSelector(completedSelectors);
 
         }
 
         public void Clear() {
 
-            currentSelector.Clear();
-
-            lastSelector = null;
+            lhsSelector = null;
+            completedSelectors.Clear();
+            rhsSelector.Clear();
 
             currentCombinator = CombinatorType.None;
 
@@ -94,15 +94,16 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             GeneralSibling
         }
 
-        private readonly List<ISelector> currentSelector = new List<ISelector>();
-        private ISelector lastSelector = null;
+        private ISelector lhsSelector = null;
+        private readonly IList<ISelector> rhsSelector = new List<ISelector>();
+        private readonly IList<ISelector> completedSelectors = new List<ISelector>();
         private CombinatorType currentCombinator = CombinatorType.None;
 
-        private void CommitCurrentSelector() {
+        private void CommitCurrentSelector(bool isLhsOfCombinator) {
 
-            if (currentSelector.Any()) {
+            if (rhsSelector.Any()) {
 
-                ISelector selector = new Selector(currentSelector);
+                ISelector committingSelector = (rhsSelector.Count() == 1) ? rhsSelector.First() : new Selector(rhsSelector);
 
                 switch (currentCombinator) {
 
@@ -111,7 +112,14 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         throw new NotImplementedException();
 
                     case CombinatorType.Child:
-                        lastSelector = new ChildSelector(lastSelector, selector);
+
+                        if (lhsSelector is null)
+                            throw new InvalidOperationException("The selector on the left-hand side of the combinator was empty.");
+
+                        completedSelectors.Add(new ChildSelector(lhsSelector, committingSelector));
+
+                        lhsSelector = null;
+
                         break;
 
                     case CombinatorType.AdjacentSibling:
@@ -124,10 +132,20 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                     default:
 
-                        if (lastSelector is null)
-                            lastSelector = selector;
-                        else
-                            lastSelector = new UnionSelector(new ISelector[] { lastSelector, selector });
+                        if (!isLhsOfCombinator) {
+
+                            // If this selector is not the left-hand side of a combinator, just add the selector directly to the list.
+
+                            completedSelectors.Add(committingSelector);
+
+                        }
+                        else {
+
+                            // Otherwise, set this selector as the left-hand side of the combinator.
+
+                            lhsSelector = committingSelector;
+
+                        }
 
                         break;
 
@@ -135,7 +153,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             }
 
-            currentSelector.Clear();
+            rhsSelector.Clear();
             currentCombinator = CombinatorType.None;
 
         }
