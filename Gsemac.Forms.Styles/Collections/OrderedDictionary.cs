@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 
 namespace Gsemac.Forms.Styles.Collections {
 
@@ -18,20 +15,18 @@ namespace Gsemac.Forms.Styles.Collections {
         }
 
         public ICollection<TKey> Keys => new ReadOnlyCollection<TKey>(orderedKeys);
-        public ICollection<TValue> Values => new ReadOnlyCollection<TValue>(orderedKeys.Select(key => dict[key]).ToList());
+        public ICollection<TValue> Values => new ReadOnlyCollection<TValue>(orderedKeys.Select(key => dict[key]));
         public int Count => dict.Count;
         public bool IsReadOnly => false;
 
         public void Add(TKey key, TValue value) {
 
-            orderedKeys.Add(key);
-
-            dict.Add(key, value);
+            SetValue(key, value);
 
         }
         public void Add(KeyValuePair<TKey, TValue> item) {
 
-            Add(item.Key, item.Value);
+            SetValue(item.Key, item.Value);
 
         }
         public void Clear() {
@@ -95,7 +90,9 @@ namespace Gsemac.Forms.Styles.Collections {
             if (ContainsKey(key))
                 Remove(key);
 
-            Add(key, value);
+            orderedKeys.Add(key);
+
+            dict.Add(key, value);
 
         }
 

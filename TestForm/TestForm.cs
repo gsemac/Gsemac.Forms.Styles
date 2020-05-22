@@ -21,9 +21,9 @@ namespace ThemeTesting {
             ClearStyles();
 
             applicator = new UserPaintStyleApplicator(LoadStyleSheet());
-            Console.WriteLine(LoadStyleSheet().ToString());
+
             applicator.ApplyStyles(this);
-      
+
         }
         private void Button2_Click(object sender, EventArgs e) {
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.Collections;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -63,9 +64,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Private members
 
+        private const int DefaultCacheCapacity = 1000;
+
         private readonly StylesheetOptions options = StylesheetOptions.Default;
         private readonly IList<IRuleset> rulesets = new List<IRuleset>();
-        private readonly IDictionary<INode, IRuleset> cache = new Dictionary<INode, IRuleset>();
+        private readonly IDictionary<INode, IRuleset> cache = new LruDictionary<INode, IRuleset>(DefaultCacheCapacity);
 
         private StyleSheet(StylesheetOptions options = StylesheetOptions.Default) {
 

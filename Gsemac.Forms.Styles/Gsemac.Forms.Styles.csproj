@@ -45,7 +45,9 @@
   <ItemGroup>
     <Compile Include="Applicators\IStyleApplicator.cs" />
     <Compile Include="Applicators\StyleSheetStyleApplicatorBase.cs" />
+    <Compile Include="Collections\LruDictionary.cs" />
     <Compile Include="Collections\OrderedDictionary.cs" />
+    <Compile Include="Collections\ReadOnlyCollection.cs" />
     <Compile Include="Extensions\StyleSheetExtensions.cs" />
     <Compile Include="Renderers\CheckBoxControlRenderer.cs" />
     <Compile Include="Renderers\ComboBoxControlRenderer.cs" />
