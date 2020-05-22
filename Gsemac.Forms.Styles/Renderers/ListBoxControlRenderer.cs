@@ -1,6 +1,8 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -12,13 +14,35 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public override void PaintControl(ListBox control, ControlPaintArgs e) {
 
+            Borders borders = e.StyleSheet.GetRuleset(control).GetBorders();
+
+            Rectangle borderRect = control.ClientRectangle;
+
+            borderRect = new Rectangle(
+                borderRect.X - (int)borders.Left.Width,
+                borderRect.Y - (int)borders.Top.Width,
+                borderRect.Width + (int)borders.Left.Width + (int)borders.Right.Width,
+                borderRect.Height + +(int)borders.Top.Width + (int)borders.Bottom.Width
+                );
+
+            if (Enumerable.Range(0, control.Items.Count).Sum(i => control.GetItemHeight(i)) > control.Height)
+                borderRect = new Rectangle(borderRect.X, borderRect.Y, borderRect.Width + SystemInformation.VerticalScrollBarWidth, borderRect.Height);
+
             e.PaintBackground();
 
-            e.ClipToBorder();
+            if (!e.ParentDraw) {
 
-            PaintItems(control, e);
+                GraphicsState graphicsState = e.Graphics.Save();
 
-            e.PaintBorder();
+                e.ClipToBorder(borderRect);
+
+                PaintItems(control, e);
+
+                e.Graphics.Restore(graphicsState);
+
+            }
+
+            e.PaintBorder(borderRect);
 
         }
 
@@ -35,8 +59,6 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle clientRect = control.ClientRectangle;
             Rectangle itemRect = control.GetItemRectangle(itemindex);
 
-            itemRect = new Rectangle(itemRect.X + 1, itemRect.Y + 1, itemRect.Width - 2, itemRect.Height);
-
             object item = control.Items[itemindex];
 
             if (itemRect.IntersectsWith(clientRect)) {
@@ -45,10 +67,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                 e.StyleRenderer.PaintBackground(e.Graphics, itemRect, itemRuleset);
                 e.StyleRenderer.PaintBorder(e.Graphics, itemRect, itemRuleset);
-
-                Rectangle textRect = new Rectangle(itemRect.X - 1, itemRect.Y, itemRect.Width + 1, itemRect.Height);
-
-                e.StyleRenderer.PaintText(e.Graphics, textRect, itemRuleset, control.GetItemText(item), control.Font);
+                e.StyleRenderer.PaintText(e.Graphics, itemRect, itemRuleset, control.GetItemText(item), control.Font);
 
             }
 

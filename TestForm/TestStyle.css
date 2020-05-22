@@ -92,6 +92,7 @@
     background-color: #45494a;
     border-color: #5c5c5c;
     border-width: 1px;
+    border-radius: 2px;
 }
 
 .listboxitem.even {

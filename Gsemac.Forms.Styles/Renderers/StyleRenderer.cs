@@ -13,11 +13,13 @@ namespace Gsemac.Forms.Styles.Renderers {
     public class StyleRenderer :
         IStyleRenderer {
 
+        // Public members
+
         public void PaintBackground(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
 
             GraphicsState state = graphics.Save();
 
-            bool hasRadius = ruleset.Where(p => p.IsBorderRadiusProperty()).OfType<NumberProperty>().Any(p => p.Value > 0);
+            bool hasRadius = ruleset.GetBorderRadii().Any(r => r > 0);
             bool hasRightRadius = hasRadius && (ruleset.BorderTopRightRadius?.Value > 0 || ruleset.BorderBottomRightRadius?.Value > 0);
             bool hasBottomRadius = hasRadius && (ruleset.BorderBottomLeftRadius?.Value > 0 || ruleset.BorderBottomRightRadius?.Value > 0);
 
@@ -52,14 +54,17 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             }
 
-            // Draw outline.
-
-            PaintBorder(graphics, rectangle, ruleset);
-
             graphics.Restore(state);
 
         }
         public void PaintBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
+
+            GraphicsState state = graphics.Save();
+
+            bool hasRadius = ruleset.GetBorderRadii().Any(r => r > 0);
+
+            if(hasRadius)
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             double topWidth = ruleset.BorderTopWidth?.Value ?? 0;
             double rightWidth = ruleset.BorderRightWidth?.Value ?? 0;
@@ -154,14 +159,27 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             }
 
+            graphics.Restore(state);
+
         }
         public void PaintText(Graphics graphics, Rectangle rectangle, IRuleset ruleset, string text, Font font, TextFormatFlags textFormatFlags = TextFormatFlags.Left) {
 
             // Paint the foreground text.
 
-            TextRenderer.DrawText(graphics, text, font, rectangle, ruleset.Color?.Value ?? SystemColors.ControlText, textFormatFlags);
+            Color textColor = ruleset.Color?.Value ?? SystemColors.ControlText;
+
+            TextRenderer.DrawText(graphics, text, font, rectangle, textColor, textFormatFlags);
+
+            //graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
+            //using (Brush brush = new SolidBrush(textColor))
+            //    graphics.DrawString(text, font, brush, new RectangleF(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height));
 
         }
+
+        // Private members
+
+
 
     }
 

@@ -58,6 +58,8 @@ namespace Gsemac.Forms.Styles.Applicators {
             public int? Width { get; set; }
             public int? Height { get; set; }
 
+            public bool ParentDraw { get; set; } = false;
+
             public void DoResetControl(Control control) {
 
                 ResetControl?.Invoke(control);

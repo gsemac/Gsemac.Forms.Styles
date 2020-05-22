@@ -2,6 +2,7 @@
 using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -72,6 +73,9 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             }
 
+            if (info.ParentDraw)
+                AddParentPaintHandler(control, info);
+
         }
 
         // Private members
@@ -98,8 +102,22 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         private void PaintEventHandler(object sender, PaintEventArgs e) {
 
-            if (sender is Control control)
-                controlRenderer.PaintControl(control, CreateControlPaintArgs(control, e));
+            if (sender is Control control) {
+
+                ControlInfo controlInfo = GetControlInfo(control);
+
+                if (controlInfo?.ParentDraw ?? false) {
+
+                    // We'll paint the control twice with different clip settings.
+                    // The first paint will be on the control itself in this event handler, and it will be painted again by the parent control.
+
+                    e.Graphics.SetClip(control.ClientRectangle);
+
+                }
+
+                controlRenderer.PaintControl(control, CreateControlPaintArgs(control, e, false));
+
+            }
 
         }
         private void InvalidateHandler(object sender, EventArgs e) {
@@ -117,9 +135,11 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         private void AddParentPaintHandler(Control control, ControlInfo info) {
 
-            if (control.Parent != null) {
+            Control parentControl = control.Parent;
 
-                ControlInfo parentControlInfo = GetControlInfo(control.Parent);
+            if (parentControl != null) {
+
+                ControlInfo parentControlInfo = GetControlInfo(parentControl);
 
                 if (parentControlInfo != null) {
 
@@ -127,11 +147,17 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                     void paintHandler(object sender, PaintEventArgs e) {
 
+                        GraphicsState graphicsState = e.Graphics.Save();
+
                         e.Graphics.TranslateTransform(control.Location.X, control.Location.Y);
 
-                        controlRenderer.PaintControl(control, CreateControlPaintArgs(control, e));
+                        Region region = new Region(parentControl.ClientRectangle);
 
-                        e.Graphics.TranslateTransform(-control.Location.X, -control.Location.Y);
+                        region.Exclude(control.ClientRectangle);
+
+                        controlRenderer.PaintControl(control, CreateControlPaintArgs(control, e, true));
+
+                        e.Graphics.Restore(graphicsState);
 
                     }
 
@@ -170,8 +196,12 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         private void ApplyStyles(ListBox control, ControlInfo info) {
 
+            info.ParentDraw = true;
+
             control.DrawMode = DrawMode.OwnerDrawFixed;
             control.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
+            //info.ParentDraw = true;
 
             control.MouseMove += InvalidateHandler; // required for :hover
             control.MouseEnter += InvalidateHandler; // required for :hover
@@ -186,7 +216,6 @@ namespace Gsemac.Forms.Styles.Applicators {
                 control.MouseLeave -= InvalidateHandler;
                 control.SelectedIndexChanged -= InvalidateHandler;
                 control.MouseDown -= InvalidateHandler;
-
 
             };
 
@@ -326,9 +355,9 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
-        private ControlPaintArgs CreateControlPaintArgs(Control control, PaintEventArgs paintEventArgs) {
+        private ControlPaintArgs CreateControlPaintArgs(Control control, PaintEventArgs paintEventArgs, bool parentDraw) {
 
-            return new ControlPaintArgs(control, paintEventArgs.Graphics, StyleSheet, styleRenderer);
+            return new ControlPaintArgs(control, paintEventArgs.Graphics, StyleSheet, styleRenderer, parentDraw);
 
         }
 

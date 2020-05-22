@@ -53,7 +53,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle checkRect = new Rectangle(clientRect.X, clientRect.Y + (int)(clientRect.Height / 2.0f - CheckWidth / 2.0f), CheckWidth, CheckWidth);
 
             e.StyleRenderer.PaintBackground(e.Graphics, checkRect, ruleset);
-            //e.StyleRenderer.PaintBorder(e.Graphics, checkRect, ruleset);
+            e.StyleRenderer.PaintBorder(e.Graphics, checkRect, ruleset);
 
             // Draw the checkmark.
 

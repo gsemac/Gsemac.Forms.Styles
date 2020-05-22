@@ -14,13 +14,15 @@ namespace Gsemac.Forms.Styles.Renderers {
         public Graphics Graphics { get; }
         public IStyleSheet StyleSheet { get; }
         public IStyleRenderer StyleRenderer { get; }
+        public bool ParentDraw { get; }
 
-        public ControlPaintArgs(Control control, Graphics graphics, IStyleSheet styleSheet, IStyleRenderer styleRenderer) {
+        public ControlPaintArgs(Control control, Graphics graphics, IStyleSheet styleSheet, IStyleRenderer styleRenderer, bool parentDraw) {
 
             this.Control = control;
             this.Graphics = graphics;
             this.StyleSheet = styleSheet;
             this.StyleRenderer = styleRenderer;
+            this.ParentDraw = parentDraw;
 
         }
 
@@ -31,7 +33,10 @@ namespace Gsemac.Forms.Styles.Renderers {
             if (Control.Parent != null)
                 parentBackgroundColor = StyleSheet.GetRuleset(Control.Parent).BackgroundColor;
 
-            Graphics.Clear(parentBackgroundColor?.Value ?? Control.Parent?.BackColor ?? Color.Transparent);
+            Color clearColor = parentBackgroundColor?.Value ?? Control.Parent?.BackColor ?? Color.Transparent;
+
+            using (Brush brush = new SolidBrush(clearColor))
+                Graphics.FillRectangle(brush, Control.ClientRectangle);
 
         }
 
@@ -59,7 +64,12 @@ namespace Gsemac.Forms.Styles.Renderers {
         }
         public void PaintBorder() {
 
-            StyleRenderer.PaintBorder(Graphics, Control.ClientRectangle, StyleSheet.GetRuleset(Control));
+            PaintBorder(Control.ClientRectangle);
+
+        }
+        public void PaintBorder(Rectangle drawRect) {
+
+            StyleRenderer.PaintBorder(Graphics, drawRect, StyleSheet.GetRuleset(Control));
 
         }
 
@@ -73,11 +83,16 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public void ClipToBorder() {
 
+            ClipToBorder(Control.ClientRectangle);
+
+        }
+        public void ClipToBorder(Rectangle clippingRect) {
+
             IRuleset ruleset = StyleSheet.GetRuleset(Control);
 
             if (ruleset.Any(p => p.IsBorderRadiusProperty())) {
 
-                Graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(Control.ClientRectangle,
+                Graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(clippingRect,
                     (int)(ruleset.BorderTopLeftRadius?.Value ?? 0),
                     (int)(ruleset.BorderTopRightRadius?.Value ?? 0),
                     (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0),
