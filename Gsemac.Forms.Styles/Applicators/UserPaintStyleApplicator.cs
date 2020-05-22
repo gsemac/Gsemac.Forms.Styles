@@ -33,8 +33,25 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                 control.Paint += PaintEventHandler;
 
+                // The following handlers are required in order for the ":focus-within" pseudo-class to work.
+                // "Enter" and "Exit" are important, as they are triggered for parent controls when child controls gain or lose focus.
+
+                control.GotFocus += InvalidateEventHandler;
+                control.LostFocus += InvalidateEventHandler;
+
+                control.Enter += InvalidateEventHandler;
+                control.Leave += InvalidateEventHandler;
+
                 info.ResetControl += (c) => {
+
                     control.Paint -= PaintEventHandler;
+
+                    control.GotFocus -= InvalidateEventHandler;
+                    control.LostFocus -= InvalidateEventHandler;
+
+                    control.Enter -= InvalidateEventHandler;
+                    control.Leave -= InvalidateEventHandler;
+
                 };
 
             }
@@ -73,8 +90,12 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             }
 
-            if (info.ParentDraw)
+            if (info.ParentDraw) {
+
                 AddParentPaintHandler(control, info);
+                AddTextBoxInvalidateParentHandlers(control, info);
+
+            }
 
         }
 
@@ -120,13 +141,13 @@ namespace Gsemac.Forms.Styles.Applicators {
             }
 
         }
-        private void InvalidateHandler(object sender, EventArgs e) {
+        private void InvalidateEventHandler(object sender, EventArgs e) {
 
             if (sender is Control control)
                 control.Invalidate();
 
         }
-        private void InvalidateParentHandler(object sender, EventArgs e) {
+        private void ParentInvalidateEventHandler(object sender, EventArgs e) {
 
             if (sender is Control control && control.Parent != null)
                 control.Parent.Invalidate();
@@ -174,21 +195,21 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
         private void AddTextBoxInvalidateParentHandlers(Control control, ControlInfo info) {
 
-            control.MouseMove += InvalidateParentHandler; // required for :hover
-            control.MouseEnter += InvalidateParentHandler; // required for :hover
-            control.MouseLeave += InvalidateParentHandler; // required for :hover
-            control.MouseDown += InvalidateParentHandler; // required for :active
-            control.GotFocus += InvalidateParentHandler; // required for :focus
-            control.LostFocus += InvalidateParentHandler; // required for :focus
+            control.MouseMove += ParentInvalidateEventHandler; // required for :hover
+            control.MouseEnter += ParentInvalidateEventHandler; // required for :hover
+            control.MouseLeave += ParentInvalidateEventHandler; // required for :hover
+            control.MouseDown += ParentInvalidateEventHandler; // required for :active
+            control.GotFocus += ParentInvalidateEventHandler; // required for :focus
+            control.LostFocus += ParentInvalidateEventHandler; // required for :focus
 
             info.ResetControl += (c) => {
 
-                control.MouseMove -= InvalidateParentHandler;
-                control.MouseEnter -= InvalidateParentHandler;
-                control.MouseLeave -= InvalidateParentHandler;
-                control.MouseDown -= InvalidateParentHandler;
-                control.GotFocus -= InvalidateParentHandler;
-                control.LostFocus -= InvalidateParentHandler;
+                control.MouseMove -= ParentInvalidateEventHandler;
+                control.MouseEnter -= ParentInvalidateEventHandler;
+                control.MouseLeave -= ParentInvalidateEventHandler;
+                control.MouseDown -= ParentInvalidateEventHandler;
+                control.GotFocus -= ParentInvalidateEventHandler;
+                control.LostFocus -= ParentInvalidateEventHandler;
 
             };
 
@@ -203,19 +224,19 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             //info.ParentDraw = true;
 
-            control.MouseMove += InvalidateHandler; // required for :hover
-            control.MouseEnter += InvalidateHandler; // required for :hover
-            control.MouseLeave += InvalidateHandler; // required for :hover
-            control.SelectedIndexChanged += InvalidateHandler; // required for item selection
-            control.MouseDown += InvalidateHandler; // required for item selection
+            control.MouseMove += InvalidateEventHandler; // required for :hover
+            control.MouseEnter += InvalidateEventHandler; // required for :hover
+            control.MouseLeave += InvalidateEventHandler; // required for :hover
+            control.SelectedIndexChanged += InvalidateEventHandler; // required for item selection
+            control.MouseDown += InvalidateEventHandler; // required for item selection
 
             info.ResetControl += (c) => {
 
-                control.MouseMove -= InvalidateHandler;
-                control.MouseEnter -= InvalidateHandler;
-                control.MouseLeave -= InvalidateHandler;
-                control.SelectedIndexChanged -= InvalidateHandler;
-                control.MouseDown -= InvalidateHandler;
+                control.MouseMove -= InvalidateEventHandler;
+                control.MouseEnter -= InvalidateEventHandler;
+                control.MouseLeave -= InvalidateEventHandler;
+                control.SelectedIndexChanged -= InvalidateEventHandler;
+                control.MouseDown -= InvalidateEventHandler;
 
             };
 

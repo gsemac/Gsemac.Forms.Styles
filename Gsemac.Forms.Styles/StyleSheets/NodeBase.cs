@@ -52,6 +52,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (States.HasFlag(NodeStates.Focus))
                 yield return ":focus";
 
+            if (States.HasFlag(NodeStates.FocusWithin))
+                yield return ":focus-within";
+
             if (States.HasFlag(NodeStates.Disabled))
                 yield return ":disabled";
 

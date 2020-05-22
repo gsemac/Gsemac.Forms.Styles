@@ -52,6 +52,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (control.Focused)
                 States |= NodeStates.Focus;
 
+            if (control.ContainsFocus)
+                States |= NodeStates.FocusWithin;
+
             if (!control.Enabled)
                 States |= NodeStates.Disabled;
 
@@ -63,6 +66,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             hashCodeBuilder.Add(control);
             hashCodeBuilder.Add((int)States);
+            hashCodeBuilder.Add(Parent);
 
             return hashCodeBuilder.GetHashCode();
 

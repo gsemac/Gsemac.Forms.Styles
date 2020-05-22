@@ -34,6 +34,7 @@ namespace Gsemac.Forms.Styles.Renderers {
                     Rectangle tabRect = control.GetTabRect(i);
                     UserNode tabNode = new UserNode(tabRect, control.PointToClient(Cursor.Position));
 
+                    tabNode.SetParent(new ControlNode(control));
                     tabNode.AddClass("tab");
 
                     if (i == 0)

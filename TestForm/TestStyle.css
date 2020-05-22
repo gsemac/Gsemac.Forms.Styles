@@ -43,8 +43,12 @@
     border-width: 0px;
     border-radius: 0px;
     border-color: #313335;
-    border-top-color: #4b6eaf;
+    border-top-color: #5c5c5c;
     border-top-width: 2px;
+}
+
+.tabcontrol:focus-within > .panel {
+    border-top-color: #4b6eaf;
 }
 
 .tab {
@@ -56,8 +60,12 @@
 }
 
 .tab:checked {
-    background-color: #4b6eaf;
+    background-color: #5c5c5c;
     border-radius: 1px 1px 0px 0px;
+}
+
+.tabcontrol:focus-within > .tab:checked {
+    background-color: #4b6eaf;
 }
 
 .toolstrip {
@@ -93,6 +101,10 @@
     border-color: #5c5c5c;
     border-width: 1px;
     border-radius: 2px;
+}
+
+.listbox:focus {
+    border-color: #6897bb;
 }
 
 .listboxitem.even {
