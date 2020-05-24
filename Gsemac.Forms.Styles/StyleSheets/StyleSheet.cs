@@ -64,11 +64,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Private members
 
-        private const int DefaultCacheCapacity = 1000;
-
         private readonly StylesheetOptions options = StylesheetOptions.Default;
         private readonly IList<IRuleset> rulesets = new List<IRuleset>();
-        private readonly IDictionary<INode, IRuleset> cache = new LruDictionary<INode, IRuleset>(DefaultCacheCapacity);
+        private readonly IDictionary<INode, IRuleset> cache = new RulesetCache();
 
         private StyleSheet(StylesheetOptions options = StylesheetOptions.Default) {
 

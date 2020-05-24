@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Gsemac.Forms.Styles.Collections {
@@ -148,11 +149,13 @@ namespace Gsemac.Forms.Styles.Collections {
 
             if (values.Any()) {
 
-                DictItem item = values.Last.Value;
+                LinkedListNode<DictItem> nodeToRemove = values.Last;
 
-                nodeDict.Remove(item.Key);
+                bool removedFromDict = nodeDict.Remove(nodeToRemove.Value.Key);
 
-                values.Remove(item);
+                Debug.Assert(removedFromDict);
+
+                values.Remove(nodeToRemove);
 
             }
 
@@ -171,9 +174,9 @@ namespace Gsemac.Forms.Styles.Collections {
             if (!Remove(key) && Count >= Capacity)
                 EvictOldest();
 
-            values.AddFirst(new DictItem(key, value));
+            nodeDict[key] = values.AddFirst(new DictItem(key, value));
 
-            nodeDict[key] = values.First;
+            Debug.Assert(Count <= Capacity);
 
         }
 

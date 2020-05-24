@@ -75,9 +75,11 @@
     <Compile Include="StyleSheets\IHashCodeBuilder.cs" />
     <Compile Include="StyleSheets\ILexer.cs" />
     <Compile Include="StyleSheets\InvalidFunctionException.cs" />
+    <Compile Include="StyleSheets\IRulesetCache.cs" />
     <Compile Include="StyleSheets\ISelectorBuilder.cs" />
     <Compile Include="StyleSheets\LexerBase.cs" />
     <Compile Include="StyleSheets\PseudoClassSelector.cs" />
+    <Compile Include="StyleSheets\RulesetCache.cs" />
     <Compile Include="StyleSheets\UnexpectedTokenException.cs" />
     <Compile Include="StyleSheets\UserNode.cs" />
     <Compile Include="StyleSheets\NodeBase.cs" />
