@@ -5,28 +5,28 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
 
-    public class NumericUpDownControlRenderer :
-        ControlRendererBase<NumericUpDown> {
+    public class TextBoxRenderer :
+        ControlRendererBase<TextBox> {
 
         // Public members
 
-        public override void PaintControl(NumericUpDown control, ControlPaintArgs e) {
+        public override void PaintControl(TextBox control, ControlPaintArgs e) {
 
             IRuleset ruleset = e.StyleSheet.GetRuleset(control);
 
-            // Update the color of the NumericUpdateDown, which updates the color of the UpDownEdit (inheriting from TextBox).
+            // Update the color of the TextBox itself.
 
             RenderUtilities.ApplyColorProperties(control, ruleset);
 
-            // Like TextBoxes, NumericUpDowns are 23 pixels high.
-            // Because the NumericUpDown has BorderStyle.None, we need to adjust it to look like a bordered control.
+            // Draw the background the TextBox.
+            // The height of regular TextBoxes is 23 pixels, with 3 pixels of horizontal padding.
 
             Rectangle clientRect = control.ClientRectangle;
 
-            int x = clientRect.X - 2;
-            int y = clientRect.Y - 2;
-            int w = clientRect.Width + 3;
-            int h = clientRect.Height + 4;
+            int x = clientRect.X - 3;
+            int y = clientRect.Y - 4;
+            int w = clientRect.Width + 6;
+            int h = clientRect.Height + 7;
 
             double topWidth = ruleset.BorderTopWidth?.Value ?? 0;
             double rightWidth = ruleset.BorderRightWidth?.Value ?? 0;
@@ -50,10 +50,19 @@ namespace Gsemac.Forms.Styles.Renderers {
             w += (int)leftWidth + (int)rightWidth;
             h += (int)topWidth + (int)bottomWidth;
 
+            if (control.ScrollBars.HasFlag(ScrollBars.Vertical))
+                w += 17;
+
+            //GraphicsState graphicsState = graphics.Save();
+
             Rectangle drawRect = new Rectangle(x, y, w, h);
+
+            //graphics.SetClip(drawRect);
 
             e.StyleRenderer.PaintBackground(e.Graphics, drawRect, ruleset);
             e.StyleRenderer.PaintBorder(e.Graphics, drawRect, ruleset);
+
+            //graphics.Restore(graphicsState);
 
         }
 

@@ -6,7 +6,7 @@
     background-color: #3c3f41;
 }
 
-.button, .textbox {
+.button, .textbox, .progressbar {
     background-color: #45494a;
     border-color: #5c5c5c;
     border-radius: 2px;
@@ -121,6 +121,12 @@
 
 .listbox:focus > .listboxitem:checked, .listbox:focus > .listboxitem:active {
     background-color: #4b6eaf;
+}
+
+.progress {
+    background-color: #4b6eaf;
+    border-color: #6897bb;
+    border-width: 1px;
 }
 
 .CheckBox {

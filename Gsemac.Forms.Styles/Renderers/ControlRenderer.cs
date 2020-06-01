@@ -9,7 +9,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public override void PaintControl(Control control, ControlPaintArgs e) {
 
-            IControlRenderer renderer = GetControlRenderer(control);
+            IControlRenderer renderer = GetRenderer(control);
 
             if (renderer is null)
                 PaintGenericControl(e);
@@ -20,39 +20,42 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Private members
 
-        private IControlRenderer GetControlRenderer(Control control) {
+        private IControlRenderer GetRenderer(Control control) {
 
             switch (control) {
 
                 case Button _:
-                    return new ButtonControlRenderer();
+                    return new ButtonRenderer();
 
                 case CheckBox _:
-                    return new CheckBoxControlRenderer();
+                    return new CheckBoxRenderer();
 
                 case ComboBox _:
                     return new ComboBoxControlRenderer();
 
                 case Label _:
-                    return new LabelControlRenderer();
+                    return new LabelRenderer();
 
                 case ListBox _:
-                    return new ListBoxControlRenderer();
+                    return new ListBoxRenderer();
 
                 case NumericUpDown _:
-                    return new NumericUpDownControlRenderer();
+                    return new NumericUpDownRenderer();
 
                 case RadioButton _:
-                    return new RadioButtonControlRenderer();
+                    return new RadioButtonRenderer();
 
                 case TabControl _:
-                    return new TabControlControlRenderer();
+                    return new TabControlRenderer();
 
                 case TextBox _:
-                    return new TextBoxControlRenderer();
+                    return new TextBoxRenderer();
 
                 case GroupBox _:
-                    return new GroupBoxControlRenderer();
+                    return new GroupBoxRenderer();
+
+                case ProgressBar _:
+                    return new ProgressBarRenderer();
 
                 default:
 
@@ -61,7 +64,7 @@ namespace Gsemac.Forms.Styles.Renderers {
                     switch (control.GetType().FullName) {
 
                         case "System.Windows.Forms.UpDownBase+UpDownButtons":
-                            return new UpDownButtonsControlRenderer();
+                            return new UpDownButtonsRenderer();
 
                         default:
                             return null;

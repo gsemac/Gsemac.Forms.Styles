@@ -1,18 +1,21 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
 
-    public class RadioButtonControlRenderer :
-    ControlRendererBase<RadioButton> {
+    public class CheckBoxRenderer :
+        ControlRendererBase<CheckBox> {
 
         // Public members
 
-        public override void PaintControl(RadioButton control, ControlPaintArgs e) {
+        public override void PaintControl(CheckBox control, ControlPaintArgs e) {
 
             e.PaintBackground();
             e.PaintBorder();
@@ -22,10 +25,9 @@ namespace Gsemac.Forms.Styles.Renderers {
             IRuleset ruleset = e.StyleSheet.GetRuleset(control);
 
             Rectangle clientRect = control.ClientRectangle;
-            Rectangle textRect = new Rectangle(clientRect.X + CheckWidth + 3, clientRect.Y, clientRect.Width, clientRect.Height);
-            TextFormatFlags textFormatFlags = RenderUtilities.GetTextFormatFlags(control.TextAlign);
+            Rectangle drawRect = new Rectangle(clientRect.X + CheckWidth + 3, clientRect.Y - 1, clientRect.Width, clientRect.Height);
 
-            e.StyleRenderer.PaintText(e.Graphics, textRect, ruleset, control.Text, control.Font, textFormatFlags);
+            e.StyleRenderer.PaintText(e.Graphics, drawRect, ruleset, control.Text, control.Font, RenderUtilities.GetTextFormatFlags(control.TextAlign));
 
         }
 
@@ -33,7 +35,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         private const int CheckWidth = 13;
 
-        private void PaintCheck(RadioButton control, ControlPaintArgs e) {
+        private void PaintCheck(CheckBox control, ControlPaintArgs e) {
 
             INode controlNode = new ControlNode(control);
             UserNode checkNode = new UserNode(string.Empty, new[] { "Check" });
@@ -49,8 +51,8 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             ruleset.InheritProperties(parentRuleset);
 
-            Rectangle clientRect = control.ClientRectangle;
-            Rectangle checkRect = new Rectangle(clientRect.X, clientRect.Y + (int)(clientRect.Height / 2.0f - CheckWidth / 2.0f), CheckWidth, CheckWidth);
+            Rectangle clientRect = e.Control.ClientRectangle;
+            Rectangle checkRect = new Rectangle(clientRect.X, clientRect.Y + (int)(clientRect.Height / 2.0f - CheckWidth / 2.0f) - 1, CheckWidth, CheckWidth);
 
             e.StyleRenderer.PaintBackground(e.Graphics, checkRect, ruleset);
             e.StyleRenderer.PaintBorder(e.Graphics, checkRect, ruleset);
@@ -59,14 +61,17 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             if (control.Checked) {
 
-                using (Brush brush = new SolidBrush(ruleset.Color?.Value ?? SystemColors.ControlText)) {
+                using (Pen pen = new Pen(ruleset.Color?.Value ?? SystemColors.ControlText)) {
 
                     e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                    e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                    checkRect.Inflate(-3, -3);
+                    pen.Alignment = PenAlignment.Center;
+                    pen.Width = 2.0f;
+                    pen.StartCap = LineCap.Square;
+                    pen.EndCap = LineCap.Square;
 
-                    e.Graphics.FillEllipse(brush, checkRect);
+                    e.Graphics.DrawLine(pen, checkRect.X + 3, checkRect.Y + checkRect.Height / 2.0f, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5);
+                    e.Graphics.DrawLine(pen, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5, checkRect.X + checkRect.Width - 4, checkRect.Y + 3);
 
                 }
 

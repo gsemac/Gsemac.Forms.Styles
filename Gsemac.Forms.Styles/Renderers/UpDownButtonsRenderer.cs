@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
 
-    public class UpDownButtonsControlRenderer :
+    public class UpDownButtonsRenderer :
         ControlRendererBase {
 
         // Public members

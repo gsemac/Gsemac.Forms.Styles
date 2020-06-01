@@ -56,6 +56,7 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -83,6 +84,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.progressBar1);
             this.tabPage1.Controls.Add(this.listBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Controls.Add(this.radioButton2);
@@ -378,6 +380,14 @@
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(168, 194);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(140, 23);
+            this.progressBar1.TabIndex = 16;
+            this.progressBar1.Value = 50;
+            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -446,5 +456,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

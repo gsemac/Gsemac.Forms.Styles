@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
-    public class LabelControlRenderer :
+    public class LabelRenderer :
         ControlRendererBase<Label> {
 
         // Public members

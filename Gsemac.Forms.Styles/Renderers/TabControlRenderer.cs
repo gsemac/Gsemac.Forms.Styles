@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
 
-    public class TabControlControlRenderer :
+    public class TabControlRenderer :
         ControlRendererBase<TabControl> {
 
         // Public members

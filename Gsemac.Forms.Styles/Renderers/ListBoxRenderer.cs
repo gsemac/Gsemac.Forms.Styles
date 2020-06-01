@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
 
-    public class ListBoxControlRenderer :
+    public class ListBoxRenderer :
         ControlRendererBase<ListBox> {
 
         // Public members

@@ -63,7 +63,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             bool hasRadius = ruleset.GetBorderRadii().Any(r => r > 0);
 
-            if(hasRadius)
+            if (hasRadius)
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             double topWidth = ruleset.BorderTopWidth?.Value ?? 0;
@@ -76,13 +76,15 @@ namespace Gsemac.Forms.Styles.Renderers {
             double bottomRightRadius = ruleset.BorderBottomRightRadius?.Value ?? 0;
             double bottomLeftRadius = ruleset.BorderBottomLeftRadius?.Value ?? 0;
 
-            Rectangle drawRect = new Rectangle(
-                rectangle.X + (int)(leftWidth / 2),
-                rectangle.Y + (int)(topWidth / 2),
-                rectangle.Width - ((int)leftWidth / 2 + (int)(rightWidth / 2)),
-                rectangle.Height - ((int)(topWidth / 2) + (int)(bottomWidth / 2)));
+            double horizontalBorderWidth = leftWidth + rightWidth;
+            double verticalBorderWidth = topWidth + bottomWidth;
 
-            drawRect = new Rectangle(drawRect.X, drawRect.Y, drawRect.Width - 1, drawRect.Height - 1);
+            int rectX = rectangle.X + (int)(leftWidth / 2);
+            int rectY = rectangle.Y + (int)(topWidth / 2);
+            int rectWidth = rectangle.Width - (int)(horizontalBorderWidth / 2);
+            int rectHeight = rectangle.Height - (int)(verticalBorderWidth / 2);
+
+            Rectangle drawRect = new Rectangle(rectX, rectY, rectWidth, rectHeight);
 
             using (Pen pen = new Pen(Color.Black)) {
 

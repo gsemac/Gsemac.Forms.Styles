@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
 
-    public class GroupBoxControlRenderer :
+    public class GroupBoxRenderer :
          ControlRendererBase<GroupBox> {
 
         // Public members
