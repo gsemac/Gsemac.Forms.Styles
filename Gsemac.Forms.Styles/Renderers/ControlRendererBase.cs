@@ -6,7 +6,7 @@ namespace Gsemac.Forms.Styles.Renderers {
     public abstract class ControlRendererBase :
         IControlRenderer {
 
-        public abstract void PaintControl(Control control, ControlPaintArgs e);
+        public abstract void PaintControl(Control control, ControlPaintArgs args);
 
     }
 
@@ -14,10 +14,10 @@ namespace Gsemac.Forms.Styles.Renderers {
         ControlRendererBase,
         IControlRenderer<T> where T : Control {
 
-        public override void PaintControl(Control control, ControlPaintArgs e) {
+        public override void PaintControl(Control control, ControlPaintArgs args) {
 
             if (control is T castedControl)
-                PaintControl(castedControl, e);
+                PaintControl(castedControl, args);
             else
                 throw new ArgumentException("The given control cannot be rendered by this renderer.");
 

@@ -84,7 +84,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 while (!lexer.EndOfStream) {
 
                     IStyleSheetLexerToken token = lexer.Peek();
-
+                 
                     switch (token.Type) {
 
                         case StyleSheetLexerTokenType.DeclarationEnd:

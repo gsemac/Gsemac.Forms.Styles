@@ -287,7 +287,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         break;
 
                     case ':':
-                        ReadPseudoClass();
+                        ReadPseudoClassOrPseudoElement();
                         break;
 
                     case ' ':
@@ -384,7 +384,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Class, valueBuilder.ToString()));
 
         }
-        private void ReadPseudoClass() {
+        private void ReadPseudoClassOrPseudoElement() {
 
             StringBuilder valueBuilder = new StringBuilder();
 
@@ -399,8 +399,17 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             }
 
-            if (valueBuilder.Length > 0)
-                tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.PseudoClass, valueBuilder.ToString()));
+            if (valueBuilder.Length > 0) {
+
+                string value = valueBuilder.ToString();
+
+                StyleSheetLexerTokenType type = value.StartsWith("::") ?
+                    StyleSheetLexerTokenType.PseudoElement :
+                    StyleSheetLexerTokenType.PseudoClass;
+
+                tokens.Enqueue(new StyleSheetLexerToken(type, value));
+
+            }
 
         }
         private void ReadTag() {

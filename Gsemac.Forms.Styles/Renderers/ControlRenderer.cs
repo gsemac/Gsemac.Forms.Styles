@@ -33,11 +33,17 @@ namespace Gsemac.Forms.Styles.Renderers {
                 case ComboBox _:
                     return new ComboBoxControlRenderer();
 
+                case GroupBox _:
+                    return new GroupBoxRenderer();
+
                 case Label _:
                     return new LabelRenderer();
 
                 case ListBox _:
                     return new ListBoxRenderer();
+
+                case ProgressBar _:
+                    return new ProgressBarRenderer();
 
                 case NumericUpDown _:
                     return new NumericUpDownRenderer();
@@ -45,17 +51,14 @@ namespace Gsemac.Forms.Styles.Renderers {
                 case RadioButton _:
                     return new RadioButtonRenderer();
 
+                case RichTextBox _:
+                    return new RichTextBoxRenderer();
+
                 case TabControl _:
                     return new TabControlRenderer();
 
                 case TextBox _:
                     return new TextBoxRenderer();
-
-                case GroupBox _:
-                    return new GroupBoxRenderer();
-
-                case ProgressBar _:
-                    return new ProgressBarRenderer();
 
                 default:
 

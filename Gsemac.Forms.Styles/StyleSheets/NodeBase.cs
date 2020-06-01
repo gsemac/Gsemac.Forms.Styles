@@ -10,6 +10,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public abstract IEnumerable<string> Classes { get; }
         public virtual IEnumerable<string> PseudoClasses => GetPseudoClasses();
+        public virtual string PseudoElement => string.Empty;
         public abstract string Tag { get; }
         public abstract string Id { get; }
         public abstract NodeStates States { get; }

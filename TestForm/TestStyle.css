@@ -6,7 +6,7 @@
     background-color: #3c3f41;
 }
 
-.button, .textbox, .progressbar {
+.button, .textbox, .progressbar, .richtextbox {
     background-color: #45494a;
     border-color: #5c5c5c;
     border-radius: 2px;
@@ -21,7 +21,7 @@
     background-color: #2b2b2b;
 }
 
-.button:focus, .textbox:focus {
+.button:focus, .textbox:focus, .richtextbox:focus {
     border-color: #6897bb;
 }
 
@@ -127,6 +127,11 @@
     background-color: #4b6eaf;
     border-color: #6897bb;
     border-width: 1px;
+    border-radius: 2px;
+}
+
+.richtextbox::selection {
+    background-color: green;
 }
 
 .CheckBox {

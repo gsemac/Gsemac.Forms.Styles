@@ -61,6 +61,7 @@
     <Compile Include="Renderers\ControlPaintArgs.cs" />
     <Compile Include="Renderers\ProgressBarRenderer.cs" />
     <Compile Include="Renderers\RadioButtonRenderer.cs" />
+    <Compile Include="Renderers\RichTextBoxRenderer.cs" />
     <Compile Include="Renderers\StyleRenderer.cs" />
     <Compile Include="Renderers\TextBoxRenderer.cs" />
     <Compile Include="Renderers\ToolStripRenderer.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="StyleSheets\ISelectorBuilder.cs" />
     <Compile Include="StyleSheets\LexerBase.cs" />
     <Compile Include="StyleSheets\PseudoClassSelector.cs" />
+    <Compile Include="StyleSheets\PseudoElementSelector.cs" />
     <Compile Include="StyleSheets\RulesetCache.cs" />
     <Compile Include="StyleSheets\UnexpectedTokenException.cs" />
     <Compile Include="StyleSheets\UserNode.cs" />

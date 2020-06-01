@@ -69,6 +69,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         builder.AddPseudoClass(token.Value);
                         break;
 
+                    case StyleSheetLexerTokenType.PseudoElement:
+                        builder.AddPseudoElement(token.Value);
+                        break;
+
                     case StyleSheetLexerTokenType.Id:
                         builder.AddId(token.Value);
                         break;

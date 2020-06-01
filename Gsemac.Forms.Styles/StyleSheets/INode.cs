@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -21,6 +19,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         string Tag { get; }
         IEnumerable<string> Classes { get; }
         IEnumerable<string> PseudoClasses { get; }
+        string PseudoElement { get; }
         string Id { get; }
         NodeStates States { get; }
 

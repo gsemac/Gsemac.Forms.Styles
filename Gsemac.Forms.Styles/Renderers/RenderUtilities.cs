@@ -5,6 +5,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -86,6 +87,53 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         }
 
+        public static ScrollBars GetVisibleScrollbars(ListBox control) {
+
+            ScrollBars scrollBars = ScrollBars.None;
+
+            if (Enumerable.Range(0, control.Items.Count).Sum(i => control.GetItemHeight(i)) > control.Height)
+                scrollBars |= ScrollBars.Vertical;
+
+            return scrollBars;
+
+        }
+        public static ScrollBars GetVisibleScrollbars(TextBox control) {
+
+            return control.ScrollBars;
+
+        }
+        public static ScrollBars GetVisibleScrollbars(Control control) {
+
+            ScrollBars scrollBars = ScrollBars.None;
+
+            Size size = control.GetPreferredSize(Size.Empty);
+
+            if (size.Height > control.Height)
+                scrollBars |= ScrollBars.Vertical;
+
+            if (size.Width > control.Width)
+                scrollBars |= ScrollBars.Horizontal;
+
+            return scrollBars;
+
+        }
+
+        public static Rectangle GetOuterBorderRectangle(Control control, IRuleset ruleset) {
+
+            Borders borders = ruleset.GetBorders();
+
+            Rectangle borderRect = control.ClientRectangle;
+
+            borderRect = new Rectangle(
+                borderRect.X - (int)borders.Left.Width,
+                borderRect.Y - (int)borders.Top.Width,
+                borderRect.Width + (int)borders.Left.Width + (int)borders.Right.Width,
+                borderRect.Height + +(int)borders.Top.Width + (int)borders.Bottom.Width
+                );
+
+            return borderRect;
+
+        }
         public static GraphicsPath CreateBorderPath(Rectangle bounds, BorderPathType type, double topLeftRadius, double topRightRadius, double bottomRightRadius, double bottomLeftRadius) {
 
             int topLeftDiameter = (int)(topLeftRadius * 2);

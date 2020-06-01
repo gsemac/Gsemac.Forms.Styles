@@ -50,8 +50,8 @@ namespace Gsemac.Forms.Styles.Renderers {
             w += (int)leftWidth + (int)rightWidth;
             h += (int)topWidth + (int)bottomWidth;
 
-            if (control.ScrollBars.HasFlag(ScrollBars.Vertical))
-                w += 17;
+            if (RenderUtilities.GetVisibleScrollbars(control).HasFlag(ScrollBars.Vertical))
+                w += SystemInformation.VerticalScrollBarWidth;
 
             //GraphicsState graphicsState = graphics.Save();
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
@@ -16,6 +17,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public override NodeStates States { get; } = NodeStates.None;
         public override INode Parent => control.Parent != null ? new ControlNode(control.Parent) : null;
         public int HashCode => GetHashCode();
+
         public ControlNode(Control control) :
             this(control, control.ClientRectangle) {
         }

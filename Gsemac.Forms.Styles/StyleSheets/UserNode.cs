@@ -10,11 +10,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
-        public override IEnumerable<string> Classes => classes;
-        public override string Tag => tag;
-        public override string Id => id;
-        public override NodeStates States => states;
-        public override INode Parent => parent;
+        public override IEnumerable<string> Classes => GetClasses();
+        public override string PseudoElement => GetPseudoElement();
+        public override string Tag => GetTag();
+        public override string Id => GetId();
+        public override NodeStates States => GetStates();
+        public override INode Parent => GetParent();
 
         public UserNode(Rectangle clientRectangle, Point cursorPosition) {
 
@@ -36,6 +37,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             foreach (string @class in classes)
                 AddClass(@class);
+
+        }
+        public UserNode(INode baseNode) {
+
+            this.baseNode = baseNode;
 
         }
 
@@ -77,14 +83,66 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             parent = node;
 
         }
+        public void SetPseudoElement(string value) {
+
+            this.pseudoElement = value;
+
+        }
 
         // Private members
 
+        private readonly INode baseNode = null;
         private readonly List<string> classes = new List<string>();
-        private string tag = "";
-        private string id = "";
+        private string pseudoElement = string.Empty;
+        private string tag = string.Empty;
+        private string id = string.Empty;
         private INode parent = null;
         private NodeStates states = NodeStates.None;
+
+        private IEnumerable<string> GetClasses() {
+
+            IEnumerable<string> baseNodeClasses = baseNode != null ?
+                baseNode.Classes :
+                Enumerable.Empty<string>();
+
+            return baseNodeClasses.Concat(classes);
+
+        }
+        private string GetPseudoElement() {
+
+            return string.IsNullOrEmpty(pseudoElement) && baseNode != null ?
+                baseNode.PseudoElement :
+                pseudoElement;
+
+        }
+        private string GetTag() {
+
+            return string.IsNullOrEmpty(tag) && baseNode != null ?
+                baseNode.Tag :
+                tag;
+
+        }
+        private string GetId() {
+
+            return string.IsNullOrEmpty(id) && baseNode != null ?
+                baseNode.Id :
+                id;
+
+        }
+        private NodeStates GetStates() {
+
+            return states == NodeStates.None && baseNode != null ?
+                baseNode.States :
+                states;
+
+        }
+        private INode GetParent() {
+
+            return parent is null && baseNode != null ?
+                baseNode.Parent :
+                parent;
+
+        }
 
     }
 

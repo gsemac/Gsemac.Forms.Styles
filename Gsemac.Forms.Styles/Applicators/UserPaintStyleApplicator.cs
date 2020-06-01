@@ -76,6 +76,12 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                     break;
 
+                case RichTextBox richTextBox:
+
+                    ApplyStyles(richTextBox, info);
+
+                    break;
+
                 case TextBox textBox:
 
                     ApplyStyles(textBox, info);
@@ -109,7 +115,7 @@ namespace Gsemac.Forms.Styles.Applicators {
             // Controls that use TextBoxes generally need special treatment to render correctly.
             // ToolStrips and MenuStrips (which inherit from ToolStrip) are drawn through the custom ToolStripRenderers supplied to the "Renderer" property.
 
-            if (control is TextBox || control is NumericUpDown || control is ToolStrip)
+            if (control is NumericUpDown || control is RichTextBox || control is TextBox || control is ToolStrip)
                 return false;
 
             // Only ComboBoxes with the DropDownList style do not use a TextBox, and can be fully painted.
@@ -222,8 +228,6 @@ namespace Gsemac.Forms.Styles.Applicators {
             control.DrawMode = DrawMode.OwnerDrawFixed;
             control.BorderStyle = System.Windows.Forms.BorderStyle.None;
 
-            //info.ParentDraw = true;
-
             control.MouseMove += InvalidateEventHandler; // required for :hover
             control.MouseEnter += InvalidateEventHandler; // required for :hover
             control.MouseLeave += InvalidateEventHandler; // required for :hover
@@ -298,6 +302,21 @@ namespace Gsemac.Forms.Styles.Applicators {
             info.ResetControl += (c) => {
                 TrySetResizeRedraw(control, oldResetRedraw);
             };
+
+        }
+        private void ApplyStyles(RichTextBox control, ControlInfo info) {
+
+            control.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
+            info.Location = control.Location;
+            info.Width = control.Width;
+            info.Height = control.Height;
+
+            control.Location = new Point(control.Location.X + 3, control.Location.Y + 3);
+            control.Width -= 6;
+            control.Height -= 6;
+
+            info.ParentDraw = true;
 
         }
         private void ApplyStyles(TextBox control, ControlInfo info) {

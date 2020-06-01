@@ -15,6 +15,7 @@
 
         Class, // ".name"
         PseudoClass, // ":focus"
+        PseudoElement, // "::selection"
         Id, // "#name"
         Tag, // "name", "*"
         DescendantCombinator, // " "
