@@ -202,6 +202,23 @@ namespace Gsemac.Forms.Styles.Extensions {
             graphics.DrawImage(image, x, y, w, h);
 
         }
+        public static void DrawImage(this Graphics graphics, Image image, Rectangle bounds, ContentAlignment alignment) {
+
+            int x = bounds.X;
+            int y = bounds.Y;
+
+            if (alignment == ContentAlignment.TopRight || alignment == ContentAlignment.MiddleRight || alignment == ContentAlignment.BottomRight)
+                x = bounds.X + bounds.Width - image.Width;
+            else if (alignment == ContentAlignment.TopCenter || alignment == ContentAlignment.MiddleCenter || alignment == ContentAlignment.BottomCenter)
+                x = bounds.X + (int)(((float)bounds.Width / 2) - ((float)image.Width / 2));
+
+            if (alignment == ContentAlignment.BottomLeft || alignment == ContentAlignment.BottomCenter || alignment == ContentAlignment.BottomRight)
+                y = bounds.Y + bounds.Height - image.Height;
+            else if (alignment == ContentAlignment.MiddleLeft || alignment == ContentAlignment.MiddleCenter || alignment == ContentAlignment.MiddleRight)
+                y = bounds.Y + (int)(((float)bounds.Height / 2) - ((float)image.Height / 2));
+
+            graphics.DrawImage(image, x, y, image.Width, image.Height);
+        }
 
         public static void AddPoint(this GraphicsPath path, Point point) {
 
