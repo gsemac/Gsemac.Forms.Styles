@@ -19,7 +19,7 @@ namespace ThemeTesting {
         private void Button1_Click(object sender, EventArgs e) {
 
             ClearStyles();
-
+         
             applicator = new UserPaintStyleApplicator(LoadStyleSheet());
 
             applicator.ApplyStyles(this);

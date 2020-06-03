@@ -59,6 +59,7 @@
     <Compile Include="Renderers\ListBoxRenderer.cs" />
     <Compile Include="Renderers\NumericUpDownRenderer.cs" />
     <Compile Include="Renderers\ControlPaintArgs.cs" />
+    <Compile Include="Renderers\PictureBoxRenderer.cs" />
     <Compile Include="Renderers\ProgressBarRenderer.cs" />
     <Compile Include="Renderers\RadioButtonRenderer.cs" />
     <Compile Include="Renderers\RichTextBoxRenderer.cs" />

@@ -42,6 +42,9 @@ namespace Gsemac.Forms.Styles.Renderers {
                 case ListBox _:
                     return new ListBoxRenderer();
 
+                case PictureBox _:
+                    return new PictureBoxRenderer();
+
                 case ProgressBar _:
                     return new ProgressBarRenderer();
 

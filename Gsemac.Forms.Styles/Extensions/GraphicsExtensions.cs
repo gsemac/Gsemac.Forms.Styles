@@ -1,10 +1,6 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
 
 namespace Gsemac.Forms.Styles.Extensions {
 
@@ -13,6 +9,13 @@ namespace Gsemac.Forms.Styles.Extensions {
         Left,
         Right,
         Down
+    }
+
+    public enum ImageSizeMode {
+        Normal = 0,
+        Stretch = 1,
+        Center = 3,
+        Zoom = 4
     }
 
     internal static class GraphicsExtensions {
@@ -156,6 +159,47 @@ namespace Gsemac.Forms.Styles.Extensions {
 
             using (GraphicsPath path = CreateTriangle(bounds, orientation))
                 graphics.FillPath(brush, path);
+
+        }
+
+        public static void DrawImage(this Graphics graphics, Image image, Rectangle bounds, ImageSizeMode sizeMode) {
+
+            int x = bounds.X;
+            int y = bounds.Y;
+            int w = image.Width;
+            int h = image.Height;
+
+            switch (sizeMode) {
+
+                case ImageSizeMode.Stretch:
+
+                    w = bounds.Width;
+                    h = bounds.Height;
+
+                    break;
+
+                case ImageSizeMode.Center:
+
+                    x += (int)(((float)bounds.Width / 2) - ((float)w / 2));
+                    y += (int)(((float)bounds.Height / 2) - ((float)h / 2));
+
+                    break;
+
+                case ImageSizeMode.Zoom:
+
+                    float scaleFactor = Math.Min((float)bounds.Width / image.Width, (float)bounds.Height / image.Height);
+
+                    w = (int)(w * scaleFactor);
+                    h = (int)(h * scaleFactor);
+
+                    x += (int)(((float)bounds.Width / 2) - ((float)w / 2));
+                    y += (int)(((float)bounds.Height / 2) - ((float)h / 2));
+
+                    break;
+
+            }
+
+            graphics.DrawImage(image, x, y, w, h);
 
         }
 
