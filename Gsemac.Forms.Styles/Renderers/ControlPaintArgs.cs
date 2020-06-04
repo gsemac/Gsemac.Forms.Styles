@@ -8,6 +8,8 @@ namespace Gsemac.Forms.Styles.Renderers {
 
     public class ControlPaintArgs {
 
+        // Public members
+
         public const TextFormatFlags DefaultTextFormatFlags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter;
 
         public Control Control { get; }
@@ -28,14 +30,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public void Clear() {
 
-            ColorProperty parentBackgroundColor = null;
-
-            if (Control.Parent != null)
-                parentBackgroundColor = StyleSheet.GetRuleset(Control.Parent).BackgroundColor;
-
-            Color clearColor = parentBackgroundColor?.Value ?? Control.Parent?.BackColor ?? Color.Transparent;
-
-            using (Brush brush = new SolidBrush(clearColor))
+            using (Brush brush = new SolidBrush(GetClearColor(Control)))
                 Graphics.FillRectangle(brush, Control.ClientRectangle);
 
         }
@@ -90,20 +85,31 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             IRuleset ruleset = StyleSheet.GetRuleset(Control);
 
-            if (ruleset.Any(p => p.IsBorderRadiusProperty())) {
+            StyleRenderer.ClipToBorder(Graphics, clippingRect, ruleset);
 
-                Graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(clippingRect,
-                    (int)(ruleset.BorderTopLeftRadius?.Value ?? 0),
-                    (int)(ruleset.BorderTopRightRadius?.Value ?? 0),
-                    (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0),
-                    (int)(ruleset.BorderBottomRightRadius?.Value ?? 0)));
+        }
+
+        // Private members
+
+        private Color GetClearColor(Control control) {
+
+            Color clearColor = Color.Transparent;
+
+            if (control != null && control.Parent != null) {
+
+                ColorProperty parentBackgroundColor = StyleSheet.GetRuleset(control.Parent).BackgroundColor;
+
+                if (parentBackgroundColor.HasValue())
+                    clearColor = parentBackgroundColor.Value;
+                else
+                    clearColor = control.Parent.BackColor;
+
+                if (clearColor == Color.Transparent)
+                    clearColor = GetClearColor(control.Parent);
 
             }
-            else {
 
-                Graphics.SetClip(Control.ClientRectangle);
-
-            }
+            return clearColor;
 
         }
 

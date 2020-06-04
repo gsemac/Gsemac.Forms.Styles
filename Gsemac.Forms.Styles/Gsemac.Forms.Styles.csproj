@@ -68,6 +68,7 @@
     <Compile Include="Renderers\ToolStripRenderer.cs" />
     <Compile Include="Renderers\UpDownButtonsRenderer.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />
+    <Compile Include="StyleSheets\BackgroundImageProperty.cs" />
     <Compile Include="StyleSheets\BorderProperty.cs" />
     <Compile Include="StyleSheets\BorderRadiusProperty.cs" />
     <Compile Include="StyleSheets\BorderStyleProperty.cs" />
@@ -75,15 +76,19 @@
     <Compile Include="StyleSheets\ClassSelector.cs" />
     <Compile Include="StyleSheets\HashCodeBuilder.cs" />
     <Compile Include="StyleSheets\IDSelector.cs" />
+    <Compile Include="StyleSheets\IGradient.cs" />
     <Compile Include="StyleSheets\IHashCodeBuilder.cs" />
+    <Compile Include="StyleSheets\IImage.cs" />
     <Compile Include="StyleSheets\ILexer.cs" />
     <Compile Include="StyleSheets\InvalidFunctionException.cs" />
     <Compile Include="StyleSheets\IRulesetCache.cs" />
     <Compile Include="StyleSheets\ISelectorBuilder.cs" />
     <Compile Include="StyleSheets\LexerBase.cs" />
+    <Compile Include="StyleSheets\LinearGradient.cs" />
     <Compile Include="StyleSheets\PseudoClassSelector.cs" />
     <Compile Include="StyleSheets\PseudoElementSelector.cs" />
     <Compile Include="StyleSheets\RulesetCache.cs" />
+    <Compile Include="StyleSheets\StyleObject.cs" />
     <Compile Include="StyleSheets\UnexpectedTokenException.cs" />
     <Compile Include="StyleSheets\UserNode.cs" />
     <Compile Include="StyleSheets\NodeBase.cs" />

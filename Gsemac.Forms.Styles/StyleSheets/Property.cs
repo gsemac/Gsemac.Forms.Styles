@@ -9,24 +9,24 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
-        public static IProperty Create(string name, object value) {
+        public static IProperty Create(string name, StyleObject value) {
 
             return Create(name, new[] { value });
 
         }
-        public static IProperty Create(string name, object[] values) {
+        public static IProperty Create(string name, StyleObject[] values) {
 
             PropertyType type = GetType(name);
 
             return Create(type, values);
 
         }
-        public static IProperty Create(PropertyType type, object value) {
+        public static IProperty Create(PropertyType type, StyleObject value) {
 
             return Create(type, new[] { value });
 
         }
-        public static IProperty Create(PropertyType type, object[] values) {
+        public static IProperty Create(PropertyType type, StyleObject[] values) {
 
             switch (type) {
 
@@ -34,7 +34,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     return new BorderProperty(type, ToBorder(values), false);
 
                 case PropertyType.BorderColor:
-                    return new ColorProperty(type, ToColor(values[0]), false);
+                    return new ColorProperty(type, values[0].GetColor(), false);
 
                 case PropertyType.BackgroundColor:
                 case PropertyType.BorderBottomColor:
@@ -42,7 +42,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 case PropertyType.BorderRightColor:
                 case PropertyType.BorderTopColor:
                 case PropertyType.Color:
-                    return new ColorProperty(type, ToColor(values[0]), true);
+                    return new ColorProperty(type, values[0].GetColor(), true);
 
                 case PropertyType.BorderRadius:
                     return new BorderRadiusProperty(ToBorderRadius(values));
@@ -56,19 +56,43 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 case PropertyType.BorderTopRightRadius:
                 case PropertyType.BorderTopWidth:
                 case PropertyType.BorderWidth:
-                    return new NumberProperty(type, ToNumber(values[0]), false);
+                    return new NumberProperty(type, values[0].GetNumber(), false);
 
                 case PropertyType.BorderBottomStyle:
                 case PropertyType.BorderLeftStyle:
                 case PropertyType.BorderRightStyle:
                 case PropertyType.BorderStyle:
                 case PropertyType.BorderTopStyle:
-                    return new BorderStyleProperty(type, ToBorderStyle(values[0]));
+                    return new BorderStyleProperty(type, values[0].GetBorderStyle());
+
+                case PropertyType.BackgroundImage:
+                    return new BackgroundImageProperty(values.Select(v => v.GetImage()).ToArray());
 
                 default:
                     throw new InvalidPropertyException(type.ToString());
 
             }
+
+        }
+
+        public static IProperty Create(string name, object value) {
+
+            return Create(name, new StyleObject(value));
+
+        }
+        public static IProperty Create(string name, object[] values) {
+
+            return Create(name, values.Select(v => new StyleObject(v)).ToArray());
+
+        }
+        public static IProperty Create(PropertyType type, object value) {
+
+            return Create(type, new StyleObject(value));
+
+        }
+        public static IProperty Create(PropertyType type, object[] values) {
+
+            return Create(type, values.Select(v => new StyleObject(v)).ToArray());
 
         }
 
@@ -94,45 +118,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         private static readonly Lazy<Dictionary<PropertyType, string>> propertyNameDict = new Lazy<Dictionary<PropertyType, string>>(() => CreatePropertyNameDictionary());
         private static readonly Lazy<Dictionary<string, PropertyType>> propertyTypeDict = new Lazy<Dictionary<string, PropertyType>>(() => CreatePropertyTypeDictionary());
 
-        private static Color ToColor(object value) {
-
-            if (value is Color)
-                return (Color)value;
-            else if (value is string)
-                return PropertyUtilities.ParseColor((string)value);
-            else
-                throw new ArgumentException(nameof(value));
-
-        }
-        private static double ToNumber(object value) {
-
-            if (value is double)
-                return (double)value;
-            else if (value is string)
-                return PropertyUtilities.ParseNumber((string)value);
-            else
-                throw new ArgumentException(nameof(value));
-
-        }
-        private static string ToString(object value) {
-
-            return value.ToString();
-
-        }
-        private static BorderStyle ToBorderStyle(object value) {
-
-            if (value is BorderStyle)
-                return (BorderStyle)value;
-            else
-                return PropertyUtilities.ParseBorderStyle(ToString(value));
-
-        }
-        private static Border ToBorder(object[] values) {
+        private static Border ToBorder(StyleObject[] values) {
 
             // At least a border style MUST be specified.
             // Arguments are allowed to occur in any order.
 
-            BorderStyle? borderStyle = values.Select(value => ToString(value))
+            BorderStyle? borderStyle = values.Select(value => value.GetString())
                 .Select(value => PropertyUtilities.TryParseBorderStyle(value, out BorderStyle result) ? (BorderStyle?)result : null)
                 .Where(result => result != null)
                 .FirstOrDefault();
@@ -140,12 +131,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (!borderStyle.HasValue)
                 throw new ArgumentException(nameof(values));
 
-            double borderWidth = values.Select(value => ToString(value))
+            double borderWidth = values.Select(value => value.GetString())
                 .Select(value => PropertyUtilities.TryParseNumber(value, out double result) ? (double?)result : null)
                 .Where(result => result != null)
                 .FirstOrDefault() ?? 0.0;
 
-            Color borderColor = values.Select(value => ToString(value))
+            Color borderColor = values.Select(value => value.GetString())
                .Select(value => PropertyUtilities.TryParseColor(value, out Color result) ? (Color?)result : null)
                .Where(result => result != null)
                .FirstOrDefault() ?? default;
@@ -153,16 +144,16 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             return new Border(borderWidth, borderStyle.Value, borderColor);
 
         }
-        private static BorderRadius ToBorderRadius(object[] values) {
+        private static BorderRadius ToBorderRadius(StyleObject[] values) {
 
             if (values.Count() == 4)
-                return new BorderRadius(ToNumber(values[0]), ToNumber(values[1]), ToNumber(values[2]), ToNumber(values[3]));
+                return new BorderRadius(values[0].GetNumber(), values[1].GetNumber(), values[2].GetNumber(), values[3].GetNumber());
             else if (values.Count() == 3)
-                return new BorderRadius(ToNumber(values[0]), ToNumber(values[1]), ToNumber(values[2]));
+                return new BorderRadius(values[0].GetNumber(), values[1].GetNumber(), values[2].GetNumber());
             else if (values.Count() == 2)
-                return new BorderRadius(ToNumber(values[0]), ToNumber(values[1]));
+                return new BorderRadius(values[0].GetNumber(), values[1].GetNumber());
             else
-                return new BorderRadius(ToNumber(values[0]));
+                return new BorderRadius(values[0].GetNumber());
 
         }
 
@@ -170,6 +161,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             Dictionary<PropertyType, string> dict = new Dictionary<PropertyType, string> {
                 [PropertyType.BackgroundColor] = "background-color",
+                [PropertyType.BackgroundImage] = "background-image",
                 [PropertyType.BorderBottomColor] = "border-bottom-color",
                 [PropertyType.BorderBottomLeftRadius] = "border-bottom-left-radius",
                 [PropertyType.BorderBottomRightRadius] = "border-bottom-right-radius",

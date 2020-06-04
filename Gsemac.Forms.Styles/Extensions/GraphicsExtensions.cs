@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.StyleSheets;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -218,6 +219,11 @@ namespace Gsemac.Forms.Styles.Extensions {
                 y = bounds.Y + (int)(((float)bounds.Height / 2) - ((float)image.Height / 2));
 
             graphics.DrawImage(image, x, y, image.Width, image.Height);
+        }
+        public static void DrawImage(this Graphics graphics, IImage image, Rectangle rect) {
+
+            image.DrawImage(graphics, rect);
+
         }
 
         public static void AddPoint(this GraphicsPath path, Point point) {

@@ -84,7 +84,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 while (!lexer.EndOfStream) {
 
                     IStyleSheetLexerToken token = lexer.Peek();
-                 
+
                     switch (token.Type) {
 
                         case StyleSheetLexerTokenType.DeclarationEnd:
@@ -123,9 +123,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             return Selector.FromLexer(lexer);
 
         }
-        private object[] ReadPropertyValues(IStyleSheetLexer lexer) {
+        private StyleObject[] ReadPropertyValues(IStyleSheetLexer lexer) {
 
-            List<object> values = new List<object>();
+            List<StyleObject> values = new List<StyleObject>();
 
             bool exitLoop = false;
 
@@ -134,7 +134,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 switch (token.Type) {
 
                     case StyleSheetLexerTokenType.Value:
-                        values.Add(token.Value);
+                        values.Add(new StyleObject(token.Value));
                         break;
 
                     case StyleSheetLexerTokenType.Function:
@@ -152,9 +152,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             return values.ToArray();
 
         }
-        private object ReadFunction(IStyleSheetLexer lexer, string functionName) {
+        private StyleObject ReadFunction(IStyleSheetLexer lexer, string functionName) {
 
-            List<object> functionArguments = new List<object>();
+            List<StyleObject> functionArgs = new List<StyleObject>();
 
             bool exitLoop = false;
 
@@ -163,11 +163,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 switch (token.Type) {
 
                     case StyleSheetLexerTokenType.Value:
-                        functionArguments.Add(token.Value);
+                        functionArgs.Add(new StyleObject(token.Value));
                         break;
 
                     case StyleSheetLexerTokenType.Function:
-                        functionArguments.Add(ReadFunction(lexer, token.Value));
+                        functionArgs.Add(ReadFunction(lexer, token.Value));
                         break;
 
                     case StyleSheetLexerTokenType.FunctionArgumentsStart:
@@ -187,15 +187,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             }
 
-            switch ((functionName ?? "").Trim().ToLowerInvariant()) {
-
-                case "rgb":
-                    return PropertyUtilities.Rgb(Convert.ToInt32(functionArguments[0]), Convert.ToInt32(functionArguments[1]), Convert.ToInt32(functionArguments[2]));
-
-                default:
-                    throw new InvalidFunctionException(functionName);
-
-            }
+            return PropertyUtilities.EvaluateFunction(functionName, functionArgs.ToArray());
 
         }
 

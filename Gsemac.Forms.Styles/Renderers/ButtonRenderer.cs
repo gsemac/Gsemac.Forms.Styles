@@ -11,9 +11,9 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public override void PaintControl(Button control, ControlPaintArgs e) {
 
-
-
             TextFormatFlags textFormatFlags = RenderUtilities.GetTextFormatFlags(control.TextAlign);
+
+            e.Clear();
 
             e.PaintBackground();
 

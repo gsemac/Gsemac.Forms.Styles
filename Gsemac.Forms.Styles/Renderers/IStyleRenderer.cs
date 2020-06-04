@@ -14,6 +14,8 @@ namespace Gsemac.Forms.Styles.Renderers {
         void PaintBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset);
         void PaintText(Graphics graphics, Rectangle rectangle, IRuleset ruleset, string text, Font font, TextFormatFlags textFormatFlags = TextFormatFlags.Left);
 
+        void ClipToBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset);
+
     }
 
 }

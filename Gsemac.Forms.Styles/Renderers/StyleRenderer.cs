@@ -15,7 +15,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
-        public void PaintBackground(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
+        public void PaintBackground(Graphics graphics, Rectangle rect, IRuleset ruleset) {
 
             GraphicsState state = graphics.Save();
 
@@ -26,31 +26,40 @@ namespace Gsemac.Forms.Styles.Renderers {
             if (hasRadius)
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // Paint the background color.
+            // Draw the background color.
+
+            Rectangle backgroundRect = rect;
+
+            // If the rectangle has right or bottom corner radii, the bounds must be decreased to ensure the curve is not clipped.
+
+            if (hasRadius)
+                backgroundRect = new Rectangle(rect.X, rect.Y, rect.Width - (hasRightRadius ? 1 : 0), rect.Height - (hasBottomRadius ? 1 : 0));
+
+            int topLeft = (int)(ruleset.BorderTopLeftRadius?.Value ?? 0);
+            int topRight = (int)(ruleset.BorderTopRightRadius?.Value ?? 0);
+            int bottomLeft = (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0);
+            int bottomRight = (int)(ruleset.BorderBottomRightRadius?.Value ?? 0);
 
             if (ruleset.BackgroundColor.HasValue()) {
 
                 using (Brush brush = new SolidBrush(ruleset.BackgroundColor?.Value ?? SystemColors.Control)) {
 
                     if (!hasRadius)
-                        graphics.FillRectangle(brush, rectangle);
-                    else {
-
-                        // If the rectangle has right or bottom corner radii, the bounds must be decreased to ensure the curve is not clipped.
-
-                        graphics.FillRoundedRectangle(brush, new Rectangle(
-                            rectangle.X,
-                            rectangle.Y,
-                            rectangle.Width - (hasRightRadius ? 1 : 0),
-                            rectangle.Height - (hasBottomRadius ? 1 : 0)),
-                            (int)(ruleset.BorderTopLeftRadius?.Value ?? 0),
-                            (int)(ruleset.BorderTopRightRadius?.Value ?? 0),
-                            (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0),
-                            (int)(ruleset.BorderBottomRightRadius?.Value ?? 0));
-
-                    }
-
+                        graphics.FillRectangle(brush, backgroundRect);
+                    else
+                        graphics.FillRoundedRectangle(brush, backgroundRect, topLeft, topRight, bottomLeft, bottomRight);
                 }
+
+            }
+
+            // Draw the background image.
+
+            if (ruleset.BackgroundImage.HasValue()) {
+
+                ClipToBorder(graphics, backgroundRect, ruleset);
+
+                foreach (IImage image in ruleset.BackgroundImage.Value.Images)
+                    graphics.DrawImage(image, backgroundRect);
 
             }
 
@@ -179,9 +188,24 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         }
 
-        // Private members
+        public void ClipToBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
 
+            if (ruleset.Any(p => p.IsBorderRadiusProperty())) {
 
+                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(rectangle,
+                    (int)(ruleset.BorderTopLeftRadius?.Value ?? 0),
+                    (int)(ruleset.BorderTopRightRadius?.Value ?? 0),
+                    (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0),
+                    (int)(ruleset.BorderBottomRightRadius?.Value ?? 0)));
+
+            }
+            else {
+
+                graphics.SetClip(rectangle);
+
+            }
+
+        }
 
     }
 

@@ -15,6 +15,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public ISelector Selector { get; }
 
         public ColorProperty BackgroundColor => GetProperty(PropertyType.BackgroundColor) as ColorProperty;
+        public BackgroundImageProperty BackgroundImage => GetProperty(PropertyType.BackgroundImage) as BackgroundImageProperty;
         public ColorProperty BorderBottomColor => GetProperty(PropertyType.BorderBottomColor) as ColorProperty;
         public NumberProperty BorderBottomLeftRadius => GetProperty(PropertyType.BorderBottomLeftRadius) as NumberProperty;
         public NumberProperty BorderBottomRightRadius => GetProperty(PropertyType.BorderBottomRightRadius) as NumberProperty;

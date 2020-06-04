@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -12,6 +8,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         ISelector Selector { get; }
 
         ColorProperty BackgroundColor { get; }
+        BackgroundImageProperty BackgroundImage { get; }
         ColorProperty BorderBottomColor { get; }
         NumberProperty BorderBottomLeftRadius { get; }
         NumberProperty BorderBottomRightRadius { get; }
