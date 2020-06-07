@@ -207,6 +207,7 @@ namespace Gsemac.Forms.Styles.Applicators {
             control.MouseDown += ParentInvalidateEventHandler; // required for :active
             control.GotFocus += ParentInvalidateEventHandler; // required for :focus
             control.LostFocus += ParentInvalidateEventHandler; // required for :focus
+            control.SizeChanged += ParentInvalidateEventHandler;
 
             info.ResetControl += (c) => {
 
@@ -216,6 +217,7 @@ namespace Gsemac.Forms.Styles.Applicators {
                 control.MouseDown -= ParentInvalidateEventHandler;
                 control.GotFocus -= ParentInvalidateEventHandler;
                 control.LostFocus -= ParentInvalidateEventHandler;
+                control.SizeChanged -= ParentInvalidateEventHandler;
 
             };
 
