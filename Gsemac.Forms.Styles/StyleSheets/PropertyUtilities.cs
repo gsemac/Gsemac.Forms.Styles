@@ -128,6 +128,28 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             return new LinearGradient(degrees, colorStops);
 
         }
+        public static StyleObject Url(string resourceFilePath) {
+
+            string[] imageFileExtensions = new[] { ".bmp", ".gif", ".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi", ".png", ".tiff", ".tif" };
+
+            // Strip outer quotes from the path.
+
+            resourceFilePath = resourceFilePath.Trim('"', '\'');
+
+            string ext = System.IO.Path.GetExtension(resourceFilePath);
+
+            if (imageFileExtensions.Any(imageExt => ext.Equals(imageExt, StringComparison.OrdinalIgnoreCase))) {
+
+                return new StyleObject(new Image(System.Drawing.Image.FromFile(resourceFilePath)));
+
+            }
+            else {
+
+                throw new ArgumentException(nameof(resourceFilePath));
+
+            }
+
+        }
 
         public static StyleObject EvaluateFunction(string functionName, StyleObject[] functionArgs) {
 
@@ -140,6 +162,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                 case "rgb":
                     return new StyleObject(Rgb((int)functionArgs[0].GetNumber(), (int)functionArgs[1].GetNumber(), (int)functionArgs[2].GetNumber()));
+
+                case "url":
+                    return new StyleObject(Url(functionArgs[0].GetString()));
 
                 default:
                     throw new InvalidFunctionException(functionName);

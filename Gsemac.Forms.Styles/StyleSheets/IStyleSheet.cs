@@ -14,7 +14,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
     }
 
     public interface IStyleSheet :
-        IEnumerable<IRuleset> {
+        IEnumerable<IRuleset>,
+        IDisposable {
 
         IRuleset GetRuleset(INode node, bool inherit = true);
 

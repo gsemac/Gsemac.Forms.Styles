@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -7,7 +6,7 @@ using System.Linq;
 namespace Gsemac.Forms.Styles.StyleSheets {
 
     public class LinearGradient :
-        IGradient {
+        GradientBase {
 
         // Public members
 
@@ -20,7 +19,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
-        public void DrawGradient(Graphics graphics, Rectangle rect) {
+        public override void DrawGradient(Graphics graphics, Rectangle rect) {
 
             if (colorStops.Count() > 1) {
 
@@ -37,7 +36,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                          .ToArray();
 
                     brush.InterpolationColors = colorBlend;
-                    
+
                     graphics.FillRectangle(brush, rect);
 
                 }
@@ -51,11 +50,6 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     graphics.FillRectangle(brush, rect);
 
             }
-
-        }
-        public void DrawImage(Graphics graphics, Rectangle rect) {
-
-            DrawGradient(graphics, rect);
 
         }
 

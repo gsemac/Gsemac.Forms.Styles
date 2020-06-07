@@ -29,6 +29,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
+        public void Dispose() {
+
+            Dispose(true);
+
+        }
+
         public override string ToString() {
 
             StringBuilder sb = new StringBuilder();
@@ -62,11 +68,27 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
+        // Protected members
+
+        protected virtual void Dispose(bool disposing) {
+
+            if (disposing) {
+
+                foreach (IDisposable disposable in disposableResources)
+                    disposable.Dispose();
+
+                disposableResources.Clear();
+
+            }
+
+        }
+
         // Private members
 
         private readonly StylesheetOptions options = StylesheetOptions.Default;
         private readonly IList<IRuleset> rulesets = new List<IRuleset>();
         private readonly IDictionary<INode, IRuleset> cache = new RulesetCache();
+        private readonly IList<IDisposable> disposableResources = new List<IDisposable>();
 
         private StyleSheet(StylesheetOptions options = StylesheetOptions.Default) {
 
@@ -187,7 +209,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             }
 
-            return PropertyUtilities.EvaluateFunction(functionName, functionArgs.ToArray());
+            StyleObject returnValue = PropertyUtilities.EvaluateFunction(functionName, functionArgs.ToArray());
+
+            if (returnValue.Type == StyleObjectType.Image)
+                disposableResources.Add(returnValue.GetImage());
+
+            return returnValue;
 
         }
 

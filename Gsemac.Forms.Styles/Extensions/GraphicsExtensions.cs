@@ -163,7 +163,7 @@ namespace Gsemac.Forms.Styles.Extensions {
 
         }
 
-        public static void DrawImage(this Graphics graphics, Image image, Rectangle bounds, ImageSizeMode sizeMode) {
+        public static void DrawImage(this Graphics graphics, System.Drawing.Image image, Rectangle bounds, ImageSizeMode sizeMode) {
 
             int x = bounds.X;
             int y = bounds.Y;
@@ -203,7 +203,7 @@ namespace Gsemac.Forms.Styles.Extensions {
             graphics.DrawImage(image, x, y, w, h);
 
         }
-        public static void DrawImage(this Graphics graphics, Image image, Rectangle bounds, ContentAlignment alignment) {
+        public static void DrawImage(this Graphics graphics, System.Drawing.Image image, Rectangle bounds, ContentAlignment alignment) {
 
             int x = bounds.X;
             int y = bounds.Y;

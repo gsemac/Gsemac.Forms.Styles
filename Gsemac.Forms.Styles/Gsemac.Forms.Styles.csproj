@@ -74,12 +74,14 @@
     <Compile Include="StyleSheets\BorderStyleProperty.cs" />
     <Compile Include="StyleSheets\ChildSelector.cs" />
     <Compile Include="StyleSheets\ClassSelector.cs" />
+    <Compile Include="StyleSheets\GradientBase.cs" />
     <Compile Include="StyleSheets\HashCodeBuilder.cs" />
     <Compile Include="StyleSheets\IDSelector.cs" />
     <Compile Include="StyleSheets\IGradient.cs" />
     <Compile Include="StyleSheets\IHashCodeBuilder.cs" />
     <Compile Include="StyleSheets\IImage.cs" />
     <Compile Include="StyleSheets\ILexer.cs" />
+    <Compile Include="StyleSheets\Image.cs" />
     <Compile Include="StyleSheets\InvalidFunctionException.cs" />
     <Compile Include="StyleSheets\IRulesetCache.cs" />
     <Compile Include="StyleSheets\ISelectorBuilder.cs" />
