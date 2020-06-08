@@ -50,13 +50,16 @@
     <Compile Include="Collections\ReadOnlyCollection.cs" />
     <Compile Include="Extensions\RulesetExtensions.cs" />
     <Compile Include="Extensions\StyleSheetExtensions.cs" />
+    <Compile Include="Native\User32.cs" />
     <Compile Include="Renderers\CheckBoxRenderer.cs" />
     <Compile Include="Renderers\ComboBoxControlRenderer.cs" />
     <Compile Include="Renderers\ControlRendererBase.cs" />
     <Compile Include="Renderers\GroupBoxRenderer.cs" />
     <Compile Include="Renderers\IControlRenderer.cs" />
+    <Compile Include="Renderers\IListViewRenderer.cs" />
     <Compile Include="Renderers\IStyleRenderer.cs" />
     <Compile Include="Renderers\ListBoxRenderer.cs" />
+    <Compile Include="Renderers\ListViewRenderer.cs" />
     <Compile Include="Renderers\NumericUpDownRenderer.cs" />
     <Compile Include="Renderers\ControlPaintArgs.cs" />
     <Compile Include="Renderers\PictureBoxRenderer.cs" />

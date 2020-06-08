@@ -61,6 +61,20 @@ namespace Gsemac.Forms.Styles.Renderers {
             return flags;
 
         }
+        public static TextFormatFlags GetTextFormatFlags(HorizontalAlignment horizontalAlignment) {
+
+            TextFormatFlags flags = TextFormatFlags.Default;
+
+            if (horizontalAlignment == HorizontalAlignment.Left)
+                flags |= TextFormatFlags.Left;
+            else if (horizontalAlignment == HorizontalAlignment.Center)
+                flags |= TextFormatFlags.HorizontalCenter;
+            else if (horizontalAlignment == HorizontalAlignment.Right)
+                flags |= TextFormatFlags.Right;
+
+            return flags;
+
+        }
         public static DashStyle GetDashStyle(StyleSheets.BorderStyle borderStyle) {
 
             switch (borderStyle) {

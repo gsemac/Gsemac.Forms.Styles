@@ -93,7 +93,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             int rectWidth = rectangle.Width - (int)(horizontalBorderWidth / 2);
             int rectHeight = rectangle.Height - (int)(verticalBorderWidth / 2);
 
-            Rectangle drawRect = new Rectangle(rectX, rectY, rectWidth, rectHeight);
+            Rectangle drawRect = new Rectangle(rectX, rectY, rectWidth - (rightWidth == 1 && leftWidth <= 0 ? 1 : 0), rectHeight - (bottomWidth == 1 && topWidth <= 0 ? 1 : 0));
 
             using (Pen pen = new Pen(Color.Black)) {
 

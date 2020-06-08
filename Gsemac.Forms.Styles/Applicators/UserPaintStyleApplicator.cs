@@ -29,7 +29,9 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             if (ControlSupportsUserPaint(control)) {
 
-                SetStyle(control, ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
+                SetDoubleBuffered(control, true);
+
+                SetStyle(control, ControlStyles.UserPaint, true);
 
                 control.Paint += PaintEventHandler;
 
@@ -61,6 +63,12 @@ namespace Gsemac.Forms.Styles.Applicators {
                 case ListBox listBox:
 
                     ApplyStyles(listBox, info);
+
+                    break;
+
+                case ListView listView:
+
+                    ApplyStyles(listView, info);
 
                     break;
 
@@ -114,8 +122,9 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             // Controls that use TextBoxes generally need special treatment to render correctly.
             // ToolStrips and MenuStrips (which inherit from ToolStrip) are drawn through the custom ToolStripRenderers supplied to the "Renderer" property.
+            // ListViews are drawn through event handlers for each part.
 
-            if (control is NumericUpDown || control is RichTextBox || control is TextBox || control is ToolStrip)
+            if (control is ListView || control is NumericUpDown || control is RichTextBox || control is TextBox || control is ToolStrip)
                 return false;
 
             // Only ComboBoxes with the DropDownList style do not use a TextBox, and can be fully painted.
@@ -245,6 +254,34 @@ namespace Gsemac.Forms.Styles.Applicators {
                 control.MouseDown -= InvalidateEventHandler;
 
             };
+
+        }
+        private void ApplyStyles(ListView control, ControlInfo info) {
+
+            IListViewRenderer renderer = new ListViewRenderer(StyleSheet, styleRenderer);
+
+            control.OwnerDraw = true;
+            control.BorderStyle = System.Windows.Forms.BorderStyle.None;
+
+            SetDoubleBuffered(control, true);
+
+            control.DrawColumnHeader += renderer.DrawColumnHeader;
+            control.DrawItem += renderer.DrawItem;
+            control.DrawSubItem += renderer.DrawSubItem;
+
+            info.ResetControl += (c) => {
+
+                control.OwnerDraw = false;
+
+                SetDoubleBuffered(control, false);
+
+                control.DrawColumnHeader -= renderer.DrawColumnHeader;
+                control.DrawItem -= renderer.DrawItem;
+                control.DrawSubItem -= renderer.DrawSubItem;
+
+            };
+
+            renderer.Initialize(control);
 
         }
         private void ApplyStyles(NumericUpDown control, ControlInfo info) {
@@ -394,6 +431,18 @@ namespace Gsemac.Forms.Styles.Applicators {
                 return false;
 
             }
+
+        }
+        private void SetDoubleBuffered(Control control, bool value) {
+
+            SetStyle(control, ControlStyles.AllPaintingInWmPaint | ControlStyles.DoubleBuffer, value);
+
+        }
+        private void SetDoubleBuffered(ListView control, bool value) {
+
+            control.GetType()
+                .GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(control, value, null);
 
         }
 
