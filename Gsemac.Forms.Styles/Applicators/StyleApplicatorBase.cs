@@ -203,9 +203,15 @@ namespace Gsemac.Forms.Styles.Applicators {
             else
                 RemoveControlInfo(control);
 
-            if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren)
+            if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren) {
+
                 foreach (Control childControl in GetStylableChildControls(control))
                     AddControlInfoRecursive(childControl, options);
+
+                if (control.ContextMenuStrip != null)
+                    AddControlInfoRecursive(control.ContextMenuStrip, options);
+
+            }
 
         }
         private void ApplyStylesRecursive(Control control, ControlStyleOptions options) {
@@ -215,9 +221,15 @@ namespace Gsemac.Forms.Styles.Applicators {
             else
                 OnClearStyles(control);
 
-            if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren)
+            if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren) {
+
                 foreach (Control childControl in GetStylableChildControls(control))
                     ApplyStylesRecursive(childControl, options);
+
+                if (control.ContextMenuStrip != null)
+                    ApplyStylesRecursive(control.ContextMenuStrip, options);
+
+            }
 
             control.Invalidate();
 
