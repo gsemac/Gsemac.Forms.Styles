@@ -258,6 +258,8 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
         private void ApplyStyles(ListView control, ControlInfo info) {
 
+            info.ParentDraw = true;
+
             IListViewRenderer renderer = new ListViewRenderer(StyleSheet, styleRenderer);
 
             control.OwnerDraw = true;

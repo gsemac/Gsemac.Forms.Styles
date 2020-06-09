@@ -9,6 +9,7 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Renderers {
 
     public class ListViewRenderer :
+        ControlRendererBase<ListView>,
         IListViewRenderer {
 
         // Public members
@@ -32,21 +33,24 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public void DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e) {
 
-            //DrawHeaderRightPortion(e.Header.ListView);
-
             IRuleset ruleset = GetColumnHeaderRuleset(e.Header);
-            Rectangle rect = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Header.Width, e.Bounds.Height);
+
+            int textPadding = 4;
+
+            Rectangle headerRect = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Header.Width, e.Bounds.Height);
+            Rectangle textRect = new Rectangle(headerRect.X + textPadding, headerRect.Y, headerRect.Width - textPadding * 2, headerRect.Height);
+
             TextFormatFlags textFormatFlags = RenderUtilities.GetTextFormatFlags(e.Header.TextAlign) | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
 
-            styleRenderer.PaintBackground(e.Graphics, rect, ruleset);
-            styleRenderer.PaintText(e.Graphics, rect, ruleset, e.Header.Text, e.Font, textFormatFlags);
-            styleRenderer.PaintBorder(e.Graphics, rect, ruleset);
+            styleRenderer.PaintBackground(e.Graphics, headerRect, ruleset);
+            styleRenderer.PaintText(e.Graphics, textRect, ruleset, e.Header.Text, e.Font, textFormatFlags);
+            styleRenderer.PaintBorder(e.Graphics, headerRect, ruleset);
+      
+            DrawHeaderRightPortion(e.Header.ListView);
 
         }
         public void DrawItem(object sender, DrawListViewItemEventArgs e) {
 
-            //DrawHeaderRightPortion(e.Item.ListView);
-
             UserNode node = new UserNode(e.Bounds, e.Item.ListView.PointToClient(Cursor.Position));
 
             node.SetClass("ListViewItem");
@@ -60,10 +64,10 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             styleRenderer.PaintBackground(e.Graphics, rect, ruleset);
 
+            DrawHeaderRightPortion(e.Item.ListView);
+
         }
         public void DrawSubItem(object sender, DrawListViewSubItemEventArgs e) {
-
-            //DrawHeaderRightPortion(e.Item.ListView);
 
             UserNode node = new UserNode(e.Bounds, e.Item.ListView.PointToClient(Cursor.Position));
 
@@ -73,12 +77,31 @@ namespace Gsemac.Forms.Styles.Renderers {
             if (e.Item.Selected)
                 node.AddState(NodeStates.Checked);
 
+            int textPadding = 4;
+
             IRuleset ruleset = styleSheet.GetRuleset(node);
-            Rectangle rect = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
+
+            Rectangle itemRect = new Rectangle(e.SubItem.Bounds.X, e.SubItem.Bounds.Y, e.Header.Width, e.SubItem.Bounds.Height);
+            Rectangle textRect = new Rectangle(itemRect.X + textPadding, itemRect.Y, itemRect.Width - textPadding * 2, itemRect.Height);
+
             TextFormatFlags textFormatFlags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
 
-            styleRenderer.PaintText(e.Graphics, rect, ruleset, e.SubItem.Text, e.Item.Font, textFormatFlags);
-            styleRenderer.PaintBorder(e.Graphics, rect, ruleset);
+            styleRenderer.PaintText(e.Graphics, textRect, ruleset, e.SubItem.Text, e.Item.Font, textFormatFlags);
+            styleRenderer.PaintBorder(e.Graphics, itemRect, ruleset);
+
+            DrawHeaderRightPortion(e.Item.ListView);
+
+        }
+
+        public override void PaintControl(ListView control, ControlPaintArgs args) {
+
+            // Draw the background/border of the control.
+
+            IRuleset ruleset = args.StyleSheet.GetRuleset(control);
+            Rectangle borderRect = RenderUtilities.GetOuterBorderRectangle(control, ruleset);
+
+            args.PaintBackground(borderRect);
+            args.PaintBorder(borderRect);
 
         }
 

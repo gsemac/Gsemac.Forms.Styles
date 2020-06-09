@@ -140,7 +140,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             if (imageFileExtensions.Any(imageExt => ext.Equals(imageExt, StringComparison.OrdinalIgnoreCase))) {
 
-                return new StyleObject(new Image(System.Drawing.Image.FromFile(resourceFilePath)));
+                if (System.IO.File.Exists(resourceFilePath))
+                    return new StyleObject(new Image(System.Drawing.Image.FromFile(resourceFilePath)));
+                else
+                    return new StyleObject(Image.Empty);
 
             }
             else {

@@ -7,6 +7,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
+        public static Image Empty => new Image();
+
         public Image(System.Drawing.Image image) {
 
             this.image = image;
@@ -15,7 +17,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public void DrawImage(Graphics graphics, Rectangle rect) {
 
-            graphics.DrawImage(image, rect.Location);
+            if (image != null)
+                graphics.DrawImage(image, rect.Location);
 
         }
 
@@ -31,7 +34,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             if (disposing) {
 
-                image.Dispose();
+                if (image != null)
+                    image.Dispose();
+
+                image = null;
 
             }
 
@@ -39,7 +45,13 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Private memberss
 
-        private readonly System.Drawing.Image image;
+        private System.Drawing.Image image;
+
+        private Image() {
+
+            image = null;
+
+        }
 
     }
 

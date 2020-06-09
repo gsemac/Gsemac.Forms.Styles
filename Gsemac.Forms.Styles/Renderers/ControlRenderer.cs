@@ -42,6 +42,9 @@ namespace Gsemac.Forms.Styles.Renderers {
                 case ListBox _:
                     return new ListBoxRenderer();
 
+                case ListView _:
+                    return new ListViewRenderer(null, null);
+
                 case PictureBox _:
                     return new PictureBoxRenderer();
 

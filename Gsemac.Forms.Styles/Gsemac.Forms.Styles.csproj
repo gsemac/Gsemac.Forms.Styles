@@ -77,6 +77,7 @@
     <Compile Include="StyleSheets\BorderStyleProperty.cs" />
     <Compile Include="StyleSheets\ChildSelector.cs" />
     <Compile Include="StyleSheets\ClassSelector.cs" />
+    <Compile Include="StyleSheets\DescendantSelector.cs" />
     <Compile Include="StyleSheets\GradientBase.cs" />
     <Compile Include="StyleSheets\HashCodeBuilder.cs" />
     <Compile Include="StyleSheets\IDSelector.cs" />

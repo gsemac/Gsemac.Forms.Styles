@@ -119,12 +119,17 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                     case CombinatorType.Descendant:
 
-                        throw new NotImplementedException();
+                        ThrowIfLhsSelectorIsNull();
+
+                        completedSelectors.Add(new DescendantSelector(lhsSelector, committingSelector));
+
+                        lhsSelector = null;
+
+                        break;
 
                     case CombinatorType.Child:
 
-                        if (lhsSelector is null)
-                            throw new InvalidOperationException("The selector on the left-hand side of the combinator was empty.");
+                        ThrowIfLhsSelectorIsNull();
 
                         completedSelectors.Add(new ChildSelector(lhsSelector, committingSelector));
 
@@ -165,6 +170,13 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             rhsSelector.Clear();
             currentCombinator = CombinatorType.None;
+
+        }
+
+        private void ThrowIfLhsSelectorIsNull() {
+
+            if (lhsSelector is null)
+                throw new InvalidOperationException("The selector on the left-hand side of the combinator was empty.");
 
         }
 

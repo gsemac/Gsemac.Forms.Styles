@@ -96,11 +96,22 @@
     background-color: rgb(81, 81, 81);
 }
 
-.listbox {
+.listbox, .listview {
     background-color: #45494a;
     border-color: #5c5c5c;
     border-width: 1px;
     border-radius: 2px;
+}
+
+.listview .columnheader {
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-color: #5c5c5c;
+    background-color: #3c3f41;
+}
+
+.listview .listviewitem:checked {
+    background-color: #5c5c5c;
 }
 
 .listbox:focus {

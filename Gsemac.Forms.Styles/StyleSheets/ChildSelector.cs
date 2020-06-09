@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Gsemac.Forms.Styles.StyleSheets {
+﻿namespace Gsemac.Forms.Styles.StyleSheets {
 
     public class ChildSelector :
         ISelector {
@@ -25,7 +20,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (node.Parent is null)
                 return false;
 
-            return parentSelector.IsMatch(node.Parent) && childSelector.IsMatch(node);
+            return childSelector.IsMatch(node) && parentSelector.IsMatch(node.Parent);
 
         }
 
