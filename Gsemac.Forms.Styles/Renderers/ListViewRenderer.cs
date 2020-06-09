@@ -1,6 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
-using Gsemac.Forms.Styles.Native;
 using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Native;
 using System;
 using System.Drawing;
 using System.Linq;
