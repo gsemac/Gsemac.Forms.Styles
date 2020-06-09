@@ -45,9 +45,6 @@
   <ItemGroup>
     <Compile Include="Applicators\IStyleApplicator.cs" />
     <Compile Include="Applicators\StyleSheetStyleApplicatorBase.cs" />
-    <Compile Include="Collections\LruDictionary.cs" />
-    <Compile Include="Collections\OrderedDictionary.cs" />
-    <Compile Include="Collections\ReadOnlyCollection.cs" />
     <Compile Include="Extensions\RulesetExtensions.cs" />
     <Compile Include="Extensions\StyleSheetExtensions.cs" />
     <Compile Include="Native\User32.cs" />
@@ -135,6 +132,11 @@
     <Compile Include="StyleSheets\UnionSelector.cs" />
     <Compile Include="Renderers\RenderUtilities.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Gsemac.Common\Gsemac.Collections\Gsemac.Collections.csproj">
+      <Project>{cf09d77c-983a-4865-b01c-158092b0f00d}</Project>
+      <Name>Gsemac.Collections</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

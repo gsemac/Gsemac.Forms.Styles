@@ -1,9 +1,7 @@
-﻿using Gsemac.Forms.Styles.Collections;
+﻿using Gsemac.Collections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
