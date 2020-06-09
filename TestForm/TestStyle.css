@@ -96,41 +96,48 @@
     background-color: rgb(81, 81, 81);
 }
 
-.listbox, .listview {
+.listbox, .listview, .datagridview {
     background-color: #45494a;
     border-color: #5c5c5c;
     border-width: 1px;
     border-radius: 2px;
 }
 
-.listview .columnheader {
+.columnheader, .rowheader {
     border-right-width: 1px;
     border-bottom-width: 1px;
     border-color: #5c5c5c;
     background-color: #3c3f41;
 }
 
-.listview .listviewitem:checked {
+.listview .item:checked, .datagridview .cell:checked {
     background-color: #5c5c5c;
+    color: white;
+}
+
+.listview .item {
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-color: #5c5c5c;
 }
 
 .listbox:focus {
     border-color: #6897bb;
 }
 
-.listboxitem.even {
+.listbox .item.even {
     background-color: #393c3e;
 }
 
-.listboxitem.odd {
+.listbox .item.odd {
     background-color: #3c3f41;
 }
 
-.listboxitem:checked, .listboxitem:active {
+.listbox .item:checked, .listbox .item:active {
     background-color: #5c5c5c;
 }
 
-.listbox:focus > .listboxitem:checked, .listbox:focus > .listboxitem:active {
+.listbox:focus > .item:checked, .listbox:focus > .item:active {
     background-color: #4b6eaf;
 }
 

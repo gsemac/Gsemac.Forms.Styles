@@ -54,8 +54,10 @@
     <Compile Include="Renderers\CheckBoxRenderer.cs" />
     <Compile Include="Renderers\ComboBoxControlRenderer.cs" />
     <Compile Include="Renderers\ControlRendererBase.cs" />
+    <Compile Include="Renderers\DataGridViewRenderer.cs" />
     <Compile Include="Renderers\GroupBoxRenderer.cs" />
     <Compile Include="Renderers\IControlRenderer.cs" />
+    <Compile Include="Renderers\IDataGridViewRenderer.cs" />
     <Compile Include="Renderers\IListViewRenderer.cs" />
     <Compile Include="Renderers\IStyleRenderer.cs" />
     <Compile Include="Renderers\ListBoxRenderer.cs" />

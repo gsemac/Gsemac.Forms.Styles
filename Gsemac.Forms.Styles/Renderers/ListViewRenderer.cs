@@ -21,7 +21,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         }
 
-        public void Initialize(ListView listView) {
+        public override void InitializeControl(ListView listView) {
 
             INode listViewNode = new ControlNode(listView);
             IRuleset ruleset = styleSheet.GetRuleset(listViewNode);
@@ -45,7 +45,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             styleRenderer.PaintBackground(e.Graphics, headerRect, ruleset);
             styleRenderer.PaintText(e.Graphics, textRect, ruleset, e.Header.Text, e.Font, textFormatFlags);
             styleRenderer.PaintBorder(e.Graphics, headerRect, ruleset);
-      
+
             DrawHeaderRightPortion(e.Header.ListView);
 
         }
@@ -53,7 +53,8 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             UserNode node = new UserNode(e.Bounds, e.Item.ListView.PointToClient(Cursor.Position));
 
-            node.SetClass("ListViewItem");
+            node.AddClass("ListViewItem");
+            node.AddClass("Item");
             node.SetParent(new ControlNode(e.Item.ListView));
 
             if (e.Item.Selected)
@@ -63,6 +64,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle rect = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
 
             styleRenderer.PaintBackground(e.Graphics, rect, ruleset);
+            styleRenderer.PaintBorder(e.Graphics, rect, ruleset);
 
             DrawHeaderRightPortion(e.Item.ListView);
 
@@ -72,6 +74,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             UserNode node = new UserNode(e.Bounds, e.Item.ListView.PointToClient(Cursor.Position));
 
             node.SetClass("ListViewItem");
+            node.AddClass("Item");
             node.SetParent(new ControlNode(e.Item.ListView));
 
             if (e.Item.Selected)

@@ -81,7 +81,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             }
 
-            UserNode node = new UserNode(string.Empty, new[] { "ListBoxItem" });
+            UserNode node = new UserNode(string.Empty, new[] { "ListBoxItem", "Item" });
 
             node.SetParent(new ControlNode(control));
             node.SetStates(states);

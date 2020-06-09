@@ -33,6 +33,9 @@ namespace Gsemac.Forms.Styles.Renderers {
                 case ComboBox _:
                     return new ComboBoxControlRenderer();
 
+                case DataGridView _:
+                    return new DataGridViewRenderer(null, null);
+
                 case GroupBox _:
                     return new GroupBoxRenderer();
 

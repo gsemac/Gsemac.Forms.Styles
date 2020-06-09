@@ -60,6 +60,12 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             switch (control) {
 
+                case DataGridView dataGridView:
+
+                    ApplyStyles(dataGridView, info);
+
+                    break;
+
                 case ListBox listBox:
 
                     ApplyStyles(listBox, info);
@@ -120,11 +126,12 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         private bool ControlSupportsUserPaint(Control control) {
 
-            // Controls that use TextBoxes generally need special treatment to render correctly.
-            // ToolStrips and MenuStrips (which inherit from ToolStrip) are drawn through the custom ToolStripRenderers supplied to the "Renderer" property.
-            // ListViews are drawn through event handlers for each part.
+            // - Controls that use TextBoxes generally need special treatment to render correctly.
+            // - ToolStrips and MenuStrips (which inherit from ToolStrip) are drawn through the custom ToolStripRenderers supplied to the "Renderer" property.
+            // - ListViews and DataGridViews are drawn through event handlers.
+            // - ScrollBars are drawn by the operating system (but this can be worked around: https://stackoverflow.com/a/4656361/5383169).
 
-            if (control is ListView || control is NumericUpDown || control is RichTextBox || control is TextBox || control is ToolStrip)
+            if (control is DataGridView || control is ListView || control is NumericUpDown || control is RichTextBox || control is ScrollBar || control is TextBox || control is ToolStrip)
                 return false;
 
             // Only ComboBoxes with the DropDownList style do not use a TextBox, and can be fully painted.
@@ -232,6 +239,32 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
+        private void ApplyStyles(DataGridView control, ControlInfo info) {
+
+            info.ParentDraw = true;
+
+            DataGridViewRenderer renderer = new DataGridViewRenderer(StyleSheet, styleRenderer);
+
+            control.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            control.EnableHeadersVisualStyles = false;
+
+            control.RowPrePaint += renderer.RowPrePaint;
+            control.RowPostPaint += renderer.RowPostPaint;
+            control.CellPainting += renderer.CellPainting;
+
+            info.ResetControl += (c) => {
+
+                control.EnableHeadersVisualStyles = true;
+
+                control.RowPrePaint -= renderer.RowPrePaint;
+                control.RowPostPaint -= renderer.RowPostPaint;
+                control.CellPainting -= renderer.CellPainting;
+
+            };
+
+            renderer.InitializeControl(control);
+
+        }
         private void ApplyStyles(ListBox control, ControlInfo info) {
 
             info.ParentDraw = true;
@@ -260,10 +293,14 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             info.ParentDraw = true;
 
-            IListViewRenderer renderer = new ListViewRenderer(StyleSheet, styleRenderer);
+            ListViewRenderer renderer = new ListViewRenderer(StyleSheet, styleRenderer);
+
+            bool ownerDraw = control.OwnerDraw;
+            bool gridLines = control.GridLines;
 
             control.OwnerDraw = true;
             control.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            control.GridLines = false;
 
             SetDoubleBuffered(control, true);
 
@@ -273,7 +310,8 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             info.ResetControl += (c) => {
 
-                control.OwnerDraw = false;
+                control.OwnerDraw = ownerDraw;
+                control.GridLines = gridLines;
 
                 SetDoubleBuffered(control, false);
 
@@ -283,7 +321,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             };
 
-            renderer.Initialize(control);
+            renderer.InitializeControl(control);
 
         }
         private void ApplyStyles(NumericUpDown control, ControlInfo info) {
