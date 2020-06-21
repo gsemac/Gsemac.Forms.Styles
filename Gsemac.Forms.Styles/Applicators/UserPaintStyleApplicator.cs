@@ -224,6 +224,7 @@ namespace Gsemac.Forms.Styles.Applicators {
             control.GotFocus += ParentInvalidateEventHandler; // required for :focus
             control.LostFocus += ParentInvalidateEventHandler; // required for :focus
             control.SizeChanged += ParentInvalidateEventHandler;
+            control.LocationChanged += ParentInvalidateEventHandler;
 
             info.ResetControl += (c) => {
 
