@@ -1,11 +1,8 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -69,25 +66,6 @@ namespace Gsemac.Forms.Styles.Renderers {
             }
 
             graphics.Restore(state);
-
-        }
-        public void PaintParentBackground(Graphics graphics, Rectangle rectangle, Rectangle parentRectangle, IRuleset parentRuleset) {
-
-            Rectangle drawRect = new Rectangle(parentRectangle.X + rectangle.X, parentRectangle.Y + rectangle.Y, parentRectangle.Width, parentRectangle.Height);
-
-            Region oldClippingRegion = graphics.Clip;
-            Region clippingRegion = new Region();
-
-            clippingRegion.Intersect(oldClippingRegion);
-            clippingRegion.Intersect(rectangle);
-
-            graphics.SetClip(clippingRegion, CombineMode.Replace);
-            graphics.TranslateTransform(-rectangle.X, -rectangle.Y);
-
-            PaintBackground(graphics, drawRect, parentRuleset);
-
-            graphics.TranslateTransform(rectangle.X, rectangle.Y);
-            graphics.SetClip(oldClippingRegion, CombineMode.Replace);
 
         }
         public void PaintBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
