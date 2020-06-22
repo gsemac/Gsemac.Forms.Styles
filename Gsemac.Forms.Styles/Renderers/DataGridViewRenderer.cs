@@ -1,6 +1,8 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Utilities;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -91,6 +93,21 @@ namespace Gsemac.Forms.Styles.Renderers {
                 styleRenderer.PaintBorder(e.Graphics, e.CellBounds, ruleset);
 
                 e.Handled = true;
+
+            }
+
+        }
+        public void Paint(object sender, PaintEventArgs e) {
+
+            if (sender is DataGridView dataGridView) {
+
+                Region clippingRegion = new Region(dataGridView.ClientRectangle);
+
+                clippingRegion.Exclude(DataGridViewUtilities.GetVisibleRowsBounds(dataGridView, true));
+
+                e.Graphics.SetClip(clippingRegion, CombineMode.Replace);
+
+                styleRenderer.PaintBackground(e.Graphics, dataGridView.ClientRectangle, styleSheet.GetRuleset(dataGridView));
 
             }
 

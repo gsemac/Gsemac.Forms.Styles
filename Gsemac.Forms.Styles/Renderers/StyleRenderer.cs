@@ -190,9 +190,11 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public void ClipToBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
 
+            Region region = new Region(rectangle);
+
             if (ruleset.Any(p => p.IsBorderRadiusProperty())) {
 
-                graphics.SetClip(GraphicsExtensions.CreateRoundedRectangle(rectangle,
+                region.Intersect(GraphicsExtensions.CreateRoundedRectangle(rectangle,
                     (int)(ruleset.BorderTopLeftRadius?.Value ?? 0),
                     (int)(ruleset.BorderTopRightRadius?.Value ?? 0),
                     (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0),
@@ -201,9 +203,11 @@ namespace Gsemac.Forms.Styles.Renderers {
             }
             else {
 
-                graphics.SetClip(rectangle);
+                region.Intersect(rectangle);
 
             }
+
+            graphics.SetClip(region, CombineMode.Intersect);
 
         }
 

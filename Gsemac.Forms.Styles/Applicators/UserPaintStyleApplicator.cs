@@ -1,5 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Renderers;
 using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Utilities;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -29,7 +30,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             if (ControlSupportsUserPaint(control)) {
 
-                SetDoubleBuffered(control, true);
+                ControlUtilities.SetDoubleBuffered(control, true);
 
                 SetStyle(control, ControlStyles.UserPaint, true);
 
@@ -249,17 +250,27 @@ namespace Gsemac.Forms.Styles.Applicators {
             control.BorderStyle = System.Windows.Forms.BorderStyle.None;
             control.EnableHeadersVisualStyles = false;
 
+            ControlUtilities.SetDoubleBuffered(control, true);
+
             control.RowPrePaint += renderer.RowPrePaint;
             control.RowPostPaint += renderer.RowPostPaint;
             control.CellPainting += renderer.CellPainting;
+            control.Paint += renderer.Paint;
+
+            control.Scroll += InvalidateEventHandler;
 
             info.ResetControl += (c) => {
 
                 control.EnableHeadersVisualStyles = true;
 
+                ControlUtilities.SetDoubleBuffered(control, false);
+
                 control.RowPrePaint -= renderer.RowPrePaint;
                 control.RowPostPaint -= renderer.RowPostPaint;
                 control.CellPainting -= renderer.CellPainting;
+                control.Paint -= renderer.Paint;
+
+                control.Scroll -= InvalidateEventHandler;
 
             };
 
@@ -303,7 +314,7 @@ namespace Gsemac.Forms.Styles.Applicators {
             control.BorderStyle = System.Windows.Forms.BorderStyle.None;
             control.GridLines = false;
 
-            SetDoubleBuffered(control, true);
+            ControlUtilities.SetDoubleBuffered(control, true);
 
             control.DrawColumnHeader += renderer.DrawColumnHeader;
             control.DrawItem += renderer.DrawItem;
@@ -314,7 +325,7 @@ namespace Gsemac.Forms.Styles.Applicators {
                 control.OwnerDraw = ownerDraw;
                 control.GridLines = gridLines;
 
-                SetDoubleBuffered(control, false);
+                ControlUtilities.SetDoubleBuffered(control, false);
 
                 control.DrawColumnHeader -= renderer.DrawColumnHeader;
                 control.DrawItem -= renderer.DrawItem;
@@ -472,18 +483,6 @@ namespace Gsemac.Forms.Styles.Applicators {
                 return false;
 
             }
-
-        }
-        private void SetDoubleBuffered(Control control, bool value) {
-
-            SetStyle(control, ControlStyles.AllPaintingInWmPaint | ControlStyles.DoubleBuffer, value);
-
-        }
-        private void SetDoubleBuffered(ListView control, bool value) {
-
-            control.GetType()
-                .GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic)
-                .SetValue(control, value, null);
 
         }
 

@@ -7,6 +7,7 @@ namespace Gsemac.Forms.Styles.Renderers {
         void RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e);
         void RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e);
         void CellPainting(object sender, DataGridViewCellPaintingEventArgs e);
+        void Paint(object sender, PaintEventArgs e);
 
     }
 

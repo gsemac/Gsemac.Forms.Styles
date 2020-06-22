@@ -136,6 +136,10 @@
       <Project>{cf09d77c-983a-4865-b01c-158092b0f00d}</Project>
       <Name>Gsemac.Collections</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Gsemac.Common\Gsemac.Forms\Gsemac.Forms.csproj">
+      <Project>{e9b26de4-5b88-40e9-ab7e-43048a965586}</Project>
+      <Name>Gsemac.Forms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Gsemac.Common\Gsemac.Native\Gsemac.Native.csproj">
       <Project>{aa10970a-6ec1-4026-9ea6-2ba783918dac}</Project>
       <Name>Gsemac.Native</Name>
