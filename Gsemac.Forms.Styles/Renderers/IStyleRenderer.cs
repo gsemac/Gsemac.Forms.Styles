@@ -11,6 +11,7 @@ namespace Gsemac.Forms.Styles.Renderers {
     public interface IStyleRenderer {
 
         void PaintBackground(Graphics graphics, Rectangle rectangle, IRuleset ruleset);
+        void PaintParentBackground(Graphics graphics, Rectangle rectangle, Rectangle parentRectangle, IRuleset parentRuleset);
         void PaintBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset);
         void PaintText(Graphics graphics, Rectangle rectangle, IRuleset ruleset, string text, Font font, TextFormatFlags textFormatFlags = TextFormatFlags.Left);
 

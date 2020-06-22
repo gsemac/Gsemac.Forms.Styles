@@ -15,7 +15,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
-        public void PaintBackground(Graphics graphics, Rectangle rect, IRuleset ruleset) {
+        public void PaintBackground(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
 
             GraphicsState state = graphics.Save();
 
@@ -28,12 +28,12 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             // Draw the background color.
 
-            Rectangle backgroundRect = rect;
+            Rectangle backgroundRect = rectangle;
 
             // If the rectangle has right or bottom corner radii, the bounds must be decreased to ensure the curve is not clipped.
 
             if (hasRadius)
-                backgroundRect = new Rectangle(rect.X, rect.Y, rect.Width - (hasRightRadius ? 1 : 0), rect.Height - (hasBottomRadius ? 1 : 0));
+                backgroundRect = new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - (hasRightRadius ? 1 : 0), rectangle.Height - (hasBottomRadius ? 1 : 0));
 
             int topLeft = (int)(ruleset.BorderTopLeftRadius?.Value ?? 0);
             int topRight = (int)(ruleset.BorderTopRightRadius?.Value ?? 0);
@@ -69,6 +69,25 @@ namespace Gsemac.Forms.Styles.Renderers {
             }
 
             graphics.Restore(state);
+
+        }
+        public void PaintParentBackground(Graphics graphics, Rectangle rectangle, Rectangle parentRectangle, IRuleset parentRuleset) {
+
+            Rectangle drawRect = new Rectangle(parentRectangle.X + rectangle.X, parentRectangle.Y + rectangle.Y, parentRectangle.Width, parentRectangle.Height);
+
+            Region oldClippingRegion = graphics.Clip;
+            Region clippingRegion = new Region();
+
+            clippingRegion.Intersect(oldClippingRegion);
+            clippingRegion.Intersect(rectangle);
+
+            graphics.SetClip(clippingRegion, CombineMode.Replace);
+            graphics.TranslateTransform(-rectangle.X, -rectangle.Y);
+
+            PaintBackground(graphics, drawRect, parentRuleset);
+
+            graphics.TranslateTransform(rectangle.X, rectangle.Y);
+            graphics.SetClip(oldClippingRegion, CombineMode.Replace);
 
         }
         public void PaintBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {

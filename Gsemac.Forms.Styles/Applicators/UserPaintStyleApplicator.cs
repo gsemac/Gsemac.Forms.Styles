@@ -204,7 +204,7 @@ namespace Gsemac.Forms.Styles.Applicators {
                         e.Graphics.Restore(graphicsState);
 
                     }
-                    
+
                     control.Parent.Paint += paintHandler;
 
                     info.ResetControl += (c) => {

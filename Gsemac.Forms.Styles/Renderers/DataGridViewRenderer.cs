@@ -50,6 +50,11 @@ namespace Gsemac.Forms.Styles.Renderers {
                 else if (isRowHeader)
                     cellNode.AddClass("RowHeader");
 
+                if (e.RowIndex % 2 == 0)
+                    cellNode.AddClass("Even");
+                else
+                    cellNode.AddClass("Odd");
+
                 if (isSelected)
                     cellNode.AddState(NodeStates.Checked);
 
@@ -83,6 +88,14 @@ namespace Gsemac.Forms.Styles.Renderers {
                         e.CellStyle.SelectionForeColor = ruleset.Color.Value;
 
                     }
+
+                }
+
+                if (ruleset.Opacity.HasValue() && ruleset.Opacity.Value < 1.0f) {
+
+                    // Draw the part of the DataGridView background behind the cell.
+
+                    styleRenderer.PaintParentBackground(e.Graphics, e.CellBounds, dataGridView.ClientRectangle, styleSheet.GetRuleset(dataGridView));
 
                 }
 
