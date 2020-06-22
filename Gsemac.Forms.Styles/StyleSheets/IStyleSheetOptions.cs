@@ -1,6 +1,6 @@
 ﻿namespace Gsemac.Forms.Styles.StyleSheets {
 
-    public interface IStylesheetOptions {
+    public interface IStyleSheetOptions {
 
         bool CacheRulesets { get; set; }
 

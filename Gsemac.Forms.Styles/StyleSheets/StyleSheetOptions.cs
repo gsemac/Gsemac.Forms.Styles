@@ -1,7 +1,7 @@
 ﻿namespace Gsemac.Forms.Styles.StyleSheets {
 
-    public class StylesheetOptions :
-        IStylesheetOptions {
+    public class StyleSheetOptions :
+        IStyleSheetOptions {
 
         // Public members
 

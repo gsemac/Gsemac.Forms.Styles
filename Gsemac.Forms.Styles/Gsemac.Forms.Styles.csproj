@@ -90,14 +90,14 @@
     <Compile Include="StyleSheets\InvalidFunctionException.cs" />
     <Compile Include="StyleSheets\IRulesetCache.cs" />
     <Compile Include="StyleSheets\ISelectorBuilder.cs" />
-    <Compile Include="StyleSheets\IStylesheetOptions.cs" />
+    <Compile Include="StyleSheets\IStyleSheetOptions.cs" />
     <Compile Include="StyleSheets\LexerBase.cs" />
     <Compile Include="StyleSheets\LinearGradient.cs" />
     <Compile Include="StyleSheets\PseudoClassSelector.cs" />
     <Compile Include="StyleSheets\PseudoElementSelector.cs" />
     <Compile Include="StyleSheets\RulesetCache.cs" />
     <Compile Include="StyleSheets\StyleObject.cs" />
-    <Compile Include="StyleSheets\StylesheetOptions.cs" />
+    <Compile Include="StyleSheets\StyleSheetOptions.cs" />
     <Compile Include="StyleSheets\UnexpectedTokenException.cs" />
     <Compile Include="StyleSheets\UserNode.cs" />
     <Compile Include="StyleSheets\NodeBase.cs" />

@@ -47,10 +47,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public static IStyleSheet Parse(string input) {
 
-            return Parse(input, new StylesheetOptions());
+            return Parse(input, new StyleSheetOptions());
 
         }
-        public static IStyleSheet Parse(string input, IStylesheetOptions options) {
+        public static IStyleSheet Parse(string input, IStyleSheetOptions options) {
 
             using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(input)))
                 return FromStream(stream, options);
@@ -58,10 +58,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         }
         public static IStyleSheet FromStream(Stream stream) {
 
-            return FromStream(stream, new StylesheetOptions());
+            return FromStream(stream, new StyleSheetOptions());
 
         }
-        public static IStyleSheet FromStream(Stream stream, IStylesheetOptions options) {
+        public static IStyleSheet FromStream(Stream stream, IStyleSheetOptions options) {
 
             StyleSheet result = new StyleSheet(options);
 
@@ -74,14 +74,14 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             // The FileReader is set such that files are read relative to the stylesheet.
 
-            return FromFile(filePath, new StylesheetOptions() {
+            return FromFile(filePath, new StyleSheetOptions() {
                 FileReader = new FileSystemFileReader() {
                     RootPath = Path.GetDirectoryName(filePath)
                 }
             });
 
         }
-        public static IStyleSheet FromFile(string filePath, IStylesheetOptions options) {
+        public static IStyleSheet FromFile(string filePath, IStyleSheetOptions options) {
 
             using (FileStream fstream = new FileStream(filePath, FileMode.Open))
                 return FromStream(fstream, options);
@@ -105,12 +105,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Private members
 
-        private readonly IStylesheetOptions options = new StylesheetOptions();
+        private readonly IStyleSheetOptions options = new StyleSheetOptions();
         private readonly IList<IRuleset> rulesets = new List<IRuleset>();
         private readonly IDictionary<INode, IRuleset> cache = new RulesetCache();
         private readonly IList<IDisposable> disposableResources = new List<IDisposable>();
 
-        private StyleSheet(IStylesheetOptions options) {
+        private StyleSheet(IStyleSheetOptions options) {
 
             this.options = options;
 
