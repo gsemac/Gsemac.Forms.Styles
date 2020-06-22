@@ -105,7 +105,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (TryParseNumber(input, out double result))
                 return result;
             else
-                throw new ArgumentException(nameof(input));
+                throw new FormatException($"Failed to parse \"{input}\" as a number.");
 
         }
         public static BorderStyle ParseBorderStyle(string input) {

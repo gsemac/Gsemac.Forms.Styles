@@ -51,6 +51,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         private readonly char[] reservedChars = { ' ', '>', '+', '~', ',', '.', '#', '{', '}', ':' };
         private readonly Queue<IStyleSheetLexerToken> tokens = new Queue<IStyleSheetLexerToken>();
         private bool insideDeclaration = false;
+        private bool readingFunctionArguments = false;
 
         private void ReadNextTokens() {
 
@@ -186,16 +187,29 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     case ',':
                     case ' ':
 
-                        // We've reached the end of the current value (of a comma-delimited set of values).
+                        if (readingFunctionArguments && char.IsWhiteSpace(nextChar)) {
 
-                        if (buffer.Length > 0)
-                            tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Value, buffer.ToString().Trim()));
+                            // Allow whitespace in function arguments (they are delimited by commas instead).
+                            // For example, "to right" should be considered a single token.
 
-                        buffer.Clear();
+                            buffer.Append((char)Reader.Read());
 
-                        tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.FunctionArgumentSeparator, ((char)Reader.Read()).ToString()));
+                        }
+                        else {
 
-                        SkipWhitespace();
+                            // We've reached the end of the current value (of a comma-delimited set of values).
+
+                            if (buffer.Length > 0)
+                                tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Value, buffer.ToString().Trim()));
+
+                            buffer.Clear();
+
+                            if (nextChar == ',')
+                                tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.FunctionArgumentSeparator, ((char)Reader.Read()).ToString()));
+
+                            SkipWhitespace();
+
+                        }
 
                         break;
 
@@ -213,7 +227,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         break;
 
                     case '/':
+
                         ReadComment();
+
                         break;
 
                     default:
@@ -237,7 +253,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             // Read the function arguments.
 
+            readingFunctionArguments = true;
+
             ReadPropertyValue();
+
+            readingFunctionArguments = false;
 
             // Read the closing delimiter.
 

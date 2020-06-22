@@ -8,8 +8,8 @@
     <ProjectGuid>{59AF0C3D-370A-41E3-8599-91A9B0DBE5E2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gsemac.Forms.Styles.StyleSheets.Tests</RootNamespace>
-    <AssemblyName>Gsemac.Forms.Styles.StyleSheets.Tests</AssemblyName>
+    <RootNamespace>Gsemac.Forms.Styles.Tests</RootNamespace>
+    <AssemblyName>Gsemac.Forms.Styles.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -47,13 +47,20 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="StyleSheets\UnitTest1.cs" />
+    <Compile Include="StyleSheets\StyleSheetTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Gsemac.Forms.Styles\Gsemac.Forms.Styles.csproj">
+      <Project>{ee0193ed-6d71-477b-93e1-e3c15e0b0eea}</Project>
+      <Name>Gsemac.Forms.Styles</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

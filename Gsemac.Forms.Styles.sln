@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{55C249C4-FEA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E2D2BBEE-0F95-453F-81C2-C1C6B2FF243F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gsemac.Forms.Styles.StyleSheets.Tests", "Gsemac.Forms.Styles.StyleSheets.Tests\Gsemac.Forms.Styles.StyleSheets.Tests.csproj", "{59AF0C3D-370A-41E3-8599-91A9B0DBE5E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gsemac.Forms.Styles.Tests", "Gsemac.Forms.Styles.StyleSheets.Tests\Gsemac.Forms.Styles.Tests.csproj", "{59AF0C3D-370A-41E3-8599-91A9B0DBE5E2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gsemac.Collections", "Gsemac.Common\Gsemac.Collections\Gsemac.Collections.csproj", "{CF09D77C-983A-4865-B01C-158092B0F00D}"
 EndProject
