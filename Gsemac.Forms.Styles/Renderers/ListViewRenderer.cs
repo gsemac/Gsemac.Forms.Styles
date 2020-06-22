@@ -1,5 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Utilities;
 using Gsemac.Native;
 using System;
 using System.Drawing;
@@ -40,7 +41,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle headerRect = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Header.Width, e.Bounds.Height);
             Rectangle textRect = new Rectangle(headerRect.X + textPadding, headerRect.Y, headerRect.Width - textPadding * 2, headerRect.Height);
 
-            TextFormatFlags textFormatFlags = RenderUtilities.GetTextFormatFlags(e.Header.TextAlign) | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
+            TextFormatFlags textFormatFlags = ControlUtilities.GetTextFormatFlags(e.Header.TextAlign) | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
 
             styleRenderer.PaintBackground(e.Graphics, headerRect, ruleset);
             styleRenderer.PaintText(e.Graphics, textRect, ruleset, e.Header.Text, e.Font, textFormatFlags);

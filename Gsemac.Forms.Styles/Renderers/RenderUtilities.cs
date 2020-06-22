@@ -22,59 +22,6 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
-        public static bool MouseIntersectsWith(Control control) {
-
-            return MouseIntersectsWith(control, control.ClientRectangle);
-
-        }
-        public static bool MouseIntersectsWith(Control control, Rectangle rect) {
-
-            Point mousePos = control.PointToClient(Cursor.Position);
-            Rectangle mouseRect = new Rectangle(mousePos.X, mousePos.Y, 1, 1);
-
-            return rect.IntersectsWith(mouseRect);
-
-        }
-
-        public static TextFormatFlags GetTextFormatFlags(ContentAlignment contentAlignment) {
-
-            TextFormatFlags flags = TextFormatFlags.Default;
-
-            if ((contentAlignment & (ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight)) != 0)
-                flags |= TextFormatFlags.Top;
-
-            if ((contentAlignment & (ContentAlignment.TopLeft | ContentAlignment.MiddleLeft | ContentAlignment.BottomLeft)) != 0)
-                flags |= TextFormatFlags.Left;
-
-            if ((contentAlignment & (ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight)) != 0)
-                flags |= TextFormatFlags.Right;
-
-            if ((contentAlignment & (ContentAlignment.BottomRight | ContentAlignment.BottomCenter | ContentAlignment.BottomLeft)) != 0)
-                flags |= TextFormatFlags.Bottom;
-
-            if ((contentAlignment & (ContentAlignment.MiddleRight | ContentAlignment.MiddleCenter | ContentAlignment.MiddleLeft)) != 0)
-                flags |= TextFormatFlags.VerticalCenter;
-
-            if ((contentAlignment & (ContentAlignment.TopCenter | ContentAlignment.MiddleCenter | ContentAlignment.BottomCenter)) != 0)
-                flags |= TextFormatFlags.HorizontalCenter;
-
-            return flags;
-
-        }
-        public static TextFormatFlags GetTextFormatFlags(HorizontalAlignment horizontalAlignment) {
-
-            TextFormatFlags flags = TextFormatFlags.Default;
-
-            if (horizontalAlignment == HorizontalAlignment.Left)
-                flags |= TextFormatFlags.Left;
-            else if (horizontalAlignment == HorizontalAlignment.Center)
-                flags |= TextFormatFlags.HorizontalCenter;
-            else if (horizontalAlignment == HorizontalAlignment.Right)
-                flags |= TextFormatFlags.Right;
-
-            return flags;
-
-        }
         public static DashStyle GetDashStyle(StyleSheets.BorderStyle borderStyle) {
 
             switch (borderStyle) {
@@ -98,37 +45,6 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             if (ruleset.Color.HasValue())
                 control.ForeColor = ruleset.Color.Value;
-
-        }
-
-        public static ScrollBars GetVisibleScrollbars(ListBox control) {
-
-            ScrollBars scrollBars = ScrollBars.None;
-
-            if (Enumerable.Range(0, control.Items.Count).Sum(i => control.GetItemHeight(i)) > control.Height)
-                scrollBars |= ScrollBars.Vertical;
-
-            return scrollBars;
-
-        }
-        public static ScrollBars GetVisibleScrollbars(TextBox control) {
-
-            return control.ScrollBars;
-
-        }
-        public static ScrollBars GetVisibleScrollbars(Control control) {
-
-            ScrollBars scrollBars = ScrollBars.None;
-
-            Size size = control.GetPreferredSize(Size.Empty);
-
-            if (size.Height > control.Height)
-                scrollBars |= ScrollBars.Vertical;
-
-            if (size.Width > control.Width)
-                scrollBars |= ScrollBars.Horizontal;
-
-            return scrollBars;
 
         }
 

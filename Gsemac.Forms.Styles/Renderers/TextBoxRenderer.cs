@@ -1,5 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Utilities;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -50,7 +51,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             w += (int)leftWidth + (int)rightWidth;
             h += (int)topWidth + (int)bottomWidth;
 
-            if (RenderUtilities.GetVisibleScrollbars(control).HasFlag(ScrollBars.Vertical))
+            if (ControlUtilities.GetVisibleScrollbars(control).HasFlag(ScrollBars.Vertical))
                 w += SystemInformation.VerticalScrollBarWidth;
 
             //GraphicsState graphicsState = graphics.Save();

@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
+using Gsemac.Forms.Utilities;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -11,7 +12,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public override void PaintControl(Button control, ControlPaintArgs e) {
 
-            TextFormatFlags textFormatFlags = RenderUtilities.GetTextFormatFlags(control.TextAlign);
+            TextFormatFlags textFormatFlags = ControlUtilities.GetTextFormatFlags(control.TextAlign);
 
             e.Clear();
 

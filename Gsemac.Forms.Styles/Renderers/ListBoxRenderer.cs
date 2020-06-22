@@ -1,5 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Utilities;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -15,7 +16,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             Rectangle borderRect = RenderUtilities.GetOuterBorderRectangle(control, e.StyleSheet.GetRuleset(control));
 
-            if (RenderUtilities.GetVisibleScrollbars(control).HasFlag(ScrollBars.Vertical))
+            if (ControlUtilities.GetVisibleScrollbars(control).HasFlag(ScrollBars.Vertical))
                 borderRect = new Rectangle(borderRect.X, borderRect.Y, borderRect.Width + SystemInformation.VerticalScrollBarWidth, borderRect.Height);
 
             e.PaintBackground();
@@ -72,7 +73,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             if (control.SelectedItems.Contains(item))
                 states |= NodeStates.Checked;
 
-            if (RenderUtilities.MouseIntersectsWith(control, itemRect)) {
+            if (ControlUtilities.MouseIntersectsWith(control, itemRect)) {
 
                 if (Control.MouseButtons.HasFlag(MouseButtons.Left))
                     states |= NodeStates.Active;

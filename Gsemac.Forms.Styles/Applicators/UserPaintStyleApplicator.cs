@@ -32,7 +32,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                 ControlUtilities.SetDoubleBuffered(control, true);
 
-                SetStyle(control, ControlStyles.UserPaint, true);
+                ControlUtilities.SetStyle(control, ControlStyles.UserPaint, true);
 
                 control.Paint += PaintEventHandler;
 

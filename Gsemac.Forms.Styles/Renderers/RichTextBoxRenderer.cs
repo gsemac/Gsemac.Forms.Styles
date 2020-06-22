@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Utilities;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -17,7 +18,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle clientRect = control.ClientRectangle;
             Rectangle borderRect = new Rectangle(clientRect.X - 3, clientRect.Y - 3, clientRect.Width + 6, clientRect.Height + 6);
 
-            if (RenderUtilities.GetVisibleScrollbars(control).HasFlag(ScrollBars.Vertical))
+            if (ControlUtilities.GetVisibleScrollbars(control).HasFlag(ScrollBars.Vertical))
                 borderRect = new Rectangle(borderRect.X, borderRect.Y, borderRect.Width + SystemInformation.VerticalScrollBarWidth, borderRect.Height);
 
             args.PaintBackground(borderRect);

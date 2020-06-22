@@ -1,5 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -27,7 +28,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle clientRect = control.ClientRectangle;
             Rectangle drawRect = new Rectangle(clientRect.X + CheckWidth + 3, clientRect.Y - 1, clientRect.Width, clientRect.Height);
 
-            e.StyleRenderer.PaintText(e.Graphics, drawRect, ruleset, control.Text, control.Font, RenderUtilities.GetTextFormatFlags(control.TextAlign));
+            e.StyleRenderer.PaintText(e.Graphics, drawRect, ruleset, control.Text, control.Font, ControlUtilities.GetTextFormatFlags(control.TextAlign));
 
         }
 

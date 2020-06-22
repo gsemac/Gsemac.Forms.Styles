@@ -123,6 +123,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             return Color.FromArgb(r, g, b);
 
         }
+        public static Color Rgba(int r, int g, int b, float alpha) {
+
+            return Color.FromArgb((int)Math.Round(255 * alpha), r, g, b);
+
+        }
         public static LinearGradient LinearGradient(double degrees, Color[] colorStops) {
 
             return new LinearGradient(degrees, colorStops);
@@ -165,6 +170,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                 case "rgb":
                     return new StyleObject(Rgb((int)functionArgs[0].GetNumber(), (int)functionArgs[1].GetNumber(), (int)functionArgs[2].GetNumber()));
+
+                case "rgba":
+                    return new StyleObject(Rgba((int)functionArgs[0].GetNumber(), (int)functionArgs[1].GetNumber(), (int)functionArgs[2].GetNumber(), (float)functionArgs[3].GetNumber()));
 
                 case "url":
                     return new StyleObject(Url(functionArgs[0].GetString()));
