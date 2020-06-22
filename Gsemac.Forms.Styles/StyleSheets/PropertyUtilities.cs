@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
@@ -135,18 +134,30 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         }
         public static StyleObject Url(string resourceFilePath) {
 
+            return Url(resourceFilePath, new FileSystemFileReader());
+
+        }
+        public static StyleObject Url(string resourceFilePath, IFileReader fileReader) {
+
+            if (fileReader is null)
+                throw new ArgumentNullException(nameof(fileReader));
+
             string[] imageFileExtensions = new[] { ".bmp", ".gif", ".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi", ".png", ".tiff", ".tif" };
 
             // Strip outer quotes from the path.
 
             resourceFilePath = resourceFilePath.Trim('"', '\'');
 
-            string ext = System.IO.Path.GetExtension(resourceFilePath);
+            string ext = Path.GetExtension(resourceFilePath);
 
             if (imageFileExtensions.Any(imageExt => ext.Equals(imageExt, StringComparison.OrdinalIgnoreCase))) {
 
-                if (System.IO.File.Exists(resourceFilePath))
-                    return new StyleObject(new Image(System.Drawing.Image.FromFile(resourceFilePath)));
+                if (File.Exists(resourceFilePath)) {
+
+                    using (Stream stream = fileReader.OpenFile(resourceFilePath))
+                        return new StyleObject(new Image(System.Drawing.Image.FromStream(stream)));
+
+                }
                 else
                     return new StyleObject(Image.Empty);
 
@@ -160,6 +171,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         }
 
         public static StyleObject EvaluateFunction(string functionName, StyleObject[] functionArgs) {
+
+            return EvaluateFunction(functionName, functionArgs, new FileSystemFileReader());
+
+        }
+        public static StyleObject EvaluateFunction(string functionName, StyleObject[] functionArgs, IFileReader fileReader) {
 
             functionName = functionName?.Trim().ToLowerInvariant();
 
@@ -175,7 +191,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     return new StyleObject(Rgba((int)functionArgs[0].GetNumber(), (int)functionArgs[1].GetNumber(), (int)functionArgs[2].GetNumber(), (float)functionArgs[3].GetNumber()));
 
                 case "url":
-                    return new StyleObject(Url(functionArgs[0].GetString()));
+                    return new StyleObject(Url(functionArgs[0].GetString(), fileReader));
 
                 default:
                     throw new InvalidFunctionException(functionName);

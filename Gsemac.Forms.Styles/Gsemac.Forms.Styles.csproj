@@ -77,9 +77,11 @@
     <Compile Include="StyleSheets\ChildSelector.cs" />
     <Compile Include="StyleSheets\ClassSelector.cs" />
     <Compile Include="StyleSheets\DescendantSelector.cs" />
+    <Compile Include="StyleSheets\FileSystemFileReader.cs" />
     <Compile Include="StyleSheets\GradientBase.cs" />
     <Compile Include="StyleSheets\HashCodeBuilder.cs" />
     <Compile Include="StyleSheets\IDSelector.cs" />
+    <Compile Include="StyleSheets\IFileReader.cs" />
     <Compile Include="StyleSheets\IGradient.cs" />
     <Compile Include="StyleSheets\IHashCodeBuilder.cs" />
     <Compile Include="StyleSheets\IImage.cs" />
@@ -88,12 +90,14 @@
     <Compile Include="StyleSheets\InvalidFunctionException.cs" />
     <Compile Include="StyleSheets\IRulesetCache.cs" />
     <Compile Include="StyleSheets\ISelectorBuilder.cs" />
+    <Compile Include="StyleSheets\IStylesheetOptions.cs" />
     <Compile Include="StyleSheets\LexerBase.cs" />
     <Compile Include="StyleSheets\LinearGradient.cs" />
     <Compile Include="StyleSheets\PseudoClassSelector.cs" />
     <Compile Include="StyleSheets\PseudoElementSelector.cs" />
     <Compile Include="StyleSheets\RulesetCache.cs" />
     <Compile Include="StyleSheets\StyleObject.cs" />
+    <Compile Include="StyleSheets\StylesheetOptions.cs" />
     <Compile Include="StyleSheets\UnexpectedTokenException.cs" />
     <Compile Include="StyleSheets\UserNode.cs" />
     <Compile Include="StyleSheets\NodeBase.cs" />

@@ -14,7 +14,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public IRuleset GetRuleset(INode node, bool inherit = true) {
 
-            return GetRuleset(node, inherit, options.HasFlag(StylesheetOptions.CacheRulesets));
+            return GetRuleset(node, inherit, options.CacheRulesets);
         }
 
         public IEnumerator<IRuleset> GetEnumerator() {
@@ -45,13 +45,23 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
-        public static StyleSheet Parse(string input, StylesheetOptions options = StylesheetOptions.Default) {
+        public static IStyleSheet Parse(string input) {
+
+            return Parse(input, new StylesheetOptions());
+
+        }
+        public static IStyleSheet Parse(string input, IStylesheetOptions options) {
 
             using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(input)))
                 return FromStream(stream, options);
 
         }
-        public static StyleSheet FromStream(Stream stream, StylesheetOptions options = StylesheetOptions.Default) {
+        public static IStyleSheet FromStream(Stream stream) {
+
+            return FromStream(stream, new StylesheetOptions());
+
+        }
+        public static IStyleSheet FromStream(Stream stream, IStylesheetOptions options) {
 
             StyleSheet result = new StyleSheet(options);
 
@@ -60,7 +70,18 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             return result;
 
         }
-        public static StyleSheet FromFile(string filePath, StylesheetOptions options = StylesheetOptions.Default) {
+        public static IStyleSheet FromFile(string filePath) {
+
+            // The FileReader is set such that files are read relative to the stylesheet.
+
+            return FromFile(filePath, new StylesheetOptions() {
+                FileReader = new FileSystemFileReader() {
+                    RootPath = Path.GetDirectoryName(filePath)
+                }
+            });
+
+        }
+        public static IStyleSheet FromFile(string filePath, IStylesheetOptions options) {
 
             using (FileStream fstream = new FileStream(filePath, FileMode.Open))
                 return FromStream(fstream, options);
@@ -84,12 +105,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Private members
 
-        private readonly StylesheetOptions options = StylesheetOptions.Default;
+        private readonly IStylesheetOptions options = new StylesheetOptions();
         private readonly IList<IRuleset> rulesets = new List<IRuleset>();
         private readonly IDictionary<INode, IRuleset> cache = new RulesetCache();
         private readonly IList<IDisposable> disposableResources = new List<IDisposable>();
 
-        private StyleSheet(StylesheetOptions options = StylesheetOptions.Default) {
+        private StyleSheet(IStylesheetOptions options) {
 
             this.options = options;
 
@@ -208,7 +229,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             }
 
-            StyleObject returnValue = PropertyUtilities.EvaluateFunction(functionName, functionArgs.ToArray());
+            StyleObject returnValue = PropertyUtilities.EvaluateFunction(functionName, functionArgs.ToArray(), options.FileReader);
 
             if (returnValue.Type == StyleObjectType.Image)
                 disposableResources.Add(returnValue.GetImage());
