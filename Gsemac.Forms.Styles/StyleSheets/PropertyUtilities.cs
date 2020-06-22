@@ -125,7 +125,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         }
         public static Color Rgba(int r, int g, int b, float alpha) {
 
-            return Color.FromArgb((int)Math.Round(255 * alpha), r, g, b);
+            return Color.FromArgb((int)Math.Round(byte.MaxValue * alpha), r, g, b);
 
         }
         public static LinearGradient LinearGradient(double degrees, Color[] colorStops) {

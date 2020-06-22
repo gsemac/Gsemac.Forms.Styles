@@ -33,6 +33,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         public BorderStyleProperty BorderTopStyle => GetProperty(PropertyType.BorderTopStyle) as BorderStyleProperty;
         public NumberProperty BorderTopWidth => GetProperty(PropertyType.BorderTopWidth) as NumberProperty;
         public ColorProperty Color => GetProperty(PropertyType.Color) as ColorProperty;
+        public NumberProperty Opacity => GetProperty(PropertyType.Opacity) as NumberProperty;
 
         public abstract void AddProperty(IProperty property);
         public void AddProperties(IEnumerable<IProperty> properties) {

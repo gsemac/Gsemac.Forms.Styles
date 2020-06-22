@@ -42,7 +42,12 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             if (ruleset.BackgroundColor.HasValue()) {
 
-                using (Brush brush = new SolidBrush(ruleset.BackgroundColor?.Value ?? SystemColors.Control)) {
+                Color backgroundColor = ruleset.BackgroundColor?.Value ?? SystemColors.Control;
+
+                if (ruleset.Opacity.HasValue())
+                    backgroundColor = RenderUtilities.GetColorWithAlpha(backgroundColor, (float)ruleset.Opacity.Value);
+
+                using (Brush brush = new SolidBrush(backgroundColor)) {
 
                     if (!hasRadius)
                         graphics.FillRectangle(brush, backgroundRect);
@@ -95,6 +100,8 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             Rectangle drawRect = new Rectangle(rectX, rectY, rectWidth - (rightWidth == 1 && leftWidth <= 0 ? 1 : 0), rectHeight - (bottomWidth == 1 && topWidth <= 0 ? 1 : 0));
 
+            float opacity = (float)(ruleset.Opacity?.Value ?? 1.0f);
+
             using (Pen pen = new Pen(Color.Black)) {
 
                 pen.Alignment = PenAlignment.Center;
@@ -107,7 +114,7 @@ namespace Gsemac.Forms.Styles.Renderers {
                     if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
 
                         pen.Width = (float)topWidth;
-                        pen.Color = ruleset.BorderTopColor?.Value ?? default;
+                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderTopColor?.Value ?? default, opacity);
                         pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
 
                         using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Top, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
@@ -124,7 +131,7 @@ namespace Gsemac.Forms.Styles.Renderers {
                     if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
 
                         pen.Width = (float)rightWidth;
-                        pen.Color = ruleset.BorderRightColor?.Value ?? default;
+                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderRightColor?.Value ?? default, opacity);
                         pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
 
                         using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Right, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
@@ -141,7 +148,7 @@ namespace Gsemac.Forms.Styles.Renderers {
                     if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
 
                         pen.Width = (float)bottomWidth;
-                        pen.Color = ruleset.BorderBottomColor?.Value ?? default;
+                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderBottomColor?.Value ?? default, opacity);
                         pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
 
                         using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Bottom, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
@@ -158,7 +165,7 @@ namespace Gsemac.Forms.Styles.Renderers {
                     if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
 
                         pen.Width = (float)leftWidth;
-                        pen.Color = ruleset.BorderLeftColor?.Value ?? default;
+                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderLeftColor?.Value ?? default, opacity);
                         pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
 
                         using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Left, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))

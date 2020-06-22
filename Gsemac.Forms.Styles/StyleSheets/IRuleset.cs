@@ -26,6 +26,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         BorderStyleProperty BorderTopStyle { get; }
         NumberProperty BorderTopWidth { get; }
         ColorProperty Color { get; }
+        NumberProperty Opacity { get; }
 
         void AddProperty(IProperty property);
         void AddProperties(IEnumerable<IProperty> properties);

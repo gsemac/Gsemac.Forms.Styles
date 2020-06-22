@@ -1,6 +1,7 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Utilities;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -50,6 +51,12 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             if (ruleset.Color.HasValue())
                 control.ForeColor = ruleset.Color.Value;
+
+        }
+
+        public static Color GetColorWithAlpha(Color baseColor, float alpha) {
+
+            return Color.FromArgb((int)Math.Round(byte.MaxValue * alpha), baseColor.R, baseColor.G, baseColor.B);
 
         }
 

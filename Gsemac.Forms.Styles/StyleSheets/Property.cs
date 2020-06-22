@@ -68,6 +68,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 case PropertyType.BackgroundImage:
                     return new BackgroundImageProperty(values.Select(v => v.GetImage()).ToArray());
 
+                case PropertyType.Opacity:
+                    return new NumberProperty(type, values[0].GetNumber(), false);
+
                 default:
                     throw new InvalidPropertyException(type.ToString());
 
@@ -188,6 +191,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 [PropertyType.BorderWidth] = "border-width",
                 [PropertyType.Border] = "border",
                 [PropertyType.Color] = "color",
+                [PropertyType.Opacity] = "opacity",
             };
 
             return dict;

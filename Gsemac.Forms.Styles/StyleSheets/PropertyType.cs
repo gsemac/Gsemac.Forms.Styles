@@ -1,10 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Gsemac.Forms.Styles.StyleSheets {
+﻿namespace Gsemac.Forms.Styles.StyleSheets {
 
     public enum PropertyType {
         BackgroundColor,
@@ -35,6 +29,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         BorderTopWidth,
         BorderWidth,
         Color,
+        Opacity
     }
 
 }

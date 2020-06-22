@@ -99,14 +99,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             // Store the control's initial styles so they can be restored in the future.
 
-            if (ControlUtilities.GetStyle(control, ControlStyles.AllPaintingInWmPaint))
-                info.Styles |= ControlStyles.AllPaintingInWmPaint;
-
-            if (ControlUtilities.GetStyle(control, ControlStyles.UserPaint))
-                info.Styles |= ControlStyles.UserPaint;
-
-            if (ControlUtilities.GetStyle(control, ControlStyles.DoubleBuffer))
-                info.Styles |= ControlStyles.DoubleBuffer;
+            info.Styles = ControlUtilities.GetStyles(control);
 
             if (TryGetDrawMode(control, out DrawMode drawMode))
                 info.DrawMode = drawMode;
@@ -145,14 +138,7 @@ namespace Gsemac.Forms.Styles.Applicators {
                 // Only disable styles that the control didn't have originally.
                 // Controls like Panel and TabPage will have UserPaint enabled by default, and it should not be disabled.
 
-                if (!info.Styles.HasFlag(ControlStyles.AllPaintingInWmPaint))
-                    ControlUtilities.SetStyle(control, ControlStyles.AllPaintingInWmPaint, false);
-
-                if (!info.Styles.HasFlag(ControlStyles.UserPaint))
-                    ControlUtilities.SetStyle(control, ControlStyles.UserPaint, false);
-
-                if (!info.Styles.HasFlag(ControlStyles.DoubleBuffer))
-                    ControlUtilities.SetStyle(control, ControlStyles.DoubleBuffer, false);
+                ControlUtilities.SetStyles(control, info.Styles);
 
                 TrySetDrawMode(control, info.DrawMode);
                 TrySetBorderStyle(control, info.BorderStyle);

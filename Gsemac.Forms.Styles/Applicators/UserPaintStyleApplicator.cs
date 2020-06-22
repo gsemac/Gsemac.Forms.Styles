@@ -204,11 +204,13 @@ namespace Gsemac.Forms.Styles.Applicators {
                         e.Graphics.Restore(graphicsState);
 
                     }
-
+                    
                     control.Parent.Paint += paintHandler;
 
                     info.ResetControl += (c) => {
+
                         control.Parent.Paint -= paintHandler;
+
                     };
 
                 }
@@ -218,7 +220,6 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
         private void AddTextBoxInvalidateParentHandlers(Control control, ControlInfo info) {
 
-            control.MouseMove += ParentInvalidateEventHandler; // required for :hover
             control.MouseEnter += ParentInvalidateEventHandler; // required for :hover
             control.MouseLeave += ParentInvalidateEventHandler; // required for :hover
             control.MouseDown += ParentInvalidateEventHandler; // required for :active
@@ -229,13 +230,13 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             info.ResetControl += (c) => {
 
-                control.MouseMove -= ParentInvalidateEventHandler;
                 control.MouseEnter -= ParentInvalidateEventHandler;
                 control.MouseLeave -= ParentInvalidateEventHandler;
                 control.MouseDown -= ParentInvalidateEventHandler;
                 control.GotFocus -= ParentInvalidateEventHandler;
                 control.LostFocus -= ParentInvalidateEventHandler;
                 control.SizeChanged -= ParentInvalidateEventHandler;
+                control.LocationChanged -= ParentInvalidateEventHandler;
 
             };
 
@@ -391,7 +392,9 @@ namespace Gsemac.Forms.Styles.Applicators {
             TrySetResizeRedraw(control, true);
 
             info.ResetControl += (c) => {
+
                 TrySetResizeRedraw(control, oldResetRedraw);
+
             };
 
         }
