@@ -6,6 +6,7 @@
         // Public members
 
         public bool CacheRulesets { get; set; } = true;
+        public bool IgnoreInvalidProperties { get; set; } = false;
 
         public IFileReader FileReader { get; set; } = new FileSystemFileReader();
 

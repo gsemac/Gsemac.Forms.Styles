@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -11,10 +8,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
-        public InvalidPropertyException(string message) :
-            base(message) {
+        public InvalidPropertyException(string propertyName) :
+            base(CreateMessage(propertyName)) {
         }
-        public InvalidPropertyException(string message, Exception innerException) : base(message, innerException) {
+        public InvalidPropertyException(string propertyName, Exception innerException) :
+            base(CreateMessage(propertyName), innerException) {
         }
         public InvalidPropertyException() {
         }
@@ -23,6 +21,14 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         protected InvalidPropertyException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext) :
             base(serializationInfo, streamingContext) {
+        }
+
+        // Private members
+
+        private static string CreateMessage(string propertyName) {
+
+            return $"\"{propertyName}\" is not a valid property.";
+
         }
 
     }

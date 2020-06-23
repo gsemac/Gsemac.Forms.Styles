@@ -97,7 +97,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (TryParseColor(input, out Color result))
                 return result;
             else
-                throw new ArgumentException(nameof(input));
+                throw new FormatException($"Failed to parse \"{input}\" as a color.");
 
         }
         public static double ParseNumber(string input) {
@@ -113,7 +113,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (TryParseBorderStyle(input, out BorderStyle result))
                 return result;
             else
-                throw new ArgumentException(nameof(input));
+                throw new FormatException($"Failed to parse \"{input}\" as a border style.");
 
         }
 

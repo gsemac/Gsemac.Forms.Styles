@@ -27,6 +27,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             base(type, value, inheritable) {
         }
 
+        public override string ToString() {
+
+            return ToString(Value.ToString().ToLowerInvariant());
+
+        }
+
     }
 
 }

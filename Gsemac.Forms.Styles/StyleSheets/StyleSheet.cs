@@ -138,8 +138,28 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                             break;
 
                         case StyleSheetLexerTokenType.Value:
-                        case StyleSheetLexerTokenType.Function:
-                            currentRuleset.AddProperty(Property.Create(currentPropertyName, ReadPropertyValues(lexer)));
+                        case StyleSheetLexerTokenType.Function: {
+
+                                StyleObject[] propertyValues = ReadPropertyValues(lexer);
+                                IProperty property = null;
+
+                                try {
+
+                                    property = Property.Create(currentPropertyName, propertyValues);
+
+                                }
+                                catch (Exception ex) {
+
+                                    if (!options.IgnoreInvalidProperties)
+                                        throw ex;
+
+                                }
+
+                                if (property != null)
+                                    currentRuleset.AddProperty(property);
+
+                            }
+
                             continue;
 
                         case StyleSheetLexerTokenType.Tag:
@@ -179,30 +199,38 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                     case StyleSheetLexerTokenType.Value:
 
+                        lexer.Read(out _); // Eat the token
+
                         values.Add(new StyleObject(token.Value));
 
                         break;
 
                     case StyleSheetLexerTokenType.Function:
 
+                        lexer.Read(out _); // Eat the token
+
                         values.Add(ReadFunction(lexer, token.Value));
 
                         break;
 
                     case StyleSheetLexerTokenType.PropertyEnd:
+
+                        lexer.Read(out _); // Eat the token
+
+                        exitLoop = true;
+
+                        break;
+
                     case StyleSheetLexerTokenType.DeclarationEnd:
+
+                        // Don't eat the token, so that it can be seen by ReadStream.
+                        // Encountering this token means the style sheet is malformed, but we want to handle it gracefully.
 
                         exitLoop = true;
 
                         break;
 
                 }
-
-                // Consume the token unless it is a DeclarationEnd token, so it can be seen by ReadStream.
-                // Encountering this token means the style sheet is malformed, but we want to handle it gracefully.
-
-                if (token.Type != StyleSheetLexerTokenType.DeclarationEnd)
-                    lexer.Read(out _);
 
             }
 
@@ -238,7 +266,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         break;
 
                     default:
-                        throw new UnexpectedTokenException(token.Type.ToString());
+                        throw new UnexpectedTokenException($"Unexpected token: {token.Type}.");
 
                 }
 
