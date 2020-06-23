@@ -174,6 +174,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                     case ';':
                     case ')':
+                    case '}':
 
                         // We've reached the end of the property or set of function arguments.
 

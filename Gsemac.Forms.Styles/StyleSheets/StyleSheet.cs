@@ -171,23 +171,38 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             bool exitLoop = false;
 
-            while (!exitLoop && !lexer.EndOfStream && lexer.Read(out IStyleSheetLexerToken token)) {
+            while (!exitLoop && !lexer.EndOfStream) {
+
+                IStyleSheetLexerToken token = lexer.Peek();
 
                 switch (token.Type) {
 
                     case StyleSheetLexerTokenType.Value:
+
                         values.Add(new StyleObject(token.Value));
+
                         break;
 
                     case StyleSheetLexerTokenType.Function:
+
                         values.Add(ReadFunction(lexer, token.Value));
+
                         break;
 
                     case StyleSheetLexerTokenType.PropertyEnd:
+                    case StyleSheetLexerTokenType.DeclarationEnd:
+
                         exitLoop = true;
+
                         break;
 
                 }
+
+                // Consume the token unless it is a DeclarationEnd token, so it can be seen by ReadStream.
+                // Encountering this token means the style sheet is malformed, but we want to handle it gracefully.
+
+                if (token.Type != StyleSheetLexerTokenType.DeclarationEnd)
+                    lexer.Read(out _);
 
             }
 
