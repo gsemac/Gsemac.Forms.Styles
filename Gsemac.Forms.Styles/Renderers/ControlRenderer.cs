@@ -18,6 +18,15 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         }
 
+        public override void InitializeControl(Control control) {
+
+            IControlRenderer renderer = GetRenderer(control);
+
+            if (renderer != null)
+                renderer.InitializeControl(control);
+
+        }
+
         // Private members
 
         private IControlRenderer GetRenderer(Control control) {

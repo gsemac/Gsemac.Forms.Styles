@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Utilities;
+﻿using Gsemac.Forms.Extensions;
+using Gsemac.Forms.Utilities;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
@@ -36,6 +37,9 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             }
 
+            if (control.ContextMenuStrip != null)
+                ClearStyles(control.ContextMenuStrip, options);
+
             control.Invalidate();
 
         }
@@ -46,19 +50,11 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         protected class ControlInfo {
 
+            // Public members
+
             public event ResetControlHandler ResetControl;
 
-            public ControlStyles Styles { get; set; }
-            public DrawMode DrawMode { get; set; }
-            public BorderStyle BorderStyle { get; set; }
-            public FlatStyle FlatStyle { get; set; }
-            public Color ForeColor { get; set; }
-            public Color BackColor { get; set; }
-            public bool UseVisualStyleBackColor { get; set; }
-            public Point? Location { get; set; }
-            public int? Width { get; set; }
-            public int? Height { get; set; }
-
+            public IControlState ControlState { get; set; }
             public bool ParentDraw { get; set; } = false;
 
             public void DoResetControl(Control control) {
@@ -95,28 +91,11 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             RemoveControlInfo(control);
 
-            ControlInfo info = new ControlInfo();
+            // Only store visual properties for Forms to avoid resizing them when the style is cleared.
 
-            // Store the control's initial styles so they can be restored in the future.
-
-            info.Styles = ControlUtilities.GetStyles(control);
-
-            if (TryGetDrawMode(control, out DrawMode drawMode))
-                info.DrawMode = drawMode;
-
-            if (TryGetBorderStyle(control, out BorderStyle borderStyle))
-                info.BorderStyle = borderStyle;
-
-            if (TryGetFlatStyle(control, out FlatStyle flatStyle))
-                info.FlatStyle = flatStyle;
-
-            info.ForeColor = control.ForeColor;
-            info.BackColor = control.BackColor;
-
-            // This property is important for restoring the visual style of controls like Buttons and TabPages.
-
-            if (TryGetUseVisualStyleBackColor(control, out bool useVisualStyleBackColor))
-                info.UseVisualStyleBackColor = useVisualStyleBackColor;
+            ControlInfo info = new ControlInfo() {
+                ControlState = control.Save(control is Form ? ControlStateOptions.StoreVisualProperties : ControlStateOptions.Default)
+            };
 
             control.ControlAdded += ControlAddedEventHandler;
 
@@ -138,25 +117,7 @@ namespace Gsemac.Forms.Styles.Applicators {
                 // Only disable styles that the control didn't have originally.
                 // Controls like Panel and TabPage will have UserPaint enabled by default, and it should not be disabled.
 
-                ControlUtilities.SetStyles(control, info.Styles);
-
-                TrySetDrawMode(control, info.DrawMode);
-                TrySetBorderStyle(control, info.BorderStyle);
-                TrySetFlatStyle(control, info.FlatStyle);
-
-                control.ForeColor = info.ForeColor;
-                control.BackColor = info.BackColor;
-
-                if (info.Location.HasValue)
-                    control.Location = info.Location.Value;
-
-                if (info.Width.HasValue)
-                    control.Width = info.Width.Value;
-
-                if (info.Height.HasValue)
-                    control.Height = info.Height.Value;
-
-                TrySetUseVisualStyleBackColor(control, info.UseVisualStyleBackColor);
+                control.Restore(info.ControlState);
 
                 controlInfo.Remove(control);
 
@@ -204,159 +165,6 @@ namespace Gsemac.Forms.Styles.Applicators {
             }
 
             control.Invalidate();
-
-        }
-
-        private bool TryGetDrawMode(Control control, out DrawMode value) {
-
-            PropertyInfo property = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
-
-            if (property != null) {
-
-                value = (DrawMode)property.GetValue(control, null);
-
-                return true;
-
-            }
-            else {
-
-                value = DrawMode.Normal;
-
-                return false;
-
-            }
-
-        }
-        private bool TrySetDrawMode(Control control, DrawMode value) {
-
-            PropertyInfo property = control.GetType().GetProperty("DrawMode", BindingFlags.Public | BindingFlags.Instance);
-
-            if (property != null) {
-
-                property.SetValue(control, value, null);
-
-                return true;
-
-            }
-            else {
-
-                return false;
-
-            }
-
-        }
-        private bool TryGetBorderStyle(Control control, out BorderStyle value) {
-
-            PropertyInfo property = control.GetType().GetProperty("BorderStyle", BindingFlags.Public | BindingFlags.Instance);
-
-            if (property != null) {
-
-                value = (BorderStyle)property.GetValue(control, null);
-
-                return true;
-
-            }
-            else {
-
-                value = BorderStyle.None;
-
-                return false;
-
-            }
-
-        }
-        private bool TrySetBorderStyle(Control control, BorderStyle value) {
-
-            PropertyInfo property = control.GetType().GetProperty("BorderStyle", BindingFlags.Public | BindingFlags.Instance);
-
-            if (property != null) {
-
-                property.SetValue(control, value, null);
-
-                return true;
-
-            }
-            else {
-
-                return false;
-
-            }
-
-        }
-        private bool TryGetFlatStyle(Control control, out FlatStyle value) {
-
-            PropertyInfo property = control.GetType().GetProperty("FlatStyle", BindingFlags.Public | BindingFlags.Instance);
-
-            if (property != null) {
-
-                value = (FlatStyle)property.GetValue(control, null);
-
-                return true;
-
-            }
-            else {
-
-                value = FlatStyle.Standard;
-
-                return false;
-
-            }
-
-        }
-        private bool TrySetFlatStyle(Control control, FlatStyle value) {
-
-            PropertyInfo property = control.GetType().GetProperty("FlatStyle", BindingFlags.Public | BindingFlags.Instance);
-
-            if (property != null) {
-
-                property.SetValue(control, value, null);
-
-                return true;
-
-            }
-            else {
-
-                return false;
-
-            }
-
-        }
-        private bool TryGetUseVisualStyleBackColor(Control control, out bool value) {
-
-            PropertyInfo property = control.GetType().GetProperty("UseVisualStyleBackColor", BindingFlags.Public | BindingFlags.Instance);
-
-            if (property != null) {
-
-                value = (bool)property.GetValue(control, null);
-
-                return true;
-
-            }
-            else {
-
-                value = true;
-
-                return false;
-
-            }
-
-        }
-        private bool TrySetUseVisualStyleBackColor(Control control, bool value) {
-
-            PropertyInfo property = control.GetType().GetProperty("UseVisualStyleBackColor", BindingFlags.Public | BindingFlags.Instance);
-
-            if (property != null) {
-
-                property.SetValue(control, value, null);
-
-                return true;
-
-            }
-            else {
-
-                return false;
-
-            }
 
         }
 

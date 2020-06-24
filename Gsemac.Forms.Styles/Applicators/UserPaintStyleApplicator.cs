@@ -105,7 +105,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                 case ToolStrip toolStrip:
 
-                    ApplyStyles(toolStrip, info);
+                    ApplyStyles(toolStrip);
 
                     break;
 
@@ -262,10 +262,6 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             info.ResetControl += (c) => {
 
-                control.EnableHeadersVisualStyles = true;
-
-                ControlUtilities.SetDoubleBuffered(control, false);
-
                 control.RowPrePaint -= renderer.RowPrePaint;
                 control.RowPostPaint -= renderer.RowPostPaint;
                 control.CellPainting -= renderer.CellPainting;
@@ -323,11 +319,6 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             info.ResetControl += (c) => {
 
-                control.OwnerDraw = ownerDraw;
-                control.GridLines = gridLines;
-
-                ControlUtilities.SetDoubleBuffered(control, false);
-
                 control.DrawColumnHeader -= renderer.DrawColumnHeader;
                 control.DrawItem -= renderer.DrawItem;
                 control.DrawSubItem -= renderer.DrawSubItem;
@@ -372,12 +363,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             }
 
-            info.Location = control.Location;
-            info.Width = control.Width;
-            info.Height = control.Height;
-
             control.BorderStyle = System.Windows.Forms.BorderStyle.None;
-
             control.Location = new Point(control.Location.X + 2, control.Location.Y + 2);
             control.Width -= 3;
 
@@ -387,25 +373,12 @@ namespace Gsemac.Forms.Styles.Applicators {
             // ResizeRedraw needs to be set to true to prevent smearing.
             // https://stackoverflow.com/a/39419274/5383169
 
-            TryGetResizeRedraw(control, out bool oldResetRedraw);
-
             TrySetResizeRedraw(control, true);
-
-            info.ResetControl += (c) => {
-
-                TrySetResizeRedraw(control, oldResetRedraw);
-
-            };
 
         }
         private void ApplyStyles(RichTextBox control, ControlInfo info) {
 
             control.BorderStyle = System.Windows.Forms.BorderStyle.None;
-
-            info.Location = control.Location;
-            info.Width = control.Width;
-            info.Height = control.Height;
-
             control.Location = new Point(control.Location.X + 3, control.Location.Y + 3);
             control.Width -= 6;
             control.Height -= 6;
@@ -423,12 +396,7 @@ namespace Gsemac.Forms.Styles.Applicators {
             // Set up properties for the TextBox.
             // Borderless TextBoxes don't have the same offset/size as regular TextBoxes, so we need to adjust it.
 
-            info.Location = control.Location;
-            info.Width = control.Width;
-            info.Height = control.Height;
-
             control.BorderStyle = System.Windows.Forms.BorderStyle.None;
-
             control.Location = new Point(control.Location.X + 3, control.Location.Y + 4);
             control.Width -= 6;
 
@@ -436,17 +404,9 @@ namespace Gsemac.Forms.Styles.Applicators {
                 control.Height -= 6;
 
         }
-        private void ApplyStyles(ToolStrip control, ControlInfo info) {
-
-            System.Windows.Forms.ToolStripRenderer originalRenderer = control.Renderer;
+        private void ApplyStyles(ToolStrip control) {
 
             control.Renderer = new Renderers.ToolStripRenderer(StyleSheet, styleRenderer);
-
-            info.ResetControl += (c) => {
-
-                (c as ToolStrip).Renderer = originalRenderer;
-
-            };
 
         }
 
