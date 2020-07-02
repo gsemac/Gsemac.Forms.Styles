@@ -49,7 +49,7 @@
     <Compile Include="Extensions\StyleRendererExtensions.cs" />
     <Compile Include="Extensions\StyleSheetExtensions.cs" />
     <Compile Include="Renderers\CheckBoxRenderer.cs" />
-    <Compile Include="Renderers\ComboBoxControlRenderer.cs" />
+    <Compile Include="Renderers\ComboBoxRenderer.cs" />
     <Compile Include="Renderers\ControlRendererBase.cs" />
     <Compile Include="Renderers\DataGridViewRenderer.cs" />
     <Compile Include="Renderers\GroupBoxRenderer.cs" />
@@ -68,6 +68,7 @@
     <Compile Include="Renderers\StyleRenderer.cs" />
     <Compile Include="Renderers\TextBoxRenderer.cs" />
     <Compile Include="Renderers\ToolStripRenderer.cs" />
+    <Compile Include="Renderers\TreeViewRenderer.cs" />
     <Compile Include="Renderers\UpDownButtonsRenderer.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />
     <Compile Include="StyleSheets\BackgroundImageProperty.cs" />

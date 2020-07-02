@@ -285,7 +285,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             IRuleset result = null;
 
-            if (useCache) {
+            // Only use the cache if inheriting styles is enabled.
+            // This is because the value of "inherit" isn't part of the node's key, so if we inherit later, we'll get the non-inherited ruleset from the cache.
+            // This could be fixed by having the value of "inherit" factor into the node's key in some way.
+
+            if (useCache && inherit) {
 
                 result = GetRulesetFromCache(node, inherit);
 

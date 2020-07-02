@@ -1,8 +1,5 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators {
@@ -21,7 +18,7 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
 
         protected override bool HasStyles(Control control) {
-
+           
             return StyleSheet.GetRuleset(new ControlNode(control), false).Any();
 
         }

@@ -87,7 +87,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                 case Panel panel:
 
-                    ApplyStyles(panel, info);
+                    ApplyStyles(panel);
 
                     break;
 
@@ -109,7 +109,15 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                     break;
 
+                case TreeView treeView:
+
+                    ApplyStyles(treeView, info);
+
+                    break;
+
             }
+
+            controlRenderer.InitializeControl(control);
 
             if (info.ParentDraw) {
 
@@ -271,8 +279,6 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             };
 
-            renderer.InitializeControl(control);
-
         }
         private void ApplyStyles(ListBox control, ControlInfo info) {
 
@@ -325,8 +331,6 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             };
 
-            renderer.InitializeControl(control);
-
         }
         private void ApplyStyles(NumericUpDown control, ControlInfo info) {
 
@@ -368,7 +372,7 @@ namespace Gsemac.Forms.Styles.Applicators {
             control.Width -= 3;
 
         }
-        private void ApplyStyles(Panel control, ControlInfo info) {
+        private void ApplyStyles(Panel control) {
 
             // ResizeRedraw needs to be set to true to prevent smearing.
             // https://stackoverflow.com/a/39419274/5383169
@@ -409,27 +413,16 @@ namespace Gsemac.Forms.Styles.Applicators {
             control.Renderer = new Renderers.ToolStripRenderer(StyleSheet, styleRenderer);
 
         }
+        private void ApplyStyles(TreeView control, ControlInfo info) {
 
-        private bool TryGetResizeRedraw(Control control, out bool value) {
+            info.ParentDraw = true;
 
-            PropertyInfo drawModeProperty = control.GetType().GetProperty("ResizeRedraw", BindingFlags.NonPublic | BindingFlags.Instance);
+            ControlUtilities.SetDoubleBuffered(control, true);
 
-            if (drawModeProperty != null) {
-
-                value = (bool)drawModeProperty.GetValue(control, null);
-
-                return true;
-
-            }
-            else {
-
-                value = false;
-
-                return false;
-
-            }
+            control.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 
         }
+
         private bool TrySetResizeRedraw(Control control, bool value) {
 
             PropertyInfo drawModeProperty = control.GetType().GetProperty("ResizeRedraw", BindingFlags.NonPublic | BindingFlags.Instance);

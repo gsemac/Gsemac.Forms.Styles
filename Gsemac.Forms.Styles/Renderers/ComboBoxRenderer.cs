@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
 
-    public class ComboBoxControlRenderer :
+    public class ComboBoxRenderer :
         ControlRendererBase<ComboBox> {
 
         // Public members

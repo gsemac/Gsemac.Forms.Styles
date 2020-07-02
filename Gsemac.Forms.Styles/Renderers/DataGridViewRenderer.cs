@@ -20,16 +20,6 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         }
 
-        public override void InitializeControl(DataGridView dataGridView) {
-
-            INode controlNode = new ControlNode(dataGridView);
-            IRuleset ruleset = styleSheet.GetRuleset(controlNode);
-
-            if (ruleset.BackgroundColor.HasValue())
-                dataGridView.BackgroundColor = ruleset.BackgroundColor.Value;
-
-        }
-
         public void RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e) { }
         public void RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e) { }
         public void CellPainting(object sender, DataGridViewCellPaintingEventArgs e) {
@@ -132,6 +122,9 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             IRuleset ruleset = args.StyleSheet.GetRuleset(control);
             Rectangle borderRect = RenderUtilities.GetOuterBorderRectangle(control, ruleset);
+
+            if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor)
+                control.BackgroundColor = ruleset.BackgroundColor.Value;
 
             args.PaintBackground(borderRect);
             args.PaintBorder(borderRect);

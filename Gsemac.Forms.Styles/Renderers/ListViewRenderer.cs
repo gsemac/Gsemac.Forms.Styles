@@ -22,16 +22,6 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         }
 
-        public override void InitializeControl(ListView listView) {
-
-            INode listViewNode = new ControlNode(listView);
-            IRuleset ruleset = styleSheet.GetRuleset(listViewNode);
-
-            if (ruleset.BackgroundColor.HasValue())
-                listView.BackColor = ruleset.BackgroundColor.Value;
-
-        }
-
         public void DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e) {
 
             IRuleset ruleset = GetColumnHeaderRuleset(e.Header);
@@ -103,6 +93,9 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             IRuleset ruleset = args.StyleSheet.GetRuleset(control);
             Rectangle borderRect = RenderUtilities.GetOuterBorderRectangle(control, ruleset);
+
+            if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor)
+                control.BackColor = ruleset.BackgroundColor.Value;
 
             args.PaintBackground(borderRect);
             args.PaintBorder(borderRect);

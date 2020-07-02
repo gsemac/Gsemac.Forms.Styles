@@ -96,7 +96,7 @@
     background-color: rgb(81, 81, 81);
 }
 
-.listbox, .listview, .datagridview {
+.listbox, .listview, .datagridview, .treeview {
     background-color: #45494a;
     border-color: #5c5c5c;
     border-width: 1px;

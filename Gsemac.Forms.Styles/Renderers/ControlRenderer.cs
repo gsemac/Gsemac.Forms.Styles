@@ -40,7 +40,7 @@ namespace Gsemac.Forms.Styles.Renderers {
                     return new CheckBoxRenderer();
 
                 case ComboBox _:
-                    return new ComboBoxControlRenderer();
+                    return new ComboBoxRenderer();
 
                 case DataGridView _:
                     return new DataGridViewRenderer(null, null);
@@ -77,6 +77,9 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                 case TextBox _:
                     return new TextBoxRenderer();
+
+                case TreeView _:
+                    return new TreeViewRenderer();
 
                 default:
 
