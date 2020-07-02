@@ -148,6 +148,33 @@
     border-radius: 2px;
 }
 
+.treeview {
+    background-color: white;
+    border-color: grey;
+    border-width: 1px;
+}
+
+.treeview .node {
+    color: black;
+}
+
+.treeview .node:checked {
+    background-color: rgb(51, 153, 255);
+    color: white;
+}
+
+.treeview .button {
+    border-color: rgb(145, 145, 145);
+    border-width: 1px;
+    background-image: linear-gradient(to bottom, rgb(250, 251, 251), rgb(227, 227, 227));
+    border-radius: 1px;
+    color: rgb(75, 99, 167);
+}
+
+.treeview .lines {
+    color: rgb(109,109,109);
+}
+
 .CheckBox {
     color: white;
 }

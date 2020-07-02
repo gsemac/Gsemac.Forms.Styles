@@ -421,6 +421,16 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             control.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 
+            control.AfterExpand += InvalidateEventHandler;
+            control.AfterCollapse += InvalidateEventHandler;
+
+            info.ResetControl += (c) => {
+
+                control.AfterExpand -= InvalidateEventHandler;
+                control.AfterCollapse -= InvalidateEventHandler;
+
+            };
+
         }
 
         private bool TrySetResizeRedraw(Control control, bool value) {
