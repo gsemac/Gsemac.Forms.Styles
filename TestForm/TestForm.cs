@@ -47,7 +47,7 @@ namespace ThemeTesting {
 
         private IStyleSheet LoadStyleSheet() {
 
-            return StyleSheet.FromFile("TestStyle.css");
+            return StyleSheet.FromFile("DarkUI.css");
 
         }
         private void ClearStyles() {

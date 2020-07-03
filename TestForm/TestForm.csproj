@@ -82,7 +82,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestStyle.css" />
+    <Content Include="DarkUI.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

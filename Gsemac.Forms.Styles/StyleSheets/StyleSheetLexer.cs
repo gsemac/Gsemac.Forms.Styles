@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -409,11 +410,15 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             StringBuilder valueBuilder = new StringBuilder();
 
+            // Read the opening colon.
+
+            valueBuilder.Append((char)Reader.Read());
+
             while (!Reader.EndOfStream) {
 
                 char nextChar = (char)Reader.Peek();
 
-                if (char.IsWhiteSpace(nextChar) || (nextChar != ':' && reservedChars.Contains(nextChar)))
+                if (char.IsWhiteSpace(nextChar) || reservedChars.Contains(nextChar))
                     break;
 
                 valueBuilder.Append((char)Reader.Read());

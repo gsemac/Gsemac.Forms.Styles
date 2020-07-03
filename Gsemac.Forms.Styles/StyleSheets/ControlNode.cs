@@ -49,6 +49,13 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                     break;
 
+                case RadioButton radioButton:
+
+                    if (radioButton.Checked)
+                        States |= NodeStates.Checked;
+
+                    break;
+
             }
 
             if (control.Focused)

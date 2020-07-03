@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using Gsemac.Forms.Styles.StyleSheets;
+using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
 
@@ -100,6 +101,10 @@ namespace Gsemac.Forms.Styles.Renderers {
         }
 
         private void PaintGenericControl(ControlPaintArgs e) {
+
+            IRuleset ruleset = e.StyleSheet.GetRuleset(new ControlNode(e.Control));
+
+            RenderUtilities.ApplyColorProperties(e.Control, ruleset);
 
             e.PaintBackground();
             e.PaintBorder();

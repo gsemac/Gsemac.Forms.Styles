@@ -61,6 +61,12 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             switch (control) {
 
+                case CheckBox checkBox:
+
+                    ApplyStyles(checkBox, info);
+
+                    break;
+
                 case DataGridView dataGridView:
 
                     ApplyStyles(dataGridView, info);
@@ -280,6 +286,20 @@ namespace Gsemac.Forms.Styles.Applicators {
             };
 
         }
+        private void ApplyStyles(CheckBox control, ControlInfo info) {
+
+            // By default, the entire check region is not invalidated when the control is clicked (?).
+            // When the check has a border that changes when :active, the top border is not overwritten without this.
+
+            control.MouseDown += InvalidateEventHandler;
+
+            info.ResetControl += (c) => {
+
+                control.MouseDown -= InvalidateEventHandler;
+
+            };
+
+        }
         private void ApplyStyles(ListBox control, ControlInfo info) {
 
             info.ParentDraw = true;
@@ -416,8 +436,6 @@ namespace Gsemac.Forms.Styles.Applicators {
         private void ApplyStyles(TreeView control, ControlInfo info) {
 
             info.ParentDraw = true;
-
-            ControlUtilities.SetDoubleBuffered(control, true);
 
             control.DrawMode = TreeViewDrawMode.OwnerDrawAll;
 

@@ -76,9 +76,9 @@ namespace Gsemac.Forms.Styles.Renderers {
         private readonly IStyleSheet styleSheet;
         private readonly IStyleRenderer styleRenderer;
 
-        INode GetToolStripItemNode(ToolStripItem item) {
+        private UserNode GetToolStripItemNode(ToolStripItem item) {
 
-            UserNode node = new UserNode(string.Empty, new[] { "ToolStripItem" });
+            UserNode node = new UserNode(string.Empty, new[] { "ToolStripItem", "Item" });
 
             if (item.Selected)
                 node.AddState(NodeStates.Hover);
@@ -89,33 +89,45 @@ namespace Gsemac.Forms.Styles.Renderers {
             return node;
 
         }
-        INode GetToolStripDropDownNode() {
+        private UserNode GetToolStripDropDownNode() {
 
             UserNode node = new UserNode(string.Empty, new[] { "ToolStripDropDown" });
 
             return node;
 
         }
-        INode getToolStripSeparatorNode() {
+        private UserNode getToolStripSeparatorNode() {
 
-            UserNode node = new UserNode(string.Empty, new[] { "ToolStripSeparator" });
+            UserNode node = new UserNode(string.Empty, new[] { "ToolStripSeparator", "ToolStripItem", "Item" });
 
             return node;
 
         }
-        IRuleset GetToolStripItemRuleset(ToolStrip parent, ToolStripItem item) {
+        private IRuleset GetToolStripItemRuleset(ToolStrip parent, ToolStripItem item) {
 
-            return styleSheet.GetRuleset(GetToolStripItemNode(item), parent);
+            UserNode node = GetToolStripItemNode(item);
+
+            node.SetParent(new ControlNode(parent));
+
+            return styleSheet.GetRuleset(node);
 
         }
-        IRuleset GetToolStripDropDownRuleset(ToolStrip parent) {
+        private IRuleset GetToolStripDropDownRuleset(ToolStrip parent) {
 
-            return styleSheet.GetRuleset(GetToolStripDropDownNode(), parent);
+            UserNode node = GetToolStripDropDownNode();
+
+            node.SetParent(new ControlNode(parent));
+
+            return styleSheet.GetRuleset(node);
 
         }
-        IRuleset GetToolStripSeparatorRuleset(ToolStrip parent) {
+        private IRuleset GetToolStripSeparatorRuleset(ToolStrip parent) {
 
-            return styleSheet.GetRuleset(getToolStripSeparatorNode(), parent);
+            UserNode node = getToolStripSeparatorNode();
+
+            node.SetParent(new ControlNode(parent));
+
+            return styleSheet.GetRuleset(node);
 
         }
 

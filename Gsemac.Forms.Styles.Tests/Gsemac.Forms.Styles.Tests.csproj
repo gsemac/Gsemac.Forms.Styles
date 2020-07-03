@@ -50,6 +50,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StyleSheets\SelectorTests.cs" />
     <Compile Include="StyleSheets\StyleSheetTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

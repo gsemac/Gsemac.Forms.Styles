@@ -38,7 +38,7 @@ namespace Gsemac.Forms.Styles.Renderers {
         }
         public static void ApplyColorProperties(Control control, IRuleset ruleset) {
 
-            if (ruleset.BackgroundColor.HasValue()) {
+            if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor) {
 
                 Color backColor = ruleset.BackgroundColor.Value;
 
@@ -49,7 +49,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             }
 
-            if (ruleset.Color.HasValue())
+            if (ruleset.Color.HasValue() && ruleset.Color.Value != control.ForeColor)
                 control.ForeColor = ruleset.Color.Value;
 
         }

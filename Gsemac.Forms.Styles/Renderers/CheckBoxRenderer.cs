@@ -1,12 +1,9 @@
 ﻿using Gsemac.Forms.Styles.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Utilities;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
