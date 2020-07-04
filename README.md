@@ -29,3 +29,5 @@ An example project `TestForm` is included for demonstration. It has an example s
 Only a limited subset of CSS properties and selectors have been implemented at this point. Implemented properties include `BackgroundColor`, `BackgroundImage`, `Border`, `BorderColor`, `BorderRadius`, `BorderStyle`, `BorderWidth`, `Color`, and `Opacity`.
 
 Supported controls and components include `Button`, `CheckBox`, `ComboBox`, `DataGridView`, `Label`, `ListBox`, `ListView`, `NumericUpDown`, `PictureBox`, `ProgressBar`, `RadioButton`, `RichTextBox`, `TabControl`, `TextBox`, `ToolStrip`, `ToolTip`, and `TreeView`.
+
+This project is currently very much a WIP, so some things might not be working perfectly just yet.
