@@ -61,6 +61,12 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             switch (control) {
 
+                case Button button:
+
+                    ApplyStyles(button, info);
+
+                    break;
+
                 case CheckBox checkBox:
 
                     ApplyStyles(checkBox, info);
@@ -94,6 +100,12 @@ namespace Gsemac.Forms.Styles.Applicators {
                 case Panel panel:
 
                     ApplyStyles(panel);
+
+                    break;
+
+                case RadioButton radioButton:
+
+                    ApplyStyles(radioButton, info);
 
                     break;
 
@@ -131,6 +143,11 @@ namespace Gsemac.Forms.Styles.Applicators {
                 AddTextBoxInvalidateParentHandlers(control, info);
 
             }
+
+        }
+        protected override void OnClearStyles(Control control) {
+
+            ControlNode.ClearControlState(control);
 
         }
 
@@ -188,6 +205,36 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             if (sender is Control control && control.Parent != null)
                 control.Parent.Invalidate();
+
+        }
+        private void SpacebarKeyDownEventHandler(object sender, KeyEventArgs e) {
+
+            if (sender is Control control) {
+
+                if (e.KeyCode == Keys.Space) {
+
+                    ControlNode.AddControlState(control, NodeStates.Active);
+
+                    control.Invalidate();
+
+                }
+
+            }
+
+        }
+        private void SpacebarKeyUpEventHandler(object sender, KeyEventArgs e) {
+
+            if (sender is Control control) {
+
+                if (e.KeyCode == Keys.Space) {
+
+                    ControlNode.RemoveControlState(sender as Control, NodeStates.Active);
+
+                    control.Invalidate();
+
+                }
+
+            }
 
         }
 
@@ -255,7 +302,43 @@ namespace Gsemac.Forms.Styles.Applicators {
             };
 
         }
+        private void AddSpacebarEventHandlers(Control control, ControlInfo info) {
 
+            control.KeyDown += SpacebarKeyDownEventHandler;
+            control.KeyUp += SpacebarKeyUpEventHandler;
+
+            info.ResetControl += (c) => {
+
+                control.KeyDown -= SpacebarKeyDownEventHandler;
+                control.KeyUp -= SpacebarKeyUpEventHandler;
+
+            };
+
+        }
+
+        private void ApplyStyles(Button control, ControlInfo info) {
+
+            AddSpacebarEventHandlers(control, info);
+
+        }
+        private void ApplyStyles(CheckBox control, ControlInfo info) {
+
+            // By default, the entire check region is not invalidated when the control is activated (?).
+            // When the check has a border that changes when :active, the top border is not overwritten without this.
+
+            control.MouseDown += InvalidateEventHandler;
+            control.KeyDown += InvalidateEventHandler;
+
+            info.ResetControl += (c) => {
+
+                control.MouseDown -= InvalidateEventHandler;
+                control.KeyDown -= InvalidateEventHandler;
+
+            };
+
+            AddSpacebarEventHandlers(control, info);
+
+        }
         private void ApplyStyles(DataGridView control, ControlInfo info) {
 
             info.ParentDraw = true;
@@ -286,20 +369,6 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                 control.Scroll -= InvalidateEventHandler;
                 control.LostFocus -= InvalidateEventHandler;
-
-            };
-
-        }
-        private void ApplyStyles(CheckBox control, ControlInfo info) {
-
-            // By default, the entire check region is not invalidated when the control is clicked (?).
-            // When the check has a border that changes when :active, the top border is not overwritten without this.
-
-            control.MouseDown += InvalidateEventHandler;
-
-            info.ResetControl += (c) => {
-
-                control.MouseDown -= InvalidateEventHandler;
 
             };
 
@@ -421,6 +490,11 @@ namespace Gsemac.Forms.Styles.Applicators {
             // https://stackoverflow.com/a/39419274/5383169
 
             TrySetResizeRedraw(control, true);
+
+        }
+        private void ApplyStyles(RadioButton control, ControlInfo info) {
+
+            AddSpacebarEventHandlers(control, info);
 
         }
         private void ApplyStyles(RichTextBox control, ControlInfo info) {

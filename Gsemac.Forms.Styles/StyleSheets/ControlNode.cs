@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
@@ -69,6 +68,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             else
                 States |= NodeStates.Disabled;
 
+            if (stateHints.TryGetValue(control, out NodeStates stateHint))
+                States |= stateHint;
+
         }
 
         public override int GetHashCode() {
@@ -83,7 +85,48 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
+        public static void AddControlState(Control control, NodeStates stateHint) {
+
+            if (stateHints.TryGetValue(control, out NodeStates currentStateHint)) {
+
+                currentStateHint |= stateHint;
+
+                stateHints[control] = currentStateHint;
+
+            }
+            else {
+
+                control.Disposed += (sender, e) => {
+
+                    ClearControlState(control);
+
+                };
+
+                stateHints[control] = stateHint;
+
+            }
+
+        }
+        public static void RemoveControlState(Control control, NodeStates stateHint) {
+
+            if (stateHints.TryGetValue(control, out NodeStates currentStateHint)) {
+
+                currentStateHint &= ~stateHint;
+
+                stateHints[control] = currentStateHint;
+
+            }
+
+        }
+        public static void ClearControlState(Control control) {
+
+            stateHints.Remove(control);
+
+        }
+
         // Private members
+
+        private static readonly IDictionary<Control, NodeStates> stateHints = new Dictionary<Control, NodeStates>();
 
         private readonly Control control;
 
