@@ -40,6 +40,9 @@ namespace Gsemac.Forms.Styles.Renderers {
                 else if (isRowHeader)
                     cellNode.AddClass("RowHeader");
 
+                if (isColumnHeader || isRowHeader)
+                    cellNode.AddClass("Header");
+
                 if (e.RowIndex % 2 == 0)
                     cellNode.AddClass("Even");
                 else

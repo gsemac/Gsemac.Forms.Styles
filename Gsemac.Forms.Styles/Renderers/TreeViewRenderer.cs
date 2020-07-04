@@ -54,6 +54,11 @@ namespace Gsemac.Forms.Styles.Renderers {
             if (node.IsSelected)
                 treeNodeNode.AddState(NodeStates.Checked);
 
+            if (node.Index % 2 == 0)
+                treeNodeNode.AddClass("Even");
+            else
+                treeNodeNode.AddClass("Odd");
+
             IRuleset treeNodeRuleset = args.StyleSheet.GetRuleset(treeNodeNode);
 
             Rectangle nodeRect = node.Bounds;

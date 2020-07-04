@@ -25,21 +25,21 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestForm));
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Node1");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Node0", new System.Windows.Forms.TreeNode[] {
+            treeNode7});
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Node3");
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Node5");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Node4", new System.Windows.Forms.TreeNode[] {
+            treeNode10});
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Node2", new System.Windows.Forms.TreeNode[] {
+            treeNode9,
+            treeNode11});
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "item 1",
             "item2"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("item 2");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("item 3");
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Node1");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Node0", new System.Windows.Forms.TreeNode[] {
-            treeNode1});
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Node3");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Node5");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Node4", new System.Windows.Forms.TreeNode[] {
-            treeNode4});
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Node2", new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode5});
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("item 2");
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("item 3");
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.button3 = new System.Windows.Forms.Button();
@@ -60,6 +60,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -85,7 +86,10 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.item1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.item2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -98,6 +102,7 @@
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -117,6 +122,10 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.numericUpDown3);
+            this.tabPage1.Controls.Add(this.textBox5);
+            this.tabPage1.Controls.Add(this.button5);
+            this.tabPage1.Controls.Add(this.checkBox2);
             this.tabPage1.Controls.Add(this.button3);
             this.tabPage1.Controls.Add(this.pictureBox1);
             this.tabPage1.Controls.Add(this.richTextBox1);
@@ -143,7 +152,7 @@
             // 
             this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
             this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button3.Location = new System.Drawing.Point(10, 233);
+            this.button3.Location = new System.Drawing.Point(6, 310);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(140, 29);
             this.button3.TabIndex = 19;
@@ -232,12 +241,13 @@
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(10, 208);
+            this.radioButton2.Enabled = false;
+            this.radioButton2.Location = new System.Drawing.Point(10, 285);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(94, 19);
+            this.radioButton2.Size = new System.Drawing.Size(139, 19);
             this.radioButton2.TabIndex = 11;
             this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "radioButton2";
+            this.radioButton2.Text = "Disabled radio button";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // comboBox3
@@ -256,7 +266,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(10, 84);
+            this.textBox2.Location = new System.Drawing.Point(10, 130);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -265,7 +275,7 @@
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(10, 47);
+            this.numericUpDown1.Location = new System.Drawing.Point(10, 74);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(140, 23);
             this.numericUpDown1.TabIndex = 7;
@@ -273,12 +283,12 @@
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(10, 183);
+            this.radioButton1.Location = new System.Drawing.Point(10, 260);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(94, 19);
+            this.radioButton1.Size = new System.Drawing.Size(136, 19);
             this.radioButton1.TabIndex = 6;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "radioButton1";
+            this.radioButton1.Text = "Enabled radio button";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // listBox1
@@ -300,14 +310,15 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(140, 23);
             this.textBox1.TabIndex = 2;
+            this.textBox1.Text = "Enabled text box";
             // 
             // checkBox1
             // 
-            this.checkBox1.Location = new System.Drawing.Point(10, 158);
+            this.checkBox1.Location = new System.Drawing.Point(10, 204);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(82, 19);
+            this.checkBox1.Size = new System.Drawing.Size(135, 19);
             this.checkBox1.TabIndex = 1;
-            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.Text = "Enabled check box";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
@@ -322,6 +333,28 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Tab with a longer title";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(6, 183);
+            this.treeView1.Name = "treeView1";
+            treeNode7.Name = "Node1";
+            treeNode7.Text = "Node1";
+            treeNode8.Name = "Node0";
+            treeNode8.Text = "Node0";
+            treeNode9.Name = "Node3";
+            treeNode9.Text = "Node3";
+            treeNode10.Name = "Node5";
+            treeNode10.Text = "Node5";
+            treeNode11.Name = "Node4";
+            treeNode11.Text = "Node4";
+            treeNode12.Name = "Node2";
+            treeNode12.Text = "Node2";
+            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode8,
+            treeNode12});
+            this.treeView1.Size = new System.Drawing.Size(189, 197);
+            this.treeView1.TabIndex = 2;
             // 
             // dataGridView1
             // 
@@ -353,9 +386,9 @@
             this.listView1.FullRowSelect = true;
             this.listView1.HideSelection = false;
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3});
+            listViewItem4,
+            listViewItem5,
+            listViewItem6});
             this.listView1.Location = new System.Drawing.Point(6, 7);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(189, 170);
@@ -527,27 +560,42 @@
             this.item2ToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.item2ToolStripMenuItem.Text = "item 2";
             // 
-            // treeView1
+            // checkBox2
             // 
-            this.treeView1.Location = new System.Drawing.Point(6, 183);
-            this.treeView1.Name = "treeView1";
-            treeNode1.Name = "Node1";
-            treeNode1.Text = "Node1";
-            treeNode2.Name = "Node0";
-            treeNode2.Text = "Node0";
-            treeNode3.Name = "Node3";
-            treeNode3.Text = "Node3";
-            treeNode4.Name = "Node5";
-            treeNode4.Text = "Node5";
-            treeNode5.Name = "Node4";
-            treeNode5.Text = "Node4";
-            treeNode6.Name = "Node2";
-            treeNode6.Text = "Node2";
-            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2,
-            treeNode6});
-            this.treeView1.Size = new System.Drawing.Size(189, 197);
-            this.treeView1.TabIndex = 2;
+            this.checkBox2.Enabled = false;
+            this.checkBox2.Location = new System.Drawing.Point(10, 225);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(136, 29);
+            this.checkBox2.TabIndex = 20;
+            this.checkBox2.Text = "Disabled check box";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
+            // button5
+            // 
+            this.button5.Enabled = false;
+            this.button5.Location = new System.Drawing.Point(6, 345);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(140, 27);
+            this.button5.TabIndex = 8;
+            this.button5.Text = "Disabled button";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // textBox5
+            // 
+            this.textBox5.Enabled = false;
+            this.textBox5.Location = new System.Drawing.Point(10, 40);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(140, 23);
+            this.textBox5.TabIndex = 21;
+            this.textBox5.Text = "Disabled text box";
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Enabled = false;
+            this.numericUpDown3.Location = new System.Drawing.Point(10, 102);
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(140, 23);
+            this.numericUpDown3.TabIndex = 22;
             // 
             // TestForm
             // 
@@ -583,6 +631,7 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -636,5 +685,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.CheckBox checkBox2;
     }
 }

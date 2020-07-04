@@ -26,7 +26,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             IRuleset ruleset = GetColumnHeaderRuleset(e.Header);
 
-            int textPadding = 4;
+            const int textPadding = 4;
 
             Rectangle headerRect = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Header.Width, e.Bounds.Height);
             Rectangle textRect = new Rectangle(headerRect.X + textPadding, headerRect.Y, headerRect.Width - textPadding * 2, headerRect.Height);
@@ -47,6 +47,11 @@ namespace Gsemac.Forms.Styles.Renderers {
             node.AddClass("ListViewItem");
             node.AddClass("Item");
             node.SetParent(new ControlNode(e.Item.ListView));
+
+            if (e.Item.Index % 2 == 0)
+                node.AddClass("Even");
+            else
+                node.AddClass("Odd");
 
             if (e.Item.Selected)
                 node.AddState(NodeStates.Checked);
@@ -113,8 +118,15 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             UserNode node = new UserNode(bounds, columnHeader.ListView.PointToClient(Cursor.Position));
 
-            node.SetClass("ColumnHeader");
             node.SetParent(new ControlNode(columnHeader.ListView));
+
+            node.AddClass("ColumnHeader");
+            node.AddClass("Header");
+
+            if (columnHeader.Index % 2 == 0)
+                node.AddClass("Even");
+            else
+                node.AddClass("Odd");
 
             return node;
 

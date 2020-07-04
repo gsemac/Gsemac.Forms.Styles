@@ -272,7 +272,10 @@ namespace Gsemac.Forms.Styles.Applicators {
             control.CellPainting += renderer.CellPainting;
             control.Paint += renderer.Paint;
 
+            // Only the current cell is invalidated when the DataGridView loses focus, so we need to invalidate the entire thing to ensure all cells appear correctly.
+
             control.Scroll += InvalidateEventHandler;
+            control.LostFocus += InvalidateEventHandler;
 
             info.ResetControl += (c) => {
 
@@ -282,6 +285,7 @@ namespace Gsemac.Forms.Styles.Applicators {
                 control.Paint -= renderer.Paint;
 
                 control.Scroll -= InvalidateEventHandler;
+                control.LostFocus -= InvalidateEventHandler;
 
             };
 
@@ -361,27 +365,46 @@ namespace Gsemac.Forms.Styles.Applicators {
                 .Where(c => c.GetType().FullName.Equals("System.Windows.Forms.UpDownBase+UpDownButtons"))
                 .FirstOrDefault();
 
+            Control textBoxControl = control.Controls.Cast<Control>()
+                .Where(c => c is TextBox)
+                .FirstOrDefault();
+
             if (upDownButtonsControl != null) {
 
                 void invalidateUpDownButtons(object sender, EventArgs e) {
+
                     upDownButtonsControl.Invalidate();
+
                 }
 
-                control.MouseMove += invalidateUpDownButtons;
                 control.MouseEnter += invalidateUpDownButtons;
                 control.MouseLeave += invalidateUpDownButtons;
                 control.MouseDown += invalidateUpDownButtons;
                 control.GotFocus += invalidateUpDownButtons;
                 control.LostFocus += invalidateUpDownButtons;
 
+                if (textBoxControl != null) {
+
+                    // This is necessary so that the UpDownButtons are invalidated when the cursor moves from the button into the TextBox.
+                    // Using MouseEnter does not seem to work, presumably because the cursor is already in the TextBox when over the UpDownButtons.
+
+                    textBoxControl.MouseMove += invalidateUpDownButtons;
+
+                }
+
                 info.ResetControl += (c) => {
 
-                    control.MouseMove -= invalidateUpDownButtons;
                     control.MouseEnter -= invalidateUpDownButtons;
                     control.MouseLeave -= invalidateUpDownButtons;
                     control.MouseDown -= invalidateUpDownButtons;
                     control.GotFocus -= invalidateUpDownButtons;
                     control.LostFocus -= invalidateUpDownButtons;
+
+                    if (textBoxControl != null) {
+
+                        textBoxControl.MouseMove -= invalidateUpDownButtons;
+
+                    }
 
                 };
 

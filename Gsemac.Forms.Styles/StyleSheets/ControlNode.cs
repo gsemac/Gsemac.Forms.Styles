@@ -64,7 +64,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (control.ContainsFocus)
                 States |= NodeStates.FocusWithin;
 
-            if (!control.Enabled)
+            if (control.Enabled)
+                States |= NodeStates.Enabled;
+            else
                 States |= NodeStates.Disabled;
 
         }
