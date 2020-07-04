@@ -25,23 +25,27 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestForm));
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Node1");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Node0", new System.Windows.Forms.TreeNode[] {
-            treeNode7});
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Node3");
-            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Node5");
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Node4", new System.Windows.Forms.TreeNode[] {
-            treeNode10});
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Node2", new System.Windows.Forms.TreeNode[] {
-            treeNode9,
-            treeNode11});
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("Node1");
+            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("Node0", new System.Windows.Forms.TreeNode[] {
+            treeNode19});
+            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("Node3");
+            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("Node5");
+            System.Windows.Forms.TreeNode treeNode23 = new System.Windows.Forms.TreeNode("Node4", new System.Windows.Forms.TreeNode[] {
+            treeNode22});
+            System.Windows.Forms.TreeNode treeNode24 = new System.Windows.Forms.TreeNode("Node2", new System.Windows.Forms.TreeNode[] {
+            treeNode21,
+            treeNode23});
+            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem(new string[] {
             "item 1",
             "item2"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("item 2");
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("item 3");
+            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem("item 2");
+            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem("item 3");
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.button3 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
@@ -86,12 +90,10 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.item1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.item2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -102,7 +104,6 @@
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -147,6 +148,43 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Basic controls";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Enabled = false;
+            this.numericUpDown3.Location = new System.Drawing.Point(10, 102);
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(140, 23);
+            this.numericUpDown3.TabIndex = 22;
+            // 
+            // textBox5
+            // 
+            this.textBox5.Enabled = false;
+            this.textBox5.Location = new System.Drawing.Point(10, 40);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(140, 23);
+            this.textBox5.TabIndex = 21;
+            this.textBox5.Text = "Disabled text box";
+            // 
+            // button5
+            // 
+            this.button5.Enabled = false;
+            this.button5.Location = new System.Drawing.Point(6, 345);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(140, 27);
+            this.button5.TabIndex = 8;
+            this.button5.Text = "Disabled button";
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.Enabled = false;
+            this.checkBox2.Location = new System.Drawing.Point(10, 225);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(136, 29);
+            this.checkBox2.TabIndex = 20;
+            this.checkBox2.Text = "Disabled check box";
+            this.checkBox2.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
@@ -338,21 +376,21 @@
             // 
             this.treeView1.Location = new System.Drawing.Point(6, 183);
             this.treeView1.Name = "treeView1";
-            treeNode7.Name = "Node1";
-            treeNode7.Text = "Node1";
-            treeNode8.Name = "Node0";
-            treeNode8.Text = "Node0";
-            treeNode9.Name = "Node3";
-            treeNode9.Text = "Node3";
-            treeNode10.Name = "Node5";
-            treeNode10.Text = "Node5";
-            treeNode11.Name = "Node4";
-            treeNode11.Text = "Node4";
-            treeNode12.Name = "Node2";
-            treeNode12.Text = "Node2";
+            treeNode19.Name = "Node1";
+            treeNode19.Text = "Node1";
+            treeNode20.Name = "Node0";
+            treeNode20.Text = "Node0";
+            treeNode21.Name = "Node3";
+            treeNode21.Text = "Node3";
+            treeNode22.Name = "Node5";
+            treeNode22.Text = "Node5";
+            treeNode23.Name = "Node4";
+            treeNode23.Text = "Node4";
+            treeNode24.Name = "Node2";
+            treeNode24.Text = "Node2";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode8,
-            treeNode12});
+            treeNode20,
+            treeNode24});
             this.treeView1.Size = new System.Drawing.Size(189, 197);
             this.treeView1.TabIndex = 2;
             // 
@@ -386,9 +424,9 @@
             this.listView1.FullRowSelect = true;
             this.listView1.HideSelection = false;
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem4,
-            listViewItem5,
-            listViewItem6});
+            listViewItem10,
+            listViewItem11,
+            listViewItem12});
             this.listView1.Location = new System.Drawing.Point(6, 7);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(189, 170);
@@ -420,6 +458,7 @@
             this.button1.Size = new System.Drawing.Size(161, 27);
             this.button1.TabIndex = 1;
             this.button1.Text = "Apply styles (UserPaint)";
+            this.toolTip1.SetToolTip(this.button1, "This is a tool tip");
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
@@ -430,6 +469,7 @@
             this.button2.Size = new System.Drawing.Size(161, 27);
             this.button2.TabIndex = 2;
             this.button2.Text = "Apply styles (Properties)";
+            this.toolTip1.SetToolTip(this.button2, "This is another tool tip.\r\n\r\nThis one spans more than one line.");
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
@@ -560,43 +600,6 @@
             this.item2ToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.item2ToolStripMenuItem.Text = "item 2";
             // 
-            // checkBox2
-            // 
-            this.checkBox2.Enabled = false;
-            this.checkBox2.Location = new System.Drawing.Point(10, 225);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(136, 29);
-            this.checkBox2.TabIndex = 20;
-            this.checkBox2.Text = "Disabled check box";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // button5
-            // 
-            this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(6, 345);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(140, 27);
-            this.button5.TabIndex = 8;
-            this.button5.Text = "Disabled button";
-            this.button5.UseVisualStyleBackColor = true;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Enabled = false;
-            this.textBox5.Location = new System.Drawing.Point(10, 40);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(140, 23);
-            this.textBox5.TabIndex = 21;
-            this.textBox5.Text = "Disabled text box";
-            // 
-            // numericUpDown3
-            // 
-            this.numericUpDown3.Enabled = false;
-            this.numericUpDown3.Location = new System.Drawing.Point(10, 102);
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(140, 23);
-            this.numericUpDown3.TabIndex = 22;
-            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -617,6 +620,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -631,7 +635,6 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -689,5 +692,6 @@
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

@@ -57,6 +57,7 @@
     <Compile Include="Renderers\IDataGridViewRenderer.cs" />
     <Compile Include="Renderers\IListViewRenderer.cs" />
     <Compile Include="Renderers\IStyleRenderer.cs" />
+    <Compile Include="Renderers\IToolTipRenderer.cs" />
     <Compile Include="Renderers\ListBoxRenderer.cs" />
     <Compile Include="Renderers\ListViewRenderer.cs" />
     <Compile Include="Renderers\NumericUpDownRenderer.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Renderers\StyleRenderer.cs" />
     <Compile Include="Renderers\TextBoxRenderer.cs" />
     <Compile Include="Renderers\ToolStripRenderer.cs" />
+    <Compile Include="Renderers\ToolTipRenderer.cs" />
     <Compile Include="Renderers\TreeViewRenderer.cs" />
     <Compile Include="Renderers\UpDownButtonsRenderer.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />

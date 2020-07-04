@@ -2,6 +2,7 @@
 using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Gsemac.Forms.Styles.Applicators {
             base(styleSheet) {
 
             controlRenderer = new ControlRenderer();
+            toolTipRenderer = new ToolTipRenderer(styleSheet, styleRenderer);
 
         }
 
@@ -137,6 +139,24 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             controlRenderer.InitializeControl(control);
 
+            foreach (ToolTip toolTip in GetToolTips(control)) {
+
+                bool toolTipOriginalOwnerDraw = toolTip.OwnerDraw;
+
+                toolTip.OwnerDraw = true;
+
+                toolTip.Draw += toolTipRenderer.Draw;
+
+                info.ResetControl += (c) => {
+
+                    toolTip.OwnerDraw = toolTipOriginalOwnerDraw;
+
+                    toolTip.Draw -= toolTipRenderer.Draw;
+
+                };
+
+            }
+
             if (info.ParentDraw) {
 
                 AddParentPaintHandler(control, info);
@@ -154,6 +174,7 @@ namespace Gsemac.Forms.Styles.Applicators {
         // Private members
 
         private readonly ControlRenderer controlRenderer;
+        private readonly IToolTipRenderer toolTipRenderer;
         private readonly IStyleRenderer styleRenderer = new StyleRenderer();
 
         private bool ControlSupportsUserPaint(Control control) {
@@ -564,6 +585,11 @@ namespace Gsemac.Forms.Styles.Applicators {
                 return false;
 
             }
+
+        }
+        private IEnumerable<ToolTip> GetToolTips(Control control) {
+
+            return ControlUtilities.GetComponents(control).OfType<ToolTip>();
 
         }
 
