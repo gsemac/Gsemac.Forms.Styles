@@ -73,6 +73,7 @@
     <Compile Include="Renderers\TreeViewRenderer.cs" />
     <Compile Include="Renderers\UpDownButtonsRenderer.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />
+    <Compile Include="Applicators\StyleApplicatorMessageFilter.cs" />
     <Compile Include="StyleSheets\BackgroundImageProperty.cs" />
     <Compile Include="StyleSheets\BorderProperty.cs" />
     <Compile Include="StyleSheets\BorderRadiusProperty.cs" />

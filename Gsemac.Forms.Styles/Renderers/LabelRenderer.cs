@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using Gsemac.Forms.Utilities;
+using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
     public class LabelRenderer :
@@ -8,7 +9,9 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public override void PaintControl(Label control, ControlPaintArgs e) {
 
-            e.PaintControl();
+            e.PaintBackground();
+            e.PaintText(ControlUtilities.GetTextFormatFlags(control.TextAlign) | TextFormatFlags.WordBreak);
+            e.PaintBorder();
 
         }
 
