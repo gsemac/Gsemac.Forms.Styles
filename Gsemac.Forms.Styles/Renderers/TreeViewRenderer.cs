@@ -10,6 +10,8 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
+        public bool PaintNodeButtonContent { get; set; } = true;
+
         public override void InitializeControl(TreeView control) {
 
             control.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -90,23 +92,27 @@ namespace Gsemac.Forms.Styles.Renderers {
             args.StyleRenderer.PaintBackground(args.Graphics, buttonRect, nodeButtonRuleset);
             args.StyleRenderer.PaintBorder(args.Graphics, buttonRect, nodeButtonRuleset);
 
-            Color detailColor = nodeButtonRuleset.Color?.Value ?? Color.Black;
+            if (PaintNodeButtonContent) {
 
-            buttonRect.Inflate(-detailPadding, -detailPadding);
+                Color detailColor = nodeButtonRuleset.Color?.Value ?? Color.Black;
 
-            int x = buttonRect.X;
-            int y = buttonRect.Y;
-            int x2 = x + buttonRect.Width - 1;
-            int y2 = y + buttonRect.Height - 1;
-            int midX = x + (buttonRect.Width / 2);
-            int midY = y + (buttonRect.Height / 2);
+                buttonRect.Inflate(-detailPadding, -detailPadding);
 
-            using (Pen detailPen = new Pen(detailColor)) {
+                int x = buttonRect.X;
+                int y = buttonRect.Y;
+                int x2 = x + buttonRect.Width - 1;
+                int y2 = y + buttonRect.Height - 1;
+                int midX = x + (buttonRect.Width / 2);
+                int midY = y + (buttonRect.Height / 2);
 
-                args.Graphics.DrawLine(detailPen, new Point(x, midY), new Point(x2, midY));
+                using (Pen detailPen = new Pen(detailColor)) {
 
-                if (!node.IsExpanded)
-                    args.Graphics.DrawLine(detailPen, new Point(midX, y), new Point(midX, y2));
+                    args.Graphics.DrawLine(detailPen, new Point(x, midY), new Point(x2, midY));
+
+                    if (!node.IsExpanded)
+                        args.Graphics.DrawLine(detailPen, new Point(midX, y), new Point(midX, y2));
+
+                }
 
             }
 

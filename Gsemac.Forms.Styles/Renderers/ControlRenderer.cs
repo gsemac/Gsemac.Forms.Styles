@@ -1,4 +1,6 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets;
+using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -28,9 +30,20 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         }
 
+        public void SetRenderer<T>(IControlRenderer<T> renderer) where T : Control {
+
+            customRenderers[typeof(T)] = renderer;
+
+        }
+
         // Private members
 
+        private readonly IDictionary<Type, IControlRenderer> customRenderers = new Dictionary<Type, IControlRenderer>();
+
         private IControlRenderer GetRenderer(Control control) {
+
+            if (customRenderers.TryGetValue(control.GetType(), out IControlRenderer customRenderer))
+                return customRenderer;
 
             switch (control) {
 
