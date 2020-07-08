@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Applicators {
 
     public class PropertyStyleApplicator :
-        StyleSheetStyleApplicatorBase {
+        StyleApplicatorBase {
 
         // Public members
 

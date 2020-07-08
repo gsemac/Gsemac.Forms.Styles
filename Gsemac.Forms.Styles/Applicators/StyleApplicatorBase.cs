@@ -1,8 +1,7 @@
 ﻿using Gsemac.Forms.Extensions;
-using Gsemac.Forms.Utilities;
+using Gsemac.Forms.Styles.StyleSheets;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Reflection;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators {
@@ -48,6 +47,8 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         protected delegate void ResetControlHandler(Control control);
 
+        protected IStyleSheet StyleSheet { get; }
+
         protected class ControlInfo {
 
             // Public members
@@ -65,9 +66,15 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
+        protected StyleApplicatorBase(IStyleSheet styleSheet) {
+
+            StyleSheet = styleSheet;
+
+        }
+
         protected virtual bool HasStyles(Control control) {
 
-            return true;
+            return StyleSheet.GetRuleset(new ControlNode(control), false).Any();
 
         }
 

@@ -12,14 +12,17 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Applicators {
 
     public class UserPaintStyleApplicator :
-        StyleSheetStyleApplicatorBase {
+        StyleApplicatorBase {
 
         // Public members
 
         public UserPaintStyleApplicator(IStyleSheet styleSheet) :
+            this(styleSheet, new ControlRenderer()) {
+        }
+        public UserPaintStyleApplicator(IStyleSheet styleSheet, IControlRenderer controlRenderer) :
             base(styleSheet) {
 
-            controlRenderer = new ControlRenderer();
+            this.controlRenderer = controlRenderer;
             toolTipRenderer = new ToolTipRenderer(styleSheet, styleRenderer);
 
         }
@@ -173,7 +176,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         // Private members
 
-        private readonly ControlRenderer controlRenderer;
+        private readonly IControlRenderer controlRenderer;
         private readonly IToolTipRenderer toolTipRenderer;
         private readonly IStyleRenderer styleRenderer = new StyleRenderer();
 
