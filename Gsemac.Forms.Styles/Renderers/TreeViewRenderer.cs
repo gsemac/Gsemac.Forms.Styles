@@ -1,5 +1,6 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -26,8 +27,10 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                 PaintLines(control, control.Nodes, args);
 
+                int visibleIndex = 0;
+
                 foreach (TreeNode node in control.Nodes)
-                    PaintNodeAndChildNodes(control, node, args);
+                    visibleIndex = PaintNodeAndChildNodes(control, node, visibleIndex, args);
 
             }
 
@@ -47,7 +50,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             args.PaintBorder(borderRect);
 
         }
-        protected virtual void PaintNodeContent(TreeView control, TreeNode node, ControlPaintArgs args) {
+        protected virtual void PaintNodeContent(TreeView control, TreeNode node, int visibleIndex, ControlPaintArgs args) {
 
             UserNode treeNodeNode = new UserNode(string.Empty, new[] { "Node", "TreeViewNode" });
 
@@ -56,7 +59,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             if (node.IsSelected)
                 treeNodeNode.AddState(NodeStates.Checked);
 
-            if (node.Index % 2 == 0)
+            if (visibleIndex % 2 == 0)
                 treeNodeNode.AddClass("Even");
             else
                 treeNodeNode.AddClass("Odd");
@@ -64,12 +67,15 @@ namespace Gsemac.Forms.Styles.Renderers {
             IRuleset treeNodeRuleset = args.StyleSheet.GetRuleset(treeNodeNode);
 
             Rectangle nodeRect = node.Bounds;
-            Rectangle drawRect = new Rectangle(nodeRect.X + 2, nodeRect.Y + 1, nodeRect.Width, nodeRect.Height - 1);
+            Rectangle backgroundRect = new Rectangle(nodeRect.X + 2, nodeRect.Y + 1, nodeRect.Width, nodeRect.Height - 1);
             Rectangle textRect = new Rectangle(nodeRect.X + 1, nodeRect.Y + 3, nodeRect.Width - 1, nodeRect.Height - 3);
 
-            args.StyleRenderer.PaintBackground(args.Graphics, drawRect, treeNodeRuleset);
-            args.StyleRenderer.PaintText(args.Graphics, textRect, treeNodeRuleset, node.Text, control.Font, TextFormatFlags.Default);
-            args.StyleRenderer.PaintBorder(args.Graphics, drawRect, treeNodeRuleset);
+            if (control.FullRowSelect)
+                backgroundRect = new Rectangle(0, backgroundRect.Y, control.Width, backgroundRect.Height);
+
+            args.StyleRenderer.PaintBackground(args.Graphics, backgroundRect, treeNodeRuleset);
+            args.StyleRenderer.PaintText(args.Graphics, textRect, treeNodeRuleset, node.Text, control.Font, TextFormatFlags.Default | TextFormatFlags.VerticalCenter);
+            args.StyleRenderer.PaintBorder(args.Graphics, backgroundRect, treeNodeRuleset);
 
         }
         protected virtual void PaintNodeButton(TreeView control, TreeNode node, ControlPaintArgs args) {
@@ -120,7 +126,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Private members
 
-        private void PaintNode(TreeView control, TreeNode node, ControlPaintArgs args) {
+        private void PaintNode(TreeView control, TreeNode node, int visibleIndex, ControlPaintArgs args) {
 
             // Check that the node bounds size is valid to avoid drawing in the top-left corner.
             // https://stackoverflow.com/questions/50815725/treeview-owner-draw-anomaly
@@ -129,22 +135,31 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                 // Paint the node content.
 
-                PaintNodeContent(control, node, args);
+                PaintNodeContent(control, node, visibleIndex, args);
 
                 // Paint the expand/collapse button to the left of the node.
 
-                if (node.Nodes.Count > 0)
+                if (control.ShowPlusMinus && node.Nodes.Count > 0)
                     PaintNodeButton(control, node, args);
 
             }
 
         }
-        private void PaintNodeAndChildNodes(TreeView control, TreeNode node, ControlPaintArgs args) {
+        private int PaintNodeAndChildNodes(TreeView control, TreeNode node, int visibleIndex, ControlPaintArgs args) {
 
-            PaintNode(control, node, args);
+            if (node.IsVisible) {
+   
+                PaintNode(control, node, visibleIndex++, args);
 
-            foreach (TreeNode childNode in node.Nodes)
-                PaintNodeAndChildNodes(control, childNode, args);
+                foreach (TreeNode childNode in node.Nodes) {
+
+                    visibleIndex = PaintNodeAndChildNodes(control, childNode, visibleIndex, args);
+
+                }
+
+            }
+
+            return visibleIndex;
 
         }
         private void PaintLines(TreeView control, TreeNodeCollection nodes, ControlPaintArgs args) {
