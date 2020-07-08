@@ -1,4 +1,4 @@
-﻿using Gsemac.Forms.Styles.Extensions;
+﻿using Gsemac.Forms.Styles.Renderers.Extensions;
 using Gsemac.Forms.Utilities;
 using System.Drawing;
 using System.Windows.Forms;

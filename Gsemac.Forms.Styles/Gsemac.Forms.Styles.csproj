@@ -45,9 +45,9 @@
   <ItemGroup>
     <Compile Include="Applicators\IStyleApplicator.cs" />
     <Compile Include="Applicators\StyleSheetStyleApplicatorBase.cs" />
-    <Compile Include="Extensions\RulesetExtensions.cs" />
-    <Compile Include="Extensions\StyleRendererExtensions.cs" />
-    <Compile Include="Extensions\StyleSheetExtensions.cs" />
+    <Compile Include="StyleSheets\Extensions\RulesetExtensions.cs" />
+    <Compile Include="Renderers\Extensions\StyleRendererExtensions.cs" />
+    <Compile Include="StyleSheets\Extensions\StyleSheetExtensions.cs" />
     <Compile Include="Renderers\CheckBoxRenderer.cs" />
     <Compile Include="Renderers\ComboBoxRenderer.cs" />
     <Compile Include="Renderers\ControlRendererBase.cs" />
@@ -72,7 +72,7 @@
     <Compile Include="Renderers\ToolTipRenderer.cs" />
     <Compile Include="Renderers\TreeViewRenderer.cs" />
     <Compile Include="Renderers\UpDownButtonsRenderer.cs" />
-    <Compile Include="Extensions\PropertyExtensions.cs" />
+    <Compile Include="StyleSheets\Extensions\PropertyExtensions.cs" />
     <Compile Include="Applicators\StyleApplicatorMessageFilter.cs" />
     <Compile Include="StyleSheets\BackgroundImageProperty.cs" />
     <Compile Include="StyleSheets\BorderProperty.cs" />
@@ -114,7 +114,7 @@
     <Compile Include="Renderers\LabelRenderer.cs" />
     <Compile Include="Renderers\TabControlRenderer.cs" />
     <Compile Include="Applicators\UserPaintStyleApplicator.cs" />
-    <Compile Include="Extensions\GraphicsExtensions.cs" />
+    <Compile Include="Renderers\Extensions\GraphicsExtensions.cs" />
     <Compile Include="StyleSheets\INode.cs" />
     <Compile Include="StyleSheets\InvalidPropertyException.cs" />
     <Compile Include="StyleSheets\ISelector.cs" />

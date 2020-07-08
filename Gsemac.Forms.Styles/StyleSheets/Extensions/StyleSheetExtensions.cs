@@ -1,11 +1,6 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Extensions {
+namespace Gsemac.Forms.Styles.StyleSheets.Extensions {
 
     public static class StyleSheetExtensions {
 

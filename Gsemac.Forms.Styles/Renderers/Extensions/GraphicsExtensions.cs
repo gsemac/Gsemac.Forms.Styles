@@ -3,7 +3,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace Gsemac.Forms.Styles.Extensions {
+namespace Gsemac.Forms.Styles.Renderers.Extensions {
 
     internal enum TriangleOrientation {
         Up,
@@ -81,7 +81,7 @@ namespace Gsemac.Forms.Styles.Extensions {
             GraphicsPath path = new GraphicsPath();
 
             int halfX = bounds.Width / 2;
-            int halfY = bounds.Height / 2;
+            //int halfY = bounds.Height / 2;
 
             switch (orientation) {
 
@@ -181,8 +181,8 @@ namespace Gsemac.Forms.Styles.Extensions {
 
                 case ImageSizeMode.Center:
 
-                    x += (int)(((float)bounds.Width / 2) - ((float)w / 2));
-                    y += (int)(((float)bounds.Height / 2) - ((float)h / 2));
+                    x += (int)((float)bounds.Width / 2 - (float)w / 2);
+                    y += (int)((float)bounds.Height / 2 - (float)h / 2);
 
                     break;
 
@@ -193,8 +193,8 @@ namespace Gsemac.Forms.Styles.Extensions {
                     w = (int)(w * scaleFactor);
                     h = (int)(h * scaleFactor);
 
-                    x += (int)(((float)bounds.Width / 2) - ((float)w / 2));
-                    y += (int)(((float)bounds.Height / 2) - ((float)h / 2));
+                    x += (int)((float)bounds.Width / 2 - (float)w / 2);
+                    y += (int)((float)bounds.Height / 2 - (float)h / 2);
 
                     break;
 
@@ -211,12 +211,12 @@ namespace Gsemac.Forms.Styles.Extensions {
             if (alignment == ContentAlignment.TopRight || alignment == ContentAlignment.MiddleRight || alignment == ContentAlignment.BottomRight)
                 x = bounds.X + bounds.Width - image.Width;
             else if (alignment == ContentAlignment.TopCenter || alignment == ContentAlignment.MiddleCenter || alignment == ContentAlignment.BottomCenter)
-                x = bounds.X + (int)(((float)bounds.Width / 2) - ((float)image.Width / 2));
+                x = bounds.X + (int)((float)bounds.Width / 2 - (float)image.Width / 2);
 
             if (alignment == ContentAlignment.BottomLeft || alignment == ContentAlignment.BottomCenter || alignment == ContentAlignment.BottomRight)
                 y = bounds.Y + bounds.Height - image.Height;
             else if (alignment == ContentAlignment.MiddleLeft || alignment == ContentAlignment.MiddleCenter || alignment == ContentAlignment.MiddleRight)
-                y = bounds.Y + (int)(((float)bounds.Height / 2) - ((float)image.Height / 2));
+                y = bounds.Y + (int)((float)bounds.Height / 2 - (float)image.Height / 2);
 
             graphics.DrawImage(image, x, y, image.Width, image.Height);
         }

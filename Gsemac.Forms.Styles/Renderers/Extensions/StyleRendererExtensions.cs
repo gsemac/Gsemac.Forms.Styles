@@ -1,9 +1,8 @@
-﻿using Gsemac.Forms.Styles.Renderers;
-using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.StyleSheets;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace Gsemac.Forms.Styles.Extensions {
+namespace Gsemac.Forms.Styles.Renderers.Extensions {
 
     public static class StyleRendererExtensions {
 
