@@ -11,8 +11,8 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         // Public members
 
-        public PropertyStyleApplicator(IStyleSheet styleSheet) :
-            base(styleSheet) {
+        public PropertyStyleApplicator(IStyleSheet styleSheet, StyleApplicatorOptions options = StyleApplicatorOptions.Default) :
+            base(styleSheet, options) {
         }
 
         // Protected members

@@ -13,6 +13,9 @@ namespace Gsemac.Forms.Styles.Applicators {
 
     public interface IStyleApplicator {
 
+        void ApplyStyles();
+        void ClearStyles();
+
         void ApplyStyles(Control control, ControlStyleOptions options = ControlStyleOptions.Default);
         void ClearStyles(Control control, ControlStyleOptions options = ControlStyleOptions.Default);
 

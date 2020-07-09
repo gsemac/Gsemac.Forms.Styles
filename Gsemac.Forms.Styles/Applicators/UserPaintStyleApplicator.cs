@@ -16,11 +16,11 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         // Public members
 
-        public UserPaintStyleApplicator(IStyleSheet styleSheet) :
-            this(styleSheet, new ControlRenderer()) {
+        public UserPaintStyleApplicator(IStyleSheet styleSheet, StyleApplicatorOptions options = StyleApplicatorOptions.Default) :
+            this(styleSheet, new ControlRenderer(), options) {
         }
-        public UserPaintStyleApplicator(IStyleSheet styleSheet, IControlRenderer controlRenderer) :
-            base(styleSheet) {
+        public UserPaintStyleApplicator(IStyleSheet styleSheet, IControlRenderer controlRenderer, StyleApplicatorOptions options = StyleApplicatorOptions.Default) :
+            base(styleSheet, options) {
 
             this.controlRenderer = controlRenderer;
             toolTipRenderer = new ToolTipRenderer(styleSheet, styleRenderer);

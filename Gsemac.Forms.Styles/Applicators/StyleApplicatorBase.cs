@@ -11,7 +11,41 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         // Public members
 
+        public void ApplyStyles() {
+
+            MakeThisCurrentApplicator();
+
+            foreach (Form form in Application.OpenForms.Cast<Form>())
+                ApplyStyles(form);
+
+            if (options.HasFlag(StyleApplicatorOptions.AddMessageFilter)) {
+
+                messageFilter = new StyleApplicatorMessageFilter(this);
+
+                Application.AddMessageFilter(messageFilter);
+
+            }
+
+        }
+
+        public void ClearStyles() {
+
+            if (options.HasFlag(StyleApplicatorOptions.AddMessageFilter) && messageFilter != null)
+                Application.RemoveMessageFilter(messageFilter);
+
+            foreach (Form form in Application.OpenForms.Cast<Form>())
+                ClearStyles(form);
+
+            if (options.HasFlag(StyleApplicatorOptions.DisposeStyleSheet) && StyleSheet != null)
+                StyleSheet.Dispose();
+
+            ClearCurrentApplicator();
+
+        }
+
         public void ApplyStyles(Control control, ControlStyleOptions options = ControlStyleOptions.Default) {
+
+            MakeThisCurrentApplicator();
 
             // Save control info for all controls before applying styles, which prevents changes to inherited properties affecting what is saved.
             // This is relevant for the BackColor and ForeColor properties of child controls.
@@ -66,9 +100,10 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
-        protected StyleApplicatorBase(IStyleSheet styleSheet) {
+        protected StyleApplicatorBase(IStyleSheet styleSheet, StyleApplicatorOptions options = StyleApplicatorOptions.Default) {
 
             StyleSheet = styleSheet;
+            this.options = options;
 
         }
 
@@ -81,7 +116,7 @@ namespace Gsemac.Forms.Styles.Applicators {
         protected abstract void OnApplyStyles(Control control);
         protected virtual void OnClearStyles(Control control) { }
 
-        protected static ControlInfo GetControlInfo(Control control) {
+        protected ControlInfo GetControlInfo(Control control) {
 
             if (controlInfo.TryGetValue(control, out ControlInfo info))
                 return info;
@@ -92,7 +127,11 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         // Private members
 
-        private static readonly Dictionary<Control, ControlInfo> controlInfo = new Dictionary<Control, ControlInfo>();
+        private readonly StyleApplicatorOptions options = StyleApplicatorOptions.Default;
+        private readonly Dictionary<Control, ControlInfo> controlInfo = new Dictionary<Control, ControlInfo>();
+        private IMessageFilter messageFilter = null;
+
+        private static IStyleApplicator currentApplicator = null;
 
         private void AddControlInfo(Control control) {
 
@@ -191,6 +230,21 @@ namespace Gsemac.Forms.Styles.Applicators {
                 yield return childControl;
 
             }
+
+        }
+
+        private void MakeThisCurrentApplicator() {
+
+            if (currentApplicator != null && currentApplicator != this)
+                currentApplicator.ClearStyles();
+
+            currentApplicator = this;
+
+        }
+        private void ClearCurrentApplicator() {
+
+            if (currentApplicator == this)
+                currentApplicator = null;
 
         }
 
