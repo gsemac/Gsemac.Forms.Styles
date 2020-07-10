@@ -379,9 +379,10 @@ namespace Gsemac.Forms.Styles.Applicators {
             control.CellPainting += renderer.CellPainting;
             control.Paint += renderer.Paint;
 
-            // Only the current cell is invalidated when the DataGridView loses focus, so we need to invalidate the entire thing to ensure all cells appear correctly.
+            // Only the current cell is invalidated when the DataGridView gains/loses focus, so we need to invalidate the entire thing to ensure all cells appear correctly.
 
             control.Scroll += InvalidateEventHandler;
+            control.GotFocus += InvalidateEventHandler;
             control.LostFocus += InvalidateEventHandler;
 
             info.ResetControl += (c) => {
@@ -392,6 +393,7 @@ namespace Gsemac.Forms.Styles.Applicators {
                 control.Paint -= renderer.Paint;
 
                 control.Scroll -= InvalidateEventHandler;
+                control.GotFocus -= InvalidateEventHandler;
                 control.LostFocus -= InvalidateEventHandler;
 
             };
