@@ -155,4 +155,7 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>"$(MSBuildToolsPath)\msbuild.exe" "$(SolutionDir)Gsemac.Common\Gsemac.Common.sln" /p:Configuration=$(ConfigurationName) /verbosity:minimal /restore</PreBuildEvent>
+  </PropertyGroup>
 </Project>
