@@ -18,8 +18,13 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle clientRect = control.ClientRectangle;
             Rectangle borderRect = new Rectangle(clientRect.X - 3, clientRect.Y - 3, clientRect.Width + 6, clientRect.Height + 6);
 
-            if (ControlUtilities.GetVisibleScrollbars(control).HasFlag(ScrollBars.Vertical))
+            ScrollBars visibleScrollbars = ControlUtilities.GetVisibleScrollBars(control);
+
+            if (visibleScrollbars.HasFlag(ScrollBars.Vertical))
                 borderRect = new Rectangle(borderRect.X, borderRect.Y, borderRect.Width + SystemInformation.VerticalScrollBarWidth, borderRect.Height);
+
+            if (visibleScrollbars.HasFlag(ScrollBars.Horizontal))
+                borderRect = new Rectangle(borderRect.X, borderRect.Y, borderRect.Width, borderRect.Height + SystemInformation.HorizontalScrollBarHeight);
 
             args.PaintBackground(borderRect);
             args.PaintBorder(borderRect);

@@ -16,7 +16,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             Rectangle borderRect = RenderUtilities.GetOuterBorderRectangle(control, e.StyleSheet.GetRuleset(control));
 
-            if (ControlUtilities.GetVisibleScrollbars(control).HasFlag(ScrollBars.Vertical))
+            if (ControlUtilities.GetVisibleScrollBars(control).HasFlag(ScrollBars.Vertical))
                 borderRect = new Rectangle(borderRect.X, borderRect.Y, borderRect.Width + SystemInformation.VerticalScrollBarWidth, borderRect.Height);
 
             e.PaintBackground();
