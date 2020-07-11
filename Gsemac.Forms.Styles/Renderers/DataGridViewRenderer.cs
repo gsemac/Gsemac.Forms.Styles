@@ -14,6 +14,8 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Public members
 
+        public bool RespectNonDefaultCellColors { get; set; } = true;
+
         public DataGridViewRenderer(IStyleSheet styleSheet, IStyleRenderer styleRenderer) {
 
             this.styleSheet = styleSheet;
@@ -27,8 +29,9 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             if (sender is DataGridView dataGridView) {
 
-                bool isColumnHeader = e.RowIndex < 0;
-                bool isRowHeader = e.ColumnIndex < 0;
+                bool isColumnHeader = DataGridViewUtilities.IsColumnHeaderIndex(e.RowIndex);
+                bool isRowHeader = DataGridViewUtilities.IsRowHeaderIndex(e.ColumnIndex);
+                bool isHeader = isColumnHeader || isRowHeader;
                 bool isSelected = e.State.HasFlag(DataGridViewElementStates.Selected);
 
                 UserNode cellNode = new UserNode(e.CellBounds, dataGridView.PointToClient(Cursor.Position));
@@ -41,7 +44,7 @@ namespace Gsemac.Forms.Styles.Renderers {
                 else if (isRowHeader)
                     cellNode.AddClass("RowHeader");
 
-                if (isColumnHeader || isRowHeader)
+                if (isHeader)
                     cellNode.AddClass("Header");
 
                 if (e.RowIndex % 2 == 0)
@@ -54,34 +57,25 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                 IRuleset ruleset = styleSheet.GetRuleset(cellNode);
 
+                if (RespectNonDefaultCellColors)
+                    ruleset = SetNonDefaultCellColors(ruleset, dataGridView, e);
+
                 if (ruleset.Color.HasValue()) {
 
-                    if (isColumnHeader) {
-
-                        if (!isSelected && e.CellStyle.ForeColor == dataGridView.ColumnHeadersDefaultCellStyle.ForeColor)
-                            e.CellStyle.ForeColor = ruleset.Color.Value;
-                        else if (isSelected && e.CellStyle.SelectionForeColor == dataGridView.ColumnHeadersDefaultCellStyle.SelectionForeColor)
-                            e.CellStyle.SelectionForeColor = ruleset.Color.Value;
-
-                    }
-                    else if (isRowHeader) {
-
-                        if (!isSelected && e.CellStyle.ForeColor == dataGridView.RowHeadersDefaultCellStyle.ForeColor)
-                            e.CellStyle.ForeColor = ruleset.Color.Value;
-                        else if (isSelected && e.CellStyle.SelectionForeColor == dataGridView.RowHeadersDefaultCellStyle.SelectionForeColor)
-                            e.CellStyle.SelectionForeColor = ruleset.Color.Value;
-
-                    }
-                    else if (!isSelected && e.CellStyle.ForeColor == dataGridView.DefaultCellStyle.ForeColor) {
-
+                    if (isSelected)
+                        e.CellStyle.SelectionForeColor = ruleset.Color.Value;
+                    else
                         e.CellStyle.ForeColor = ruleset.Color.Value;
 
-                    }
-                    else if (isSelected && e.CellStyle.SelectionForeColor == dataGridView.DefaultCellStyle.SelectionForeColor) {
+                }
+                e.CellStyle.ForeColor = ruleset.Color.Value;
 
-                        e.CellStyle.SelectionForeColor = ruleset.Color.Value;
+                if (ruleset.BackgroundColor.HasValue()) {
 
-                    }
+                    if (isSelected)
+                        e.CellStyle.SelectionBackColor = ruleset.BackgroundColor.Value;
+                    else
+                        e.CellStyle.BackColor = ruleset.BackgroundColor.Value;
 
                 }
 
@@ -139,6 +133,27 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         private readonly IStyleSheet styleSheet;
         private readonly IStyleRenderer styleRenderer;
+
+        private IRuleset SetNonDefaultCellColors(IRuleset ruleset, DataGridView dataGridView, DataGridViewCellPaintingEventArgs e) {
+
+            IRuleset result = new Ruleset(ruleset);
+            DataGridViewCellStyle cellStyle = DataGridViewUtilities.GetDefaultCellStyle(dataGridView, e.RowIndex, e.ColumnIndex);
+
+            bool isSelected = e.State.HasFlag(DataGridViewElementStates.Selected);
+
+            if (!isSelected && e.CellStyle.ForeColor != cellStyle.ForeColor)
+                result.AddProperty(Property.Create(PropertyType.Color, e.CellStyle.ForeColor));
+            else if (isSelected && e.CellStyle.SelectionForeColor != cellStyle.SelectionForeColor)
+                result.AddProperty(Property.Create(PropertyType.Color, e.CellStyle.SelectionForeColor));
+
+            if (!isSelected && e.CellStyle.BackColor != cellStyle.BackColor)
+                result.AddProperty(Property.Create(PropertyType.BackgroundColor, e.CellStyle.BackColor));
+            else if (isSelected && e.CellStyle.SelectionBackColor != cellStyle.SelectionBackColor)
+                result.AddProperty(Property.Create(PropertyType.BackgroundColor, e.CellStyle.SelectionBackColor));
+
+            return result;
+
+        }
 
     }
 

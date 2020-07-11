@@ -10,6 +10,11 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public Ruleset() {
         }
+        public Ruleset(IRuleset other) {
+
+            AddProperties(other);
+
+        }
         public Ruleset(ISelector selector) :
             base(selector) {
         }
