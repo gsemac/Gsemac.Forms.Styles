@@ -1,5 +1,6 @@
 ﻿using Gsemac.Forms.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -33,8 +34,8 @@ namespace Gsemac.Forms.Styles.Applicators {
             if (options.HasFlag(StyleApplicatorOptions.AddMessageFilter) && messageFilter != null)
                 Application.RemoveMessageFilter(messageFilter);
 
-            foreach (Form form in Application.OpenForms.Cast<Form>())
-                ClearStyles(form);
+            foreach (Control control in controlInfo.Keys.ToArray())
+                ClearStyles(control, ControlStyleOptions.Default & ~ControlStyleOptions.Recursive);
 
             if (options.HasFlag(StyleApplicatorOptions.DisposeStyleSheet) && StyleSheet != null)
                 StyleSheet.Dispose();
@@ -144,9 +145,13 @@ namespace Gsemac.Forms.Styles.Applicators {
             };
 
             control.ControlAdded += ControlAddedEventHandler;
+            control.Disposed += ControlDisposedEventHandler;
 
             info.ResetControl += (c) => {
+
                 control.ControlAdded -= ControlAddedEventHandler;
+                control.Disposed -= ControlDisposedEventHandler;
+
             };
 
             controlInfo[control] = info;
@@ -217,6 +222,18 @@ namespace Gsemac.Forms.Styles.Applicators {
         private void ControlAddedEventHandler(object sender, ControlEventArgs e) {
 
             ApplyStyles(e.Control);
+
+        }
+        private void ControlDisposedEventHandler(object sender, EventArgs e) {
+
+            if (sender is Control control) {
+
+                // Just remove the control info instead of calling RemoveControlInfo.
+                // Because the control has been disposed, there is no need to restore its state.
+
+                controlInfo.Remove(control);
+
+            }
 
         }
 

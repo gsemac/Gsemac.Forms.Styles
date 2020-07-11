@@ -68,7 +68,6 @@ namespace Gsemac.Forms.Styles.Renderers {
                         e.CellStyle.ForeColor = ruleset.Color.Value;
 
                 }
-                e.CellStyle.ForeColor = ruleset.Color.Value;
 
                 if (ruleset.BackgroundColor.HasValue()) {
 

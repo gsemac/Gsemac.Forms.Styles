@@ -290,11 +290,15 @@ namespace Gsemac.Forms.Styles.Applicators {
 
                     }
 
-                    control.Parent.Paint += paintHandler;
+                    parentControl.Paint += paintHandler;
 
                     info.ResetControl += (c) => {
 
-                        control.Parent.Paint -= paintHandler;
+                        // It's important that we access the the parent control through a variable (parentControl) rather than directly (control.Parent).
+                        // This is because it's possible that the control's parent is no longer non-null.
+
+                        if (!parentControl.IsDisposed)
+                            parentControl.Paint -= paintHandler;
 
                     };
 
