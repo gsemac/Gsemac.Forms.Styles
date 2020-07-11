@@ -31,7 +31,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle headerRect = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Header.Width, e.Bounds.Height);
             Rectangle textRect = new Rectangle(headerRect.X + textPadding, headerRect.Y, headerRect.Width - textPadding * 2, headerRect.Height);
 
-            TextFormatFlags textFormatFlags = ControlUtilities.GetTextFormatFlags(e.Header.TextAlign) | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
+            TextFormatFlags textFormatFlags = ControlUtilities.GetTextFormatFlags(e.Header.TextAlign) | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix;
 
             styleRenderer.PaintBackground(e.Graphics, headerRect, ruleset);
             styleRenderer.PaintText(e.Graphics, textRect, ruleset, e.Header.Text, e.Font, textFormatFlags);
@@ -83,7 +83,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             Rectangle itemRect = new Rectangle(e.SubItem.Bounds.X, e.SubItem.Bounds.Y, e.Header.Width, e.SubItem.Bounds.Height);
             Rectangle textRect = new Rectangle(itemRect.X + textPadding, itemRect.Y, itemRect.Width - textPadding * 2, itemRect.Height);
 
-            TextFormatFlags textFormatFlags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis;
+            TextFormatFlags textFormatFlags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix;
 
             styleRenderer.PaintText(e.Graphics, textRect, ruleset, e.SubItem.Text, e.Item.Font, textFormatFlags);
             styleRenderer.PaintBorder(e.Graphics, itemRect, ruleset);

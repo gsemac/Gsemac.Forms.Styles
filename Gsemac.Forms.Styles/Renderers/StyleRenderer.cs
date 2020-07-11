@@ -178,7 +178,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             graphics.Restore(state);
 
         }
-        public void PaintText(Graphics graphics, Rectangle rectangle, IRuleset ruleset, string text, Font font, TextFormatFlags textFormatFlags = TextFormatFlags.Left) {
+        public void PaintText(Graphics graphics, Rectangle rectangle, IRuleset ruleset, string text, Font font, TextFormatFlags textFormatFlags = TextFormatFlags.Left | TextFormatFlags.NoPrefix) {
 
             // Paint the foreground text.
 
