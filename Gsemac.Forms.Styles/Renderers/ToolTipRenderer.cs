@@ -21,7 +21,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             IRuleset ruleset = styleSheet.GetRuleset(node);
 
             styleRenderer.PaintBackground(e.Graphics, e.Bounds, ruleset);
-            styleRenderer.PaintText(e.Graphics, e.Bounds, ruleset, e.ToolTipText, e.Font, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            styleRenderer.PaintText(e.Graphics, e.Bounds, ruleset, e.ToolTipText, e.Font, TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
             styleRenderer.PaintBorder(e.Graphics, e.Bounds, ruleset);
 
         }
