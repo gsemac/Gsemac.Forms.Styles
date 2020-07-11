@@ -37,59 +37,30 @@ namespace Gsemac.Forms.Styles.Renderers {
             styleRenderer.PaintText(e.Graphics, textRect, ruleset, e.Header.Text, e.Font, textFormatFlags);
             styleRenderer.PaintBorder(e.Graphics, headerRect, ruleset);
 
-            DrawHeaderRightPortion(e.Header.ListView);
+            PaintHeaderControlRightPortion(e.Header.ListView);
 
         }
         public void DrawItem(object sender, DrawListViewItemEventArgs e) {
 
-            UserNode node = new UserNode(e.Bounds, e.Item.ListView.PointToClient(Cursor.Position));
+            /* There is a bug in the underlying Win32 ListView control that causes sub-items to be drawn over on the first mouse-over.
+             * There is a workaround for the issue implemented here:
+             * https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.listview.ownerdraw?view=netcore-3.1
+             * 
+             * The problem with this workaround is that it doesn't work with ListViews in virtual mode, where the tag is lost when a new item is created.
+             * The following approach redraws all sub items when an item is invalidated.
+             */
 
-            node.AddClass("ListViewItem");
-            node.AddClass("Item");
-            node.SetParent(new ControlNode(e.Item.ListView));
+            PaintItem(e.Graphics, e.Item);
 
-            if (e.Item.Index % 2 == 0)
-                node.AddClass("Even");
-            else
-                node.AddClass("Odd");
+            // Paint all sub-items.
 
-            if (e.Item.Selected)
-                node.AddState(NodeStates.Checked);
+            foreach (ListViewItem.ListViewSubItem subItem in e.Item.SubItems)
+                PaintSubItem(e.Graphics, e.Item, subItem);
 
-            IRuleset ruleset = styleSheet.GetRuleset(node);
-            Rectangle rect = new Rectangle(e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height);
-
-            styleRenderer.PaintBackground(e.Graphics, rect, ruleset);
-            styleRenderer.PaintBorder(e.Graphics, rect, ruleset);
-
-            DrawHeaderRightPortion(e.Item.ListView);
+            PaintHeaderControlRightPortion(e.Item.ListView);
 
         }
         public void DrawSubItem(object sender, DrawListViewSubItemEventArgs e) {
-
-            UserNode node = new UserNode(e.Bounds, e.Item.ListView.PointToClient(Cursor.Position));
-
-            node.SetClass("ListViewItem");
-            node.AddClass("Item");
-            node.SetParent(new ControlNode(e.Item.ListView));
-
-            if (e.Item.Selected)
-                node.AddState(NodeStates.Checked);
-
-            int textPadding = 4;
-
-            IRuleset ruleset = styleSheet.GetRuleset(node);
-
-            Rectangle itemRect = new Rectangle(e.SubItem.Bounds.X, e.SubItem.Bounds.Y, e.Header.Width, e.SubItem.Bounds.Height);
-            Rectangle textRect = new Rectangle(itemRect.X + textPadding, itemRect.Y, itemRect.Width - textPadding * 2, itemRect.Height);
-
-            TextFormatFlags textFormatFlags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix;
-
-            styleRenderer.PaintText(e.Graphics, textRect, ruleset, e.SubItem.Text, e.Item.Font, textFormatFlags);
-            styleRenderer.PaintBorder(e.Graphics, itemRect, ruleset);
-
-            DrawHeaderRightPortion(e.Item.ListView);
-
         }
 
         public override void PaintControl(ListView control, ControlPaintArgs args) {
@@ -131,13 +102,11 @@ namespace Gsemac.Forms.Styles.Renderers {
             return node;
 
         }
-
         private IRuleset GetColumnHeaderRuleset(ColumnHeader columnHeader) {
 
             return styleSheet.GetRuleset(GetColumnHeaderNode(columnHeader));
 
         }
-
         private Rectangle GetColumnHeaderBounds(ColumnHeader columnHeader) {
 
             int columnHeaderIndex = columnHeader.DisplayIndex;
@@ -154,6 +123,59 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         }
 
+        private void PaintItem(Graphics graphics, ListViewItem item) {
+
+            Rectangle bounds = item.Bounds;
+            UserNode node = new UserNode(bounds, item.ListView.PointToClient(Cursor.Position));
+
+            node.AddClass("ListViewItem");
+            node.AddClass("Item");
+            node.SetParent(new ControlNode(item.ListView));
+
+            if (item.Index % 2 == 0)
+                node.AddClass("Even");
+            else
+                node.AddClass("Odd");
+
+            if (item.Selected)
+                node.AddState(NodeStates.Checked);
+
+            IRuleset ruleset = styleSheet.GetRuleset(node);
+            Rectangle rect = new Rectangle(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+
+            styleRenderer.PaintBackground(graphics, rect, ruleset);
+            styleRenderer.PaintBorder(graphics, rect, ruleset);
+
+        }
+        private void PaintSubItem(Graphics graphics, ListViewItem item, ListViewItem.ListViewSubItem subItem) {
+
+            ListView listView = item.ListView;
+            ColumnHeader columnHeader = listView.Columns[item.SubItems.IndexOf(subItem)];
+
+            Rectangle bounds = subItem.Bounds;
+            UserNode node = new UserNode(bounds, listView.PointToClient(Cursor.Position));
+
+            node.SetClass("ListViewItem");
+            node.AddClass("Item");
+            node.SetParent(new ControlNode(listView));
+
+            if (item.Selected)
+                node.AddState(NodeStates.Checked);
+
+            int textPadding = 4;
+
+            IRuleset ruleset = styleSheet.GetRuleset(node);
+
+            Rectangle itemRect = new Rectangle(bounds.X, bounds.Y, columnHeader.Width, bounds.Height);
+            Rectangle textRect = new Rectangle(itemRect.X + textPadding, itemRect.Y, itemRect.Width - textPadding * 2, itemRect.Height);
+
+            TextFormatFlags textFormatFlags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix;
+
+            styleRenderer.PaintText(graphics, textRect, ruleset, subItem.Text, subItem.Font, textFormatFlags);
+            styleRenderer.PaintBorder(graphics, itemRect, ruleset);
+
+        }
+
         private IntPtr GetHeaderControl(ListView listView) {
 
             const int LVM_GETHEADER = 0x1000 + 31;
@@ -161,7 +183,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             return User32.SendMessage(listView.Handle, LVM_GETHEADER, IntPtr.Zero, IntPtr.Zero);
 
         }
-        private void DrawHeaderRightPortion(ListView listView) {
+        private void PaintHeaderControlRightPortion(ListView listView) {
 
             bool hasColumns = listView.View == View.Details &&
                 listView.HeaderStyle != ColumnHeaderStyle.None &&
