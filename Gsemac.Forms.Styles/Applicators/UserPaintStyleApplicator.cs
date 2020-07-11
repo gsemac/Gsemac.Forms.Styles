@@ -446,22 +446,11 @@ namespace Gsemac.Forms.Styles.Applicators {
             control.DrawItem += renderer.DrawItem;
             control.DrawSubItem += renderer.DrawSubItem;
 
-            // The following event handlers are required for :hover.
-
-            // They also serve a secondary purpose: Sometimes ListView sub-items disappear on mouse-over when styles are applied, and the control is not automatically invalidated.
-            // These event handlers will cause the control to be evaluated, and the disappeared items will be visible again.
-
-            control.MouseEnter += InvalidateEventHandler;
-            control.MouseLeave += InvalidateEventHandler;
-
             info.ResetControl += (c) => {
 
                 control.DrawColumnHeader -= renderer.DrawColumnHeader;
                 control.DrawItem -= renderer.DrawItem;
                 control.DrawSubItem -= renderer.DrawSubItem;
-
-                control.MouseEnter -= InvalidateEventHandler;
-                control.MouseLeave -= InvalidateEventHandler;
 
             };
 
