@@ -16,20 +16,33 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             MakeThisCurrentApplicator();
 
-            foreach (Form form in Application.OpenForms.Cast<Form>())
-                ApplyStyles(form);
+            if (StyleSheet != null) {
 
-            if (options.HasFlag(StyleApplicatorOptions.AddMessageFilter)) {
+                foreach (Form form in Application.OpenForms.Cast<Form>())
+                    ApplyStyles(form);
 
-                messageFilter = new StyleApplicatorMessageFilter(this);
+                if (options.HasFlag(StyleApplicatorOptions.AddMessageFilter)) {
 
-                Application.AddMessageFilter(messageFilter);
+                    messageFilter = new StyleApplicatorMessageFilter(this);
+
+                    Application.AddMessageFilter(messageFilter);
+
+                }
+
+            }
+            else {
+
+                // Applying styles with a null style sheet is equivalent to clearing them.
+
+                ClearStyles();
 
             }
 
         }
 
         public void ClearStyles() {
+
+            MakeThisCurrentApplicator();
 
             if (options.HasFlag(StyleApplicatorOptions.AddMessageFilter) && messageFilter != null)
                 Application.RemoveMessageFilter(messageFilter);
@@ -48,14 +61,25 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             MakeThisCurrentApplicator();
 
-            // Save control info for all controls before applying styles, which prevents changes to inherited properties affecting what is saved.
-            // This is relevant for the BackColor and ForeColor properties of child controls.
+            if (StyleSheet != null) {
 
-            AddControlInfoRecursive(control, options);
+                // Save control info for all controls before applying styles, which prevents changes to inherited properties affecting what is saved.
+                // This is relevant for the BackColor and ForeColor properties of child controls.
 
-            // Apply styles.
+                AddControlInfoRecursive(control, options);
 
-            ApplyStylesRecursive(control, options);
+                // Apply styles.
+
+                ApplyStylesRecursive(control, options);
+
+            }
+            else {
+
+                // Applying styles with a null style sheet is equivalent to clearing them.
+
+                ClearStyles(control, options);
+
+            }
 
         }
         public void ClearStyles(Control control, ControlStyleOptions options = ControlStyleOptions.Default) {
