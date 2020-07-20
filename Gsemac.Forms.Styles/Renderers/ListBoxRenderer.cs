@@ -1,6 +1,5 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
-using Gsemac.Forms.Utilities;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
