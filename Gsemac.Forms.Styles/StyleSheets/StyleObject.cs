@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -68,8 +66,20 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 case StyleObjectType.BorderStyle:
                     return PropertyUtilities.ToString((BorderStyle)value);
 
+                case StyleObjectType.Color:
+                    return ((Color)value).ToString();
+
+                case StyleObjectType.Image:
+                    return ((IImage)value).ToString();
+
+                case StyleObjectType.Number:
+                    return ((double)value).ToString(CultureInfo.InvariantCulture);
+
+                case StyleObjectType.String:
+                    return (string)value;
+
                 default:
-                    return value.ToString();
+                    throw new Exception("The underlying type cannot be converted to a string.");
 
             }
 
