@@ -31,7 +31,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public override string ToString() {
 
-            return $"{parentSelector.ToString()} {descendantSelector.ToString()}";
+            return $"{parentSelector} {descendantSelector}";
 
         }
 

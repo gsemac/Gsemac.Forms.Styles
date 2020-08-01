@@ -26,7 +26,7 @@
 
         public override string ToString() {
 
-            return $"{parentSelector.ToString()} > {childSelector.ToString()}";
+            return $"{parentSelector} > {childSelector}";
 
         }
 
