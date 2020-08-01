@@ -72,7 +72,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     return new NumberProperty(type, values[0].GetNumber(), false);
 
                 default:
-                    throw new InvalidPropertyException(type.ToString());
+                    throw new ArgumentOutOfRangeException(nameof(type));
 
             }
 
@@ -112,7 +112,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (propertyNameDict.Value.TryGetValue(propertyType, out string name))
                 return name;
             else
-                throw new ArgumentException(nameof(propertyType));
+                throw new ArgumentOutOfRangeException(nameof(propertyType));
 
         }
 

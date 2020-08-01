@@ -63,7 +63,15 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public string GetString() {
 
-            return value.ToString();
+            switch (Type) {
+
+                case StyleObjectType.BorderStyle:
+                    return PropertyUtilities.ToString((BorderStyle)value);
+
+                default:
+                    return value.ToString();
+
+            }
 
         }
         public double GetNumber() {

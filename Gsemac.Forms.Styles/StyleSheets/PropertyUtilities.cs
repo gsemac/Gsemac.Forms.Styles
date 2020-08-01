@@ -200,6 +200,47 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
+        public static string ToString(BorderStyle input) {
+
+            switch (input) {
+
+                case BorderStyle.Dotted:
+                    return "dotted";
+
+                case BorderStyle.Dashed:
+                    return "dashed";
+
+                case BorderStyle.Solid:
+                    return "solid";
+
+                case BorderStyle.Double:
+                    return "double";
+
+                case BorderStyle.Groove:
+                    return "groove";
+
+                case BorderStyle.Ridge:
+                    return "ridge";
+
+                case BorderStyle.Inset:
+                    return "inset";
+
+                case BorderStyle.Outset:
+                    return "outset";
+
+                case BorderStyle.None:
+                    return "none";
+
+                case BorderStyle.Hidden:
+                    return "hidden";
+
+                default:
+                    throw new ArgumentException(nameof(input));
+
+            }
+
+        }
+
         // Private members
 
         private static bool TryParseAngle(string input, out double result) {
