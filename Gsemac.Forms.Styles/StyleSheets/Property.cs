@@ -112,7 +112,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (propertyNameDict.Value.TryGetValue(propertyType, out string name))
                 return name;
             else
-                throw new InvalidPropertyException(propertyType.ToString());
+                throw new ArgumentException(nameof(propertyType));
 
         }
 

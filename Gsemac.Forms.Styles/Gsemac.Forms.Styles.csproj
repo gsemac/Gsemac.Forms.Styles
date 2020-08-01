@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Applicators\IStyleApplicator.cs" />
     <Compile Include="Applicators\StyleApplicatorOptions.cs" />
+    <Compile Include="StyleSheets\BorderStyle.cs" />
     <Compile Include="StyleSheets\Extensions\RulesetExtensions.cs" />
     <Compile Include="Renderers\Extensions\StyleRendererExtensions.cs" />
     <Compile Include="StyleSheets\Extensions\StyleSheetExtensions.cs" />

@@ -1,22 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
-
-    public enum BorderStyle {
-        Dotted,
-        Dashed,
-        Solid,
-        Double,
-        Groove,
-        Ridge,
-        Inset,
-        Outset,
-        None,
-        Hidden
-    }
 
     public class BorderStyleProperty :
         PropertyBase<BorderStyle> {
@@ -29,7 +13,50 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public override string ToString() {
 
-            return ToString(Value.ToString().ToLowerInvariant());
+            return ToString(BorderStyleToString(Value).ToLowerInvariant());
+
+        }
+
+        // Private members
+
+        private string BorderStyleToString(BorderStyle borderStyle) {
+
+            switch (borderStyle) {
+
+                case BorderStyle.Dotted:
+                    return "dotted";
+
+                case BorderStyle.Dashed:
+                    return "dashed";
+
+                case BorderStyle.Solid:
+                    return "solid";
+
+                case BorderStyle.Double:
+                    return "double";
+
+                case BorderStyle.Groove:
+                    return "groove";
+
+                case BorderStyle.Ridge:
+                    return "ridge";
+
+                case BorderStyle.Inset:
+                    return "inset";
+
+                case BorderStyle.Outset:
+                    return "outset";
+
+                case BorderStyle.None:
+                    return "none";
+
+                case BorderStyle.Hidden:
+                    return "hidden";
+
+                default:
+                    throw new ArgumentException(nameof(borderStyle));
+
+            }
 
         }
 
