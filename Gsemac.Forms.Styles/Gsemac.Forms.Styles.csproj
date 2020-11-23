@@ -1,162 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EE0193ED-6D71-477B-93E1-E3C15E0B0EEA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gsemac.Forms.Styles</RootNamespace>
-    <AssemblyName>Gsemac.Forms.Styles</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Applicators\IStyleApplicator.cs" />
-    <Compile Include="Applicators\StyleApplicatorOptions.cs" />
-    <Compile Include="StyleSheets\BorderStyle.cs" />
-    <Compile Include="StyleSheets\Extensions\RulesetExtensions.cs" />
-    <Compile Include="Renderers\Extensions\StyleRendererExtensions.cs" />
-    <Compile Include="StyleSheets\Extensions\StyleSheetExtensions.cs" />
-    <Compile Include="Renderers\CheckBoxRenderer.cs" />
-    <Compile Include="Renderers\ComboBoxRenderer.cs" />
-    <Compile Include="Renderers\ControlRendererBase.cs" />
-    <Compile Include="Renderers\DataGridViewRenderer.cs" />
-    <Compile Include="Renderers\GroupBoxRenderer.cs" />
-    <Compile Include="Renderers\IControlRenderer.cs" />
-    <Compile Include="Renderers\IDataGridViewRenderer.cs" />
-    <Compile Include="Renderers\IListViewRenderer.cs" />
-    <Compile Include="Renderers\IStyleRenderer.cs" />
-    <Compile Include="Renderers\IToolTipRenderer.cs" />
-    <Compile Include="Renderers\ListBoxRenderer.cs" />
-    <Compile Include="Renderers\ListViewRenderer.cs" />
-    <Compile Include="Renderers\NumericUpDownRenderer.cs" />
-    <Compile Include="Renderers\ControlPaintArgs.cs" />
-    <Compile Include="Renderers\PictureBoxRenderer.cs" />
-    <Compile Include="Renderers\ProgressBarRenderer.cs" />
-    <Compile Include="Renderers\RadioButtonRenderer.cs" />
-    <Compile Include="Renderers\RichTextBoxRenderer.cs" />
-    <Compile Include="Renderers\StyleRenderer.cs" />
-    <Compile Include="Renderers\TextBoxRenderer.cs" />
-    <Compile Include="Renderers\ToolStripRenderer.cs" />
-    <Compile Include="Renderers\ToolTipRenderer.cs" />
-    <Compile Include="Renderers\TreeViewRenderer.cs" />
-    <Compile Include="Renderers\UpDownButtonsRenderer.cs" />
-    <Compile Include="StyleSheets\Extensions\PropertyExtensions.cs" />
-    <Compile Include="Applicators\StyleApplicatorMessageFilter.cs" />
-    <Compile Include="StyleSheets\BackgroundImageProperty.cs" />
-    <Compile Include="StyleSheets\BorderProperty.cs" />
-    <Compile Include="StyleSheets\BorderRadiusProperty.cs" />
-    <Compile Include="StyleSheets\BorderStyleProperty.cs" />
-    <Compile Include="StyleSheets\ChildSelector.cs" />
-    <Compile Include="StyleSheets\ClassSelector.cs" />
-    <Compile Include="StyleSheets\DescendantSelector.cs" />
-    <Compile Include="StyleSheets\FileSystemFileReader.cs" />
-    <Compile Include="StyleSheets\GradientBase.cs" />
-    <Compile Include="StyleSheets\HashCodeBuilder.cs" />
-    <Compile Include="StyleSheets\IDSelector.cs" />
-    <Compile Include="StyleSheets\IFileReader.cs" />
-    <Compile Include="StyleSheets\IGradient.cs" />
-    <Compile Include="StyleSheets\IHashCodeBuilder.cs" />
-    <Compile Include="StyleSheets\IImage.cs" />
-    <Compile Include="StyleSheets\ILexer.cs" />
-    <Compile Include="StyleSheets\Image.cs" />
-    <Compile Include="StyleSheets\InvalidFunctionException.cs" />
-    <Compile Include="StyleSheets\IRulesetCache.cs" />
-    <Compile Include="StyleSheets\ISelectorBuilder.cs" />
-    <Compile Include="StyleSheets\IStyleSheetOptions.cs" />
-    <Compile Include="StyleSheets\LexerBase.cs" />
-    <Compile Include="StyleSheets\LinearGradient.cs" />
-    <Compile Include="StyleSheets\PseudoClassSelector.cs" />
-    <Compile Include="StyleSheets\PseudoElementSelector.cs" />
-    <Compile Include="StyleSheets\RulesetCache.cs" />
-    <Compile Include="StyleSheets\StyleObject.cs" />
-    <Compile Include="StyleSheets\StyleSheetOptions.cs" />
-    <Compile Include="StyleSheets\UnexpectedTokenException.cs" />
-    <Compile Include="StyleSheets\UserNode.cs" />
-    <Compile Include="StyleSheets\NodeBase.cs" />
-    <Compile Include="Applicators\PropertyStyleApplicator.cs" />
-    <Compile Include="Applicators\StyleApplicatorBase.cs" />
-    <Compile Include="StyleSheets\ColorProperty.cs" />
-    <Compile Include="StyleSheets\ControlNode.cs" />
-    <Compile Include="Renderers\ButtonRenderer.cs" />
-    <Compile Include="Renderers\ControlRenderer.cs" />
-    <Compile Include="Renderers\LabelRenderer.cs" />
-    <Compile Include="Renderers\TabControlRenderer.cs" />
-    <Compile Include="Applicators\UserPaintStyleApplicator.cs" />
-    <Compile Include="Renderers\Extensions\GraphicsExtensions.cs" />
-    <Compile Include="StyleSheets\INode.cs" />
-    <Compile Include="StyleSheets\InvalidPropertyException.cs" />
-    <Compile Include="StyleSheets\ISelector.cs" />
-    <Compile Include="StyleSheets\IStyleSheet.cs" />
-    <Compile Include="StyleSheets\IProperty.cs" />
-    <Compile Include="StyleSheets\IRuleset.cs" />
-    <Compile Include="StyleSheets\IStyleSheetLexer.cs" />
-    <Compile Include="StyleSheets\IStyleSheetLexerToken.cs" />
-    <Compile Include="StyleSheets\NumberProperty.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StyleSheets\Property.cs" />
-    <Compile Include="StyleSheets\PropertyBase.cs" />
-    <Compile Include="StyleSheets\PropertyType.cs" />
-    <Compile Include="StyleSheets\Ruleset.cs" />
-    <Compile Include="StyleSheets\RulesetBase.cs" />
-    <Compile Include="StyleSheets\Selector.cs" />
-    <Compile Include="StyleSheets\SelectorBuilder.cs" />
-    <Compile Include="StyleSheets\StyleSheet.cs" />
-    <Compile Include="StyleSheets\StyleSheetLexer.cs" />
-    <Compile Include="StyleSheets\StyleSheetLexerToken.cs" />
-    <Compile Include="StyleSheets\PropertyUtilities.cs" />
-    <Compile Include="StyleSheets\TagSelector.cs" />
-    <Compile Include="StyleSheets\UnionSelector.cs" />
-    <Compile Include="Renderers\RenderUtilities.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Gsemac.Common\Gsemac.Collections\Gsemac.Collections.csproj">
-      <Project>{cf09d77c-983a-4865-b01c-158092b0f00d}</Project>
-      <Name>Gsemac.Collections</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Gsemac.Common\Gsemac.Forms\Gsemac.Forms.csproj">
-      <Project>{e9b26de4-5b88-40e9-ab7e-43048a965586}</Project>
-      <Name>Gsemac.Forms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Gsemac.Common\Gsemac.Native\Gsemac.Native.csproj">
-      <Project>{aa10970a-6ec1-4026-9ea6-2ba783918dac}</Project>
-      <Name>Gsemac.Native</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>"$(MSBuildToolsPath)\msbuild.exe" "$(SolutionDir)Gsemac.Common\Gsemac.Common.sln" /p:Configuration=$(ConfigurationName) /verbosity:minimal /restore</PreBuildEvent>
-  </PropertyGroup>
+﻿<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
+
+	<PropertyGroup>
+		<TargetFrameworks>net40-client</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebugType>none</DebugType>
+		<DebugSymbols>false</DebugSymbols>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="Gsemac.Collections">
+			<HintPath>..\Gsemac.Common\Gsemac.Collections\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Collections.dll</HintPath>
+		</Reference>
+		<Reference Include="Gsemac.Native">
+			<HintPath>..\Gsemac.Common\Gsemac.Native\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Native.dll</HintPath>
+		</Reference>
+		<Reference Include="Gsemac.Forms">
+			<HintPath>..\Gsemac.Common\Gsemac.Forms\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Forms.dll</HintPath>
+		</Reference>
+		<Reference Include="System.Windows.Forms" />
+	</ItemGroup>
+
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	  <Exec Command="&quot;$(MSBuildToolsPath)\msbuild.exe&quot; &quot;$(SolutionDir)Gsemac.Common\Gsemac.Common.sln&quot; /p:Configuration=$(ConfigurationName) /verbosity:minimal /restore" />
+	</Target>
+
 </Project>
