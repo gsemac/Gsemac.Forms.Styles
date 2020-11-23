@@ -23,7 +23,7 @@
 	</ItemGroup>
 
 	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-	  <Exec Command="&quot;$(MSBuildToolsPath)\msbuild.exe&quot; &quot;$(SolutionDir)Gsemac.Common\Gsemac.Common.sln&quot; /p:Configuration=$(ConfigurationName) /verbosity:minimal /restore" />
+	  <Exec Command="&quot;$(MSBuildToolsPath)\msbuild.exe&quot; &quot;..\Gsemac.Common\Gsemac.Common.sln&quot; /p:Configuration=$(ConfigurationName) /verbosity:quiet /restore" />
 	</Target>
 
 </Project>
