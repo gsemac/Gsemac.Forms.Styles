@@ -11,13 +11,13 @@
 
 	<ItemGroup>
 		<Reference Include="Gsemac.Collections">
-			<HintPath>..\Gsemac.Common\Gsemac.Collections\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Collections.dll</HintPath>
+			<HintPath>..\Gsemac.Common\src\Gsemac.Collections\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Collections.dll</HintPath>
 		</Reference>
 		<Reference Include="Gsemac.Native">
-			<HintPath>..\Gsemac.Common\Gsemac.Native\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Native.dll</HintPath>
+			<HintPath>..\Gsemac.Common\src\Gsemac.Native\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Native.dll</HintPath>
 		</Reference>
 		<Reference Include="Gsemac.Forms">
-			<HintPath>..\Gsemac.Common\Gsemac.Forms\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Forms.dll</HintPath>
+			<HintPath>..\Gsemac.Common\src\Gsemac.Forms\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Forms.dll</HintPath>
 		</Reference>
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
