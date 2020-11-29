@@ -76,13 +76,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gsemac.Forms.Styles\Gsemac.Forms.Styles.csproj">
+    <Content Include="DarkUI.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Gsemac.Forms.Styles\Gsemac.Forms.Styles.csproj">
       <Project>{ee0193ed-6d71-477b-93e1-e3c15e0b0eea}</Project>
       <Name>Gsemac.Forms.Styles</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DarkUI.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
