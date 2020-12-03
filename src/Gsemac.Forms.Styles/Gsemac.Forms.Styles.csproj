@@ -10,20 +10,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Reference Include="Gsemac.Collections">
-			<HintPath>..\Gsemac.Common\src\Gsemac.Collections\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Collections.dll</HintPath>
-		</Reference>
-		<Reference Include="Gsemac.Native">
-			<HintPath>..\Gsemac.Common\src\Gsemac.Native\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Native.dll</HintPath>
-		</Reference>
-		<Reference Include="Gsemac.Forms">
-			<HintPath>..\Gsemac.Common\src\Gsemac.Forms\bin\$(ConfigurationName)\$(TargetFramework)\Gsemac.Forms.dll</HintPath>
-		</Reference>
-		<Reference Include="System.Windows.Forms" />
+		<PackageReference Include="Gsemac.Collections" Version="0.1.0" />
+		<PackageReference Include="Gsemac.Forms" Version="0.1.0" />
+		<PackageReference Include="Gsemac.Win32" Version="0.1.1" />
 	</ItemGroup>
 
-	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-	  <Exec Command="&quot;$(MSBuildToolsPath)\msbuild.exe&quot; &quot;..\Gsemac.Common\Gsemac.Common.sln&quot; /p:Configuration=$(ConfigurationName) /verbosity:quiet /restore" />
-	</Target>
+	<ItemGroup>
+		<Reference Include="System.Windows.Forms" />
+	</ItemGroup>
 
 </Project>
