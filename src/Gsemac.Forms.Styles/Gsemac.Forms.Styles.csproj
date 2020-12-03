@@ -2,6 +2,15 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net40-client;net461</TargetFrameworks>
+		<Company />
+		<Authors>gsemac</Authors>
+		<Version>0.1.0</Version>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<PackageProjectUrl>https://github.com/gsemac/Gsemac.Common</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/gsemac/Gsemac.Common</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Copyright></Copyright>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
