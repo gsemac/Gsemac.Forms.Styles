@@ -4,7 +4,7 @@
 		<TargetFrameworks>net40-client;net461</TargetFrameworks>
 		<Company />
 		<Authors>gsemac</Authors>
-		<Version>0.1.0</Version>
+		<Version>0.2.0</Version>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<PackageProjectUrl>https://github.com/gsemac/Gsemac.Common</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/gsemac/Gsemac.Common</RepositoryUrl>
@@ -19,9 +19,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Gsemac.Collections" Version="0.2.1" />
-		<PackageReference Include="Gsemac.Forms" Version="0.1.1" />
-		<PackageReference Include="Gsemac.Win32" Version="0.3.0" />
+		<PackageReference Include="Gsemac.Collections" Version="0.2.2" />
+		<PackageReference Include="Gsemac.Forms" Version="0.1.3" />
+		<PackageReference Include="Gsemac.Win32" Version="0.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
