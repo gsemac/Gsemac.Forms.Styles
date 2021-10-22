@@ -1,4 +1,6 @@
 # Gsemac.Forms.Styles
+[![NuGet](https://img.shields.io/nuget/v/Gsemac.Forms.Styles.svg)](https://www.nuget.org/packages/Gsemac.Forms.Styles/)
+
 WinForms theming library using CSS.
 
 ## About
