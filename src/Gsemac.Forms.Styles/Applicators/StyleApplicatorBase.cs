@@ -39,7 +39,6 @@ namespace Gsemac.Forms.Styles.Applicators {
             }
 
         }
-
         public void ClearStyles() {
 
             MakeThisCurrentApplicator();
@@ -48,7 +47,7 @@ namespace Gsemac.Forms.Styles.Applicators {
                 Application.RemoveMessageFilter(messageFilter);
 
             foreach (Control control in controlInfo.Keys.ToArray())
-                ClearStyles(control, ControlStyleOptions.Default & ~ControlStyleOptions.Recursive);
+                ClearStyles(control, new StyleOptions(StyleOptions.Default) { ApplyToChildren = false });
 
             if (options.HasFlag(StyleApplicatorOptions.DisposeStyleSheet) && StyleSheet != null)
                 StyleSheet.Dispose();
@@ -57,7 +56,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
-        public void ApplyStyles(Control control, ControlStyleOptions options = ControlStyleOptions.Default) {
+        public void ApplyStyles(Control control, IStyleOptions options = null) {
 
             MakeThisCurrentApplicator();
 
@@ -82,13 +81,13 @@ namespace Gsemac.Forms.Styles.Applicators {
             }
 
         }
-        public void ClearStyles(Control control, ControlStyleOptions options = ControlStyleOptions.Default) {
+        public void ClearStyles(Control control, IStyleOptions options = null) {
 
             OnClearStyles(control);
 
             RemoveControlInfo(control);
 
-            if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren) {
+            if (options.ApplyToChildren && control.HasChildren) {
 
                 foreach (Control childControl in control.Controls)
                     ClearStyles(childControl, options);
@@ -204,14 +203,14 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
 
-        private void AddControlInfoRecursive(Control control, ControlStyleOptions options) {
+        private void AddControlInfoRecursive(Control control, IStyleOptions options) {
 
-            if (!options.HasFlag(ControlStyleOptions.RulesRequired) || HasStyles(control))
+            if (!options.RequireExplicitStyles || HasStyles(control))
                 AddControlInfo(control);
             else
                 RemoveControlInfo(control);
 
-            if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren) {
+            if (options.ApplyToChildren && control.HasChildren) {
 
                 foreach (Control childControl in GetStylableChildControls(control))
                     AddControlInfoRecursive(childControl, options);
@@ -222,14 +221,14 @@ namespace Gsemac.Forms.Styles.Applicators {
             }
 
         }
-        private void ApplyStylesRecursive(Control control, ControlStyleOptions options) {
+        private void ApplyStylesRecursive(Control control, IStyleOptions options) {
 
-            if (!options.HasFlag(ControlStyleOptions.RulesRequired) || HasStyles(control))
+            if (!options.RequireExplicitStyles || HasStyles(control))
                 OnApplyStyles(control);
             else
                 OnClearStyles(control);
 
-            if (options.HasFlag(ControlStyleOptions.Recursive) && control.HasChildren) {
+            if (options.ApplyToChildren && control.HasChildren) {
 
                 foreach (Control childControl in GetStylableChildControls(control))
                     ApplyStylesRecursive(childControl, options);
