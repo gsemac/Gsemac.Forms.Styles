@@ -3,28 +3,34 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Dom {
 
-    public class ControlNode :
-        DomNodeBase {
+    public class ControlNode2 :
+        NodeBase {
 
         // Public members
 
         public Control Control { get; }
 
-        public ControlNode(Control control) :
+        public ControlNode2(Control control) :
+            this(control, populateChildren: true) {
+        }
+        public ControlNode2(Control control, bool populateChildren) :
             base(GetTagName(control)) {
 
             Control = control;
             Id = GetId(control);
 
             AddClasses(control);
-            AddChildren(control);
+
+            if (populateChildren)
+                AddChildren(control);
+
             AddEventHandlers(control);
 
         }
 
         public override bool Equals(object obj) {
 
-            if (obj is ControlNode controlDomNode)
+            if (obj is ControlNode2 controlDomNode)
                 return controlDomNode.Control == Control;
 
             return base.Equals(obj);
@@ -61,7 +67,7 @@ namespace Gsemac.Forms.Styles.Dom {
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
-            ControlNode node = new ControlNode(control);
+            ControlNode2 node = new ControlNode2(control);
 
             control.Disposed += (sender, e) => Children.Remove(node);
 
@@ -82,7 +88,7 @@ namespace Gsemac.Forms.Styles.Dom {
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
-            Children.Remove(new ControlNode(control));
+            Children.Remove(new ControlNode2(control));
 
         }
 
@@ -91,8 +97,27 @@ namespace Gsemac.Forms.Styles.Dom {
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
-            control.ControlAdded += (sender, e) => AddChild(e.Control);
-            control.ControlRemoved += (sender, e) => RemoveChild(e.Control);
+            control.ControlAdded += ControlAddedHandler;
+            control.ControlRemoved += ControlRemovedHandler;
+
+            control.GotFocus += GotFocusHandler;
+            control.LostFocus += LostFocusHandler;
+
+            control.Disposed += DisposedHandler;
+
+        }
+        private void RemoveEventHandlers(Control control) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            control.ControlAdded -= ControlAddedHandler;
+            control.ControlRemoved -= ControlRemovedHandler;
+
+            control.GotFocus -= GotFocusHandler;
+            control.LostFocus -= LostFocusHandler;
+
+            control.Disposed -= DisposedHandler;
 
         }
 
@@ -110,6 +135,32 @@ namespace Gsemac.Forms.Styles.Dom {
                 throw new ArgumentNullException(nameof(control));
 
             return control.GetType().Name;
+
+        }
+
+        private void ControlAddedHandler(object sender, ControlEventArgs e) {
+
+            AddChild(e.Control);
+
+        }
+        private void ControlRemovedHandler(object sender, ControlEventArgs e) {
+
+            RemoveChild(e.Control);
+
+        }
+        private void GotFocusHandler(object sender, EventArgs e) {
+
+            States.Add(NodeState.Focused);
+
+        }
+        private void LostFocusHandler(object sender, EventArgs e) {
+
+            States.Remove(NodeState.Focused);
+
+        }
+        private void DisposedHandler(object sender, EventArgs e) {
+
+            RemoveEventHandlers((Control)sender);
 
         }
 

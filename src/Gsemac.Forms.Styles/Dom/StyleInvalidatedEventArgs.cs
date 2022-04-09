@@ -1,11 +1,11 @@
 ﻿namespace Gsemac.Forms.Styles.Dom {
 
-    public class StylesChangedEventArgs :
+    public class StyleInvalidatedEventArgs :
         NodeEventArgs {
 
         // Public members
 
-        public StylesChangedEventArgs(INode2 node) :
+        public StyleInvalidatedEventArgs(INode2 node) : 
             base(node) {
         }
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -21,7 +18,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (string.IsNullOrEmpty(className))
                 return false;
 
-            return node.Classes.Any(c => c.TrimStart('.').Equals(className, StringComparison.OrdinalIgnoreCase));
+            return node.Classes.Any(c => c.TrimStart('.').Equals(className));
 
         }
 

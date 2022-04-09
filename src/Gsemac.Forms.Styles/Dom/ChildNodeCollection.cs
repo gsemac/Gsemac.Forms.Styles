@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Gsemac.Collections.Specialized;
+using System;
 
 namespace Gsemac.Forms.Styles.Dom {
 
     internal class ChildNodeCollection :
-        ICollection<IDomNode> {
+        ObservableList<INode2> {
 
         // Public members
 
-        public int Count => items.Count;
-        public bool IsReadOnly => false;
-
-        public ChildNodeCollection(IDomNode parentNode) {
+        public ChildNodeCollection(INode2 parentNode) {
 
             if (parentNode is null)
                 throw new ArgumentNullException(nameof(parentNode));
@@ -21,22 +17,22 @@ namespace Gsemac.Forms.Styles.Dom {
 
         }
 
-        public void Add(IDomNode item) {
+        public override void Add(INode2 item) {
 
             if (item is null)
                 throw new ArgumentNullException(nameof(item));
 
             item.Parent = parentNode;
 
-            items.Add(item);
+            base.Add(item);
 
         }
-        public bool Remove(IDomNode item) {
+        public override bool Remove(INode2 item) {
 
             if (item is null)
                 return false;
 
-            if (items.Remove(item)) {
+            if (base.Remove(item)) {
 
                 item.Parent = null;
 
@@ -50,52 +46,18 @@ namespace Gsemac.Forms.Styles.Dom {
             }
 
         }
-        public void Clear() {
+        public override void Clear() {
 
-            foreach (IDomNode node in items)
+            foreach (INode2 node in Items)
                 node.Parent = null;
 
-            items.Clear();
-
-        }
-
-        public bool Contains(IDomNode item) {
-
-            if (item is null)
-                return false;
-
-            return items.Contains(item);
-
-        }
-
-        public void CopyTo(IDomNode[] array, int arrayIndex) {
-
-            if (array is null)
-                throw new ArgumentNullException(nameof(array));
-
-            if (arrayIndex < 0 || arrayIndex >= array.Length)
-                throw new ArgumentOutOfRangeException(nameof(arrayIndex));
-
-            items.CopyTo(array, arrayIndex);
-
-        }
-
-        public IEnumerator<IDomNode> GetEnumerator() {
-
-            return items.GetEnumerator();
-
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() {
-
-            return GetEnumerator();
+            base.Clear();
 
         }
 
         // Private members
 
-        private readonly IDomNode parentNode;
-        private readonly List<IDomNode> items = new List<IDomNode>();
+        private readonly INode2 parentNode;
 
     }
 

@@ -1,4 +1,5 @@
-﻿using Gsemac.Core;
+﻿using Gsemac.Collections.Specialized;
+using Gsemac.Core;
 using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Collections.Generic;
@@ -9,22 +10,21 @@ using System.Xml;
 
 namespace Gsemac.Forms.Styles.Dom {
 
-    public abstract class DomNodeBase :
-        IDomNode {
+    public abstract class NodeBase :
+        INode2 {
 
         // Public members
 
-        public event EventHandler<ClassesChangedEventArgs> ClassAdded;
-        public event EventHandler<ClassesChangedEventArgs> ClassRemoved;
-        public event EventHandler<StylesChangedEventArgs> StyleAdded;
-        public event EventHandler<StylesChangedEventArgs> StyleRemoved;
+        public event EventHandler<StyleInvalidatedEventArgs> StyleInvalidated;
+        public event EventHandler<StylesChangedEventArgs> StylesChanged;
 
         public string Tag { get; }
         public string Id { get; protected set; }
-        public IDomNode Parent { get; set; }
+        public INode2 Parent { get; set; }
+        public ICollection<INode2> Children { get; }
         public ICollection<string> Classes { get; }
-        public ICollection<IDomNode> Children { get; }
-        public ICollection<IRuleset> Styles { get; } = new List<IRuleset>();
+        public ICollection<NodeState> States { get; }
+        public ICollection<IRuleset> Styles { get; }
 
         public IRuleset GetComputedStyle() {
 
@@ -53,30 +53,55 @@ namespace Gsemac.Forms.Styles.Dom {
 
         // Protected members
 
-        protected DomNodeBase(string tagName) {
+        protected NodeBase(string tagName) {
 
             Tag = tagName;
 
-            ClassCollection classes = new ClassCollection(this);
+            // Initialize collections.
 
-            classes.ClassAdded += ClassAdded;
-            classes.ClassRemoved += ClassRemoved;
+            IObservableCollection<INode2> children = new ChildNodeCollection(this);
+            IObservableCollection<string> classes = new ObservableHashSet<string>();
+            IObservableCollection<NodeState> states = new ObservableHashSet<NodeState>();
+            IObservableCollection<IRuleset> styles = new ObservableHashSet<IRuleset>();
 
             Classes = classes;
+            Children = children;
+            States = states;
+            Styles = styles;
 
-            StyleCollection styles = new StyleCollection(this);
+            // Register event handlers.
 
-            styles.StyleAdded += StyleAdded;
-            styles.StyleRemoved += StyleRemoved;
+            children.CollectionChanged += (sender, e) => OnStyleInvalidated();
+            classes.CollectionChanged += (sender, e) => OnStyleInvalidated();
+            styles.CollectionChanged += (sender, e) => OnStylesChanged();
+            states.CollectionChanged += (sender, e) => OnStyleInvalidated();
 
-            styles.StyleAdded += StylesChangedHandler;
-            styles.StyleRemoved += StylesChangedHandler;
+            styles.CollectionChanged += StylesChangedHandler;
 
-            Styles = Styles;
+            // Initialize style.
 
             style = new ResettableLazy<IRuleset>(CalculateStyleInternal);
 
-            Children = new ChildNodeCollection(this);
+        }
+
+        protected void OnStyleInvalidated() {
+
+            OnStyleInvalidated(new StyleInvalidatedEventArgs(this));
+
+        }
+        protected void OnStyleInvalidated(StyleInvalidatedEventArgs e) {
+
+            StyleInvalidated?.Invoke(this, e);
+
+        }
+        protected void OnStylesChanged() {
+
+            OnStylesChanged(new StylesChangedEventArgs(this));
+
+        }
+        protected void OnStylesChanged(StylesChangedEventArgs e) {
+
+            StylesChanged?.Invoke(this, e);
 
         }
 
@@ -95,13 +120,13 @@ namespace Gsemac.Forms.Styles.Dom {
 
         }
 
-        private void StylesChangedHandler(object sender, StylesChangedEventArgs e) {
+        private void StylesChangedHandler(object sender, EventArgs e) {
 
             style.Reset();
 
         }
 
-        private static void WriteNode(XmlWriter xmlWriter, IDomNode node) {
+        private static void WriteNode(XmlWriter xmlWriter, INode2 node) {
 
             if (xmlWriter is null)
                 throw new ArgumentNullException(nameof(xmlWriter));
@@ -127,7 +152,7 @@ namespace Gsemac.Forms.Styles.Dom {
 
             }
 
-            foreach (IDomNode childNode in node.Children)
+            foreach (INode2 childNode in node.Children)
                 WriteNode(xmlWriter, childNode);
 
             xmlWriter.WriteEndElement();

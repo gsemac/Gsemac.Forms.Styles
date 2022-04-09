@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Gsemac.Forms.Styles.StyleSheets {
+﻿namespace Gsemac.Forms.Styles.StyleSheets {
 
     public class IDSelector :
         ISelector {
@@ -23,7 +18,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             if (string.IsNullOrEmpty(Name))
                 return false;
 
-            return node.Id.Equals(Name, StringComparison.OrdinalIgnoreCase);
+            return node.Id.Equals(Name);
 
         }
 

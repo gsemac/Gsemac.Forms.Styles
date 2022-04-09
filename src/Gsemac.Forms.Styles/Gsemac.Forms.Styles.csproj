@@ -28,4 +28,10 @@
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Properties\ExceptionMessages.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

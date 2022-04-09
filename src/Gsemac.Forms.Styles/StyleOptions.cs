@@ -1,4 +1,4 @@
-﻿namespace Gsemac.Forms.Styles.Applicators {
+﻿namespace Gsemac.Forms.Styles {
 
     public class StyleOptions :
         IStyleOptions {

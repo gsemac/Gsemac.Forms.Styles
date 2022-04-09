@@ -1,4 +1,6 @@
-﻿using Gsemac.Forms.Styles.Applicators;
+﻿using Gsemac.Forms.Styles;
+using Gsemac.Forms.Styles.Applicators;
+using Gsemac.Forms.Styles.Applicators2;
 using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Windows.Forms;
@@ -13,6 +15,13 @@ namespace ThemeTesting {
         public TestForm() {
 
             InitializeComponent();
+
+            IStyleApplicatorFactory styleApplicatorFactory = new PropertyStyleApplicatorFactory();
+            IStyleManager styleManager = new StyleManager(styleApplicatorFactory);
+
+            styleManager.StyleSheets.Add(LoadStyleSheet());
+
+            styleManager.ApplyStyles();
 
         }
 
