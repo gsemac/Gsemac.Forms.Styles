@@ -1,4 +1,6 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -115,7 +117,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         private void PaintGenericControl(ControlPaintArgs e) {
 
-            IRuleset ruleset = e.StyleSheet.GetRuleset(new ControlNode(e.Control));
+            IRuleset ruleset = e.StyleSheet.GetRuleset(new ControlNode2(e.Control));
 
             RenderUtilities.ApplyColorProperties(e.Control, ruleset);
 

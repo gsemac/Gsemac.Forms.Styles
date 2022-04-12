@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Gsemac.Forms.Styles.Dom;
+using System.Linq;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -13,7 +14,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
-        public bool IsMatch(INode node) {
+        public bool IsMatch(INode2 node) {
 
             if (string.IsNullOrEmpty(className))
                 return false;

@@ -62,7 +62,7 @@ namespace Gsemac.Forms.Styles.Dom {
             IObservableCollection<INode2> children = new ChildNodeCollection(this);
             IObservableCollection<string> classes = new ObservableHashSet<string>();
             IObservableCollection<NodeState> states = new ObservableHashSet<NodeState>();
-            IObservableCollection<IRuleset> styles = new ObservableHashSet<IRuleset>();
+            IObservableCollection<IRuleset> styles = new ObservableHashSet<IRuleset>(new EquivalentRulesetEqualityComparer());
 
             Classes = classes;
             Children = children;

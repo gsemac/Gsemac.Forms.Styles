@@ -1,21 +1,22 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.Dom;
+using System;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
-    public class TagSelector :
+    public class TypeSelector :
         ISelector {
 
         // Public members
 
         public string Name { get; }
 
-        public TagSelector(string name) {
+        public TypeSelector(string name) {
 
             this.Name = name;
 
         }
 
-        public bool IsMatch(INode node) {
+        public bool IsMatch(INode2 node) {
 
             if (string.IsNullOrEmpty(Name))
                 return false;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Gsemac.Forms.Styles.Dom;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
-        public bool IsMatch(INode node) {
+        public bool IsMatch(INode2 node) {
 
             return selectors.All(selector => selector.IsMatch(node));
 

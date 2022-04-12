@@ -1,4 +1,6 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -17,7 +19,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public void Draw(object sender, DrawToolTipEventArgs e) {
 
-            INode node = new UserNode(string.Empty, new[] { "ToolTip" });
+            INode2 node = new UserNode(string.Empty, new[] { "ToolTip" });
             IRuleset ruleset = styleSheet.GetRuleset(node);
 
             styleRenderer.PaintBackground(e.Graphics, e.Bounds, ruleset);

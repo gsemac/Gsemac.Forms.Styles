@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -62,7 +63,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             }
 
         }
-        private INode CreateItemNode(ListBox control, int itemindex) {
+        private INode2 CreateItemNode(ListBox control, int itemindex) {
 
             object item = control.Items[itemindex];
             Rectangle itemRect = control.GetItemRectangle(itemindex);

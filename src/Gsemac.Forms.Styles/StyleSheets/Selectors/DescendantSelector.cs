@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Gsemac.Forms.Styles.Dom;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -17,7 +14,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
-        public bool IsMatch(INode node) {
+        public bool IsMatch(INode2 node) {
 
             if (parentSelector is null || descendantSelector is null)
                 return false;
@@ -40,7 +37,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         private readonly ISelector parentSelector;
         private readonly ISelector descendantSelector;
 
-        private bool MatchesNodeOrParentNode(ISelector selector, INode node) {
+        private bool MatchesNodeOrParentNode(ISelector selector, INode2 node) {
 
             bool result = selector.IsMatch(node);
 

@@ -1,4 +1,6 @@
-﻿namespace Gsemac.Forms.Styles.StyleSheets {
+﻿using Gsemac.Forms.Styles.Dom;
+
+namespace Gsemac.Forms.Styles.StyleSheets {
 
     public class ChildSelector :
         ISelector {
@@ -12,7 +14,7 @@
 
         }
 
-        public bool IsMatch(INode node) {
+        public bool IsMatch(INode2 node) {
 
             if (parentSelector is null || childSelector is null)
                 return false;

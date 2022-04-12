@@ -1,6 +1,9 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -28,7 +31,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             return args.StyleSheet.GetRuleset(GetProgressNode(control));
 
         }
-        private INode GetProgressNode(ProgressBar control) {
+        private INode2 GetProgressNode(ProgressBar control) {
 
             UserNode node = new UserNode(string.Empty, new[] { "Progress" });
 

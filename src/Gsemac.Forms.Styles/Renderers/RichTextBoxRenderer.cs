@@ -1,4 +1,6 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,7 +11,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public override void PaintControl(RichTextBox control, ControlPaintArgs args) {
 
-            INode controlNode = new ControlNode(control);
+            INode2 controlNode = new ControlNode2(control);
             IRuleset ruleset = args.StyleSheet.GetRuleset(controlNode);
 
             RenderUtilities.ApplyColorProperties(control, ruleset);

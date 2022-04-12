@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Gsemac.Forms.Styles.Dom;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
     public interface ISelector {
 
-        bool IsMatch(INode node);
+        bool IsMatch(INode2 node);
 
     }
 

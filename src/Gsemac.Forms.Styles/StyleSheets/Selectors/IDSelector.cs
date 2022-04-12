@@ -1,4 +1,6 @@
-﻿namespace Gsemac.Forms.Styles.StyleSheets {
+﻿using Gsemac.Forms.Styles.Dom;
+
+namespace Gsemac.Forms.Styles.StyleSheets {
 
     public class IDSelector :
         ISelector {
@@ -13,7 +15,7 @@
 
         }
 
-        public bool IsMatch(INode node) {
+        public bool IsMatch(INode2 node) {
 
             if (string.IsNullOrEmpty(Name))
                 return false;

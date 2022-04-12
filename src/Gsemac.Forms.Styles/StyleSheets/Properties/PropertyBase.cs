@@ -8,7 +8,7 @@
         public T Value { get; }
         public string Name => Property.GetName(Type);
         public PropertyType Type { get; }
-        public bool Inheritable { get; }
+        public bool IsInheritable { get; }
 
         object IProperty.Value => Value;
 
@@ -20,11 +20,11 @@
 
         // Protected members
 
-        protected PropertyBase(PropertyType type, T value, bool inheritable = true) {
+        protected PropertyBase(PropertyType type, T value, bool isInheritable = true) {
 
             this.Type = type;
             this.Value = value;
-            this.Inheritable = inheritable;
+            this.IsInheritable = isInheritable;
 
         }
 

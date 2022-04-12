@@ -1,5 +1,7 @@
-﻿using Gsemac.Forms.Styles.Renderers.Extensions;
+﻿using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.Renderers.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -34,8 +36,8 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            PaintButton(e, topButtonRect, TriangleOrientation.Up, e.StyleSheet.GetRuleset(new ControlNode(control, topButtonClickRect)));
-            PaintButton(e, bottomButtonRect, TriangleOrientation.Down, e.StyleSheet.GetRuleset(new ControlNode(control, bottomButtonClickRect)));
+          //  PaintButton(e, topButtonRect, TriangleOrientation.Up, e.StyleSheet.GetRuleset(new ControlNode2(control, topButtonClickRect)));
+          //  PaintButton(e, bottomButtonRect, TriangleOrientation.Down, e.StyleSheet.GetRuleset(new ControlNode2(control, bottomButtonClickRect)));
 
         }
 

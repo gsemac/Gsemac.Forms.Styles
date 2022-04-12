@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Extensions;
+using Gsemac.Forms.Styles.Dom;
 using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Collections.Generic;
@@ -48,9 +49,6 @@ namespace Gsemac.Forms.Styles.Applicators {
 
             foreach (Control control in controlInfo.Keys.ToArray())
                 ClearStyles(control, new StyleOptions(StyleOptions.Default) { ApplyToChildren = false });
-
-            if (options.HasFlag(StyleApplicatorOptions.DisposeStyleSheet) && StyleSheet != null)
-                StyleSheet.Dispose();
 
             ClearCurrentApplicator();
 
@@ -133,7 +131,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         protected virtual bool HasStyles(Control control) {
 
-            return StyleSheet.GetRuleset(new ControlNode(control), false).Any();
+            return StyleSheet.GetRulesets(new ControlNode2(control)).Any();
 
         }
 

@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System.Drawing;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         protected override void OnApplyStyles(Control control) {
 
-            IRuleset rules = StyleSheet.GetRuleset(new ControlNode(control));
+            IRuleset rules = StyleSheet.GetRuleset(new ControlNode2(control));
 
             if (rules.BackgroundColor.HasValue())
                 control.BackColor = rules.BackgroundColor.Value;

@@ -6,18 +6,12 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.StyleSheets {
 
     public class UserNode :
-        NodeBase {
+       Dom.NodeBase {
 
         // Public members
 
-        public override IEnumerable<string> Classes => GetClasses();
-        public override string PseudoElement => GetPseudoElement();
-        public override string Tag => GetTag();
-        public override string Id => GetId();
-        public override NodeStates States => GetStates();
-        public override INode Parent => GetParent();
-
-        public UserNode(Rectangle clientRectangle, Point cursorPosition) {
+        public UserNode(Rectangle clientRectangle, Point cursorPosition) :
+            base("") {
 
             Rectangle cursorRect = new Rectangle(cursorPosition.X, cursorPosition.Y, 1, 1);
 
@@ -31,7 +25,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             }
 
         }
-        public UserNode(string tag, IEnumerable<string> classes) {
+        public UserNode(string tag, IEnumerable<string> classes) :
+            base(tag) {
 
             this.tag = tag;
 
@@ -39,7 +34,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 AddClass(@class);
 
         }
-        public UserNode(INode baseNode) {
+        public UserNode(INode baseNode) :
+            base(baseNode.Tag) {
 
             this.baseNode = baseNode;
 

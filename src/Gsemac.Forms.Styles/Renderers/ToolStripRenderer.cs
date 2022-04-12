@@ -92,7 +92,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             return node;
 
         }
-        private UserNode getToolStripSeparatorNode() {
+        private UserNode GetToolStripSeparatorNode() {
 
             UserNode node = new UserNode(string.Empty, new[] { "ToolStripSeparator", "ToolStripItem", "Item" });
 
@@ -119,7 +119,7 @@ namespace Gsemac.Forms.Styles.Renderers {
         }
         private IRuleset GetToolStripSeparatorRuleset(ToolStrip parent) {
 
-            UserNode node = getToolStripSeparatorNode();
+            UserNode node = GetToolStripSeparatorNode();
 
             node.SetParent(new ControlNode(parent));
 

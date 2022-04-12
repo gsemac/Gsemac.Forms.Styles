@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -44,7 +42,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         }
         public void InheritProperties(IEnumerable<IProperty> properties) {
 
-            foreach (IProperty property in properties.Where(p => p.Inheritable))
+            foreach (IProperty property in properties.Where(p => p.IsInheritable))
                 if (!HasProperty(property.Type))
                     AddProperty(property);
 

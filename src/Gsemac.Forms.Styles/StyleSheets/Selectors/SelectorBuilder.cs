@@ -32,7 +32,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         }
         public void AddTag(string name) {
 
-            rhsSelector.Add(new TagSelector(name));
+            rhsSelector.Add(new TypeSelector(name));
 
         }
 

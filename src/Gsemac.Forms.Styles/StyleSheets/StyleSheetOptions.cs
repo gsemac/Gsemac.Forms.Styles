@@ -10,6 +10,8 @@
 
         public IFileReader FileReader { get; set; } = new FileSystemFileReader();
 
+        public static StyleSheetOptions Default => new StyleSheetOptions();
+
     }
 
 }

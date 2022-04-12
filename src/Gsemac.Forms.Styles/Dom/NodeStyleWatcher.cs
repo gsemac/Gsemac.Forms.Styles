@@ -256,18 +256,8 @@ namespace Gsemac.Forms.Styles.Dom {
         }
         private bool ComputeStyles(INode2 node) {
 
-            IRuleset testRuleset = new Ruleset();
-
-            testRuleset.AddProperty(Property.Create(PropertyType.BackgroundColor, Color.DimGray));
-            testRuleset.AddProperty(Property.Create(PropertyType.Color, Color.DarkGray));
-
-            if (node.States.Contains(NodeState.Focused))
-                testRuleset.AddProperty(Property.Create(PropertyType.Color, Color.DodgerBlue));
-
-            IEnumerable<IRuleset> styles = new List<IRuleset> { testRuleset }
+            IEnumerable<IRuleset> styles = styleSheets.SelectMany(styleSheet => styleSheet.GetRulesets(node))
                 .Where(ruleset => ruleset.Any());
-
-            // new List<IRuleset>(StyleSheet.GetRuleset(node));
 
             if (!styles.Any()) {
 
@@ -279,10 +269,14 @@ namespace Gsemac.Forms.Styles.Dom {
                 // Note that if the style lists are the same, Remove and Add will never be called.
                 // This means the cached style returned by CalculateStyle won't be reset, and event handlers won't be called unnecessarily.
 
-                foreach (IRuleset style in node.Styles.Except(styles).ToArray())
+                IEqualityComparer<IRuleset> rulesetComparer = new EquivalentRulesetEqualityComparer();
+
+                // #TODO This can cause StylesChanged to get called twice, could be more efficient
+
+                foreach (IRuleset style in node.Styles.Except(styles, rulesetComparer).ToArray())
                     node.Styles.Remove(style);
 
-                foreach (IRuleset style in styles.Except(node.Styles).ToArray())
+                foreach (IRuleset style in styles.Except(node.Styles, rulesetComparer).ToArray())
                     node.Styles.Add(style);
 
             }

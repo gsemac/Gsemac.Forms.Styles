@@ -2,6 +2,7 @@
 using Gsemac.Forms.Styles.Applicators;
 using Gsemac.Forms.Styles.Applicators2;
 using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System;
 using System.Windows.Forms;
 
@@ -69,7 +70,7 @@ namespace ThemeTesting {
 
         private IStyleSheet LoadStyleSheet() {
 
-            return StyleSheet.FromFile("DarkUI.css");
+            return new StyleSheetFactory().FromFile("DarkUI.css");
 
         }
         private void ClearStyles() {

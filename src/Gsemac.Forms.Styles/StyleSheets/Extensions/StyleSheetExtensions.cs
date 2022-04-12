@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using Gsemac.Forms.Styles.Dom;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Extensions {
 
@@ -13,15 +15,29 @@ namespace Gsemac.Forms.Styles.StyleSheets.Extensions {
         }
         public static IRuleset GetRuleset(this IStyleSheet styleSheet, Control control, bool inherit) {
 
-            return styleSheet.GetRuleset(new ControlNode(control), inherit);
+            return styleSheet.GetRuleset(new ControlNode2(control));
 
         }
-        public static IRuleset GetRuleset(this IStyleSheet styleSheet, INode node, Control parent) {
+        public static IRuleset GetRuleset(this IStyleSheet styleSheet, INode2 node, Control parent) {
 
             return styleSheet.GetRuleset(node, styleSheet.GetRuleset(parent));
 
         }
-        public static IRuleset GetRuleset(this IStyleSheet styleSheet, INode node, IRuleset parentRuleset) {
+        public static IRuleset GetRuleset(this IStyleSheet styleSheet, INode2 node) {
+
+            // TODO: Get rid of this
+
+            return styleSheet.GetRulesets(node).First();
+
+        }
+        public static IRuleset GetRuleset(this IStyleSheet styleSheet, INode2 node, bool inherit) {
+
+            // TODO: Get rid of this
+
+            return styleSheet.GetRuleset(node);
+
+        }
+        public static IRuleset GetRuleset(this IStyleSheet styleSheet, INode2 node, IRuleset parentRuleset) {
 
             IRuleset ruleset = new Ruleset();
 

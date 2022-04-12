@@ -256,7 +256,7 @@ namespace Gsemac.Forms.Styles {
 
                 }
 
-                Console.WriteLine($"Refreshing style for {node.Id}");
+                Console.WriteLine($"{DateTimeOffset.Now} Rerendering style for {node.Id}");
 
                 node.Control.Invalidate();
 

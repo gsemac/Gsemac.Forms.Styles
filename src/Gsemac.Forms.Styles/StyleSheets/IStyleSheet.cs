@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.Dom;
 using System.Collections.Generic;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
     public interface IStyleSheet :
-        IEnumerable<IRuleset>,
-        IDisposable {
+        IEnumerable<IRuleset> {
 
-        IRuleset GetRuleset(INode node, bool inherit = true);
+        IEnumerable<IRuleset> GetRulesets(INode2 node);
 
     }
 

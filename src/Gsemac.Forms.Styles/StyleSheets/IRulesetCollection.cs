@@ -5,11 +5,10 @@ using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
-    public interface IHashCodeBuilder {
+    public interface IRulesetCollection :
+        ICollection<IRuleset> {
 
-        void Add(object obj);
 
-        int Build();
 
     }
 

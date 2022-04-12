@@ -27,12 +27,8 @@ namespace Gsemac.Forms.Styles.Applicators2 {
                  .Select(p => p.Value)
                  .LastOrDefault();
 
-            if (borderWidth > 0) {
-
-                button.FlatAppearance.BorderColor = borderColor;
-                button.FlatAppearance.BorderSize = (int)borderWidth;
-
-            }
+            button.FlatAppearance.BorderColor = borderColor;
+            button.FlatAppearance.BorderSize = (int)borderWidth;
 
         }
 

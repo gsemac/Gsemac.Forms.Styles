@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Gsemac.Forms.Styles.Dom;
+using System;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -10,18 +8,20 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
-        public PseudoElementSelector(string name) {
+        public PseudoElementSelector(string elementName) {
 
-            this.elementName = name?.TrimStart(':');
+            this.elementName = elementName?.TrimStart(':');
 
         }
 
-        public bool IsMatch(INode node) {
+        public bool IsMatch(INode2 node) {
+
+            throw new NotImplementedException();
 
             if (string.IsNullOrEmpty(elementName))
                 return false;
 
-            return node.PseudoElement.TrimStart(':').Equals(elementName, StringComparison.OrdinalIgnoreCase);
+            // return node.PseudoElement.TrimStart(':').Equals(elementName, StringComparison.OrdinalIgnoreCase);
 
         }
 
