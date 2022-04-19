@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Renderers2;
+using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System.Collections.Generic;
 using System.Drawing;
@@ -41,7 +42,7 @@ namespace Gsemac.Forms.Styles.Renderers {
         protected virtual void PaintBackground(TreeView control, ControlPaintArgs args) {
 
             IRuleset ruleset = args.StyleSheet.GetRuleset(control);
-            Rectangle borderRect = RenderUtilities.GetOuterBorderRectangle(control, ruleset);
+            Rectangle borderRect = Renderers2.RenderUtilities.GetOuterBorderRectangle(control.ClientRectangle, ruleset);
 
             if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor)
                 control.BackColor = ruleset.BackgroundColor.Value;
@@ -148,7 +149,7 @@ namespace Gsemac.Forms.Styles.Renderers {
         private int PaintNodeAndChildNodes(TreeView control, TreeNode node, int visibleIndex, ControlPaintArgs args) {
 
             if (node.IsVisible) {
-   
+
                 PaintNode(control, node, visibleIndex++, args);
 
                 foreach (TreeNode childNode in node.Nodes) {

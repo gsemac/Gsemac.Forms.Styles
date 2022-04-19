@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Renderers2;
+using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using Gsemac.Win32;
 using System;
@@ -67,7 +68,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             // Draw the background/border of the control.
 
             IRuleset ruleset = args.StyleSheet.GetRuleset(control);
-            Rectangle borderRect = RenderUtilities.GetOuterBorderRectangle(control, ruleset);
+            Rectangle borderRect = Renderers2.RenderUtilities.GetOuterBorderRectangle(control.ClientRectangle, ruleset);
 
             if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor)
                 control.BackColor = ruleset.BackgroundColor.Value;

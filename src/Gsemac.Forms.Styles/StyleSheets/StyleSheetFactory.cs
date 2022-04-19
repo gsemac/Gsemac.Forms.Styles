@@ -9,6 +9,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Public members
 
+        public static StyleSheetFactory Default => new StyleSheetFactory();
+
         public IStyleSheet FromStream(Stream stream, IStyleSheetOptions options) {
 
             IList<IRuleset> rulesets = new List<IRuleset>();

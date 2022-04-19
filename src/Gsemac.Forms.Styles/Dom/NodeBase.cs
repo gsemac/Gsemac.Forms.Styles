@@ -3,6 +3,7 @@ using Gsemac.Core;
 using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -80,7 +81,24 @@ namespace Gsemac.Forms.Styles.Dom {
 
             // Initialize style.
 
-            style = new ResettableLazy<IRuleset>(CalculateStyleInternal);
+            style = new ResettableLazy<IRuleset>(ComputeStyle);
+
+        }
+
+        protected virtual IRuleset ComputeStyle() {
+
+            IRuleset ruleset = new Ruleset();
+
+            if (Parent is object) {
+
+                ruleset.AddProperties(Parent.GetComputedStyle());
+
+            }
+
+            foreach (IRuleset style in Styles)
+                ruleset.AddProperties(style);
+
+            return ruleset;
 
         }
 
@@ -108,17 +126,6 @@ namespace Gsemac.Forms.Styles.Dom {
         // Private members
 
         private readonly IResettableLazy<IRuleset> style;
-
-        private IRuleset CalculateStyleInternal() {
-
-            IRuleset ruleset = new Ruleset();
-
-            foreach (IRuleset style in Styles)
-                ruleset.AddProperties(style);
-
-            return ruleset;
-
-        }
 
         private void StylesChangedHandler(object sender, EventArgs e) {
 

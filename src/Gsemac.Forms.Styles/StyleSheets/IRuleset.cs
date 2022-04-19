@@ -32,6 +32,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         void AddProperties(IEnumerable<IProperty> properties);
         void InheritProperties(IEnumerable<IProperty> properties);
         IProperty GetProperty(PropertyType propertyType);
+        IProperty GetProperty(string propertyName);
         bool HasProperty(PropertyType propertyType);
 
     }

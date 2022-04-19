@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CannotApplyStyleToTypeWithType" xml:space="preserve">
-    <value>Cannot apply style to type '{0}'.</value>
+    <value>Cannot apply style to object of type '{0}'.</value>
+  </data>
+  <data name="CannotRenderTypeWithType" xml:space="preserve">
+    <value>Cannot render objects of type '{0}'.</value>
   </data>
 </root>

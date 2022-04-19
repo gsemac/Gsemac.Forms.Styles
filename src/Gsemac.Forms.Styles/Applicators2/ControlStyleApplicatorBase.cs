@@ -8,7 +8,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Public members
 
-        public override void InitializeTarget(T obj) {
+        public override void InitializeObject(T obj) {
 
             if (obj is null)
                 throw new ArgumentNullException(nameof(obj));

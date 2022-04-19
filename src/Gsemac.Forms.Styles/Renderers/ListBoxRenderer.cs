@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.Renderers2;
 using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System.Drawing;
@@ -14,7 +15,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public override void PaintControl(ListBox control, ControlPaintArgs e) {
 
-            Rectangle borderRect = RenderUtilities.GetOuterBorderRectangle(control, e.StyleSheet.GetRuleset(control));
+            Rectangle borderRect = Renderers2.RenderUtilities.GetOuterBorderRectangle(control.ClientRectangle, e.StyleSheet.GetRuleset(control));
 
             if (ControlUtilities.GetVisibleScrollBars(control).HasFlag(ScrollBars.Vertical))
                 borderRect = new Rectangle(borderRect.X, borderRect.Y, borderRect.Width + SystemInformation.VerticalScrollBarWidth, borderRect.Height);

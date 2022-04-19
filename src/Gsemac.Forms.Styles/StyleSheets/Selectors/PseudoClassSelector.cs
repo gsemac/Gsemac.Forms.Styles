@@ -1,6 +1,5 @@
 ﻿using Gsemac.Forms.Styles.Dom;
 using System;
-using System.Linq;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -16,13 +15,19 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         }
 
         public bool IsMatch(INode2 node) {
+            Console.WriteLine(node.States.Contains(NodeState.Hover));
+            switch (className) {
 
-            throw new NotImplementedException();
+                case "focus":
+                    return node.States.Contains(NodeState.Focus);
 
-            if (string.IsNullOrEmpty(className))
-                return false;
+                case "hover":
+                    return node.States.Contains(NodeState.Hover);
 
-            // return node.PseudoClasses.Any(c => c.TrimStart(':').Equals(className, StringComparison.OrdinalIgnoreCase));
+                default:
+                    return false;
+
+            }
 
         }
 

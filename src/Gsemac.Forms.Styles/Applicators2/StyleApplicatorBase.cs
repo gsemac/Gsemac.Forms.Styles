@@ -5,14 +5,14 @@ using System;
 namespace Gsemac.Forms.Styles.Applicators2 {
 
     public abstract class StyleApplicatorBase :
-        IStyleApplicator2 {
+        IStyleApplicator {
 
         // Public members
 
-        public abstract void ApplyStyle(object obj, IRuleset style);
+        public abstract void ApplyStyle(object obj, IRuleset ruleset);
 
-        public virtual void InitializeTarget(object obj) { }
-        public virtual void DeinitializeTarget(object obj) { }
+        public virtual void InitializeObject(object obj) { }
+        public virtual void DeinitializeObject(object obj) { }
 
     }
 
@@ -22,36 +22,36 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Public members
 
-        public abstract void ApplyStyle(T obj, IRuleset style);
+        public abstract void ApplyStyle(T obj, IRuleset ruleset);
 
-        public virtual void InitializeTarget(T obj) { }
-        public virtual void DeinitializeTarget(T obj) { }
+        public virtual void InitializeObject(T obj) { }
+        public virtual void DeinitializeObject(T obj) { }
 
-        public override void InitializeTarget(object obj) {
-
-            ValidateTarget(obj);
-
-            InitializeTarget((T)obj);
-
-        }
-        public override void DeinitializeTarget(object obj) {
+        public override void InitializeObject(object obj) {
 
             ValidateTarget(obj);
 
-            DeinitializeTarget((T)obj);
+            InitializeObject((T)obj);
 
         }
-        public override void ApplyStyle(object obj, IRuleset style) {
+        public override void DeinitializeObject(object obj) {
+
+            ValidateTarget(obj);
+
+            DeinitializeObject((T)obj);
+
+        }
+        public override void ApplyStyle(object obj, IRuleset ruleset) {
 
             if (obj is null)
                 throw new ArgumentNullException(nameof(obj));
 
-            if (style is null)
-                throw new ArgumentNullException(nameof(style));
+            if (ruleset is null)
+                throw new ArgumentNullException(nameof(ruleset));
 
             ValidateTarget(obj);
 
-            ApplyStyle((T)obj, style);
+            ApplyStyle((T)obj, ruleset);
 
         }
 

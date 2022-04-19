@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Gsemac.Forms.Styles.StyleSheets.Extensions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Tests {
@@ -10,7 +11,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Tests {
         public void TestPropertyWithLeadingWhitespaceBeforeValue() {
 
             string styleSheetStr = "class { border-width:     10px; }";
-            IStyleSheet styleSheet = StyleSheet.Parse(styleSheetStr);
+            IStyleSheet styleSheet = StyleSheetFactory.Default.Parse(styleSheetStr);
             IRuleset ruleset = styleSheet.GetRuleset(new UserNode("class", Enumerable.Empty<string>()));
 
             Assert.AreEqual(10.0, ruleset.GetProperty(PropertyType.BorderWidth).Value);
@@ -20,7 +21,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Tests {
         public void TestPropertyWithFollowingWhitespaceAfterValue() {
 
             string styleSheetStr = "class { border-width: 10px     ; }";
-            IStyleSheet styleSheet = StyleSheet.Parse(styleSheetStr);
+            IStyleSheet styleSheet = StyleSheetFactory.Default.Parse(styleSheetStr);
             IRuleset ruleset = styleSheet.GetRuleset(new UserNode("class", Enumerable.Empty<string>()));
 
             Assert.AreEqual(10.0, ruleset.GetProperty(PropertyType.BorderWidth).Value);
@@ -30,7 +31,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Tests {
         public void TestPropertyWithNoLeadingWhitespaceBeforeValue() {
 
             string styleSheetStr = "class { border-width:10px; }";
-            IStyleSheet styleSheet = StyleSheet.Parse(styleSheetStr);
+            IStyleSheet styleSheet = StyleSheetFactory.Default.Parse(styleSheetStr);
             IRuleset ruleset = styleSheet.GetRuleset(new UserNode("class", Enumerable.Empty<string>()));
 
             Assert.AreEqual(10.0, ruleset.GetProperty(PropertyType.BorderWidth).Value);
@@ -40,7 +41,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Tests {
         public void TestPropertyWithNoEndingDelimiter() {
 
             string styleSheetStr = "class { border-width: 10px }";
-            IStyleSheet styleSheet = StyleSheet.Parse(styleSheetStr);
+            IStyleSheet styleSheet = StyleSheetFactory.Default.Parse(styleSheetStr);
             IRuleset ruleset = styleSheet.GetRuleset(new UserNode("class", Enumerable.Empty<string>()));
 
             Assert.AreEqual(10.0, ruleset.GetProperty(PropertyType.BorderWidth).Value);

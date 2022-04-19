@@ -1,5 +1,7 @@
 ﻿using Gsemac.Collections;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Gsemac.Forms.Styles.StyleSheets {
 
@@ -54,6 +56,13 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 return property;
             else
                 return null;
+
+        }
+        public override IProperty GetProperty(string propertyName) {
+
+            // TODO: Not this
+
+            return properties.Values.Where(p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
 
         }
 

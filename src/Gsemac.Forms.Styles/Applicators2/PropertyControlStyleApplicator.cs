@@ -1,5 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
-using Gsemac.Forms.Styles.StyleSheets.Extensions;
+﻿using Gsemac.Forms.Styles.Renderers2;
+using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Windows.Forms;
 
@@ -10,21 +10,17 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Public members
 
-        public override void ApplyStyle(T obj, IRuleset style) {
+        public override void ApplyStyle(T obj, IRuleset ruleset) {
 
             if (obj is null)
                 throw new ArgumentNullException(nameof(obj));
 
-            if (style is null)
-                throw new ArgumentNullException(nameof(style));
+            if (ruleset is null)
+                throw new ArgumentNullException(nameof(ruleset));
 
             Control control = obj;
 
-            if (style.BackgroundColor.HasValue())
-                control.BackColor = style.BackgroundColor.Value;
-
-            if (style.Color.HasValue())
-                control.ForeColor = style.Color.Value;
+            ControlRenderUtilities.ApplyColorProperties(control, ruleset);
 
         }
 

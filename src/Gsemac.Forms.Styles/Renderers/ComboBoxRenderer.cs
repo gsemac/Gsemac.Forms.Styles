@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Renderers2;
+using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -15,7 +16,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             IRuleset ruleset = e.StyleSheet.GetRuleset(control);
 
-            RenderUtilities.ApplyColorProperties(control, ruleset);
+            ControlRenderUtilities.ApplyColorProperties(control, ruleset);
 
             Rectangle clientRect = control.ClientRectangle;
 

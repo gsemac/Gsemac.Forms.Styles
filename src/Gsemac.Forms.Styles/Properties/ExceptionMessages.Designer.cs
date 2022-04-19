@@ -61,11 +61,20 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot apply style to type &apos;{0}&apos;..
+        ///   Looks up a localized string similar to Cannot apply style to object of type &apos;{0}&apos;..
         /// </summary>
         internal static string CannotApplyStyleToTypeWithType {
             get {
                 return ResourceManager.GetString("CannotApplyStyleToTypeWithType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot render objects of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string CannotRenderTypeWithType {
+            get {
+                return ResourceManager.GetString("CannotRenderTypeWithType", resourceCulture);
             }
         }
     }

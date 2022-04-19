@@ -48,6 +48,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
         public abstract IProperty GetProperty(PropertyType propertyType);
+        public abstract IProperty GetProperty(string propertyName);
         public virtual bool HasProperty(PropertyType propertyType) {
 
             return GetProperty(propertyType) != null;

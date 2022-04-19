@@ -6,7 +6,7 @@
         Checked,
         Disabled,
         Enabled,
-        Focused,
+        Focus,
         Hover,
     }
 

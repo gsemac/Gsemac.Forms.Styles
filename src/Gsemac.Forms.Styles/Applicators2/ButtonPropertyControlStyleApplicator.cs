@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System.Drawing;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Applicators2 {
 
     public class ButtonPropertyControlStyleApplicator :
-        PropertyControlStyleApplicator<Button> {
+         PropertyControlStyleApplicator<Button> {
 
         // Public members
 

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Extensions;
+using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Dom {
@@ -39,6 +42,22 @@ namespace Gsemac.Forms.Styles.Dom {
         public override int GetHashCode() {
 
             return Control.GetHashCode();
+
+        }
+
+        // Protected members
+
+        protected override IRuleset ComputeStyle() {
+
+            IRuleset ruleset = base.ComputeStyle();
+
+            if (!ruleset.GetProperty(PropertyType.BackgroundColor).HasValue())
+                ruleset.AddProperty(Property.Create(PropertyType.BackgroundColor, Control.BackColor));
+
+            if (!ruleset.GetProperty(PropertyType.Color).HasValue())
+                ruleset.AddProperty(Property.Create(PropertyType.Color, Control.ForeColor));
+
+            return ruleset;
 
         }
 
@@ -100,10 +119,13 @@ namespace Gsemac.Forms.Styles.Dom {
             control.ControlAdded += ControlAddedHandler;
             control.ControlRemoved += ControlRemovedHandler;
 
+            control.Disposed += DisposedHandler;
+
             control.GotFocus += GotFocusHandler;
             control.LostFocus += LostFocusHandler;
 
-            control.Disposed += DisposedHandler;
+            control.MouseEnter += MouseEnterHandler;
+            control.MouseLeave += MouseLeaveHandler;
 
         }
         private void RemoveEventHandlers(Control control) {
@@ -114,10 +136,13 @@ namespace Gsemac.Forms.Styles.Dom {
             control.ControlAdded -= ControlAddedHandler;
             control.ControlRemoved -= ControlRemovedHandler;
 
+            control.Disposed -= DisposedHandler;
+
             control.GotFocus -= GotFocusHandler;
             control.LostFocus -= LostFocusHandler;
 
-            control.Disposed -= DisposedHandler;
+            control.MouseEnter -= MouseEnterHandler;
+            control.MouseLeave -= MouseLeaveHandler;
 
         }
 
@@ -148,19 +173,29 @@ namespace Gsemac.Forms.Styles.Dom {
             RemoveChild(e.Control);
 
         }
+        private void DisposedHandler(object sender, EventArgs e) {
+
+            RemoveEventHandlers((Control)sender);
+
+        }
         private void GotFocusHandler(object sender, EventArgs e) {
 
-            States.Add(NodeState.Focused);
+            States.Add(NodeState.Focus);
 
         }
         private void LostFocusHandler(object sender, EventArgs e) {
 
-            States.Remove(NodeState.Focused);
+            States.Remove(NodeState.Focus);
 
         }
-        private void DisposedHandler(object sender, EventArgs e) {
+        private void MouseEnterHandler(object sender, EventArgs e) {
 
-            RemoveEventHandlers((Control)sender);
+            States.Add(NodeState.Hover);
+
+        }
+        private void MouseLeaveHandler(object sender, EventArgs e) {
+
+            States.Remove(NodeState.Hover);
 
         }
 

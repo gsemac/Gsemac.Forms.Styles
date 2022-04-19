@@ -17,7 +17,7 @@ namespace ThemeTesting {
 
             InitializeComponent();
 
-            IStyleApplicatorFactory styleApplicatorFactory = new PropertyStyleApplicatorFactory();
+            INodeStyleApplicatorFactory styleApplicatorFactory = new UserPaintControlStyleApplicatorFactory();
             IStyleManager styleManager = new StyleManager(styleApplicatorFactory);
 
             styleManager.StyleSheets.Add(LoadStyleSheet());
@@ -66,11 +66,12 @@ namespace ThemeTesting {
 
         // Private members
 
-        IStyleApplicator styleApplicator;
+        Gsemac.Forms.Styles.Applicators.IStyleApplicator styleApplicator;
 
         private IStyleSheet LoadStyleSheet() {
 
-            return new StyleSheetFactory().FromFile("DarkUI.css");
+            //return new StyleSheetFactory().FromFile("DarkUI.css");
+            return new StyleSheetFactory().FromFile("Test.css");
 
         }
         private void ClearStyles() {

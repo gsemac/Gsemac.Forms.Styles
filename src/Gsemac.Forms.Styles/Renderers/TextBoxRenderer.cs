@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.Renderers2;
+using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System.Drawing;
 using System.Windows.Forms;
@@ -16,7 +17,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             // Update the color of the TextBox itself.
 
-            RenderUtilities.ApplyColorProperties(control, ruleset);
+            ControlRenderUtilities.ApplyColorProperties(control, ruleset);
 
             // Draw the background the TextBox.
             // The height of regular TextBoxes is 23 pixels, with 3 pixels of horizontal padding.

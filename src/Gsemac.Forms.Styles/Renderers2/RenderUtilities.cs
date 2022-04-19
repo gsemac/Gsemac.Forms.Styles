@@ -7,20 +7,17 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Renderers {
-
-    internal enum BorderPathType {
-        Top,
-        Right,
-        Bottom,
-        Left,
-        Full
-    }
+namespace Gsemac.Forms.Styles.Renderers2 {
 
     internal static class RenderUtilities {
 
         // Public members
 
+        public static Color GetColorWithAlpha(Color baseColor, float alpha) {
+
+            return Color.FromArgb((int)Math.Round(byte.MaxValue * alpha), baseColor.R, baseColor.G, baseColor.B);
+
+        }
         public static DashStyle GetDashStyle(StyleSheets.BorderStyle borderStyle) {
 
             switch (borderStyle) {
@@ -37,28 +34,39 @@ namespace Gsemac.Forms.Styles.Renderers {
             }
 
         }
-        public static Color GetColorWithAlpha(Color baseColor, float alpha) {
+        public static Rectangle GetOuterBorderRectangle(Rectangle bounds, IRuleset style) {
 
-            return Color.FromArgb((int)Math.Round(byte.MaxValue * alpha), baseColor.R, baseColor.G, baseColor.B);
+            Borders borders = style.GetBorders();
+
+            Rectangle borderRect = bounds;
+
+            borderRect = new Rectangle(
+                borderRect.X - (int)borders.Left.Width,
+                borderRect.Y - (int)borders.Top.Width,
+                borderRect.Width + (int)borders.Left.Width + (int)borders.Right.Width,
+                borderRect.Height + +(int)borders.Top.Width + (int)borders.Bottom.Width
+                );
+
+            return borderRect;
 
         }
 
-        public static void ClipToBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
+        public static void ClipToBorder(Graphics graphics, Rectangle bounds, IRuleset style) {
 
-            Region region = new Region(rectangle);
+            Region region = new Region(bounds);
 
-            if (ruleset.Any(p => p.IsBorderRadiusProperty())) {
+            if (style.Any(p => p.IsBorderRadiusProperty())) {
 
-                region.Intersect(GraphicsExtensions.CreateRoundedRectangle(rectangle,
-                    (int)(ruleset.BorderTopLeftRadius?.Value ?? 0),
-                    (int)(ruleset.BorderTopRightRadius?.Value ?? 0),
-                    (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0),
-                    (int)(ruleset.BorderBottomRightRadius?.Value ?? 0)));
+                region.Intersect(GraphicsExtensions.CreateRoundedRectangle(bounds,
+                    (int)(style.BorderTopLeftRadius?.Value ?? 0),
+                    (int)(style.BorderTopRightRadius?.Value ?? 0),
+                    (int)(style.BorderBottomLeftRadius?.Value ?? 0),
+                    (int)(style.BorderBottomRightRadius?.Value ?? 0)));
 
             }
             else {
 
-                region.Intersect(rectangle);
+                region.Intersect(bounds);
 
             }
 
@@ -66,37 +74,45 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         }
 
-        public static void DrawBackground(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
+        public static void Clear(Graphics graphics, IRuleset style) {
+
+            IProperty clearColorProperty = style.GetProperty("--clear-color");
+
+            graphics.Clear(Color.Transparent);
+
+        }
+
+        public static void DrawBackground(Graphics graphics, Rectangle bounds, IRuleset style) {
 
             GraphicsState state = graphics.Save();
 
-            bool hasRadius = ruleset.GetBorderRadii().Any(r => r > 0);
-            bool hasRightRadius = hasRadius && (ruleset.BorderTopRightRadius?.Value > 0 || ruleset.BorderBottomRightRadius?.Value > 0);
-            bool hasBottomRadius = hasRadius && (ruleset.BorderBottomLeftRadius?.Value > 0 || ruleset.BorderBottomRightRadius?.Value > 0);
+            bool hasRadius = style.GetBorderRadii().Any(r => r > 0);
+            bool hasRightRadius = hasRadius && (style.BorderTopRightRadius?.Value > 0 || style.BorderBottomRightRadius?.Value > 0);
+            bool hasBottomRadius = hasRadius && (style.BorderBottomLeftRadius?.Value > 0 || style.BorderBottomRightRadius?.Value > 0);
 
             if (hasRadius)
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             // Draw the background color.
 
-            Rectangle backgroundRect = rectangle;
+            Rectangle backgroundRect = bounds;
 
             // If the rectangle has right or bottom corner radii, the bounds must be decreased to ensure the curve is not clipped.
 
             if (hasRadius)
-                backgroundRect = new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - (hasRightRadius ? 1 : 0), rectangle.Height - (hasBottomRadius ? 1 : 0));
+                backgroundRect = new Rectangle(bounds.X, bounds.Y, bounds.Width - (hasRightRadius ? 1 : 0), bounds.Height - (hasBottomRadius ? 1 : 0));
 
-            int topLeft = (int)(ruleset.BorderTopLeftRadius?.Value ?? 0);
-            int topRight = (int)(ruleset.BorderTopRightRadius?.Value ?? 0);
-            int bottomLeft = (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0);
-            int bottomRight = (int)(ruleset.BorderBottomRightRadius?.Value ?? 0);
+            int topLeft = (int)(style.BorderTopLeftRadius?.Value ?? 0);
+            int topRight = (int)(style.BorderTopRightRadius?.Value ?? 0);
+            int bottomLeft = (int)(style.BorderBottomLeftRadius?.Value ?? 0);
+            int bottomRight = (int)(style.BorderBottomRightRadius?.Value ?? 0);
 
-            if (ruleset.BackgroundColor.HasValue()) {
+            if (style.BackgroundColor.HasValue()) {
 
-                Color backgroundColor = ruleset.BackgroundColor?.Value ?? SystemColors.Control;
+                Color backgroundColor = style.BackgroundColor?.Value ?? SystemColors.Control;
 
-                if (ruleset.Opacity.HasValue())
-                    backgroundColor = RenderUtilities.GetColorWithAlpha(backgroundColor, (float)ruleset.Opacity.Value);
+                if (style.Opacity.HasValue())
+                    backgroundColor = GetColorWithAlpha(backgroundColor, (float)style.Opacity.Value);
 
                 using (Brush brush = new SolidBrush(backgroundColor)) {
 
@@ -110,11 +126,11 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             // Draw the background image.
 
-            if (ruleset.BackgroundImage.HasValue()) {
+            if (style.BackgroundImage.HasValue()) {
 
-                ClipToBorder(graphics, backgroundRect, ruleset);
+                ClipToBorder(graphics, backgroundRect, style);
 
-                foreach (IImage image in ruleset.BackgroundImage.Value.Images)
+                foreach (IImage image in style.BackgroundImage.Value.Images)
                     graphics.DrawImage(image, backgroundRect);
 
             }
@@ -122,36 +138,37 @@ namespace Gsemac.Forms.Styles.Renderers {
             graphics.Restore(state);
 
         }
-        public static void DrawBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
+
+        public static void DrawBorder(Graphics graphics, Rectangle bounds, IRuleset style) {
 
             GraphicsState state = graphics.Save();
 
-            bool hasRadius = ruleset.GetBorderRadii().Any(r => r > 0);
+            bool hasRadius = style.GetBorderRadii().Any(r => r > 0);
 
             if (hasRadius)
                 graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            double topWidth = ruleset.BorderTopWidth?.Value ?? 0;
-            double rightWidth = ruleset.BorderRightWidth?.Value ?? 0;
-            double bottomWidth = ruleset.BorderBottomWidth?.Value ?? 0;
-            double leftWidth = ruleset.BorderLeftWidth?.Value ?? 0;
+            double topWidth = style.BorderTopWidth?.Value ?? 0;
+            double rightWidth = style.BorderRightWidth?.Value ?? 0;
+            double bottomWidth = style.BorderBottomWidth?.Value ?? 0;
+            double leftWidth = style.BorderLeftWidth?.Value ?? 0;
 
-            double topLeftRadius = ruleset.BorderTopLeftRadius?.Value ?? 0;
-            double topRightRadius = ruleset.BorderTopRightRadius?.Value ?? 0;
-            double bottomRightRadius = ruleset.BorderBottomRightRadius?.Value ?? 0;
-            double bottomLeftRadius = ruleset.BorderBottomLeftRadius?.Value ?? 0;
+            double topLeftRadius = style.BorderTopLeftRadius?.Value ?? 0;
+            double topRightRadius = style.BorderTopRightRadius?.Value ?? 0;
+            double bottomRightRadius = style.BorderBottomRightRadius?.Value ?? 0;
+            double bottomLeftRadius = style.BorderBottomLeftRadius?.Value ?? 0;
 
             double horizontalBorderWidth = leftWidth + rightWidth;
             double verticalBorderWidth = topWidth + bottomWidth;
 
-            int rectX = rectangle.X + (int)(leftWidth / 2);
-            int rectY = rectangle.Y + (int)(topWidth / 2);
-            int rectWidth = rectangle.Width - (int)(horizontalBorderWidth / 2);
-            int rectHeight = rectangle.Height - (int)(verticalBorderWidth / 2);
+            int rectX = bounds.X + (int)(leftWidth / 2);
+            int rectY = bounds.Y + (int)(topWidth / 2);
+            int rectWidth = bounds.Width - (int)(horizontalBorderWidth / 2);
+            int rectHeight = bounds.Height - (int)(verticalBorderWidth / 2);
 
             Rectangle drawRect = new Rectangle(rectX, rectY, rectWidth - (rightWidth == 1 && leftWidth <= 0 ? 1 : 0), rectHeight - (bottomWidth == 1 && topWidth <= 0 ? 1 : 0));
 
-            float opacity = (float)(ruleset.Opacity?.Value ?? 1.0f);
+            float opacity = (float)(style.Opacity?.Value ?? 1.0f);
 
             using (Pen pen = new Pen(Color.Black)) {
 
@@ -160,15 +177,15 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                 if (topWidth > 0) {
 
-                    StyleSheets.BorderStyle borderStyle = ruleset.BorderTopStyle?.Value ?? StyleSheets.BorderStyle.Solid;
+                    StyleSheets.BorderStyle borderStyle = style.BorderTopStyle?.Value ?? StyleSheets.BorderStyle.Solid;
 
                     if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
 
                         pen.Width = (float)topWidth;
-                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderTopColor?.Value ?? default, opacity);
-                        pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
+                        pen.Color = GetColorWithAlpha(style.BorderTopColor?.Value ?? default, opacity);
+                        pen.DashStyle = GetDashStyle(borderStyle);
 
-                        using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Top, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
+                        using (GraphicsPath path = CreateBorderPath(drawRect, BorderPathType.Top, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
                             graphics.DrawPath(pen, path);
 
                     }
@@ -177,15 +194,15 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                 if (rightWidth > 0) {
 
-                    StyleSheets.BorderStyle borderStyle = ruleset.BorderRightStyle?.Value ?? StyleSheets.BorderStyle.Solid;
+                    StyleSheets.BorderStyle borderStyle = style.BorderRightStyle?.Value ?? StyleSheets.BorderStyle.Solid;
 
                     if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
 
                         pen.Width = (float)rightWidth;
-                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderRightColor?.Value ?? default, opacity);
-                        pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
+                        pen.Color = GetColorWithAlpha(style.BorderRightColor?.Value ?? default, opacity);
+                        pen.DashStyle = GetDashStyle(borderStyle);
 
-                        using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Right, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
+                        using (GraphicsPath path = CreateBorderPath(drawRect, BorderPathType.Right, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
                             graphics.DrawPath(pen, path);
 
                     }
@@ -194,15 +211,15 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                 if (bottomWidth > 0) {
 
-                    StyleSheets.BorderStyle borderStyle = ruleset.BorderBottomStyle?.Value ?? StyleSheets.BorderStyle.Solid;
+                    StyleSheets.BorderStyle borderStyle = style.BorderBottomStyle?.Value ?? StyleSheets.BorderStyle.Solid;
 
                     if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
 
                         pen.Width = (float)bottomWidth;
-                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderBottomColor?.Value ?? default, opacity);
-                        pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
+                        pen.Color = GetColorWithAlpha(style.BorderBottomColor?.Value ?? default, opacity);
+                        pen.DashStyle = GetDashStyle(borderStyle);
 
-                        using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Bottom, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
+                        using (GraphicsPath path = CreateBorderPath(drawRect, BorderPathType.Bottom, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
                             graphics.DrawPath(pen, path);
 
                     }
@@ -211,15 +228,15 @@ namespace Gsemac.Forms.Styles.Renderers {
 
                 if (leftWidth > 0) {
 
-                    StyleSheets.BorderStyle borderStyle = ruleset.BorderLeftStyle?.Value ?? StyleSheets.BorderStyle.Solid;
+                    StyleSheets.BorderStyle borderStyle = style.BorderLeftStyle?.Value ?? StyleSheets.BorderStyle.Solid;
 
                     if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
 
                         pen.Width = (float)leftWidth;
-                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderLeftColor?.Value ?? default, opacity);
-                        pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
+                        pen.Color = GetColorWithAlpha(style.BorderLeftColor?.Value ?? default, opacity);
+                        pen.DashStyle = GetDashStyle(borderStyle);
 
-                        using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Left, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
+                        using (GraphicsPath path = CreateBorderPath(drawRect, BorderPathType.Left, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
                             graphics.DrawPath(pen, path);
 
                     }
@@ -231,13 +248,25 @@ namespace Gsemac.Forms.Styles.Renderers {
             graphics.Restore(state);
 
         }
-        public static void DrawText(Graphics graphics, Rectangle rectangle, IRuleset ruleset, string text, Font font, TextFormatFlags textFormatFlags = TextFormatFlags.Left | TextFormatFlags.NoPrefix) {
+
+        public static void DrawText(Graphics graphics, Rectangle bounds, string text, Font font, IRuleset style) {
+
+            DrawText(graphics, bounds, text, font, TextFormatFlags.Left | TextFormatFlags.NoPrefix, style);
+
+        }
+        public static void DrawText(Graphics graphics, Rectangle bounds, string text, Font font, TextFormatFlags textFormatFlags, IRuleset style) {
+
+            if (graphics is null)
+                throw new ArgumentNullException(nameof(graphics));
+
+            if (font is null)
+                throw new ArgumentNullException(nameof(font));
 
             // Paint the foreground text.
 
-            Color textColor = ruleset.Color?.Value ?? SystemColors.ControlText;
+            Color textColor = style.Color?.Value ?? SystemColors.ControlText;
 
-            TextRenderer.DrawText(graphics, text, font, rectangle, textColor, textFormatFlags);
+            TextRenderer.DrawText(graphics, text, font, bounds, textColor, textFormatFlags);
 
             //graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
@@ -248,7 +277,15 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Private members
 
-        public static GraphicsPath CreateBorderPath(Rectangle bounds, BorderPathType type, double topLeftRadius, double topRightRadius, double bottomRightRadius, double bottomLeftRadius) {
+        private enum BorderPathType {
+            Top,
+            Right,
+            Bottom,
+            Left,
+            Full
+        }
+
+        private static GraphicsPath CreateBorderPath(Rectangle bounds, BorderPathType type, double topLeftRadius, double topRightRadius, double bottomRightRadius, double bottomLeftRadius) {
 
             int topLeftDiameter = (int)(topLeftRadius * 2);
             int topRightDiameter = (int)(topRightRadius * 2);
@@ -331,6 +368,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             return path;
 
         }
+
 
     }
 
