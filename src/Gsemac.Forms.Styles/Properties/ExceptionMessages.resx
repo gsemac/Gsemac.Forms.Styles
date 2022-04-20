@@ -123,4 +123,13 @@
   <data name="CannotRenderTypeWithType" xml:space="preserve">
     <value>Cannot render objects of type '{0}'.</value>
   </data>
+  <data name="UnitCannotBeConvertedToDegreesWithUnit" xml:space="preserve">
+    <value>The unit '{0}' cannot be converted to degrees.</value>
+  </data>
+  <data name="UnitCannotBeConvertedToPixelsWithUnit" xml:space="preserve">
+    <value>The unit '{0}' cannot be converted to pixels.</value>
+  </data>
+  <data name="UnrecognizedUnitsWithUnit" xml:space="preserve">
+    <value>The unit '{0}' was not recognized.</value>
+  </data>
 </root>

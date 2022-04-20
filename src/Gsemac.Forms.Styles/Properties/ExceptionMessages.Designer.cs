@@ -77,5 +77,32 @@ namespace Gsemac.Forms.Styles.Properties {
                 return ResourceManager.GetString("CannotRenderTypeWithType", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The unit &apos;{0}&apos; cannot be converted to degrees..
+        /// </summary>
+        internal static string UnitCannotBeConvertedToDegreesWithUnit {
+            get {
+                return ResourceManager.GetString("UnitCannotBeConvertedToDegreesWithUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The unit &apos;{0}&apos; cannot be converted to pixels..
+        /// </summary>
+        internal static string UnitCannotBeConvertedToPixelsWithUnit {
+            get {
+                return ResourceManager.GetString("UnitCannotBeConvertedToPixelsWithUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The unit &apos;{0}&apos; was not recognized..
+        /// </summary>
+        internal static string UnrecognizedUnitsWithUnit {
+            get {
+                return ResourceManager.GetString("UnrecognizedUnitsWithUnit", resourceCulture);
+            }
+        }
     }
 }
