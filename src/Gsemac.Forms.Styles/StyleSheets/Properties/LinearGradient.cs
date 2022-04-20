@@ -1,62 +1,33 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 
-namespace Gsemac.Forms.Styles.StyleSheets {
+namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     public class LinearGradient :
-        GradientBase {
+        ILinearGradient {
 
         // Public members
 
-        public LinearGradient(double degrees, Color[] colorStops) {
+        public IMeasurement Direction { get; }
+        public IEnumerable<ColorStop> ColorStops { get; }
 
-            Debug.Assert(colorStops.Any());
+        public LinearGradient(IMeasurement direction, IEnumerable<ColorStop> colorStops) {
 
-            this.degrees = degrees;
-            this.colorStops = colorStops;
+            if (direction is null)
+                throw new ArgumentNullException(nameof(direction));
 
-        }
+            if (colorStops is null)
+                throw new ArgumentNullException(nameof(colorStops));
 
-        public override void DrawGradient(Graphics graphics, Rectangle rect) {
-
-            if (colorStops.Count() > 1) {
-
-                // 90 degrees is Right, but Up for CSS.
-
-                using (LinearGradientBrush brush = new LinearGradientBrush(rect, Color.Black, Color.Black, (float)degrees - 90.0f)) {
-
-                    ColorBlend colorBlend = new ColorBlend {
-                        Colors = colorStops
-                    };
-
-                    colorBlend.Positions = Enumerable.Range(0, colorStops.Count())
-                         .Select(i => (float)i / (colorStops.Count() - 1))
-                         .ToArray();
-
-                    brush.InterpolationColors = colorBlend;
-
-                    graphics.FillRectangle(brush, rect);
-
-                }
-
-            }
-            else if (colorStops.Count() == 1) {
-
-                // Draw a solid rectangle if there is only one color.
-
-                using (SolidBrush brush = new SolidBrush(colorStops.First()))
-                    graphics.FillRectangle(brush, rect);
-
-            }
+            Direction = direction;
+            ColorStops = colorStops.ToArray();
 
         }
-
-        // Private members
-
-        private readonly double degrees;
-        private readonly Color[] colorStops;
+        public LinearGradient(double degrees, IEnumerable<Color> colorStops) :
+            this(Measurement.FromDegrees(degrees), colorStops.Select(color => new ColorStop(color))) {
+        }
 
     }
 

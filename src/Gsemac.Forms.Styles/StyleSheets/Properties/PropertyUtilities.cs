@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.StyleSheets.Properties;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -127,7 +128,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             return Color.FromArgb((int)Math.Round(byte.MaxValue * alpha), r, g, b);
 
         }
-        public static LinearGradient LinearGradient(double degrees, Color[] colorStops) {
+        public static ILinearGradient LinearGradient(double degrees, Color[] colorStops) {
 
             return new LinearGradient(degrees, colorStops);
 

@@ -1,6 +1,7 @@
 ﻿using Gsemac.Forms.Styles.Renderers.Extensions;
 using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
+using Gsemac.Forms.Styles.StyleSheets.Properties;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -369,6 +370,47 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         }
 
+        private static void DrawGradient(Graphics graphics, Rectangle bounds, ILinearGradient gradient) {
+
+            if (graphics is null)
+                throw new ArgumentNullException(nameof(graphics));
+
+            if (gradient is null)
+                throw new ArgumentNullException(nameof(gradient));
+
+            int colorStopsCount = gradient.ColorStops.Count();
+
+            if (colorStopsCount > 1) {
+
+                // 90 degrees is Right, but Up for CSS.
+
+                using (LinearGradientBrush brush = new LinearGradientBrush(bounds, Color.Black, Color.Black, (float)gradient.Direction.ToDegrees() - 90.0f)) {
+
+                    ColorBlend colorBlend = new ColorBlend {
+                        Colors = gradient.ColorStops.Select(stop => stop.Color).ToArray(),
+                    };
+
+                    colorBlend.Positions = Enumerable.Range(0, colorStopsCount)
+                         .Select(i => (float)i / (colorStopsCount - 1))
+                         .ToArray();
+
+                    brush.InterpolationColors = colorBlend;
+
+                    graphics.FillRectangle(brush, bounds);
+
+                }
+
+            }
+            else if (colorStopsCount == 1) {
+
+                // Draw a solid rectangle if there is only one color.
+
+                using (SolidBrush brush = new SolidBrush(gradient.ColorStops.First().Color))
+                    graphics.FillRectangle(brush, bounds);
+
+            }
+
+        }
 
     }
 
