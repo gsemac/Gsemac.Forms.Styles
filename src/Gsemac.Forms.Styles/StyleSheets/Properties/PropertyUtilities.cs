@@ -1,209 +1,152 @@
-﻿using Gsemac.Forms.Styles.StyleSheets.Properties;
+﻿using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
+using System.Globalization;
 
-namespace Gsemac.Forms.Styles.StyleSheets {
+namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public static class PropertyUtilities {
+    internal static class PropertyUtilities {
 
-        // Public members
+        // Internal members
 
-        public static bool TryParseColor(string input, out Color result) {
+        internal static bool IsInheritable(string propertyName) {
 
-            try {
+            // https://stackoverflow.com/a/30536051/5383169 (David Bonnet)
 
-                input = input.Replace("grey", "gray");
-
-                result = ColorTranslator.FromHtml(input);
-
-                return true;
-
-            }
-            catch (Exception) {
-
-                result = default;
-
+            if (propertyName is null)
                 return false;
 
-            }
+            switch (propertyName.ToLowerInvariant()) {
 
-        }
-        public static bool TryParseNumber(string input, out double result) {
-
-            if (input.EndsWith("px", StringComparison.OrdinalIgnoreCase))
-                input = input.Substring(0, input.IndexOf("px", StringComparison.OrdinalIgnoreCase));
-
-            return double.TryParse(input, out result) || TryParseAngle(input, out result);
-
-        }
-        public static bool TryParseBorderStyle(string input, out BorderStyle result) {
-
-            switch (input?.Trim()?.ToLowerInvariant()) {
-
-                case "dotted":
-                    result = BorderStyle.Dotted;
-                    break;
-
-                case "dashed":
-                    result = BorderStyle.Dashed;
-                    break;
-
-                case "solid":
-                    result = BorderStyle.Solid;
-                    break;
-
-                case "double":
-                    result = BorderStyle.Double;
-                    break;
-
-                case "groove":
-                    result = BorderStyle.Groove;
-                    break;
-
-                case "ridge":
-                    result = BorderStyle.Ridge;
-                    break;
-
-                case "inset":
-                    result = BorderStyle.Inset;
-                    break;
-
-                case "outset":
-                    result = BorderStyle.Outset;
-                    break;
-
-                case "none":
-                    result = BorderStyle.None;
-                    break;
-
-                case "hidden":
-                    result = BorderStyle.Hidden;
-                    break;
+                case PropertyName.BorderCollapse:
+                case PropertyName.BorderSpacing:
+                case PropertyName.CaptionSide:
+                case PropertyName.Color:
+                case PropertyName.Cursor:
+                case PropertyName.Direction:
+                case PropertyName.EmptyCells:
+                case PropertyName.FontFamily:
+                case PropertyName.FontSize:
+                case PropertyName.FontStyle:
+                case PropertyName.FontVariant:
+                case PropertyName.FontWeight:
+                case PropertyName.FontSizeAdjust:
+                case PropertyName.FontStretch:
+                case PropertyName.Font:
+                case PropertyName.LetterSpacing:
+                case PropertyName.LineHeight:
+                case PropertyName.ListStyleImage:
+                case PropertyName.ListStylePosition:
+                case PropertyName.ListStyleType:
+                case PropertyName.ListStyle:
+                case PropertyName.Orphans:
+                case PropertyName.Quotes:
+                case PropertyName.TabSize:
+                case PropertyName.TextAlign:
+                case PropertyName.TextAlignLast:
+                case PropertyName.TextDecorationColor:
+                case PropertyName.TextIndent:
+                case PropertyName.TextJustify:
+                case PropertyName.TextShadow:
+                case PropertyName.TextTransform:
+                case PropertyName.Visibility:
+                case PropertyName.WhiteSpace:
+                case PropertyName.Widows:
+                case PropertyName.WordBreak:
+                case PropertyName.WordSpacing:
+                case PropertyName.WordWrap:
+                    return true;
 
                 default:
-                    result = BorderStyle.None;
                     return false;
 
             }
 
-            return true;
-
         }
 
-        public static Color ParseColor(string input) {
+        internal static IPropertyValue GetInitialValue(string propertyName) {
 
-            if (TryParseColor(input, out Color result))
-                return result;
-            else
-                throw new FormatException($"Failed to parse \"{input}\" as a color.");
+            return GetInitialValue(propertyName, Ruleset.Empty);
 
         }
-        public static double ParseNumber(string input) {
+        internal static IPropertyValue GetInitialValue(string propertyName, IRuleset style) {
 
-            if (TryParseNumber(input, out double result))
-                return result;
-            else
-                throw new FormatException($"Failed to parse \"{input}\" as a number.");
+            if (string.IsNullOrWhiteSpace(propertyName))
+                return null;
 
-        }
-        public static BorderStyle ParseBorderStyle(string input) {
+            switch (propertyName.ToLowerInvariant()) {
 
-            if (TryParseBorderStyle(input, out BorderStyle result))
-                return result;
-            else
-                throw new FormatException($"Failed to parse \"{input}\" as a border style.");
+                case PropertyName.BackgroundColor:
+                    return PropertyValue.Create(Color.Transparent);
 
-        }
+                case PropertyName.BorderTopColor:
+                case PropertyName.BorderRightColor:
+                case PropertyName.BorderBottomColor:
+                case PropertyName.BorderLeftColor:
+                    return PropertyValue.Create(style.Color);
 
-        public static Color Rgb(int r, int g, int b) {
+                case PropertyName.BorderTopStyle:
+                case PropertyName.BorderRightStyle:
+                case PropertyName.BorderBottomStyle:
+                case PropertyName.BorderLeftStyle:
+                    return PropertyValue.Create(BorderStyle.None);
 
-            return Color.FromArgb(r, g, b);
-
-        }
-        public static Color Rgba(int r, int g, int b, float alpha) {
-
-            return Color.FromArgb((int)Math.Round(byte.MaxValue * alpha), r, g, b);
-
-        }
-        public static ILinearGradient LinearGradient(double degrees, Color[] colorStops) {
-
-            return new LinearGradient(degrees, colorStops);
-
-        }
-        public static StyleObject Url(string resourceFilePath) {
-
-            return Url(resourceFilePath, new FileSystemFileReader());
-
-        }
-        public static StyleObject Url(string resourceFilePath, IFileReader fileReader) {
-
-            if (fileReader is null)
-                throw new ArgumentNullException(nameof(fileReader));
-
-            string[] imageFileExtensions = new[] { ".bmp", ".gif", ".jpg", ".jpeg", ".jpe", ".jif", ".jfif", ".jfi", ".png", ".tiff", ".tif" };
-
-            // Strip outer quotes from the path.
-
-            resourceFilePath = resourceFilePath.Trim('"', '\'');
-
-            string ext = Path.GetExtension(resourceFilePath);
-
-            if (imageFileExtensions.Any(imageExt => ext.Equals(imageExt, StringComparison.OrdinalIgnoreCase))) {
-
-                if (File.Exists(resourceFilePath)) {
-
-                    using (Stream stream = fileReader.OpenFile(resourceFilePath))
-                        return new StyleObject(new Image(System.Drawing.Image.FromStream(stream)));
-
-                }
-                else
-                    return new StyleObject(Image.Empty);
-
-            }
-            else {
-
-                throw new ArgumentException(nameof(resourceFilePath));
-
-            }
-
-        }
-
-        public static StyleObject EvaluateFunction(string functionName, StyleObject[] functionArgs) {
-
-            return EvaluateFunction(functionName, functionArgs, new FileSystemFileReader());
-
-        }
-        public static StyleObject EvaluateFunction(string functionName, StyleObject[] functionArgs, IFileReader fileReader) {
-
-            functionName = functionName?.Trim().ToLowerInvariant();
-
-            switch (functionName) {
-
-                case "linear-gradient":
-                    return new StyleObject(LinearGradient(functionArgs[0].GetNumber(), functionArgs.Skip(1).Select(obj => obj.GetColor()).ToArray()));
-
-                case "rgb":
-                    return new StyleObject(Rgb((int)functionArgs[0].GetNumber(), (int)functionArgs[1].GetNumber(), (int)functionArgs[2].GetNumber()));
-
-                case "rgba":
-                    return new StyleObject(Rgba((int)functionArgs[0].GetNumber(), (int)functionArgs[1].GetNumber(), (int)functionArgs[2].GetNumber(), (float)functionArgs[3].GetNumber()));
-
-                case "url":
-                    return new StyleObject(Url(functionArgs[0].GetString(), fileReader));
+                case PropertyName.Color:
+                    return PropertyValue.Create(Color.Black); // Dependant on user agent
 
                 default:
-                    throw new InvalidFunctionException(functionName);
+                    return PropertyValue.Null;
+
+            }
+
+        }
+        internal static T GetInitialValue<T>(string propertyName) {
+
+            return GetInitialValue<T>(propertyName, Ruleset.Empty);
+
+        }
+        internal static T GetInitialValue<T>(string propertyName, IRuleset style) {
+
+            if (style is null)
+                throw new ArgumentNullException(nameof(style));
+
+            IPropertyValue initialValue = GetInitialValue(propertyName);
+
+            if (initialValue is object && initialValue.Type.Equals(typeof(T)))
+                return (T)initialValue;
+
+            return default;
+
+        }
+
+        internal static string SerializePropertyValue(object value) {
+
+            if (value is null)
+                return string.Empty;
+
+            switch (value) {
+
+                case BorderStyle borderStyle:
+                    return BorderStyletoString(borderStyle);
+
+                case Color color:
+                    return ColorToString(color);
+
+                case double @double:
+                    return @double.ToString(CultureInfo.InvariantCulture);
+
+                default:
+                    return value.ToString();
 
             }
 
         }
 
-        public static string ToString(BorderStyle input) {
+        // Private members
 
-            switch (input) {
+        private static string BorderStyletoString(BorderStyle value) {
+
+            switch (value) {
 
                 case BorderStyle.Dotted:
                     return "dotted";
@@ -236,114 +179,14 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                     return "hidden";
 
                 default:
-                    throw new ArgumentException(nameof(input));
+                    throw new ArgumentOutOfRangeException(nameof(value));
 
             }
 
         }
+        private static string ColorToString(Color value) {
 
-        // Private members
-
-        private static bool TryParseAngle(string input, out double result) {
-
-            input = input?.Trim().ToLowerInvariant();
-
-            Regex stringAngleRegex = new Regex(@"to\s*(bottom(?:\s*(?:right|left))?|top(?:\s*(?:right|left)?)|left|right)$", RegexOptions.IgnoreCase);
-            Regex numericAngleRegex = new Regex(@"(-?[\d.]+)(deg|g?rad|turn)$", RegexOptions.IgnoreCase);
-
-            Match stringAngleMatch = stringAngleRegex.Match(input);
-            Match numericAngleMatch = stringAngleMatch.Success ? null : numericAngleRegex.Match(input);
-
-            bool success;
-
-            if (stringAngleMatch.Success) {
-
-                success = true;
-
-                switch (stringAngleMatch.Groups[1].Value) {
-
-                    case "bottom right":
-                        result = 135.0;
-                        break;
-
-                    case "bottom left":
-                        result = 225.0;
-                        break;
-
-                    case "top right":
-                        result = 45.0;
-                        break;
-
-                    case "top left":
-                        result = 315.0;
-                        break;
-
-                    case "bottom":
-                        result = 180.0;
-                        break;
-
-                    case "top":
-                        result = 0.0;
-                        break;
-
-                    case "left":
-                        result = 270.0;
-                        break;
-
-                    case "right":
-                        result = 90.0;
-                        break;
-
-                    default:
-                        result = default;
-                        success = false;
-                        break;
-
-                }
-
-            }
-            else if (numericAngleMatch.Success) {
-
-                if (!double.TryParse(numericAngleMatch.Groups[1].Value, out result))
-                    return false;
-
-                success = true;
-
-                string units = numericAngleMatch.Groups[2].Value;
-
-                switch (units) {
-
-                    case "deg":
-                        break;
-
-                    case "rad":
-                        result = result * 180.0 / Math.PI;
-                        break;
-
-                    case "grad":
-                        result = result * 180.0 / 200.0;
-                        break;
-
-                    case "turn":
-                        result *= 360.0;
-                        break;
-
-                    default:
-                        result = default;
-                        success = false;
-                        break;
-
-                }
-
-            }
-            else {
-
-                result = default;
-                success = false;
-
-            }
-
-            return success;
+            return ColorTranslator.ToHtml(value).ToLowerInvariant();
 
         }
 

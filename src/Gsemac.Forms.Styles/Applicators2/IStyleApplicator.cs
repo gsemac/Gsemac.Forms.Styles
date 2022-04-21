@@ -1,5 +1,5 @@
 ﻿using Gsemac.Forms.Styles.Dom;
-using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 

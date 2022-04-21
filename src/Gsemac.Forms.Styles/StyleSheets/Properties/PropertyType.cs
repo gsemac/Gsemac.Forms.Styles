@@ -1,4 +1,4 @@
-﻿namespace Gsemac.Forms.Styles.StyleSheets {
+﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     public enum PropertyType {
         BackgroundColor,

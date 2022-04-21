@@ -1,5 +1,5 @@
 ﻿using Gsemac.Forms.Styles.Renderers2;
-using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;

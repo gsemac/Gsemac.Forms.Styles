@@ -1,6 +1,7 @@
 ﻿using Gsemac.Forms.Styles.Applicators2;
 using Gsemac.Forms.Styles.Dom;
 using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Dom;
 using System;
 using System.Collections.Generic;
 using System.Linq;

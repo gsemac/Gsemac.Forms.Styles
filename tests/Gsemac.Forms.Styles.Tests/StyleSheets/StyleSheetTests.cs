@@ -1,4 +1,6 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets.Extensions;
+using Gsemac.Forms.Styles.StyleSheets.Properties;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 

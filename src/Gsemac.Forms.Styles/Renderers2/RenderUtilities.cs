@@ -1,7 +1,8 @@
 ﻿using Gsemac.Forms.Styles.Renderers.Extensions;
-using Gsemac.Forms.Styles.StyleSheets;
-using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Properties;
+using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets.Extensions;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -19,14 +20,14 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             return Color.FromArgb((int)Math.Round(byte.MaxValue * alpha), baseColor.R, baseColor.G, baseColor.B);
 
         }
-        public static DashStyle GetDashStyle(StyleSheets.BorderStyle borderStyle) {
+        public static DashStyle GetDashStyle(StyleSheets.Properties.BorderStyle borderStyle) {
 
             switch (borderStyle) {
 
-                case StyleSheets.BorderStyle.Dashed:
+                case StyleSheets.Properties.BorderStyle.Dashed:
                     return DashStyle.Dash;
 
-                case StyleSheets.BorderStyle.Dotted:
+                case StyleSheets.Properties.BorderStyle.Dotted:
                     return DashStyle.Dot;
 
                 default:
@@ -178,9 +179,9 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
                 if (topWidth > 0) {
 
-                    StyleSheets.BorderStyle borderStyle = style.BorderTopStyle?.Value ?? StyleSheets.BorderStyle.Solid;
+                    StyleSheets.Properties.BorderStyle borderStyle = style.BorderTopStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
 
-                    if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
+                    if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
 
                         pen.Width = (float)topWidth;
                         pen.Color = GetColorWithAlpha(style.BorderTopColor?.Value ?? default, opacity);
@@ -195,9 +196,9 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
                 if (rightWidth > 0) {
 
-                    StyleSheets.BorderStyle borderStyle = style.BorderRightStyle?.Value ?? StyleSheets.BorderStyle.Solid;
+                    StyleSheets.Properties.BorderStyle borderStyle = style.BorderRightStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
 
-                    if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
+                    if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
 
                         pen.Width = (float)rightWidth;
                         pen.Color = GetColorWithAlpha(style.BorderRightColor?.Value ?? default, opacity);
@@ -212,9 +213,9 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
                 if (bottomWidth > 0) {
 
-                    StyleSheets.BorderStyle borderStyle = style.BorderBottomStyle?.Value ?? StyleSheets.BorderStyle.Solid;
+                    StyleSheets.Properties.BorderStyle borderStyle = style.BorderBottomStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
 
-                    if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
+                    if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
 
                         pen.Width = (float)bottomWidth;
                         pen.Color = GetColorWithAlpha(style.BorderBottomColor?.Value ?? default, opacity);
@@ -229,9 +230,9 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
                 if (leftWidth > 0) {
 
-                    StyleSheets.BorderStyle borderStyle = style.BorderLeftStyle?.Value ?? StyleSheets.BorderStyle.Solid;
+                    StyleSheets.Properties.BorderStyle borderStyle = style.BorderLeftStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
 
-                    if (borderStyle != StyleSheets.BorderStyle.None && borderStyle != StyleSheets.BorderStyle.Hidden) {
+                    if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
 
                         pen.Width = (float)leftWidth;
                         pen.Color = GetColorWithAlpha(style.BorderLeftColor?.Value ?? default, opacity);

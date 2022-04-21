@@ -42,7 +42,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
                 throw new ArgumentNullException(nameof(obj));
 
             if (!typeof(T).IsAssignableFrom(obj.GetType()))
-                throw new ArgumentException(string.Format(ExceptionMessages.CannotRenderTypeWithType, obj.GetType()), nameof(obj));
+                throw new ArgumentException(string.Format(ExceptionMessages.CannotRenderType, obj.GetType()), nameof(obj));
 
         }
 

@@ -1,5 +1,7 @@
-﻿namespace Gsemac.Forms.Styles.StyleSheets {
+﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public interface IGradient { }
+    public interface IGradient :
+        IImage {
+    }
 
 }

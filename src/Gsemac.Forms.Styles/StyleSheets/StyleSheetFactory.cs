@@ -1,4 +1,9 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.Properties;
+using Gsemac.Forms.Styles.StyleSheets.Lexers;
+using Gsemac.Forms.Styles.StyleSheets.Properties;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
+using Gsemac.Forms.Styles.StyleSheets.Selectors;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -10,6 +15,18 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         // Public members
 
         public static StyleSheetFactory Default => new StyleSheetFactory();
+
+        public StyleSheetFactory() :
+            this(PropertyFactory.Default) {
+        }
+        public StyleSheetFactory(IPropertyFactory propertyFactory) {
+
+            if (propertyFactory is null)
+                throw new ArgumentNullException(nameof(propertyFactory));
+
+            this.propertyFactory = propertyFactory;
+
+        }
 
         public IStyleSheet FromStream(Stream stream, IStyleSheetOptions options) {
 
@@ -37,12 +54,12 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         case StyleSheetLexerTokenType.Value:
                         case StyleSheetLexerTokenType.Function: {
 
-                                StyleObject[] propertyValues = ReadPropertyValues(lexer);
+                                IPropertyValue[] propertyValues = ReadPropertyValues(lexer);
                                 IProperty property = null;
 
                                 try {
 
-                                    property = Property.Create(currentPropertyName, propertyValues);
+                                    property = propertyFactory.Create(currentPropertyName, propertyValues);
 
                                 }
                                 catch (Exception ex) {
@@ -53,7 +70,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                                 }
 
                                 if (property != null)
-                                    currentRuleset.AddProperty(property);
+                                    currentRuleset.Add(property);
 
                             }
 
@@ -81,14 +98,16 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         // Private members
 
+        private readonly IPropertyFactory propertyFactory;
+
         private ISelector ReadSelector(IStyleSheetLexer lexer) {
 
             return Selector.FromLexer(lexer);
 
         }
-        private StyleObject[] ReadPropertyValues(IStyleSheetLexer lexer) {
+        private IPropertyValue[] ReadPropertyValues(IStyleSheetLexer lexer) {
 
-            List<StyleObject> values = new List<StyleObject>();
+            List<IPropertyValue> values = new List<IPropertyValue>();
 
             bool exitLoop = false;
 
@@ -102,7 +121,8 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                         lexer.Read(out _); // Eat the token
 
-                        values.Add(new StyleObject(token.Value));
+                        if (PropertyValue.TryParse(token.Value, out PropertyValue parsedPropertyValue))
+                            values.Add(parsedPropertyValue);
 
                         break;
 
@@ -138,9 +158,9 @@ namespace Gsemac.Forms.Styles.StyleSheets {
             return values.ToArray();
 
         }
-        private StyleObject ReadFunction(IStyleSheetLexer lexer, string functionName) {
+        private IPropertyValue ReadFunction(IStyleSheetLexer lexer, string functionName) {
 
-            List<StyleObject> functionArgs = new List<StyleObject>();
+            List<IPropertyValue> functionArgs = new List<IPropertyValue>();
 
             bool exitLoop = false;
 
@@ -149,11 +169,16 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 switch (token.Type) {
 
                     case StyleSheetLexerTokenType.Value:
-                        functionArgs.Add(new StyleObject(token.Value));
+
+                        if (PropertyValue.TryParse(token.Value, out PropertyValue parsedPropertyValue))
+                            functionArgs.Add(parsedPropertyValue);
+
                         break;
 
                     case StyleSheetLexerTokenType.Function:
+
                         functionArgs.Add(ReadFunction(lexer, token.Value));
+
                         break;
 
                     case StyleSheetLexerTokenType.FunctionArgumentsStart:
@@ -163,21 +188,19 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         break;
 
                     case StyleSheetLexerTokenType.FunctionArgumentsEnd:
+
                         exitLoop = true;
+
                         break;
 
                     default:
-                        throw new UnexpectedTokenException($"Unexpected token: {token.Type}.");
+                        throw new UnexpectedTokenException(string.Format(ExceptionMessages.UnexpectedTokenTypeWithType, token.Type));
 
                 }
 
             }
 
-            //StyleObject returnValue = PropertyUtilities.EvaluateFunction(functionName, functionArgs.ToArray(), options.FileReader);
-            StyleObject returnValue = PropertyUtilities.EvaluateFunction(functionName, functionArgs.ToArray());
-
-            //if (returnValue.Type == StyleObjectType.Image)
-            //    disposableResources.Add(returnValue.GetImage());
+            IPropertyValue returnValue = PropertyFunctions.EvaluateFunction(functionName, functionArgs.ToArray());
 
             return returnValue;
 

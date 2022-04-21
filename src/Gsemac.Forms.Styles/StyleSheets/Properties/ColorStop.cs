@@ -3,19 +3,20 @@ using System.Drawing;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public class ColorStop {
+    public class ColorStop :
+        IColorStop {
 
         // Public members
 
         public Color Color { get; }
-        public IMeasurement StopPosition { get; }
+        public Measurement StopPosition { get; }
 
         public ColorStop(Color color) {
 
             Color = color;
 
         }
-        public ColorStop(Color color, IMeasurement stopPosition) {
+        public ColorStop(Color color, Measurement stopPosition) {
 
             if (stopPosition is null)
                 throw new ArgumentNullException(nameof(stopPosition));

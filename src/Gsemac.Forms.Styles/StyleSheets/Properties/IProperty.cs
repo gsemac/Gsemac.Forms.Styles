@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Gsemac.Forms.Styles.StyleSheets {
+namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     public interface IProperty {
 
         string Name { get; }
-        PropertyType Type { get; }
         object Value { get; }
+
         bool IsInheritable { get; }
+
+        Type ValueType { get; }
+
+        IEnumerable<IProperty> GetChildProperties(IPropertyFactory propertyFactory);
 
     }
 

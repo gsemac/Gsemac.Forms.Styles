@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.Dom;
+﻿using Gsemac.Forms.Styles.StyleSheets.Dom;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System.Collections.Generic;
 
 namespace Gsemac.Forms.Styles.StyleSheets {

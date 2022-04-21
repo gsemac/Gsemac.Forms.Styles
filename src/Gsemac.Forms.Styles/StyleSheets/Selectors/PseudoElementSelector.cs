@@ -1,7 +1,7 @@
-﻿using Gsemac.Forms.Styles.Dom;
+﻿using Gsemac.Forms.Styles.StyleSheets.Dom;
 using System;
 
-namespace Gsemac.Forms.Styles.StyleSheets {
+namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
     public class PseudoElementSelector :
       ISelector {

@@ -1,5 +1,4 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -163,7 +162,7 @@ namespace Gsemac.Forms.Styles.Renderers.Extensions {
 
         }
 
-        public static void DrawImage(this Graphics graphics, System.Drawing.Image image, Rectangle bounds, ImageSizeMode sizeMode) {
+        public static void DrawImage(this Graphics graphics, Image image, Rectangle bounds, ImageSizeMode sizeMode) {
 
             int x = bounds.X;
             int y = bounds.Y;
@@ -203,7 +202,7 @@ namespace Gsemac.Forms.Styles.Renderers.Extensions {
             graphics.DrawImage(image, x, y, w, h);
 
         }
-        public static void DrawImage(this Graphics graphics, System.Drawing.Image image, Rectangle bounds, ContentAlignment alignment) {
+        public static void DrawImage(this Graphics graphics, Image image, Rectangle bounds, ContentAlignment alignment) {
 
             int x = bounds.X;
             int y = bounds.Y;
@@ -219,11 +218,6 @@ namespace Gsemac.Forms.Styles.Renderers.Extensions {
                 y = bounds.Y + (int)((float)bounds.Height / 2 - (float)image.Height / 2);
 
             graphics.DrawImage(image, x, y, image.Width, image.Height);
-        }
-        public static void DrawImage(this Graphics graphics, IImage image, Rectangle rect) {
-
-            image.DrawImage(graphics, rect);
-
         }
 
         public static void AddPoint(this GraphicsPath path, Point point) {

@@ -1,6 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Dom;
-using Gsemac.Forms.Styles.StyleSheets;
-using Gsemac.Forms.Styles.StyleSheets.Extensions;
+using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -19,7 +19,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             button.FlatStyle = FlatStyle.Flat;
 
             double borderWidth = style.Where(p => p.IsBorderWidthProperty())
-                 .Cast<NumberProperty>()
+                 .Cast<MeasurementProperty>()
                  .Select(p => p.Value)
                  .LastOrDefault();
 

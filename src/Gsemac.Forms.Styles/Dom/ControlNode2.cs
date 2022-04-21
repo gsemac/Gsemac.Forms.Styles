@@ -1,13 +1,14 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
-using Gsemac.Forms.Styles.StyleSheets.Extensions;
+﻿using Gsemac.Forms.Styles.StyleSheets.Dom;
+using Gsemac.Forms.Styles.StyleSheets.Properties;
+using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Dom {
 
     public class ControlNode2 :
-        NodeBase {
+        StyleSheets.Dom.NodeBase {
 
         // Public members
 
@@ -51,11 +52,11 @@ namespace Gsemac.Forms.Styles.Dom {
 
             IRuleset ruleset = base.ComputeStyle();
 
-            if (!ruleset.GetProperty(PropertyType.BackgroundColor).HasValue())
-                ruleset.AddProperty(Property.Create(PropertyType.BackgroundColor, Control.BackColor));
+            if (!ruleset.Contains(PropertyName.BackgroundColor))
+                ruleset.Add(PropertyFactory.Default.Create(PropertyName.BackgroundColor, PropertyValue.Create(Control.BackColor)));
 
-            if (!ruleset.GetProperty(PropertyType.Color).HasValue())
-                ruleset.AddProperty(Property.Create(PropertyType.Color, Control.ForeColor));
+            if (!ruleset.Contains(PropertyName.Color))
+                ruleset.Add(PropertyFactory.Default.Create(PropertyName.Color, PropertyValue.Create(Control.ForeColor)));
 
             return ruleset;
 

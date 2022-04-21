@@ -1,4 +1,4 @@
-﻿using Gsemac.Forms.Styles.StyleSheets;
+﻿using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Drawing;
 

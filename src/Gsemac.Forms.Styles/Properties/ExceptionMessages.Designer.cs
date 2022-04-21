@@ -63,23 +63,86 @@ namespace Gsemac.Forms.Styles.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Cannot apply style to object of type &apos;{0}&apos;..
         /// </summary>
-        internal static string CannotApplyStyleToTypeWithType {
+        internal static string CannotApplyStyleToType {
             get {
-                return ResourceManager.GetString("CannotApplyStyleToTypeWithType", resourceCulture);
+                return ResourceManager.GetString("CannotApplyStyleToType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot cast property of type &apos;{0}&apos; to type &apos;{1}&apos;..
+        /// </summary>
+        internal static string CannotCastPropertyOfTypeToType {
+            get {
+                return ResourceManager.GetString("CannotCastPropertyOfTypeToType", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Cannot render objects of type &apos;{0}&apos;..
         /// </summary>
-        internal static string CannotRenderTypeWithType {
+        internal static string CannotRenderType {
             get {
-                return ResourceManager.GetString("CannotRenderTypeWithType", resourceCulture);
+                return ResourceManager.GetString("CannotRenderType", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The unit &apos;{0}&apos; cannot be converted to degrees..
+        ///   Looks up a localized string similar to The string &quot;{0}&quot; is not in the correct format..
+        /// </summary>
+        internal static string MalformedMeasurementValue {
+            get {
+                return ResourceManager.GetString("MalformedMeasurementValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The string &quot;{0}&quot; is not a valid property value..
+        /// </summary>
+        internal static string MalformedPropertyValue {
+            get {
+                return ResourceManager.GetString("MalformedPropertyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The string &quot;{0}&quot; cannot be parsed as &apos;{1}&apos;..
+        /// </summary>
+        internal static string MalformedPropertyValueAsType {
+            get {
+                return ResourceManager.GetString("MalformedPropertyValueAsType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Function &quot;{0}&quot; requires {1} argument(s), but {2} were given..
+        /// </summary>
+        internal static string PropertyFunctionRequiresNArguments {
+            get {
+                return ResourceManager.GetString("PropertyFunctionRequiresNArguments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property name cannot be empty..
+        /// </summary>
+        internal static string PropertyNameCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("PropertyNameCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encountered unexpected token &apos;{0}&apos;..
+        /// </summary>
+        internal static string UnexpectedTokenTypeWithType {
+            get {
+                return ResourceManager.GetString("UnexpectedTokenTypeWithType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The unit &quot;{0}&quot; cannot be converted to degrees..
         /// </summary>
         internal static string UnitCannotBeConvertedToDegreesWithUnit {
             get {
@@ -88,7 +151,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The unit &apos;{0}&apos; cannot be converted to pixels..
+        ///   Looks up a localized string similar to The unit &quot;{0}&quot; cannot be converted to pixels..
         /// </summary>
         internal static string UnitCannotBeConvertedToPixelsWithUnit {
             get {
@@ -97,11 +160,20 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The unit &apos;{0}&apos; was not recognized..
+        ///   Looks up a localized string similar to The string &quot;{0}&quot; was not recognized as a valid property..
         /// </summary>
-        internal static string UnrecognizedUnitsWithUnit {
+        internal static string UnrecognizedProperty {
             get {
-                return ResourceManager.GetString("UnrecognizedUnitsWithUnit", resourceCulture);
+                return ResourceManager.GetString("UnrecognizedProperty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The string &quot;{0}&quot; was not recognized as a valid unit..
+        /// </summary>
+        internal static string UnrecognizedUnits {
+            get {
+                return ResourceManager.GetString("UnrecognizedUnits", resourceCulture);
             }
         }
     }

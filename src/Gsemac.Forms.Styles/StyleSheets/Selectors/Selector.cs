@@ -1,10 +1,11 @@
-﻿using Gsemac.Forms.Styles.Dom;
+﻿using Gsemac.Forms.Styles.StyleSheets.Dom;
+using Gsemac.Forms.Styles.StyleSheets.Lexers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Gsemac.Forms.Styles.StyleSheets {
+namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
     public class Selector :
         ISelector {
@@ -13,7 +14,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public Selector(ISelector selector) {
 
-            this.selectors = new List<ISelector>() {
+            selectors = new List<ISelector>() {
                 selector
             };
 
@@ -48,7 +49,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                 return FromLexer(lexer);
 
         }
-        public static ISelector FromLexer(IStyleSheetLexer lexer) {
+
+        // Internal members
+
+        internal static ISelector FromLexer(IStyleSheetLexer lexer) {
 
             SelectorBuilder builder = new SelectorBuilder();
 

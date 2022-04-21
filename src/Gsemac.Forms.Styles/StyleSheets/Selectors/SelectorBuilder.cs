@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Gsemac.Forms.Styles.StyleSheets {
+namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
     public class SelectorBuilder :
         ISelectorBuilder {
@@ -74,7 +73,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             CommitCurrentSelector(false);
 
-            return (completedSelectors.Count() == 1) ? completedSelectors.First() : new UnionSelector(completedSelectors);
+            return completedSelectors.Count() == 1 ? completedSelectors.First() : new UnionSelector(completedSelectors);
 
         }
 
@@ -113,7 +112,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             if (rhsSelector.Any()) {
 
-                ISelector committingSelector = (rhsSelector.Count() == 1) ? rhsSelector.First() : new Selector(rhsSelector);
+                ISelector committingSelector = rhsSelector.Count() == 1 ? rhsSelector.First() : new Selector(rhsSelector);
 
                 switch (currentCombinator) {
 

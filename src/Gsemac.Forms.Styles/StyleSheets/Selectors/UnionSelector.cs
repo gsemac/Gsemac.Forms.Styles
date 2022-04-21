@@ -1,8 +1,8 @@
-﻿using Gsemac.Forms.Styles.Dom;
+﻿using Gsemac.Forms.Styles.StyleSheets.Dom;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Gsemac.Forms.Styles.StyleSheets {
+namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
     public class UnionSelector :
         ISelector {
@@ -32,4 +32,5 @@ namespace Gsemac.Forms.Styles.StyleSheets {
         private readonly IEnumerable<ISelector> selectors;
 
     }
+
 }

@@ -1,168 +1,63 @@
-﻿using Gsemac.Collections.Specialized;
-using Gsemac.Core;
-using Gsemac.Forms.Styles.StyleSheets;
-using System;
+﻿using Gsemac.Core;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Xml;
 
 namespace Gsemac.Forms.Styles.Dom {
 
     public abstract class NodeBase :
-        INode2 {
+        INode {
 
         // Public members
 
-        public event EventHandler<StyleInvalidatedEventArgs> StyleInvalidated;
-        public event EventHandler<StylesChangedEventArgs> StylesChanged;
+        public abstract IEnumerable<string> Classes { get; }
+        public virtual IEnumerable<string> PseudoClasses => GetPseudoClasses();
+        public virtual string PseudoElement => string.Empty;
+        public abstract string Tag { get; }
+        public abstract string Id { get; }
+        public abstract NodeStates States { get; }
+        public abstract INode Parent { get; }
 
-        public string Tag { get; }
-        public string Id { get; protected set; }
-        public INode2 Parent { get; set; }
-        public ICollection<INode2> Children { get; }
-        public ICollection<string> Classes { get; }
-        public ICollection<NodeState> States { get; }
-        public ICollection<IRuleset> Styles { get; }
+        public override int GetHashCode() {
 
-        public IRuleset GetComputedStyle() {
+            IHashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
 
-            return style.Value;
+            foreach (string @class in Classes)
+                hashCodeBuilder.Add(@class);
 
-        }
+            hashCodeBuilder.Add(Tag);
+            hashCodeBuilder.Add(Id);
+            hashCodeBuilder.Add((int)States);
+            hashCodeBuilder.Add(Parent);
 
-        public override string ToString() {
-
-            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings() {
-                Encoding = Encoding.UTF8,
-                OmitXmlDeclaration = Parent is object,
-                Indent = true,
-            };
-
-            using (StringWriter stringWriter = new StringWriter()) {
-
-                using (XmlWriter xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSettings))
-                    WriteNode(xmlWriter, this);
-
-                return stringWriter.ToString();
-
-            }
+            return hashCodeBuilder.GetHashCode();
 
         }
+        public override bool Equals(object obj) {
 
-        // Protected members
-
-        protected NodeBase(string tagName) {
-
-            Tag = tagName;
-
-            // Initialize collections.
-
-            IObservableCollection<INode2> children = new ChildNodeCollection(this);
-            IObservableCollection<string> classes = new ObservableHashSet<string>();
-            IObservableCollection<NodeState> states = new ObservableHashSet<NodeState>();
-            IObservableCollection<IRuleset> styles = new ObservableHashSet<IRuleset>(new EquivalentRulesetEqualityComparer());
-
-            Classes = classes;
-            Children = children;
-            States = states;
-            Styles = styles;
-
-            // Register event handlers.
-
-            children.CollectionChanged += (sender, e) => OnStyleInvalidated();
-            classes.CollectionChanged += (sender, e) => OnStyleInvalidated();
-            styles.CollectionChanged += (sender, e) => OnStylesChanged();
-            states.CollectionChanged += (sender, e) => OnStyleInvalidated();
-
-            styles.CollectionChanged += StylesChangedHandler;
-
-            // Initialize style.
-
-            style = new ResettableLazy<IRuleset>(ComputeStyle);
-
-        }
-
-        protected virtual IRuleset ComputeStyle() {
-
-            IRuleset ruleset = new Ruleset();
-
-            if (Parent is object) {
-
-                ruleset.AddProperties(Parent.GetComputedStyle());
-
-            }
-
-            foreach (IRuleset style in Styles)
-                ruleset.AddProperties(style);
-
-            return ruleset;
-
-        }
-
-        protected void OnStyleInvalidated() {
-
-            OnStyleInvalidated(new StyleInvalidatedEventArgs(this));
-
-        }
-        protected void OnStyleInvalidated(StyleInvalidatedEventArgs e) {
-
-            StyleInvalidated?.Invoke(this, e);
-
-        }
-        protected void OnStylesChanged() {
-
-            OnStylesChanged(new StylesChangedEventArgs(this));
-
-        }
-        protected void OnStylesChanged(StylesChangedEventArgs e) {
-
-            StylesChanged?.Invoke(this, e);
+            return obj.GetHashCode() == GetHashCode();
 
         }
 
         // Private members
 
-        private readonly IResettableLazy<IRuleset> style;
+        private IEnumerable<string> GetPseudoClasses() {
 
-        private void StylesChangedHandler(object sender, EventArgs e) {
+            if (States.HasFlag(NodeStates.Active))
+                yield return ":active";
 
-            style.Reset();
+            if (States.HasFlag(NodeStates.Hover))
+                yield return ":hover";
 
-        }
+            if (States.HasFlag(NodeStates.Checked))
+                yield return ":checked";
 
-        private static void WriteNode(XmlWriter xmlWriter, INode2 node) {
+            if (States.HasFlag(NodeStates.Focus))
+                yield return ":focus";
 
-            if (xmlWriter is null)
-                throw new ArgumentNullException(nameof(xmlWriter));
+            if (States.HasFlag(NodeStates.FocusWithin))
+                yield return ":focus-within";
 
-            if (node is null)
-                throw new ArgumentNullException(nameof(node));
-
-            xmlWriter.WriteStartElement(node.Tag.ToLowerInvariant());
-
-            if (!string.IsNullOrEmpty(node.Id)) {
-
-                xmlWriter.WriteStartAttribute("id");
-                xmlWriter.WriteString(node.Id);
-                xmlWriter.WriteEndAttribute();
-
-            }
-
-            if (node.Classes.Any()) {
-
-                xmlWriter.WriteStartAttribute("class");
-                xmlWriter.WriteString(string.Join(" ", node.Classes));
-                xmlWriter.WriteEndAttribute();
-
-            }
-
-            foreach (INode2 childNode in node.Children)
-                WriteNode(xmlWriter, childNode);
-
-            xmlWriter.WriteEndElement();
+            if (States.HasFlag(NodeStates.Disabled))
+                yield return ":disabled";
 
         }
 

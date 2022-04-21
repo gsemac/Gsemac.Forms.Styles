@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.StyleSheets.Selectors;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Tests {
 

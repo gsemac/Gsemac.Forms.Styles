@@ -1,5 +1,5 @@
 ﻿using Gsemac.Forms.Styles.Properties;
-using Gsemac.Forms.Styles.StyleSheets;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
@@ -63,7 +63,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
                 throw new ArgumentNullException(nameof(obj));
 
             if (!typeof(T).IsAssignableFrom(obj.GetType()))
-                throw new ArgumentException(string.Format(ExceptionMessages.CannotApplyStyleToTypeWithType, obj.GetType()), nameof(obj));
+                throw new ArgumentException(string.Format(ExceptionMessages.CannotApplyStyleToType, obj.GetType()), nameof(obj));
 
         }
 

@@ -11,9 +11,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         // Public members
 
         public IMeasurement Direction { get; }
-        public IEnumerable<ColorStop> ColorStops { get; }
+        public IEnumerable<IColorStop> ColorStops { get; }
 
-        public LinearGradient(IMeasurement direction, IEnumerable<ColorStop> colorStops) {
+        public LinearGradient(IMeasurement direction, IEnumerable<IColorStop> colorStops) {
 
             if (direction is null)
                 throw new ArgumentNullException(nameof(direction));

@@ -1,6 +1,6 @@
-﻿using Gsemac.Forms.Styles.Dom;
+﻿using Gsemac.Forms.Styles.StyleSheets.Dom;
 
-namespace Gsemac.Forms.Styles.StyleSheets {
+namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
     public class IDSelector :
         ISelector {
@@ -11,7 +11,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         public IDSelector(string name) {
 
-            this.Name = name?.TrimStart('#');
+            Name = name?.TrimStart('#');
 
         }
 

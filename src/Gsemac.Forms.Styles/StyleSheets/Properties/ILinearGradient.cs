@@ -6,7 +6,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         IGradient {
 
         IMeasurement Direction { get; }
-        IEnumerable<ColorStop> ColorStops { get; }
+        IEnumerable<IColorStop> ColorStops { get; }
 
     }
 
