@@ -2,7 +2,6 @@
 using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
-using Gsemac.Forms.Styles.StyleSheets.Rulesets.Extensions;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -17,181 +16,181 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public void PaintBackground(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
 
-            GraphicsState state = graphics.Save();
+            //GraphicsState state = graphics.Save();
 
-            bool hasRadius = ruleset.GetBorderRadii().Any(r => r > 0);
-            bool hasRightRadius = hasRadius && (ruleset.BorderTopRightRadius?.Value > 0 || ruleset.BorderBottomRightRadius?.Value > 0);
-            bool hasBottomRadius = hasRadius && (ruleset.BorderBottomLeftRadius?.Value > 0 || ruleset.BorderBottomRightRadius?.Value > 0);
+            //bool hasRadius = ruleset.BorderRadius.Any(r => r.Value > 0);
+            //bool hasRightRadius = hasRadius && (ruleset.BorderTopRightRadius?.Value > 0 || ruleset.BorderBottomRightRadius?.Value > 0);
+            //bool hasBottomRadius = hasRadius && (ruleset.BorderBottomLeftRadius?.Value > 0 || ruleset.BorderBottomRightRadius?.Value > 0);
 
-            if (hasRadius)
-                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            //if (hasRadius)
+            //    graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // Draw the background color.
+            //// Draw the background color.
 
-            Rectangle backgroundRect = rectangle;
+            //Rectangle backgroundRect = rectangle;
 
-            // If the rectangle has right or bottom corner radii, the bounds must be decreased to ensure the curve is not clipped.
+            //// If the rectangle has right or bottom corner radii, the bounds must be decreased to ensure the curve is not clipped.
 
-            if (hasRadius)
-                backgroundRect = new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - (hasRightRadius ? 1 : 0), rectangle.Height - (hasBottomRadius ? 1 : 0));
+            //if (hasRadius)
+            //    backgroundRect = new Rectangle(rectangle.X, rectangle.Y, rectangle.Width - (hasRightRadius ? 1 : 0), rectangle.Height - (hasBottomRadius ? 1 : 0));
 
-            int topLeft = (int)(ruleset.BorderTopLeftRadius?.Value ?? 0);
-            int topRight = (int)(ruleset.BorderTopRightRadius?.Value ?? 0);
-            int bottomLeft = (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0);
-            int bottomRight = (int)(ruleset.BorderBottomRightRadius?.Value ?? 0);
+            //int topLeft = (int)(ruleset.BorderTopLeftRadius?.Value ?? 0);
+            //int topRight = (int)(ruleset.BorderTopRightRadius?.Value ?? 0);
+            //int bottomLeft = (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0);
+            //int bottomRight = (int)(ruleset.BorderBottomRightRadius?.Value ?? 0);
 
-            if (ruleset.BackgroundColor.HasValue()) {
+            //if (ruleset.Contains(PropertyName.BackgroundColor)) {
 
-                Color backgroundColor = ruleset.BackgroundColor?.Value ?? SystemColors.Control;
+            //    Color backgroundColor = ruleset.BackgroundColor?.Value ?? SystemColors.Control;
 
-                if (ruleset.Opacity.HasValue())
-                    backgroundColor = RenderUtilities.GetColorWithAlpha(backgroundColor, (float)ruleset.Opacity.Value);
+            //    if (ruleset.Contains(PropertyName.Opacity))
+            //        backgroundColor = RenderUtilities.GetColorWithAlpha(backgroundColor, (float)ruleset.Opacity.Value);
 
-                using (Brush brush = new SolidBrush(backgroundColor)) {
+            //    using (Brush brush = new SolidBrush(backgroundColor)) {
 
-                    if (!hasRadius)
-                        graphics.FillRectangle(brush, backgroundRect);
-                    else
-                        graphics.FillRoundedRectangle(brush, backgroundRect, topLeft, topRight, bottomLeft, bottomRight);
-                }
+            //        if (!hasRadius)
+            //            graphics.FillRectangle(brush, backgroundRect);
+            //        else
+            //            graphics.FillRoundedRectangle(brush, backgroundRect, topLeft, topRight, bottomLeft, bottomRight);
+            //    }
 
-            }
+            //}
 
-            // Draw the background image.
+            //// Draw the background image.
 
-            if (ruleset.BackgroundImage.HasValue()) {
+            ////if (ruleset.Contains(PropertyName.BackgroundImage)) {
 
-                ClipToBorder(graphics, backgroundRect, ruleset);
+            ////    ClipToBorder(graphics, backgroundRect, ruleset);
 
-                foreach (IImage image in ruleset.BackgroundImage.Value.Images)
-                    graphics.DrawImage(image, backgroundRect);
+            ////    foreach (IImage image in ruleset.BackgroundImage.Images)
+            ////        graphics.DrawImage(image, backgroundRect);
 
-            }
+            ////}
 
-            graphics.Restore(state);
+            //graphics.Restore(state);
 
         }
         public void PaintBorder(Graphics graphics, Rectangle rectangle, IRuleset ruleset) {
 
-            GraphicsState state = graphics.Save();
+            //GraphicsState state = graphics.Save();
 
-            bool hasRadius = ruleset.GetBorderRadii().Any(r => r > 0);
+            //bool hasRadius = ruleset.BorderRadius.Any(r => r.Value > 0);
 
-            if (hasRadius)
-                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            //if (hasRadius)
+            //    graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            double topWidth = ruleset.BorderTopWidth?.Value ?? 0;
-            double rightWidth = ruleset.BorderRightWidth?.Value ?? 0;
-            double bottomWidth = ruleset.BorderBottomWidth?.Value ?? 0;
-            double leftWidth = ruleset.BorderLeftWidth?.Value ?? 0;
+            //double topWidth = ruleset.BorderTopWidth?.Value ?? 0;
+            //double rightWidth = ruleset.BorderRightWidth?.Value ?? 0;
+            //double bottomWidth = ruleset.BorderBottomWidth?.Value ?? 0;
+            //double leftWidth = ruleset.BorderLeftWidth?.Value ?? 0;
 
-            double topLeftRadius = ruleset.BorderTopLeftRadius?.Value ?? 0;
-            double topRightRadius = ruleset.BorderTopRightRadius?.Value ?? 0;
-            double bottomRightRadius = ruleset.BorderBottomRightRadius?.Value ?? 0;
-            double bottomLeftRadius = ruleset.BorderBottomLeftRadius?.Value ?? 0;
+            //double topLeftRadius = ruleset.BorderTopLeftRadius?.Value ?? 0;
+            //double topRightRadius = ruleset.BorderTopRightRadius?.Value ?? 0;
+            //double bottomRightRadius = ruleset.BorderBottomRightRadius?.Value ?? 0;
+            //double bottomLeftRadius = ruleset.BorderBottomLeftRadius?.Value ?? 0;
 
-            double horizontalBorderWidth = leftWidth + rightWidth;
-            double verticalBorderWidth = topWidth + bottomWidth;
+            //double horizontalBorderWidth = leftWidth + rightWidth;
+            //double verticalBorderWidth = topWidth + bottomWidth;
 
-            int rectX = rectangle.X + (int)(leftWidth / 2);
-            int rectY = rectangle.Y + (int)(topWidth / 2);
-            int rectWidth = rectangle.Width - (int)(horizontalBorderWidth / 2);
-            int rectHeight = rectangle.Height - (int)(verticalBorderWidth / 2);
+            //int rectX = rectangle.X + (int)(leftWidth / 2);
+            //int rectY = rectangle.Y + (int)(topWidth / 2);
+            //int rectWidth = rectangle.Width - (int)(horizontalBorderWidth / 2);
+            //int rectHeight = rectangle.Height - (int)(verticalBorderWidth / 2);
 
-            Rectangle drawRect = new Rectangle(rectX, rectY, rectWidth - (rightWidth == 1 && leftWidth <= 0 ? 1 : 0), rectHeight - (bottomWidth == 1 && topWidth <= 0 ? 1 : 0));
+            //Rectangle drawRect = new Rectangle(rectX, rectY, rectWidth - (rightWidth == 1 && leftWidth <= 0 ? 1 : 0), rectHeight - (bottomWidth == 1 && topWidth <= 0 ? 1 : 0));
 
-            float opacity = (float)(ruleset.Opacity?.Value ?? 1.0f);
+            //float opacity = (float)(ruleset.Opacity?.Value ?? 1.0f);
 
-            using (Pen pen = new Pen(Color.Black)) {
+            //using (Pen pen = new Pen(Color.Black)) {
 
-                pen.Alignment = PenAlignment.Center;
-                pen.StartCap = LineCap.Square;
+            //    pen.Alignment = PenAlignment.Center;
+            //    pen.StartCap = LineCap.Square;
 
-                if (topWidth > 0) {
+            //    if (topWidth > 0) {
 
-                    StyleSheets.Properties.BorderStyle borderStyle = ruleset.BorderTopStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
+            //        StyleSheets.Properties.BorderStyle borderStyle = ruleset.BorderTopStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
 
-                    if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
+            //        if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
 
-                        pen.Width = (float)topWidth;
-                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderTopColor?.Value ?? default, opacity);
-                        pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
+            //            pen.Width = (float)topWidth;
+            //            pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderTopColor?.Value ?? default, opacity);
+            //            pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
 
-                        using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Top, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
-                            graphics.DrawPath(pen, path);
+            //            using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Top, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
+            //                graphics.DrawPath(pen, path);
 
-                    }
+            //        }
 
-                }
+            //    }
 
-                if (rightWidth > 0) {
+            //    if (rightWidth > 0) {
 
-                    StyleSheets.Properties.BorderStyle borderStyle = ruleset.BorderRightStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
+            //        StyleSheets.Properties.BorderStyle borderStyle = ruleset.BorderRightStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
 
-                    if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
+            //        if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
 
-                        pen.Width = (float)rightWidth;
-                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderRightColor?.Value ?? default, opacity);
-                        pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
+            //            pen.Width = (float)rightWidth;
+            //            pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderRightColor?.Value ?? default, opacity);
+            //            pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
 
-                        using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Right, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
-                            graphics.DrawPath(pen, path);
+            //            using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Right, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
+            //                graphics.DrawPath(pen, path);
 
-                    }
+            //        }
 
-                }
+            //    }
 
-                if (bottomWidth > 0) {
+            //    if (bottomWidth > 0) {
 
-                    StyleSheets.Properties.BorderStyle borderStyle = ruleset.BorderBottomStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
+            //        StyleSheets.Properties.BorderStyle borderStyle = ruleset.BorderBottomStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
 
-                    if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
+            //        if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
 
-                        pen.Width = (float)bottomWidth;
-                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderBottomColor?.Value ?? default, opacity);
-                        pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
+            //            pen.Width = (float)bottomWidth;
+            //            pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderBottomColor?.Value ?? default, opacity);
+            //            pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
 
-                        using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Bottom, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
-                            graphics.DrawPath(pen, path);
+            //            using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Bottom, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
+            //                graphics.DrawPath(pen, path);
 
-                    }
+            //        }
 
-                }
+            //    }
 
-                if (leftWidth > 0) {
+            //    if (leftWidth > 0) {
 
-                    StyleSheets.Properties.BorderStyle borderStyle = ruleset.BorderLeftStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
+            //        StyleSheets.Properties.BorderStyle borderStyle = ruleset.BorderLeftStyle?.Value ?? StyleSheets.Properties.BorderStyle.Solid;
 
-                    if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
+            //        if (borderStyle != StyleSheets.Properties.BorderStyle.None && borderStyle != StyleSheets.Properties.BorderStyle.Hidden) {
 
-                        pen.Width = (float)leftWidth;
-                        pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderLeftColor?.Value ?? default, opacity);
-                        pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
+            //            pen.Width = (float)leftWidth;
+            //            pen.Color = RenderUtilities.GetColorWithAlpha(ruleset.BorderLeftColor?.Value ?? default, opacity);
+            //            pen.DashStyle = RenderUtilities.GetDashStyle(borderStyle);
 
-                        using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Left, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
-                            graphics.DrawPath(pen, path);
+            //            using (GraphicsPath path = RenderUtilities.CreateBorderPath(drawRect, BorderPathType.Left, topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius))
+            //                graphics.DrawPath(pen, path);
 
-                    }
+            //        }
 
-                }
+            //    }
 
-            }
+            //}
 
-            graphics.Restore(state);
+            //graphics.Restore(state);
 
         }
         public void PaintText(Graphics graphics, Rectangle rectangle, IRuleset ruleset, string text, Font font, TextFormatFlags textFormatFlags = TextFormatFlags.Left | TextFormatFlags.NoPrefix) {
 
-            // Paint the foreground text.
+            //// Paint the foreground text.
 
-            Color textColor = ruleset.Color?.Value ?? SystemColors.ControlText;
+            //Color textColor = ruleset.Color?.Value ?? SystemColors.ControlText;
 
-            TextRenderer.DrawText(graphics, text, font, rectangle, textColor, textFormatFlags);
+            //TextRenderer.DrawText(graphics, text, font, rectangle, textColor, textFormatFlags);
 
-            //graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+            ////graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
-            //using (Brush brush = new SolidBrush(textColor))
-            //    graphics.DrawString(text, font, brush, new RectangleF(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height));
+            ////using (Brush brush = new SolidBrush(textColor))
+            ////    graphics.DrawString(text, font, brush, new RectangleF(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height));
 
         }
 
@@ -199,7 +198,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             Region region = new Region(rectangle);
 
-            if (ruleset.Any(p => p.IsBorderRadiusProperty())) {
+            if (ruleset.Any(p => PropertyUtilities.IsBorderRadiusProperty(p))) {
 
                 region.Intersect(GraphicsExtensions.CreateRoundedRectangle(rectangle,
                     (int)(ruleset.BorderTopLeftRadius?.Value ?? 0),

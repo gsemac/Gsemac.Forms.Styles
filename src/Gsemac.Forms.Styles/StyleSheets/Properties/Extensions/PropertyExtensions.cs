@@ -16,37 +16,24 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
 
         }
 
-        public static bool HasValue(this IProperty property) {
+        public static T GetValueAs<T>(this IProperty property) {
 
-            return property != null;
+            if (property is null)
+                throw new ArgumentNullException(nameof(property));
 
-        }
-
-        public static bool IsBorderRadiusProperty(this IProperty property) {
-
-            return property.Name == PropertyName.BorderTopLeftRadius ||
-                property.Name == PropertyName.BorderTopRightRadius ||
-                property.Name == PropertyName.BorderBottomRightRadius ||
-                property.Name == PropertyName.BorderBottomLeftRadius ||
-                property.Name == PropertyName.BorderRadius;
+            return new PropertyValue(property.ValueType, property.Value)
+                .GetValueAs<T>();
 
         }
-        public static bool IsBorderWidthProperty(this IProperty property) {
+        public static bool TryGetValueAs<T>(this IProperty property, out T value) {
 
-            return property.Name == PropertyName.BorderTopWidth ||
-               property.Name == PropertyName.BorderRightWidth ||
-               property.Name == PropertyName.BorderBottomWidth ||
-               property.Name == PropertyName.BorderLeftWidth ||
-               property.Name == PropertyName.BorderWidth;
+            value = default;
 
-        }
-        public static bool IsBorderColorProperty(this IProperty property) {
+            if (property is null)
+                throw new ArgumentNullException(nameof(property));
 
-            return property.Name == PropertyName.BorderTopColor ||
-               property.Name == PropertyName.BorderRightColor ||
-               property.Name == PropertyName.BorderBottomColor ||
-               property.Name == PropertyName.BorderLeftColor ||
-               property.Name == PropertyName.BorderColor;
+            return new PropertyValue(property.ValueType, property.Value)
+                .TryGetValueAs(out value);
 
         }
 

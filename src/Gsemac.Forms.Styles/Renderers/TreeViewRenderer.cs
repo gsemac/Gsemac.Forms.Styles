@@ -42,14 +42,14 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         protected virtual void PaintBackground(TreeView control, ControlPaintArgs args) {
 
-            IRuleset ruleset = args.StyleSheet.GetRuleset(control);
-            Rectangle borderRect = Renderers2.RenderUtilities.GetOuterBorderRectangle(control.ClientRectangle, ruleset);
+            //IRuleset ruleset = args.StyleSheet.GetRuleset(control);
+            //Rectangle borderRect = Renderers2.RenderUtilities.GetOuterBorderRectangle(control.ClientRectangle, ruleset);
 
-            if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor)
-                control.BackColor = ruleset.BackgroundColor.Value;
+            //if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor)
+            //    control.BackColor = ruleset.BackgroundColor.Value;
 
-            args.PaintBackground(borderRect);
-            args.PaintBorder(borderRect);
+            //args.PaintBackground(borderRect);
+            //args.PaintBorder(borderRect);
 
         }
         protected virtual void PaintNodeContent(TreeView control, TreeNode node, int visibleIndex, ControlPaintArgs args) {
@@ -82,47 +82,47 @@ namespace Gsemac.Forms.Styles.Renderers {
         }
         protected virtual void PaintNodeButton(TreeView control, TreeNode node, ControlPaintArgs args) {
 
-            const int buttonWidth = 9;
-            const int detailPadding = 2;
+            //const int buttonWidth = 9;
+            //const int detailPadding = 2;
 
-            UserNode nodeButtonNode = new UserNode(string.Empty, new[] { "Button" });
+            //UserNode nodeButtonNode = new UserNode(string.Empty, new[] { "Button" });
 
-            nodeButtonNode.SetParent(new ControlNode(control));
+            //nodeButtonNode.SetParent(new ControlNode(control));
 
-            if (node.IsSelected)
-                nodeButtonNode.AddState(NodeStates.Checked);
+            //if (node.IsSelected)
+            //    nodeButtonNode.AddState(NodeStates.Checked);
 
-            IRuleset nodeButtonRuleset = args.StyleSheet.GetRuleset(nodeButtonNode);
+            //IRuleset nodeButtonRuleset = args.StyleSheet.GetRuleset(nodeButtonNode);
 
-            Rectangle nodeRect = node.Bounds;
-            Rectangle buttonRect = new Rectangle(nodeRect.X - buttonWidth - 3, nodeRect.Y + nodeRect.Height - buttonWidth - 1, buttonWidth, buttonWidth);
+            //Rectangle nodeRect = node.Bounds;
+            //Rectangle buttonRect = new Rectangle(nodeRect.X - buttonWidth - 3, nodeRect.Y + nodeRect.Height - buttonWidth - 1, buttonWidth, buttonWidth);
 
-            args.StyleRenderer.PaintBackground(args.Graphics, buttonRect, nodeButtonRuleset);
-            args.StyleRenderer.PaintBorder(args.Graphics, buttonRect, nodeButtonRuleset);
+            //args.StyleRenderer.PaintBackground(args.Graphics, buttonRect, nodeButtonRuleset);
+            //args.StyleRenderer.PaintBorder(args.Graphics, buttonRect, nodeButtonRuleset);
 
-            if (PaintNodeButtonContent) {
+            //if (PaintNodeButtonContent) {
 
-                Color detailColor = nodeButtonRuleset.Color?.Value ?? Color.Black;
+            //    Color detailColor = nodeButtonRuleset.Color?.Value ?? Color.Black;
 
-                buttonRect.Inflate(-detailPadding, -detailPadding);
+            //    buttonRect.Inflate(-detailPadding, -detailPadding);
 
-                int x = buttonRect.X;
-                int y = buttonRect.Y;
-                int x2 = x + buttonRect.Width - 1;
-                int y2 = y + buttonRect.Height - 1;
-                int midX = x + (buttonRect.Width / 2);
-                int midY = y + (buttonRect.Height / 2);
+            //    int x = buttonRect.X;
+            //    int y = buttonRect.Y;
+            //    int x2 = x + buttonRect.Width - 1;
+            //    int y2 = y + buttonRect.Height - 1;
+            //    int midX = x + (buttonRect.Width / 2);
+            //    int midY = y + (buttonRect.Height / 2);
 
-                using (Pen detailPen = new Pen(detailColor)) {
+            //    using (Pen detailPen = new Pen(detailColor)) {
 
-                    args.Graphics.DrawLine(detailPen, new Point(x, midY), new Point(x2, midY));
+            //        args.Graphics.DrawLine(detailPen, new Point(x, midY), new Point(x2, midY));
 
-                    if (!node.IsExpanded)
-                        args.Graphics.DrawLine(detailPen, new Point(midX, y), new Point(midX, y2));
+            //        if (!node.IsExpanded)
+            //            args.Graphics.DrawLine(detailPen, new Point(midX, y), new Point(midX, y2));
 
-                }
+            //    }
 
-            }
+            //}
 
         }
 
@@ -166,63 +166,63 @@ namespace Gsemac.Forms.Styles.Renderers {
         }
         private void PaintLines(TreeView control, TreeNodeCollection nodes, ControlPaintArgs args) {
 
-            const int buttonWidth = 9;
+            //const int buttonWidth = 9;
 
-            if (control.ShowLines && control.Nodes.Count > 0) {
+            //if (control.ShowLines && control.Nodes.Count > 0) {
 
-                if (control.ShowRootLines || nodes[0].Level != 0) {
+            //    if (control.ShowRootLines || nodes[0].Level != 0) {
 
-                    UserNode lineNode = new UserNode(string.Empty, new[] { "Lines" });
+            //        UserNode lineNode = new UserNode(string.Empty, new[] { "Lines" });
 
-                    lineNode.SetParent(new ControlNode(control));
+            //        lineNode.SetParent(new ControlNode(control));
 
-                    IRuleset lineRuleset = args.StyleSheet.GetRuleset(lineNode);
+            //        IRuleset lineRuleset = args.StyleSheet.GetRuleset(lineNode);
 
-                    Color lineColor = lineRuleset.Color?.Value ?? Color.Black;
+            //        Color lineColor = lineRuleset.Color?.Value ?? Color.Black;
 
-                    using (Pen linePen = new Pen(lineColor)) {
+            //        using (Pen linePen = new Pen(lineColor)) {
 
-                        linePen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+            //            linePen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
-                        // Draw a line from the first node down to the last node.
+            //            // Draw a line from the first node down to the last node.
 
-                        TreeNode firstNode = nodes[0];
-                        TreeNode lastNode = nodes[nodes.Count - 1];
+            //            TreeNode firstNode = nodes[0];
+            //            TreeNode lastNode = nodes[nodes.Count - 1];
 
-                        int x1 = firstNode.Bounds.X - 8;
-                        int x2 = x1;
-                        int y1 = firstNode.Bounds.Y + (firstNode.Nodes.Count > 0 ? buttonWidth - 1 : 2);
-                        int y2 = lastNode.Bounds.Y + (firstNode.Nodes.Count > 0 ? buttonWidth - 1 : 13);
+            //            int x1 = firstNode.Bounds.X - 8;
+            //            int x2 = x1;
+            //            int y1 = firstNode.Bounds.Y + (firstNode.Nodes.Count > 0 ? buttonWidth - 1 : 2);
+            //            int y2 = lastNode.Bounds.Y + (firstNode.Nodes.Count > 0 ? buttonWidth - 1 : 13);
 
-                        args.Graphics.DrawLine(linePen, new Point(x1, y1), new Point(x2, y2));
+            //            args.Graphics.DrawLine(linePen, new Point(x1, y1), new Point(x2, y2));
 
-                        // Draw horizontal lines connecting the vertical line to each of the nodes.
+            //            // Draw horizontal lines connecting the vertical line to each of the nodes.
 
-                        foreach (TreeNode childNode in nodes) {
+            //            foreach (TreeNode childNode in nodes) {
 
-                            x1 = firstNode.Bounds.X - buttonWidth + 1;
-                            x2 = childNode.Bounds.X + 2;
-                            y1 = childNode.Bounds.Y + 12;
-                            y2 = y1;
+            //                x1 = firstNode.Bounds.X - buttonWidth + 1;
+            //                x2 = childNode.Bounds.X + 2;
+            //                y1 = childNode.Bounds.Y + 12;
+            //                y2 = y1;
 
-                            args.Graphics.DrawLine(linePen, new Point(x1, y1), new Point(x2, y2));
+            //                args.Graphics.DrawLine(linePen, new Point(x1, y1), new Point(x2, y2));
 
-                        }
+            //            }
 
-                    }
+            //        }
 
-                }
+            //    }
 
-                // Draw lines for the child nodes.
+            //    // Draw lines for the child nodes.
 
-                foreach (TreeNode node in nodes) {
+            //    foreach (TreeNode node in nodes) {
 
-                    if (node.IsExpanded)
-                        PaintLines(control, node.Nodes, args);
+            //        if (node.IsExpanded)
+            //            PaintLines(control, node.Nodes, args);
 
-                }
+            //    }
 
-            }
+            //}
 
         }
 

@@ -18,7 +18,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             switch (propertyName) {
 
                 case PropertyName.Border:
-                    return CreateBorderProperty(propertyName, arguments);
+                    return CreateBorderProperty(arguments);
 
                 case PropertyName.BackgroundColor:
                 case PropertyName.BorderBottomColor:
@@ -30,7 +30,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                     return CreateColorProperty(propertyName, arguments);
 
                 case PropertyName.BorderRadius:
-                    return CreateBorderRadiusProperty(propertyName, arguments);
+                    return CreateBorderRadiusProperty(arguments);
 
                 case PropertyName.BorderBottomLeftRadius:
                 case PropertyName.BorderBottomRightRadius:
@@ -52,7 +52,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                     return CreateBorderStyleProperty(propertyName, arguments);
 
                 case PropertyName.BackgroundImage:
-                    return CreateBackgroundImageProperty(propertyName, arguments);
+                    return CreateBackgroundImageProperty(arguments);
 
                 default:
                     throw new InvalidPropertyException(string.Format(ExceptionMessages.UnrecognizedProperty, propertyName));
@@ -63,61 +63,97 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Private members
 
-        private static Property<BackgroundImage> CreateBackgroundImageProperty(string propertyName, IPropertyValue[] values) {
+        private static Property<T> CreateDefaultProperty<T>(string propertyName) {
 
-            if (values is null || values.Length <= 0)
-                return new Property<BackgroundImage>(propertyName);
-
-            return new Property<BackgroundImage>(propertyName, CreateBackgroundImage(values));
-
-        }
-        private static BorderProperty CreateBorderProperty(string propertyName, IPropertyValue[] values) {
-
-            if (values is null || values.Length <= 0)
-                return new BorderProperty();
-
-            return new BorderProperty(CreateBorder(values));
-
-        }
-        private static Property<BorderRadius> CreateBorderRadiusProperty(string propertyName, IPropertyValue[] values) {
-
-            if (values is null || values.Length <= 0)
-                return new Property<BorderRadius>(propertyName);
-
-            return new Property<BorderRadius>(propertyName, CreateBorderRadius(values));
-
-        }
-        private static Property<BorderStyle> CreateBorderStyleProperty(string propertyName, IPropertyValue[] values) {
-
-            if (values is null || values.Length <= 0)
-                return new Property<BorderStyle>(propertyName);
-
-            return new Property<BorderStyle>(propertyName, values.First().As<BorderStyle>());
-
-        }
-        private static Property<Color> CreateColorProperty(string propertyName, IPropertyValue[] values) {
-
-            if (values is null || values.Length <= 0)
-                return new Property<Color>(propertyName);
-
-            return new Property<Color>(propertyName, values.First().As<Color>());
-
-        }
-        private static Property<IMeasurement> CreateMeasurementProperty(string propertyName, IPropertyValue[] values) {
-
-            if (values is null || values.Length <= 0)
-                return new Property<IMeasurement>(propertyName);
-
-            return new Property<IMeasurement>(propertyName, values.First().As<IMeasurement>());
+            return new Property<T>(propertyName, PropertyUtilities.GetInitialValue<T>(propertyName), PropertyUtilities.IsInheritable(propertyName));
 
         }
 
-        private static BackgroundImage CreateBackgroundImage(IPropertyValue[] values) {
+        private static Property<BackgroundImage> CreateBackgroundImageProperty(IPropertyValue[] arguments) {
 
-            return new BackgroundImage(values.Select(v => v.As<IImage>()));
+            if (arguments is null || arguments.Length <= 0)
+                return CreateDefaultProperty<BackgroundImage>(PropertyName.BackgroundImage);
+
+            return new Property<BackgroundImage>(PropertyName.BackgroundImage,
+                CreateBackgroundImage(arguments),
+                PropertyUtilities.IsInheritable(PropertyName.BackgroundImage));
 
         }
-        private static Border CreateBorder(IPropertyValue[] values) {
+        private static BorderProperty CreateBorderProperty(IPropertyValue[] arguments) {
+
+            if (arguments is null || arguments.Length <= 0)
+                return new BorderProperty(PropertyUtilities.GetInitialValue<Border>(PropertyName.Border));
+
+            return new BorderProperty(CreateBorder(arguments));
+
+        }
+        private static BorderRadiusProperty CreateBorderRadiusProperty(IPropertyValue[] arguments) {
+
+            if (arguments is null || arguments.Length <= 0)
+                return new BorderRadiusProperty(PropertyUtilities.GetInitialValue<BorderRadius>(PropertyName.BorderRadius));
+
+            return new BorderRadiusProperty(CreateBorderRadius(arguments));
+
+        }
+        private static Property<BorderStyle> CreateBorderStyleProperty(string propertyName, IPropertyValue[] arguments) {
+
+            if (arguments is null || arguments.Length <= 0)
+                return CreateDefaultProperty<BorderStyle>(propertyName);
+
+            return new Property<BorderStyle>(propertyName,
+                arguments.First().GetValueAs<BorderStyle>(),
+                PropertyUtilities.IsInheritable(propertyName));
+
+        }
+        private static Property<Color> CreateColorProperty(string propertyName, IPropertyValue[] arguments) {
+
+            if (arguments is null || arguments.Length <= 0)
+                return CreateDefaultProperty<Color>(propertyName);
+
+            return new Property<Color>(propertyName,
+                arguments.First().GetValueAs<Color>(),
+                PropertyUtilities.IsInheritable(propertyName));
+
+        }
+        private static Property<IMeasurement> CreateMeasurementProperty(string propertyName, IPropertyValue[] arguments) {
+
+            if (arguments is null || arguments.Length <= 0)
+                return CreateDefaultProperty<IMeasurement>(propertyName);
+
+            return new Property<IMeasurement>(propertyName,
+                arguments.First().GetValueAs<IMeasurement>(),
+                PropertyUtilities.IsInheritable(propertyName));
+
+        }
+
+        private static bool TryCreateValueDirectly<T>(IPropertyValue[] arguments, out T value) {
+
+            value = default;
+
+            if (arguments.Length == 1 && arguments.First().TryGetValueAs(out T valueAsT)) {
+
+                value = valueAsT;
+
+                return true;
+
+            }
+
+            return false;
+
+        }
+
+        private static BackgroundImage CreateBackgroundImage(IPropertyValue[] arguments) {
+
+            if (TryCreateValueDirectly(arguments, out BackgroundImage value))
+                return value;
+
+            return new BackgroundImage(arguments.Select(v => v.GetValueAs<IImage>()));
+
+        }
+        private static Border CreateBorder(IPropertyValue[] arguments) {
+
+            if (TryCreateValueDirectly(arguments, out Border value))
+                return value;
 
             // TODO: Implement this
 
@@ -147,16 +183,23 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             //return new Border(borderWidth, borderStyle.Value, borderColor);
 
         }
-        private static BorderRadius CreateBorderRadius(IPropertyValue[] values) {
+        private static BorderRadius CreateBorderRadius(IPropertyValue[] arguments) {
 
-            if (values.Count() == 4)
-                return new BorderRadius(values[0].As<double>(), values[1].As<double>(), values[2].As<double>(), values[3].As<double>());
-            else if (values.Count() == 3)
-                return new BorderRadius(values[0].As<double>(), values[1].As<double>(), values[2].As<double>());
-            else if (values.Count() == 2)
-                return new BorderRadius(values[0].As<double>(), values[1].As<double>());
+            if (TryCreateValueDirectly(arguments, out BorderRadius value))
+                return value;
+
+            IMeasurement[] measurments = arguments
+                .Select(arg => arg.GetValueAs<IMeasurement>())
+                .ToArray();
+
+            if (measurments.Count() == 4)
+                return new BorderRadius(measurments[0], measurments[1], measurments[2], measurments[3]);
+            else if (measurments.Count() == 3)
+                return new BorderRadius(measurments[0], measurments[1], measurments[2]);
+            else if (measurments.Count() == 2)
+                return new BorderRadius(measurments[0], measurments[1]);
             else
-                return new BorderRadius(values[0].As<double>());
+                return new BorderRadius(measurments[0]);
 
         }
 

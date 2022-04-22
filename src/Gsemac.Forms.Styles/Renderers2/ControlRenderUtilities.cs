@@ -1,4 +1,4 @@
-﻿using Gsemac.Forms.Styles.StyleSheets.Extensions;
+﻿using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System.Drawing;
 using System.Windows.Forms;
@@ -11,9 +11,9 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         public static void ApplyColorProperties(Control control, IRuleset ruleset) {
 
-            if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor) {
+            if (ruleset.Contains(PropertyName.BackgroundColor) && ruleset.BackgroundColor != control.BackColor) {
 
-                Color backColor = ruleset.BackgroundColor.Value;
+                Color backColor = ruleset.BackgroundColor;
 
                 if (backColor.A != byte.MaxValue && !ControlUtilities.GetStyle(control, ControlStyles.SupportsTransparentBackColor))
                     backColor = Color.FromArgb(backColor.R, backColor.G, backColor.B);
@@ -22,8 +22,8 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             }
 
-            if (ruleset.Color.HasValue() && ruleset.Color.Value != control.ForeColor)
-                control.ForeColor = ruleset.Color.Value;
+            if (ruleset.Contains(PropertyName.Color) && ruleset.Color != control.ForeColor)
+                control.ForeColor = ruleset.Color;
 
         }
 

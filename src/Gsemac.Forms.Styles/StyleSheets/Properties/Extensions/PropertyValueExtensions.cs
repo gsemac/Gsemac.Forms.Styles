@@ -7,20 +7,55 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
 
         // Public members
 
-        public static T As<T>(this IPropertyValue propertyValue) {
+        public static T GetValueAs<T>(this IPropertyValue propertyValue) {
 
             if (propertyValue is null)
                 throw new ArgumentNullException(nameof(propertyValue));
 
-            // Since all numbers are parsed as measurements, allow them to be casted into numeric types.
+            if (TryGetValueAs(propertyValue, out T value))
+                return value;
 
-            if (propertyValue.Type.Equals(typeof(IMeasurement)) && TypeUtilities.IsNumericType(typeof(T)))
-                return (T)Convert.ChangeType(propertyValue.As<IMeasurement>().Value, typeof(T));
+            throw new InvalidCastException(string.Format(ExceptionMessages.CannotCastPropertyOfTypeToType, propertyValue.Type, typeof(T).Name));
 
-            if (typeof(T) != propertyValue.Type)
-                throw new InvalidCastException(string.Format(ExceptionMessages.CannotCastPropertyOfTypeToType, propertyValue.Type, typeof(T).Name));
+        }
+        public static bool TryGetValueAs<T>(this IPropertyValue propertyValue, out T value) {
 
-            return (T)propertyValue.Value;
+            value = default;
+
+            if (propertyValue is null)
+                throw new ArgumentNullException(nameof(propertyValue));
+
+            if (typeof(T) == propertyValue.Type) {
+
+                // If the type is an exact match, we can simply cast the value directly.
+
+                value = (T)propertyValue.Value;
+
+                return true;
+
+            }
+            else if (propertyValue.Type.Equals(typeof(IMeasurement)) && TypeUtilities.IsNumericType(typeof(T))) {
+
+                // Since all numbers are parsed as measurements, allow them to be casted into numeric types.
+
+                value = (T)Convert.ChangeType(propertyValue.GetValueAs<IMeasurement>().Value, typeof(T));
+
+                return true;
+
+            }
+            else if (propertyValue.Type.Equals(typeof(string)) && PropertyValue.TryParse((string)propertyValue.Value, out PropertyValue<T> parsedStringValue)) {
+
+                // Attempt to parse the string into the desired type.
+
+                value = parsedStringValue.Value;
+
+                return true;
+
+            }
+
+            // We were not able to cast to the requested type.
+
+            return false;
 
         }
 

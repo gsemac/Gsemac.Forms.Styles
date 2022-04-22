@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public class BorderProperty :
+    public sealed class BorderProperty :
         PropertyBase<Border> {
 
         // Public members

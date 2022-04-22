@@ -22,42 +22,42 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         protected override void OnApplyStyles(Control control) {
 
-            IRuleset rules = StyleSheet.GetRuleset(new ControlNode2(control));
+            //IRuleset rules = StyleSheet.GetRuleset(new ControlNode2(control));
 
-            if (rules.BackgroundColor.HasValue())
-                control.BackColor = rules.BackgroundColor.Value;
+            //if (rules.BackgroundColor.HasValue())
+            //    control.BackColor = rules.BackgroundColor.Value;
 
-            if (rules.Color.HasValue())
-                control.ForeColor = rules.Color.Value;
+            //if (rules.Color.HasValue())
+            //    control.ForeColor = rules.Color.Value;
 
-            switch (control) {
+            //switch (control) {
 
-                case Button button:
+            //    case Button button:
 
-                    ApplyStyles(button, rules);
+            //        ApplyStyles(button, rules);
 
-                    break;
+            //        break;
 
-                case ListBox listBox:
+            //    case ListBox listBox:
 
-                    ApplyStyles(listBox, rules);
+            //        ApplyStyles(listBox, rules);
 
-                    break;
+            //        break;
 
-                case NumericUpDown numericUpDown:
+            //    case NumericUpDown numericUpDown:
 
-                    ApplyStyles(numericUpDown, rules);
+            //        ApplyStyles(numericUpDown, rules);
 
-                    break;
+            //        break;
 
-                case TextBox textBox:
+            //    case TextBox textBox:
 
-                    if (!(textBox.Parent is NumericUpDown _))
-                        ApplyStyles(textBox, rules);
+            //        if (!(textBox.Parent is NumericUpDown _))
+            //            ApplyStyles(textBox, rules);
 
-                    break;
+            //        break;
 
-            }
+            //}
 
         }
 
@@ -65,63 +65,63 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         private void ApplyStyles(Button button, IRuleset rules) {
 
-            button.FlatStyle = FlatStyle.Flat;
+            //button.FlatStyle = FlatStyle.Flat;
 
-            double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
-                 .Cast<MeasurementProperty>()
-                 .Select(p => p.Value)
-                 .LastOrDefault();
+            //double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
+            //     .Cast<MeasurementProperty>()
+            //     .Select(p => p.Value)
+            //     .LastOrDefault();
 
-            Color borderColor = rules.Where(p => p.IsBorderColorProperty())
-                 .Cast<ColorProperty>()
-                 .Select(p => p.Value)
-                 .LastOrDefault();
+            //Color borderColor = rules.Where(p => p.IsBorderColorProperty())
+            //     .Cast<ColorProperty>()
+            //     .Select(p => p.Value)
+            //     .LastOrDefault();
 
-            if (borderWidth > 0) {
+            //if (borderWidth > 0) {
 
-                button.FlatAppearance.BorderColor = borderColor;
-                button.FlatAppearance.BorderSize = (int)borderWidth;
+            //    button.FlatAppearance.BorderColor = borderColor;
+            //    button.FlatAppearance.BorderSize = (int)borderWidth;
 
-            }
+            //}
 
         }
         private void ApplyStyles(ListBox listBox, IRuleset rules) {
 
-            double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
-                 .Cast<MeasurementProperty>()
-                 .Select(p => p.Value)
-                 .LastOrDefault();
+            //double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
+            //     .Cast<MeasurementProperty>()
+            //     .Select(p => p.Value)
+            //     .LastOrDefault();
 
-            if (borderWidth <= 0)
-                listBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            else
-                listBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            //if (borderWidth <= 0)
+            //    listBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //else
+            //    listBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 
         }
         private void ApplyStyles(NumericUpDown numericUpDown, IRuleset rules) {
 
-            double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
-               .Cast<MeasurementProperty>()
-               .Select(p => p.Value)
-               .LastOrDefault();
+            //double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
+            //   .Cast<MeasurementProperty>()
+            //   .Select(p => p.Value)
+            //   .LastOrDefault();
 
-            if (borderWidth <= 0)
-                numericUpDown.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            else
-                numericUpDown.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            //if (borderWidth <= 0)
+            //    numericUpDown.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //else
+            //    numericUpDown.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 
         }
         private void ApplyStyles(TextBox textBox, IRuleset rules) {
 
-            double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
-              .Cast<MeasurementProperty>()
-              .Select(p => p.Value)
-              .LastOrDefault();
+            //double borderWidth = rules.Where(p => p.IsBorderWidthProperty())
+            //  .Cast<MeasurementProperty>()
+            //  .Select(p => p.Value)
+            //  .LastOrDefault();
 
-            if (borderWidth <= 0)
-                textBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            else
-                textBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            //if (borderWidth <= 0)
+            //    textBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            //else
+            //    textBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 
         }
 

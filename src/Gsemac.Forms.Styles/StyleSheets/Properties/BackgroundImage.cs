@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public class BackgroundImage {
+    public sealed class BackgroundImage {
 
         // Public members
 

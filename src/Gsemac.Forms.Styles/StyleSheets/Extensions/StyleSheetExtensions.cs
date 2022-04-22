@@ -1,5 +1,8 @@
-﻿using Gsemac.Forms.Styles.StyleSheets.Dom;
+﻿using Gsemac.Collections.Extensions;
+using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.StyleSheets.Dom;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets.Extensions;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -42,8 +45,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Extensions {
 
             IRuleset ruleset = new Ruleset();
 
-            ruleset.InheritProperties(parentRuleset);
-            ruleset.AddProperties(styleSheet.GetRuleset(node));
+            ruleset.InheritPropertiesFrom(parentRuleset);
+            ruleset.AddRange(styleSheet.GetRuleset(node));
 
             return ruleset;
 

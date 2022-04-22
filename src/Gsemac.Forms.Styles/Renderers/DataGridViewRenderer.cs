@@ -30,74 +30,74 @@ namespace Gsemac.Forms.Styles.Renderers {
         public void RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e) { }
         public void CellPainting(object sender, DataGridViewCellPaintingEventArgs e) {
 
-            if (sender is DataGridView dataGridView) {
+            //if (sender is DataGridView dataGridView) {
 
-                bool isColumnHeader = DataGridViewUtilities.IsColumnHeaderIndex(e.RowIndex);
-                bool isRowHeader = DataGridViewUtilities.IsRowHeaderIndex(e.ColumnIndex);
-                bool isHeader = isColumnHeader || isRowHeader;
-                bool isSelected = e.State.HasFlag(DataGridViewElementStates.Selected);
+            //    bool isColumnHeader = DataGridViewUtilities.IsColumnHeaderIndex(e.RowIndex);
+            //    bool isRowHeader = DataGridViewUtilities.IsRowHeaderIndex(e.ColumnIndex);
+            //    bool isHeader = isColumnHeader || isRowHeader;
+            //    bool isSelected = e.State.HasFlag(DataGridViewElementStates.Selected);
 
-                UserNode cellNode = new UserNode(e.CellBounds, dataGridView.PointToClient(Cursor.Position));
+            //    UserNode cellNode = new UserNode(e.CellBounds, dataGridView.PointToClient(Cursor.Position));
 
-                cellNode.AddClass("Cell");
-                cellNode.SetParent(new ControlNode(sender as DataGridView));
+            //    cellNode.AddClass("Cell");
+            //    cellNode.SetParent(new ControlNode(sender as DataGridView));
 
-                if (isColumnHeader)
-                    cellNode.AddClass("ColumnHeader");
-                else if (isRowHeader)
-                    cellNode.AddClass("RowHeader");
+            //    if (isColumnHeader)
+            //        cellNode.AddClass("ColumnHeader");
+            //    else if (isRowHeader)
+            //        cellNode.AddClass("RowHeader");
 
-                if (isHeader)
-                    cellNode.AddClass("Header");
+            //    if (isHeader)
+            //        cellNode.AddClass("Header");
 
-                if (e.RowIndex % 2 == 0)
-                    cellNode.AddClass("Even");
-                else
-                    cellNode.AddClass("Odd");
+            //    if (e.RowIndex % 2 == 0)
+            //        cellNode.AddClass("Even");
+            //    else
+            //        cellNode.AddClass("Odd");
 
-                if (isSelected)
-                    cellNode.AddState(NodeStates.Checked);
+            //    if (isSelected)
+            //        cellNode.AddState(NodeStates.Checked);
 
-                IRuleset ruleset = styleSheet.GetRuleset(cellNode);
+            //    IRuleset ruleset = styleSheet.GetRuleset(cellNode);
 
-                if (RespectNonDefaultCellColors)
-                    ruleset = SetNonDefaultCellColors(ruleset, dataGridView, e);
+            //    if (RespectNonDefaultCellColors)
+            //        ruleset = SetNonDefaultCellColors(ruleset, dataGridView, e);
 
-                if (ruleset.Color.HasValue()) {
+            //    if (ruleset.Color.HasValue()) {
 
-                    if (isSelected)
-                        e.CellStyle.SelectionForeColor = ruleset.Color.Value;
-                    else
-                        e.CellStyle.ForeColor = ruleset.Color.Value;
+            //        if (isSelected)
+            //            e.CellStyle.SelectionForeColor = ruleset.Color.Value;
+            //        else
+            //            e.CellStyle.ForeColor = ruleset.Color.Value;
 
-                }
+            //    }
 
-                if (ruleset.BackgroundColor.HasValue()) {
+            //    if (ruleset.BackgroundColor.HasValue()) {
 
-                    if (isSelected)
-                        e.CellStyle.SelectionBackColor = ruleset.BackgroundColor.Value;
-                    else
-                        e.CellStyle.BackColor = ruleset.BackgroundColor.Value;
+            //        if (isSelected)
+            //            e.CellStyle.SelectionBackColor = ruleset.BackgroundColor.Value;
+            //        else
+            //            e.CellStyle.BackColor = ruleset.BackgroundColor.Value;
 
-                }
+            //    }
 
-                if (ruleset.Opacity.HasValue() && ruleset.Opacity.Value < 1.0f) {
+            //    if (ruleset.Opacity.HasValue() && ruleset.Opacity.Value < 1.0f) {
 
-                    // Draw the part of the DataGridView background behind the cell.
+            //        // Draw the part of the DataGridView background behind the cell.
 
-                    styleRenderer.PaintParentBackground(e.Graphics, e.CellBounds, dataGridView.ClientRectangle, styleSheet.GetRuleset(dataGridView));
+            //        styleRenderer.PaintParentBackground(e.Graphics, e.CellBounds, dataGridView.ClientRectangle, styleSheet.GetRuleset(dataGridView));
 
-                }
+            //    }
 
-                styleRenderer.PaintBackground(e.Graphics, e.CellBounds, ruleset);
+            //    styleRenderer.PaintBackground(e.Graphics, e.CellBounds, ruleset);
 
-                e.PaintContent(e.ClipBounds);
+            //    e.PaintContent(e.ClipBounds);
 
-                styleRenderer.PaintBorder(e.Graphics, e.CellBounds, ruleset);
+            //    styleRenderer.PaintBorder(e.Graphics, e.CellBounds, ruleset);
 
-                e.Handled = true;
+            //    e.Handled = true;
 
-            }
+            //}
 
         }
         public void Paint(object sender, PaintEventArgs e) {
@@ -118,16 +118,16 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public override void PaintControl(DataGridView control, ControlPaintArgs args) {
 
-            // Draw the background/border of the control.
+            //// Draw the background/border of the control.
 
-            IRuleset ruleset = args.StyleSheet.GetRuleset(control);
-            Rectangle borderRect = Renderers2.RenderUtilities.GetOuterBorderRectangle(control.ClientRectangle, ruleset);
+            //IRuleset ruleset = args.StyleSheet.GetRuleset(control);
+            //Rectangle borderRect = Renderers2.RenderUtilities.GetOuterBorderRectangle(control.ClientRectangle, ruleset);
 
-            if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor)
-                control.BackgroundColor = ruleset.BackgroundColor.Value;
+            //if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor)
+            //    control.BackgroundColor = ruleset.BackgroundColor.Value;
 
-            args.PaintBackground(borderRect);
-            args.PaintBorder(borderRect);
+            //args.PaintBackground(borderRect);
+            //args.PaintBorder(borderRect);
 
         }
 
@@ -139,19 +139,19 @@ namespace Gsemac.Forms.Styles.Renderers {
         private IRuleset SetNonDefaultCellColors(IRuleset ruleset, DataGridView dataGridView, DataGridViewCellPaintingEventArgs e) {
 
             IRuleset result = new Ruleset(ruleset);
-            DataGridViewCellStyle cellStyle = DataGridViewUtilities.GetDefaultCellStyle(dataGridView, e.RowIndex, e.ColumnIndex);
+            //DataGridViewCellStyle cellStyle = DataGridViewUtilities.GetDefaultCellStyle(dataGridView, e.RowIndex, e.ColumnIndex);
 
-            bool isSelected = e.State.HasFlag(DataGridViewElementStates.Selected);
+            //bool isSelected = e.State.HasFlag(DataGridViewElementStates.Selected);
 
-            if (!isSelected && e.CellStyle.ForeColor != cellStyle.ForeColor)
-                result.AddProperty(Property.Create(PropertyType.Color, e.CellStyle.ForeColor));
-            else if (isSelected && e.CellStyle.SelectionForeColor != cellStyle.SelectionForeColor)
-                result.AddProperty(Property.Create(PropertyType.Color, e.CellStyle.SelectionForeColor));
+            //if (!isSelected && e.CellStyle.ForeColor != cellStyle.ForeColor)
+            //    result.Add(Property.Create(PropertyType.Color, e.CellStyle.ForeColor));
+            //else if (isSelected && e.CellStyle.SelectionForeColor != cellStyle.SelectionForeColor)
+            //    result.Add(Property.Create(PropertyType.Color, e.CellStyle.SelectionForeColor));
 
-            if (!isSelected && e.CellStyle.BackColor != cellStyle.BackColor)
-                result.AddProperty(Property.Create(PropertyType.BackgroundColor, e.CellStyle.BackColor));
-            else if (isSelected && e.CellStyle.SelectionBackColor != cellStyle.SelectionBackColor)
-                result.AddProperty(Property.Create(PropertyType.BackgroundColor, e.CellStyle.SelectionBackColor));
+            //if (!isSelected && e.CellStyle.BackColor != cellStyle.BackColor)
+            //    result.Add(Property.Create(PropertyType.BackgroundColor, e.CellStyle.BackColor));
+            //else if (isSelected && e.CellStyle.SelectionBackColor != cellStyle.SelectionBackColor)
+            //    result.Add(Property.Create(PropertyType.BackgroundColor, e.CellStyle.SelectionBackColor));
 
             return result;
 

@@ -45,14 +45,14 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         private void PaintButton(ControlPaintArgs e, Rectangle clientRect, TriangleOrientation arrowOrientation, IRuleset ruleset) {
 
-            e.StyleRenderer.PaintBackground(e.Graphics, clientRect, ruleset);
-            e.StyleRenderer.PaintBorder(e.Graphics, clientRect, ruleset);
+            //e.StyleRenderer.PaintBackground(e.Graphics, clientRect, ruleset);
+            //e.StyleRenderer.PaintBorder(e.Graphics, clientRect, ruleset);
 
-            clientRect.Inflate(new Size(-5, -3));
-            clientRect.Offset(1, 0);
+            //clientRect.Inflate(new Size(-5, -3));
+            //clientRect.Offset(1, 0);
 
-            using (Brush brush = new SolidBrush(ruleset.Color?.Value ?? Color.Black))
-                e.Graphics.FillTriangle(brush, clientRect, arrowOrientation);
+            //using (Brush brush = new SolidBrush(ruleset.Color?.Value ?? Color.Black))
+            //    e.Graphics.FillTriangle(brush, clientRect, arrowOrientation);
 
         }
 

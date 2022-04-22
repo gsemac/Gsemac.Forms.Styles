@@ -67,16 +67,16 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         public override void PaintControl(ListView control, ControlPaintArgs args) {
 
-            // Draw the background/border of the control.
+            //// Draw the background/border of the control.
 
-            IRuleset ruleset = args.StyleSheet.GetRuleset(control);
-            Rectangle borderRect = Renderers2.RenderUtilities.GetOuterBorderRectangle(control.ClientRectangle, ruleset);
+            //IRuleset ruleset = args.StyleSheet.GetRuleset(control);
+            //Rectangle borderRect = Renderers2.RenderUtilities.GetOuterBorderRectangle(control.ClientRectangle, ruleset);
 
-            if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor)
-                control.BackColor = ruleset.BackgroundColor.Value;
+            //if (ruleset.BackgroundColor.HasValue() && ruleset.BackgroundColor.Value != control.BackColor)
+            //    control.BackColor = ruleset.BackgroundColor.Value;
 
-            args.PaintBackground(borderRect);
-            args.PaintBorder(borderRect);
+            //args.PaintBackground(borderRect);
+            //args.PaintBorder(borderRect);
 
         }
 

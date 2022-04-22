@@ -14,22 +14,24 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         Color BackgroundColor { get; }
         BackgroundImage BackgroundImage { get; }
+        Borders Border { get; }
         Color BorderBottomColor { get; }
-        Measurement BorderBottomLeftRadius { get; }
-        Measurement BorderBottomRightRadius { get; }
+        IMeasurement BorderBottomLeftRadius { get; }
+        IMeasurement BorderBottomRightRadius { get; }
         BorderStyle BorderBottomStyle { get; }
-        Measurement BorderBottomWidth { get; }
+        IMeasurement BorderBottomWidth { get; }
         Color BorderLeftColor { get; }
         BorderStyle BorderLeftStyle { get; }
-        Measurement BorderLeftWidth { get; }
+        IMeasurement BorderLeftWidth { get; }
+        BorderRadius BorderRadius { get; }
         Color BorderRightColor { get; }
         BorderStyle BorderRightStyle { get; }
-        Measurement BorderRightWidth { get; }
+        IMeasurement BorderRightWidth { get; }
         Color BorderTopColor { get; }
-        Measurement BorderTopLeftRadius { get; }
-        Measurement BorderTopRightRadius { get; }
+        IMeasurement BorderTopLeftRadius { get; }
+        IMeasurement BorderTopRightRadius { get; }
         BorderStyle BorderTopStyle { get; }
-        Measurement BorderTopWidth { get; }
+        IMeasurement BorderTopWidth { get; }
         Color Color { get; }
         double Opacity { get; }
 

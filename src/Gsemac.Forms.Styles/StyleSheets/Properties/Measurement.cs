@@ -83,6 +83,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             if (string.IsNullOrWhiteSpace(input))
                 return false;
 
+            input = input.Trim().ToLowerInvariant();
+
             if (TryParseDirectionalAngle(input, out double parsedDirectionalAngle)) {
 
                 measurement = FromDegrees(parsedDirectionalAngle);
@@ -115,28 +117,24 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             // Whitespace is permitted between the number and the units.
 
-            string parsePattern = $@"^(?<value>\d+(?:\.\d+))\s*(?<unit>{measurementsPattern}|)$";
+            string parsePattern = $@"^(?<value>\d+(?:\.\d+)?)\s*(?<unit>{measurementsPattern}|)$";
 
-            if (string.IsNullOrWhiteSpace(input)) {
+            Match m = Regex.Match(input, parsePattern);
 
-                Match m = Regex.Match(input, parsePattern);
+            if (m.Success && double.TryParse(m.Groups["value"].Value, out double value)) {
 
-                if (m.Success && double.TryParse(m.Groups["value"].Value, out double value)) {
+                string unit = m.Groups["unit"].Value;
 
-                    string unit = m.Groups["unit"].Value;
+                // Use pixels as a fallback unit if the units are not specified.
+                // Note that only non-zero values require units to be specified.
+                // https://stackoverflow.com/a/11275156/5383169 (BoltClock)
 
-                    // Use pixels as a fallback unit if the units are not specified.
-                    // Note that only non-zero values require units to be specified.
-                    // https://stackoverflow.com/a/11275156/5383169 (BoltClock)
+                if (string.IsNullOrWhiteSpace(unit))
+                    unit = Pixels;
 
-                    if (string.IsNullOrWhiteSpace(unit))
-                        unit = Pixels;
+                measurement = new Measurement(value, unit);
 
-                    measurement = new Measurement(value, unit);
-
-                    return true;
-
-                }
+                return true;
 
             }
 

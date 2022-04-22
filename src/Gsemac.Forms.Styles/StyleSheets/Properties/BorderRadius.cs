@@ -3,15 +3,17 @@ using System.Collections.Generic;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public class BorderRadius :
-        IEnumerable<double> {
+    public sealed class BorderRadius :
+        IEnumerable<IMeasurement> {
 
-        public double TopLeft { get; set; } = 0.0;
-        public double TopRight { get; set; } = 0.0;
-        public double BottomRight { get; set; } = 0.0;
-        public double BottomLeft { get; set; } = 0.0;
+        public IMeasurement TopLeft { get; } = Measurement.FromPixels(0);
+        public IMeasurement TopRight { get; } = Measurement.FromPixels(0);
+        public IMeasurement BottomRight { get; } = Measurement.FromPixels(0);
+        public IMeasurement BottomLeft { get; } = Measurement.FromPixels(0);
 
-        public BorderRadius(double value) {
+        public BorderRadius() {
+        }
+        public BorderRadius(IMeasurement value) {
 
             TopLeft = value;
             TopRight = value;
@@ -19,7 +21,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             BottomRight = value;
 
         }
-        public BorderRadius(double topLeftBottomRight, double topRightBottomLeft) {
+        public BorderRadius(IMeasurement topLeftBottomRight, IMeasurement topRightBottomLeft) {
 
             TopLeft = topLeftBottomRight;
             TopRight = topRightBottomLeft;
@@ -27,7 +29,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             BottomRight = topLeftBottomRight;
 
         }
-        public BorderRadius(double topLeft, double topRightBottomLeft, double bottomRight) {
+        public BorderRadius(IMeasurement topLeft, IMeasurement topRightBottomLeft, IMeasurement bottomRight) {
 
             TopLeft = topLeft;
             TopRight = topRightBottomLeft;
@@ -35,7 +37,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             BottomRight = bottomRight;
 
         }
-        public BorderRadius(double topLeft, double topRight, double bottomRight, double bottomLeft) {
+        public BorderRadius(IMeasurement topLeft, IMeasurement topRight, IMeasurement bottomRight, IMeasurement bottomLeft) {
 
             TopLeft = topLeft;
             TopRight = topRight;
@@ -44,13 +46,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
-        public override string ToString() {
-
-            return $"{TopLeft}px {TopRight}px {BottomLeft}px {BottomRight}px";
-
-        }
-
-        public IEnumerator<double> GetEnumerator() {
+        public IEnumerator<IMeasurement> GetEnumerator() {
 
             yield return TopLeft;
             yield return TopRight;
@@ -58,9 +54,16 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             yield return BottomLeft;
 
         }
+
         IEnumerator IEnumerable.GetEnumerator() {
 
             return GetEnumerator();
+
+        }
+
+        public override string ToString() {
+
+            return $"{TopLeft} {TopRight} {BottomRight} {BottomLeft}";
 
         }
 

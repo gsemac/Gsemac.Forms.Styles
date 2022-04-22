@@ -1,15 +1,14 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Drawing;
-using System.Globalization;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     internal static class PropertyUtilities {
 
-        // Internal members
+        // Public members
 
-        internal static bool IsInheritable(string propertyName) {
+        public static bool IsInheritable(string propertyName) {
 
             // https://stackoverflow.com/a/30536051/5383169 (David Bonnet)
 
@@ -64,20 +63,26 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
-        internal static IPropertyValue GetInitialValue(string propertyName) {
+        public static IPropertyValue GetInitialValue(string propertyName) {
 
             return GetInitialValue(propertyName, Ruleset.Empty);
 
         }
-        internal static IPropertyValue GetInitialValue(string propertyName, IRuleset style) {
+        public static IPropertyValue GetInitialValue(string propertyName, IRuleset style) {
 
             if (string.IsNullOrWhiteSpace(propertyName))
                 return null;
 
             switch (propertyName.ToLowerInvariant()) {
 
+                case PropertyName.BackgroundImage:
+                    return PropertyValue.Create(new BackgroundImage());
+
                 case PropertyName.BackgroundColor:
                     return PropertyValue.Create(Color.Transparent);
+
+                case PropertyName.Border:
+                    return PropertyValue.Create(new Border(style.Color));
 
                 case PropertyName.BorderTopColor:
                 case PropertyName.BorderRightColor:
@@ -100,12 +105,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             }
 
         }
-        internal static T GetInitialValue<T>(string propertyName) {
+        public static T GetInitialValue<T>(string propertyName) {
 
             return GetInitialValue<T>(propertyName, Ruleset.Empty);
 
         }
-        internal static T GetInitialValue<T>(string propertyName, IRuleset style) {
+        public static T GetInitialValue<T>(string propertyName, IRuleset style) {
 
             if (style is null)
                 throw new ArgumentNullException(nameof(style));
@@ -113,80 +118,37 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             IPropertyValue initialValue = GetInitialValue(propertyName);
 
             if (initialValue is object && initialValue.Type.Equals(typeof(T)))
-                return (T)initialValue;
+                return (T)initialValue.Value;
 
             return default;
 
         }
 
-        internal static string SerializePropertyValue(object value) {
+        public static bool IsBorderRadiusProperty(IProperty property) {
 
-            if (value is null)
-                return string.Empty;
-
-            switch (value) {
-
-                case BorderStyle borderStyle:
-                    return BorderStyletoString(borderStyle);
-
-                case Color color:
-                    return ColorToString(color);
-
-                case double @double:
-                    return @double.ToString(CultureInfo.InvariantCulture);
-
-                default:
-                    return value.ToString();
-
-            }
+            return property.Name == PropertyName.BorderTopLeftRadius ||
+                property.Name == PropertyName.BorderTopRightRadius ||
+                property.Name == PropertyName.BorderBottomRightRadius ||
+                property.Name == PropertyName.BorderBottomLeftRadius ||
+                property.Name == PropertyName.BorderRadius;
 
         }
+        public static bool IsBorderWidthProperty(IProperty property) {
 
-        // Private members
-
-        private static string BorderStyletoString(BorderStyle value) {
-
-            switch (value) {
-
-                case BorderStyle.Dotted:
-                    return "dotted";
-
-                case BorderStyle.Dashed:
-                    return "dashed";
-
-                case BorderStyle.Solid:
-                    return "solid";
-
-                case BorderStyle.Double:
-                    return "double";
-
-                case BorderStyle.Groove:
-                    return "groove";
-
-                case BorderStyle.Ridge:
-                    return "ridge";
-
-                case BorderStyle.Inset:
-                    return "inset";
-
-                case BorderStyle.Outset:
-                    return "outset";
-
-                case BorderStyle.None:
-                    return "none";
-
-                case BorderStyle.Hidden:
-                    return "hidden";
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(value));
-
-            }
+            return property.Name == PropertyName.BorderTopWidth ||
+               property.Name == PropertyName.BorderRightWidth ||
+               property.Name == PropertyName.BorderBottomWidth ||
+               property.Name == PropertyName.BorderLeftWidth ||
+               property.Name == PropertyName.BorderWidth;
 
         }
-        private static string ColorToString(Color value) {
+        public static bool IsBorderColorProperty(IProperty property) {
 
-            return ColorTranslator.ToHtml(value).ToLowerInvariant();
+            return property.Name == PropertyName.BorderTopColor ||
+               property.Name == PropertyName.BorderRightColor ||
+               property.Name == PropertyName.BorderBottomColor ||
+               property.Name == PropertyName.BorderLeftColor ||
+               property.Name == PropertyName.BorderColor;
 
         }
 

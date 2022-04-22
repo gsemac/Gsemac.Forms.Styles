@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
@@ -27,7 +28,24 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public override string ToString() {
 
-            return string.Format("{0}: {1}", Name, PropertyUtilities.SerializePropertyValue(Value));
+            return ToString(PropertyValueWriter.Default);
+
+        }
+        public string ToString(IPropertyValueWriter valueWriter) {
+
+            if (valueWriter is null)
+                throw new ArgumentNullException(nameof(valueWriter));
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(Name);
+            sb.Append(": ");
+
+            valueWriter.Write(Value);
+
+            sb.Append(valueWriter.ToString());
+
+            return sb.ToString();
 
         }
 

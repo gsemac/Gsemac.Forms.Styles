@@ -1,7 +1,9 @@
 ﻿using Gsemac.Forms.Styles.Dom;
 using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Properties;
+using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets.Extensions;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -36,45 +38,45 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         private void PaintCheck(CheckBox control, ControlPaintArgs e) {
 
-            INode controlNode = new ControlNode(control);
-            UserNode checkNode = new UserNode(string.Empty, new[] { "Check" });
+            //INode controlNode = new ControlNode(control);
+            //UserNode checkNode = new UserNode(string.Empty, new[] { "Check" });
 
-            checkNode.SetParent(controlNode);
-            checkNode.SetStates(controlNode.States);
+            //checkNode.SetParent(controlNode);
+            //checkNode.SetStates(controlNode.States);
 
-            IRuleset parentRuleset = e.StyleSheet.GetRuleset(control);
-            IRuleset ruleset = e.StyleSheet.GetRuleset(checkNode, inherit: false);
+            //IRuleset parentRuleset = e.StyleSheet.GetRuleset(control);
+            //IRuleset ruleset = e.StyleSheet.GetRuleset(checkNode, inherit: false);
 
-            if (!ruleset.Any())
-                ruleset = CreateDefaultCheckRuleset();
+            //if (!ruleset.Any())
+            //    ruleset = CreateDefaultCheckRuleset();
 
-            ruleset.InheritProperties(parentRuleset);
+            //ruleset.InheritPropertiesFrom(parentRuleset);
 
-            Rectangle clientRect = e.Control.ClientRectangle;
-            Rectangle checkRect = new Rectangle(clientRect.X, clientRect.Y + (int)(clientRect.Height / 2.0f - CheckWidth / 2.0f) - 1, CheckWidth, CheckWidth);
+            //Rectangle clientRect = e.Control.ClientRectangle;
+            //Rectangle checkRect = new Rectangle(clientRect.X, clientRect.Y + (int)(clientRect.Height / 2.0f - CheckWidth / 2.0f) - 1, CheckWidth, CheckWidth);
 
-            e.StyleRenderer.PaintBackground(e.Graphics, checkRect, ruleset);
-            e.StyleRenderer.PaintBorder(e.Graphics, checkRect, ruleset);
+            //e.StyleRenderer.PaintBackground(e.Graphics, checkRect, ruleset);
+            //e.StyleRenderer.PaintBorder(e.Graphics, checkRect, ruleset);
 
-            // Draw the checkmark.
+            //// Draw the checkmark.
 
-            if (control.Checked) {
+            //if (control.Checked) {
 
-                using (Pen pen = new Pen(ruleset.Color?.Value ?? SystemColors.ControlText)) {
+            //    using (Pen pen = new Pen(ruleset.Color?.Value ?? SystemColors.ControlText)) {
 
-                    e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            //        e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-                    pen.Alignment = PenAlignment.Center;
-                    pen.Width = 2.0f;
-                    pen.StartCap = LineCap.Square;
-                    pen.EndCap = LineCap.Square;
+            //        pen.Alignment = PenAlignment.Center;
+            //        pen.Width = 2.0f;
+            //        pen.StartCap = LineCap.Square;
+            //        pen.EndCap = LineCap.Square;
 
-                    e.Graphics.DrawLine(pen, checkRect.X + 3, checkRect.Y + checkRect.Height / 2.0f, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5);
-                    e.Graphics.DrawLine(pen, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5, checkRect.X + checkRect.Width - 4, checkRect.Y + 3);
+            //        e.Graphics.DrawLine(pen, checkRect.X + 3, checkRect.Y + checkRect.Height / 2.0f, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5);
+            //        e.Graphics.DrawLine(pen, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5, checkRect.X + checkRect.Width - 4, checkRect.Y + 3);
 
-                }
+            //    }
 
-            }
+            //}
 
         }
 
@@ -82,10 +84,10 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             IRuleset ruleset = new Ruleset();
 
-            ruleset.AddProperty(Property.Create(PropertyType.BackgroundColor, "white"));
-            ruleset.AddProperty(Property.Create(PropertyType.BorderColor, "#707070"));
-            ruleset.AddProperty(Property.Create(PropertyType.BorderWidth, "1px"));
-            ruleset.AddProperty(Property.Create(PropertyType.Color, "black"));
+            ruleset.Add(PropertyFactory.Default.Create(PropertyName.BackgroundColor, "white"));
+            ruleset.Add(PropertyFactory.Default.Create(PropertyName.BorderColor, "#707070"));
+            ruleset.Add(PropertyFactory.Default.Create(PropertyName.BorderWidth, "1px"));
+            ruleset.Add(PropertyFactory.Default.Create(PropertyName.Color, "black"));
 
             return ruleset;
 

@@ -40,34 +40,34 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         private void PaintDropDownArrow(ComboBox control, ControlPaintArgs e) {
 
-            INode controlNode = new ControlNode(control);
-            UserNode dropDownArrowNode = new UserNode(string.Empty, new[] { "DropDownArrow" });
+            //INode controlNode = new ControlNode(control);
+            //UserNode dropDownArrowNode = new UserNode(string.Empty, new[] { "DropDownArrow" });
 
-            dropDownArrowNode.SetParent(controlNode);
-            dropDownArrowNode.SetStates(controlNode.States);
+            //dropDownArrowNode.SetParent(controlNode);
+            //dropDownArrowNode.SetStates(controlNode.States);
 
-            IRuleset ruleset = e.StyleSheet.GetRuleset(dropDownArrowNode);
+            //IRuleset ruleset = e.StyleSheet.GetRuleset(dropDownArrowNode);
 
-            // Create the arrow rectangle to match the bounds of the default control.
+            //// Create the arrow rectangle to match the bounds of the default control.
 
-            Rectangle clientRect = control.ClientRectangle;
-            Rectangle arrowRect = new Rectangle(clientRect.Right - 12, clientRect.Y + 9, 7, 6);
+            //Rectangle clientRect = control.ClientRectangle;
+            //Rectangle arrowRect = new Rectangle(clientRect.Right - 12, clientRect.Y + 9, 7, 6);
 
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            //e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            using (Pen pen = new Pen(ruleset.Color?.Value ?? SystemColors.ControlText)) {
+            //using (Pen pen = new Pen(ruleset.Color?.Value ?? SystemColors.ControlText)) {
 
-                pen.Width = 2.0f;
-                pen.Alignment = PenAlignment.Center;
-                pen.StartCap = LineCap.Flat;
-                pen.EndCap = LineCap.Flat;
+            //    pen.Width = 2.0f;
+            //    pen.Alignment = PenAlignment.Center;
+            //    pen.StartCap = LineCap.Flat;
+            //    pen.EndCap = LineCap.Flat;
 
-                PointF bottomMidpoint = new PointF(arrowRect.Left + arrowRect.Width / 2.0f, arrowRect.Bottom - 1);
+            //    PointF bottomMidpoint = new PointF(arrowRect.Left + arrowRect.Width / 2.0f, arrowRect.Bottom - 1);
 
-                e.Graphics.DrawLine(pen, new PointF(arrowRect.Left, arrowRect.Top), bottomMidpoint);
-                e.Graphics.DrawLine(pen, new PointF(arrowRect.Right, arrowRect.Top), bottomMidpoint);
+            //    e.Graphics.DrawLine(pen, new PointF(arrowRect.Left, arrowRect.Top), bottomMidpoint);
+            //    e.Graphics.DrawLine(pen, new PointF(arrowRect.Right, arrowRect.Top), bottomMidpoint);
 
-            }
+            //}
 
         }
 

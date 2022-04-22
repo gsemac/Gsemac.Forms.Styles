@@ -27,22 +27,28 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         public Color BackgroundColor => GetPropertyValueOrDefault<Color>(PropertyName.BackgroundColor);
         public BackgroundImage BackgroundImage => GetPropertyValueOrDefault<BackgroundImage>(PropertyName.BackgroundImage);
+        public Borders Border => GetBorder();
+        public Border BorderBottom => GetBorderBottom();
         public Color BorderBottomColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderBottomColor);
-        public Measurement BorderBottomLeftRadius => GetPropertyValueOrDefault<Measurement>(PropertyName.BorderBottomLeftRadius);
-        public Measurement BorderBottomRightRadius => GetPropertyValueOrDefault<Measurement>(PropertyName.BorderBottomRightRadius);
+        public IMeasurement BorderBottomLeftRadius => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderBottomLeftRadius);
+        public IMeasurement BorderBottomRightRadius => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderBottomRightRadius);
         public BorderStyle BorderBottomStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderBottomStyle);
-        public Measurement BorderBottomWidth => GetPropertyValueOrDefault<Measurement>(PropertyName.BorderBottomWidth);
+        public IMeasurement BorderBottomWidth => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderBottomWidth);
+        public Border BorderLeft => GetBorderLeft();
         public Color BorderLeftColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderLeftColor);
         public BorderStyle BorderLeftStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderLeftStyle);
-        public Measurement BorderLeftWidth => GetPropertyValueOrDefault<Measurement>(PropertyName.BorderLeftWidth);
+        public IMeasurement BorderLeftWidth => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderLeftWidth);
+        public BorderRadius BorderRadius => GetBorderRadius();
+        public Border BorderRight => GetBorderRight();
         public Color BorderRightColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderRightColor);
         public BorderStyle BorderRightStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderRightStyle);
-        public Measurement BorderRightWidth => GetPropertyValueOrDefault<Measurement>(PropertyName.BorderRightWidth);
+        public IMeasurement BorderRightWidth => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderRightWidth);
+        public Border BorderTop => GetBorderTop();
         public Color BorderTopColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderTopColor);
-        public Measurement BorderTopLeftRadius => GetPropertyValueOrDefault<Measurement>(PropertyName.BorderTopLeftRadius);
-        public Measurement BorderTopRightRadius => GetPropertyValueOrDefault<Measurement>(PropertyName.BorderTopRightRadius);
+        public IMeasurement BorderTopLeftRadius => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderTopLeftRadius);
+        public IMeasurement BorderTopRightRadius => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderTopRightRadius);
         public BorderStyle BorderTopStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderTopStyle);
-        public Measurement BorderTopWidth => GetPropertyValueOrDefault<Measurement>(PropertyName.BorderTopWidth);
+        public IMeasurement BorderTopWidth => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderTopWidth);
         public Color Color => GetPropertyValueOrDefault<Color>(PropertyName.Color);
         public double Opacity => GetPropertyValueOrDefault<double>(PropertyName.Opacity);
 
@@ -199,6 +205,37 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
                 return property;
 
             return propertyFactory.Create(propertyName);
+
+        }
+
+        private Borders GetBorder() {
+
+            return new Borders(BorderTop, BorderRight, BorderBottom, BorderLeft);
+
+        }
+        private Border GetBorderBottom() {
+
+            return new Border(BorderBottomWidth, BorderBottomStyle, BorderBottomColor);
+
+        }
+        private Border GetBorderLeft() {
+
+            return new Border(BorderLeftWidth, BorderLeftStyle, BorderLeftColor);
+
+        }
+        private Border GetBorderRight() {
+
+            return new Border(BorderRightWidth, BorderRightStyle, BorderRightColor);
+
+        }
+        private Border GetBorderTop() {
+
+            return new Border(BorderTopWidth, BorderTopStyle, BorderTopColor);
+
+        }
+        private BorderRadius GetBorderRadius() {
+
+            return new BorderRadius(BorderTopLeftRadius, BorderTopRightRadius, BorderBottomRightRadius, BorderBottomLeftRadius);
 
         }
 

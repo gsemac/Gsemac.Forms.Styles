@@ -96,19 +96,19 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             Color clearColor = Color.Transparent;
 
-            if (control != null && control.Parent != null) {
+            //if (control != null && control.Parent != null) {
 
-                ColorProperty parentBackgroundColor = StyleSheet.GetRuleset(control.Parent).BackgroundColor;
+            //    ColorProperty parentBackgroundColor = StyleSheet.GetRuleset(control.Parent).BackgroundColor;
 
-                if (parentBackgroundColor.HasValue())
-                    clearColor = parentBackgroundColor.Value;
-                else
-                    clearColor = control.Parent.BackColor;
+            //    if (parentBackgroundColor.HasValue())
+            //        clearColor = parentBackgroundColor.Value;
+            //    else
+            //        clearColor = control.Parent.BackColor;
 
-                if (clearColor == Color.Transparent)
-                    clearColor = GetClearColor(control.Parent);
+            //    if (clearColor == Color.Transparent)
+            //        clearColor = GetClearColor(control.Parent);
 
-            }
+            //}
 
             return clearColor;
 

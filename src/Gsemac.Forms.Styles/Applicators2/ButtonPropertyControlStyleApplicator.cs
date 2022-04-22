@@ -1,4 +1,4 @@
-﻿using Gsemac.Forms.Styles.Dom;
+﻿using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System.Drawing;
@@ -18,14 +18,12 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             button.FlatStyle = FlatStyle.Flat;
 
-            double borderWidth = style.Where(p => p.IsBorderWidthProperty())
-                 .Cast<MeasurementProperty>()
-                 .Select(p => p.Value)
+            double borderWidth = style.Where(p => PropertyUtilities.IsBorderWidthProperty(p))
+                 .Select(p => p.GetValueAs<double>())
                  .LastOrDefault();
 
-            Color borderColor = style.Where(p => p.IsBorderColorProperty())
-                 .Cast<ColorProperty>()
-                 .Select(p => p.Value)
+            Color borderColor = style.Where(p => PropertyUtilities.IsBorderColorProperty(p))
+                 .Select(p => p.GetValueAs<Color>())
                  .LastOrDefault();
 
             button.FlatAppearance.BorderColor = borderColor;

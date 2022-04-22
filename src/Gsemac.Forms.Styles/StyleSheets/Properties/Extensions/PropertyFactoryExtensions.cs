@@ -24,6 +24,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
         }
         public static IProperty Create<T>(this IPropertyFactory factory, string propertyName, T argument) {
 
+            if (argument is IPropertyValue)
+                return Create(factory, propertyName, (IPropertyValue)argument);
+
             return factory.Create(propertyName, (IPropertyValue)PropertyValue.Create(argument));
 
         }

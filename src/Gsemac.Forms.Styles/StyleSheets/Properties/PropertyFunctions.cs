@@ -42,8 +42,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             if (arguments.Length < minimumArguments)
                 throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, PropertyFunctionName.LinearGradient, minimumArguments, arguments.Length));
 
-            IMeasurement angle = arguments[0].As<IMeasurement>();
-            Color[] colors = arguments.Skip(1).Select(arg => arg.As<Color>()).ToArray();
+            IMeasurement angle = arguments[0].GetValueAs<IMeasurement>();
+            Color[] colors = arguments.Skip(1).Select(arg => arg.GetValueAs<Color>()).ToArray();
 
             ILinearGradient gradient = new LinearGradient(angle.ToDegrees(), colors);
 
@@ -57,9 +57,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             if (arguments.Length != requiredArguments)
                 throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, PropertyFunctionName.LinearGradient, requiredArguments, arguments.Length));
 
-            int r = arguments[0].As<int>();
-            int g = arguments[1].As<int>();
-            int b = arguments[2].As<int>();
+            int r = arguments[0].GetValueAs<int>();
+            int g = arguments[1].GetValueAs<int>();
+            int b = arguments[2].GetValueAs<int>();
 
             Color color = Color.FromArgb(r, g, b);
 
@@ -73,10 +73,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             if (arguments.Length != requiredArguments)
                 throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, PropertyFunctionName.LinearGradient, requiredArguments, arguments.Length));
 
-            int r = arguments[0].As<int>();
-            int g = arguments[1].As<int>();
-            int b = arguments[2].As<int>();
-            float alpha = arguments[3].As<float>();
+            int r = arguments[0].GetValueAs<int>();
+            int g = arguments[1].GetValueAs<int>();
+            int b = arguments[2].GetValueAs<int>();
+            float alpha = arguments[3].GetValueAs<float>();
 
             Color color = Color.FromArgb((int)Math.Round(byte.MaxValue * alpha), r, g, b); ;
 
@@ -90,7 +90,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             if (arguments.Length != requiredArguments)
                 throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, PropertyFunctionName.LinearGradient, requiredArguments, arguments.Length));
 
-            string resourcePath = arguments[0].As<string>();
+            string resourcePath = arguments[0].GetValueAs<string>();
 
             // Strip outer quotes from the path.
 
