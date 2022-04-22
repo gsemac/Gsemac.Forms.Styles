@@ -1,16 +1,16 @@
 ﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     public enum BorderStyle {
-        Dotted,
+        None = 0,
         Dashed,
-        Solid,
+        Dotted,
         Double,
         Groove,
-        Ridge,
+        Hidden,
         Inset,
         Outset,
-        None,
-        Hidden
+        Ridge,
+        Solid,
     }
 
 }

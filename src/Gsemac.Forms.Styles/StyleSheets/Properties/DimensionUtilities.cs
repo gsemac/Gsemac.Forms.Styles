@@ -5,27 +5,27 @@ using System.Drawing;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public static class MeasurementUtilities {
+    public static class DimensionUtilities {
 
         // Public members
 
-        public static double ToDegrees(IMeasurement measurement) {
+        public static double ToDegrees(IDimension measurement) {
 
             if (measurement is null)
                 throw new ArgumentNullException(nameof(measurement));
 
             switch (measurement.Unit) {
 
-                case Measurement.Degrees:
+                case AngleUnit.Degree:
                     return measurement.Value;
 
-                case Measurement.Gradians:
+                case AngleUnit.Gradian:
                     return MathUtilities.GradiansToDegrees(measurement.Value);
 
-                case Measurement.Radians:
+                case AngleUnit.Radian:
                     return MathUtilities.RadiansToDegrees(measurement.Value);
 
-                case Measurement.Turns:
+                case AngleUnit.Turn:
                     return MathUtilities.TurnsToDegrees(measurement.Value);
 
                 default:
@@ -35,19 +35,19 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
-        public static int ToPixels(IMeasurement measurement, INode2 node, Rectangle viewport) {
+        public static int ToPixels(IDimension measurement, INode2 node, Rectangle viewport) {
 
             return ToPixels(measurement, node, viewport, DefaultDpi);
 
         }
-        public static int ToPixels(IMeasurement measurement, INode2 node, Rectangle viewport, int dpi) {
+        public static int ToPixels(IDimension measurement, INode2 node, Rectangle viewport, int dpi) {
 
             if (measurement is null)
                 throw new ArgumentNullException(nameof(measurement));
 
             switch (measurement.Unit) {
 
-                case Measurement.Pixels:
+                case LengthUnit.Pixel:
                     return (int)measurement.Value;
 
                 default:

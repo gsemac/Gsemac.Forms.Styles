@@ -5,12 +5,12 @@ using System.Drawing;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public class InitialValueFactory :
-        IInitialValueFactory {
+    public class PropertyInitialValueFactory :
+        IPropertyInitialValueFactory {
 
         // Public members
 
-        public static InitialValueFactory Default => new InitialValueFactory();
+        public static PropertyInitialValueFactory Default => new PropertyInitialValueFactory();
 
         public IPropertyValue GetInitialValue(string propertyName, IRuleset style) {
 

@@ -7,7 +7,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
-        public IMeasurement Width { get; } = new Measurement(0, Measurement.Pixels);
+        public Length Width { get; } = Length.FromPixels(0);
         public BorderStyle Style { get; } = BorderStyle.None;
         public Color Color { get; } = Color.Black;
 
@@ -18,7 +18,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             Color = color;
 
         }
-        public Border(IMeasurement width, BorderStyle style, Color color) {
+        public Border(Length width, BorderStyle style, Color color) {
 
             if (width is null)
                 throw new ArgumentNullException(nameof(width));

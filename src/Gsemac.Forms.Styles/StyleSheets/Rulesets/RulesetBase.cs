@@ -30,25 +30,25 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public Borders Border => GetBorder();
         public Border BorderBottom => GetBorderBottom();
         public Color BorderBottomColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderBottomColor);
-        public IMeasurement BorderBottomLeftRadius => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderBottomLeftRadius);
-        public IMeasurement BorderBottomRightRadius => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderBottomRightRadius);
+        public Length BorderBottomLeftRadius => GetPropertyValueOrDefault<Length>(PropertyName.BorderBottomLeftRadius);
+        public Length BorderBottomRightRadius => GetPropertyValueOrDefault<Length>(PropertyName.BorderBottomRightRadius);
         public BorderStyle BorderBottomStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderBottomStyle);
-        public IMeasurement BorderBottomWidth => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderBottomWidth);
+        public Length BorderBottomWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderBottomWidth);
         public Border BorderLeft => GetBorderLeft();
         public Color BorderLeftColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderLeftColor);
         public BorderStyle BorderLeftStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderLeftStyle);
-        public IMeasurement BorderLeftWidth => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderLeftWidth);
+        public Length BorderLeftWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderLeftWidth);
         public BorderRadius BorderRadius => GetBorderRadius();
         public Border BorderRight => GetBorderRight();
         public Color BorderRightColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderRightColor);
         public BorderStyle BorderRightStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderRightStyle);
-        public IMeasurement BorderRightWidth => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderRightWidth);
+        public Length BorderRightWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderRightWidth);
         public Border BorderTop => GetBorderTop();
         public Color BorderTopColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderTopColor);
-        public IMeasurement BorderTopLeftRadius => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderTopLeftRadius);
-        public IMeasurement BorderTopRightRadius => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderTopRightRadius);
+        public Length BorderTopLeftRadius => GetPropertyValueOrDefault<Length>(PropertyName.BorderTopLeftRadius);
+        public Length BorderTopRightRadius => GetPropertyValueOrDefault<Length>(PropertyName.BorderTopRightRadius);
         public BorderStyle BorderTopStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderTopStyle);
-        public IMeasurement BorderTopWidth => GetPropertyValueOrDefault<IMeasurement>(PropertyName.BorderTopWidth);
+        public Length BorderTopWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderTopWidth);
         public Color Color => GetPropertyValueOrDefault<Color>(PropertyName.Color);
         public double Opacity => GetPropertyValueOrDefault<double>(PropertyName.Opacity);
 
@@ -190,7 +190,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         // TODO: The property dictionary should be case-insensitive
 
         private readonly IDictionary<string, IProperty> properties = new OrderedDictionary<string, IProperty>();
-        private readonly IInitialValueFactory initialValueFactory = InitialValueFactory.Default;
+        private readonly IPropertyInitialValueFactory initialValueFactory = PropertyInitialValueFactory.Default;
 
         private T GetPropertyValueOrDefault<T>(string propertyName) {
 

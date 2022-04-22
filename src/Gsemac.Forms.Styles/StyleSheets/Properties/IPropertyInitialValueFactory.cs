@@ -2,7 +2,7 @@
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public interface IInitialValueFactory {
+    public interface IPropertyInitialValueFactory {
 
         IPropertyValue GetInitialValue(string propertyName, IRuleset style);
         T GetInitialValue<T>(string propertyName, IRuleset style);

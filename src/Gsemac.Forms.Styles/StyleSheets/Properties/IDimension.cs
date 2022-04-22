@@ -1,6 +1,6 @@
 ﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public interface IMeasurement {
+    public interface IDimension {
 
         string Unit { get; }
         double Value { get; }

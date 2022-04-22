@@ -5,8 +5,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
     public interface ILinearGradient :
         IGradient {
 
-        IMeasurement Direction { get; }
-        IEnumerable<IColorStop> ColorStops { get; }
+        Angle Direction { get; }
+        IEnumerable<ColorStop> ColorStops { get; }
 
     }
 

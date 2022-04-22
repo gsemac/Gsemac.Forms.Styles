@@ -90,9 +90,9 @@ namespace Gsemac.Forms.Styles.Properties {
         /// <summary>
         ///   Looks up a localized string similar to The string &quot;{0}&quot; is not in the correct format..
         /// </summary>
-        internal static string MalformedMeasurementValue {
+        internal static string MalformedDimensionValue {
             get {
-                return ResourceManager.GetString("MalformedMeasurementValue", resourceCulture);
+                return ResourceManager.GetString("MalformedDimensionValue", resourceCulture);
             }
         }
         

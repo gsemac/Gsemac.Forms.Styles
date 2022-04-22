@@ -19,11 +19,11 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             button.FlatStyle = FlatStyle.Flat;
 
             double borderWidth = style.Where(p => PropertyUtilities.IsBorderWidthProperty(p))
-                 .Select(p => p.GetValueAs<double>())
+                 .Select(p => p.Value.As<double>())
                  .LastOrDefault();
 
             Color borderColor = style.Where(p => PropertyUtilities.IsBorderColorProperty(p))
-                 .Select(p => p.GetValueAs<Color>())
+                 .Select(p => p.Value.As<Color>())
                  .LastOrDefault();
 
             button.FlatAppearance.BorderColor = borderColor;

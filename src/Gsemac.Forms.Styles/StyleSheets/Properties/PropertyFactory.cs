@@ -14,9 +14,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         public static PropertyFactory Default => new PropertyFactory();
 
         public PropertyFactory() :
-            this(InitialValueFactory.Default) {
+            this(PropertyInitialValueFactory.Default) {
         }
-        public PropertyFactory(IInitialValueFactory initialValueFactory) {
+        public PropertyFactory(IPropertyInitialValueFactory initialValueFactory) {
 
             if (initialValueFactory is null)
                 throw new ArgumentNullException(nameof(initialValueFactory));
@@ -75,7 +75,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Private members
 
-        private readonly IInitialValueFactory initialValueFactory;
+        private readonly IPropertyInitialValueFactory initialValueFactory;
 
         private Property<T> CreateDefaultProperty<T>(string propertyName) {
 
@@ -115,7 +115,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 return CreateDefaultProperty<BorderStyle>(propertyName);
 
             return new Property<BorderStyle>(propertyName,
-                arguments.First().GetValueAs<BorderStyle>(),
+                arguments.First().As<BorderStyle>(),
                 PropertyUtilities.IsInheritable(propertyName));
 
         }
@@ -125,17 +125,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 return CreateDefaultProperty<Color>(propertyName);
 
             return new Property<Color>(propertyName,
-                arguments.First().GetValueAs<Color>(),
+                arguments.First().As<Color>(),
                 PropertyUtilities.IsInheritable(propertyName));
 
         }
-        private Property<IMeasurement> CreateMeasurementProperty(string propertyName, IPropertyValue[] arguments) {
+        private Property<IDimension> CreateMeasurementProperty(string propertyName, IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
-                return CreateDefaultProperty<IMeasurement>(propertyName);
+                return CreateDefaultProperty<IDimension>(propertyName);
 
-            return new Property<IMeasurement>(propertyName,
-                arguments.First().GetValueAs<IMeasurement>(),
+            return new Property<IDimension>(propertyName,
+                arguments.First().As<IDimension>(),
                 PropertyUtilities.IsInheritable(propertyName));
 
         }
@@ -144,7 +144,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             value = default;
 
-            if (arguments.Length == 1 && arguments.First().TryGetValueAs(out T valueAsT)) {
+            if (arguments.Length == 1 && arguments.First().TryAs(out T valueAsT)) {
 
                 value = valueAsT;
 
@@ -161,7 +161,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             if (TryCreateValueDirectly(arguments, out BackgroundImage value))
                 return value;
 
-            return new BackgroundImage(arguments.Select(v => v.GetValueAs<IImage>()));
+            return new BackgroundImage(arguments.Select(v => v.As<IImage>()));
 
         }
         private static Border CreateBorder(IPropertyValue[] arguments) {
@@ -202,8 +202,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             if (TryCreateValueDirectly(arguments, out BorderRadius value))
                 return value;
 
-            IMeasurement[] measurments = arguments
-                .Select(arg => arg.GetValueAs<IMeasurement>())
+            Length[] measurments = arguments
+                .Select(arg => arg.As<Length>())
                 .ToArray();
 
             if (measurments.Count() == 4)

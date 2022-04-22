@@ -53,9 +53,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 result = Create(parsedColor);
 
             }
-            else if (Measurement.TryParse(value, out Measurement parsedMeasurement)) {
+            else if (Angle.TryParse(value, out Angle parsedAngle)) {
 
-                result = Create<IMeasurement>(parsedMeasurement);
+                result = Create(parsedAngle);
+
+            }
+            else if (Length.TryParse(value, out Length parsedLength)) {
+
+                result = Create(parsedLength);
 
             }
             else {

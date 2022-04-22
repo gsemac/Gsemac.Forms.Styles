@@ -6,7 +6,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
     public interface IProperty {
 
         string Name { get; }
-        object Value { get; }
+        IPropertyValue Value { get; }
 
         bool IsInheritable { get; }
 

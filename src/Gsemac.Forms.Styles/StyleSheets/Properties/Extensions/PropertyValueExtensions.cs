@@ -7,18 +7,18 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
 
         // Public members
 
-        public static T GetValueAs<T>(this IPropertyValue propertyValue) {
+        public static T As<T>(this IPropertyValue propertyValue) {
 
             if (propertyValue is null)
                 throw new ArgumentNullException(nameof(propertyValue));
 
-            if (TryGetValueAs(propertyValue, out T value))
+            if (TryAs(propertyValue, out T value))
                 return value;
 
             throw new InvalidCastException(string.Format(ExceptionMessages.CannotCastPropertyOfTypeToType, propertyValue.Type, typeof(T).Name));
 
         }
-        public static bool TryGetValueAs<T>(this IPropertyValue propertyValue, out T value) {
+        public static bool TryAs<T>(this IPropertyValue propertyValue, out T value) {
 
             value = default;
 
@@ -34,11 +34,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
                 return true;
 
             }
-            else if (propertyValue.Type.Equals(typeof(IMeasurement)) && TypeUtilities.IsNumericType(typeof(T))) {
+            else if (propertyValue.Type.Equals(typeof(IDimension)) && TypeUtilities.IsNumericType(typeof(T))) {
 
                 // Since all numbers are parsed as measurements, allow them to be casted into numeric types.
 
-                value = (T)Convert.ChangeType(propertyValue.GetValueAs<IMeasurement>().Value, typeof(T));
+                value = (T)Convert.ChangeType(propertyValue.As<IDimension>().Value, typeof(T));
 
                 return true;
 

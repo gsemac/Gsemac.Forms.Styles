@@ -10,10 +10,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
-        public IMeasurement Direction { get; }
-        public IEnumerable<IColorStop> ColorStops { get; }
+        public Angle Direction { get; }
+        public IEnumerable<ColorStop> ColorStops { get; }
 
-        public LinearGradient(IMeasurement direction, IEnumerable<IColorStop> colorStops) {
+        public LinearGradient(Angle direction, IEnumerable<ColorStop> colorStops) {
 
             if (direction is null)
                 throw new ArgumentNullException(nameof(direction));
@@ -26,7 +26,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
         public LinearGradient(double degrees, IEnumerable<Color> colorStops) :
-            this(Measurement.FromDegrees(degrees), colorStops.Select(color => new ColorStop(color))) {
+            this(Angle.FromDegrees(degrees), colorStops.Select(color => new ColorStop(color))) {
         }
 
     }
