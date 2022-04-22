@@ -194,8 +194,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         private T GetPropertyValueOrDefault<T>(string propertyName) {
 
-            if (properties.TryGetValue(propertyName, out IProperty property) && property.ValueType.Equals(typeof(T)))
-                return (T)property.Value;
+            if (properties.TryGetValue(propertyName, out IProperty property) && property.Value.Is<T>())
+                return property.Value.As<T>();
 
             return initialValueFactory.GetInitialValue<T>(propertyName, this);
 

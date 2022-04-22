@@ -15,7 +15,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
             if (TryAs(propertyValue, out T value))
                 return value;
 
-            throw new InvalidCastException(string.Format(ExceptionMessages.CannotCastPropertyOfTypeToType, propertyValue.Type, typeof(T).Name));
+            throw new InvalidCastException(string.Format(ExceptionMessages.CannotCastPropertyOfTypeToType, propertyValue.Type, typeof(T)));
 
         }
         public static bool TryAs<T>(this IPropertyValue propertyValue, out T value) {
@@ -56,6 +56,15 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
             // We were not able to cast to the requested type.
 
             return false;
+
+        }
+
+        public static bool Is<T>(this IPropertyValue propertyValue) {
+
+            if (propertyValue is null)
+                throw new ArgumentNullException(nameof(propertyValue));
+
+            return propertyValue.Type.Equals(typeof(T));
 
         }
 
