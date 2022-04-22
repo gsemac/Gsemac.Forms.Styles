@@ -39,7 +39,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 case PropertyName.BorderRightColor:
                 case PropertyName.BorderTopColor:
                 case PropertyName.Color:
-                    return CreateColorProperty(propertyName, arguments);
+                    return CreatePropertyFromSingleArgument<Color>(propertyName, arguments);
 
                 case PropertyName.BorderRadius:
                     return CreateBorderRadiusProperty(arguments);
@@ -54,14 +54,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 case PropertyName.BorderTopWidth:
                 case PropertyName.BorderWidth:
                 case PropertyName.Opacity:
-                    return CreateMeasurementProperty(propertyName, arguments);
+                    return CreatePropertyFromSingleArgument<Length>(propertyName, arguments);
 
                 case PropertyName.BorderBottomStyle:
                 case PropertyName.BorderLeftStyle:
                 case PropertyName.BorderRightStyle:
                 case PropertyName.BorderStyle:
                 case PropertyName.BorderTopStyle:
-                    return CreateBorderStyleProperty(propertyName, arguments);
+                    return CreatePropertyFromSingleArgument<BorderStyle>(propertyName, arguments);
 
                 case PropertyName.BackgroundImage:
                     return CreateBackgroundImageProperty(arguments);
@@ -77,20 +77,34 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         private readonly IPropertyInitialValueFactory initialValueFactory;
 
-        private Property<T> CreateDefaultProperty<T>(string propertyName) {
+        private Property<T> CreatePropertyWithDefaultValue<T>(string propertyName) {
 
-            return new Property<T>(propertyName, initialValueFactory.GetInitialValue<T>(propertyName), PropertyUtilities.IsInheritable(propertyName));
+            T value = initialValueFactory.GetInitialValue<T>(propertyName);
+            bool isInheritable = IsInheritable(propertyName);
+
+            return new Property<T>(propertyName, value, isInheritable);
+
+        }
+        private Property<T> CreatePropertyFromSingleArgument<T>(string propertyName, IPropertyValue[] arguments) {
+
+            if (arguments is null || arguments.Length <= 0)
+                return CreatePropertyWithDefaultValue<T>(propertyName);
+
+            T value = arguments.First().As<T>();
+            bool isInheritable = IsInheritable(propertyName);
+
+            return new Property<T>(propertyName, value, isInheritable);
 
         }
 
         private Property<BackgroundImage> CreateBackgroundImageProperty(IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
-                return CreateDefaultProperty<BackgroundImage>(PropertyName.BackgroundImage);
+                return CreatePropertyWithDefaultValue<BackgroundImage>(PropertyName.BackgroundImage);
 
             return new Property<BackgroundImage>(PropertyName.BackgroundImage,
                 CreateBackgroundImage(arguments),
-                PropertyUtilities.IsInheritable(PropertyName.BackgroundImage));
+                IsInheritable(PropertyName.BackgroundImage));
 
         }
         private BorderProperty CreateBorderProperty(IPropertyValue[] arguments) {
@@ -109,38 +123,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             return new BorderRadiusProperty(CreateBorderRadius(arguments));
 
         }
-        private Property<BorderStyle> CreateBorderStyleProperty(string propertyName, IPropertyValue[] arguments) {
 
-            if (arguments is null || arguments.Length <= 0)
-                return CreateDefaultProperty<BorderStyle>(propertyName);
-
-            return new Property<BorderStyle>(propertyName,
-                arguments.First().As<BorderStyle>(),
-                PropertyUtilities.IsInheritable(propertyName));
-
-        }
-        private Property<Color> CreateColorProperty(string propertyName, IPropertyValue[] arguments) {
-
-            if (arguments is null || arguments.Length <= 0)
-                return CreateDefaultProperty<Color>(propertyName);
-
-            return new Property<Color>(propertyName,
-                arguments.First().As<Color>(),
-                PropertyUtilities.IsInheritable(propertyName));
-
-        }
-        private Property<IDimension> CreateMeasurementProperty(string propertyName, IPropertyValue[] arguments) {
-
-            if (arguments is null || arguments.Length <= 0)
-                return CreateDefaultProperty<IDimension>(propertyName);
-
-            return new Property<IDimension>(propertyName,
-                arguments.First().As<IDimension>(),
-                PropertyUtilities.IsInheritable(propertyName));
-
-        }
-
-        private static bool TryCreateValueDirectly<T>(IPropertyValue[] arguments, out T value) {
+        private static bool TryGetValueAsTypeDirectly<T>(IPropertyValue[] arguments, out T value) {
 
             value = default;
 
@@ -158,7 +142,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         private static BackgroundImage CreateBackgroundImage(IPropertyValue[] arguments) {
 
-            if (TryCreateValueDirectly(arguments, out BackgroundImage value))
+            if (TryGetValueAsTypeDirectly(arguments, out BackgroundImage value))
                 return value;
 
             return new BackgroundImage(arguments.Select(v => v.As<IImage>()));
@@ -166,7 +150,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         }
         private static Border CreateBorder(IPropertyValue[] arguments) {
 
-            if (TryCreateValueDirectly(arguments, out Border value))
+            if (TryGetValueAsTypeDirectly(arguments, out Border value))
                 return value;
 
             // TODO: Implement this
@@ -199,7 +183,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         }
         private static BorderRadius CreateBorderRadius(IPropertyValue[] arguments) {
 
-            if (TryCreateValueDirectly(arguments, out BorderRadius value))
+            if (TryGetValueAsTypeDirectly(arguments, out BorderRadius value))
                 return value;
 
             Length[] measurments = arguments
@@ -214,6 +198,61 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 return new BorderRadius(measurments[0], measurments[1]);
             else
                 return new BorderRadius(measurments[0]);
+
+        }
+
+        private static bool IsInheritable(string propertyName) {
+
+            // https://stackoverflow.com/a/30536051/5383169 (David Bonnet)
+
+            if (propertyName is null)
+                return false;
+
+            switch (propertyName.ToLowerInvariant()) {
+
+                case PropertyName.BorderCollapse:
+                case PropertyName.BorderSpacing:
+                case PropertyName.CaptionSide:
+                case PropertyName.Color:
+                case PropertyName.Cursor:
+                case PropertyName.Direction:
+                case PropertyName.EmptyCells:
+                case PropertyName.FontFamily:
+                case PropertyName.FontSize:
+                case PropertyName.FontStyle:
+                case PropertyName.FontVariant:
+                case PropertyName.FontWeight:
+                case PropertyName.FontSizeAdjust:
+                case PropertyName.FontStretch:
+                case PropertyName.Font:
+                case PropertyName.LetterSpacing:
+                case PropertyName.LineHeight:
+                case PropertyName.ListStyleImage:
+                case PropertyName.ListStylePosition:
+                case PropertyName.ListStyleType:
+                case PropertyName.ListStyle:
+                case PropertyName.Orphans:
+                case PropertyName.Quotes:
+                case PropertyName.TabSize:
+                case PropertyName.TextAlign:
+                case PropertyName.TextAlignLast:
+                case PropertyName.TextDecorationColor:
+                case PropertyName.TextIndent:
+                case PropertyName.TextJustify:
+                case PropertyName.TextShadow:
+                case PropertyName.TextTransform:
+                case PropertyName.Visibility:
+                case PropertyName.WhiteSpace:
+                case PropertyName.Widows:
+                case PropertyName.WordBreak:
+                case PropertyName.WordSpacing:
+                case PropertyName.WordWrap:
+                    return true;
+
+                default:
+                    return false;
+
+            }
 
         }
 

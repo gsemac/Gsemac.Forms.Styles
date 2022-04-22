@@ -88,7 +88,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The string &quot;{0}&quot; is not in the correct format..
+        ///   Looks up a localized string similar to The string &quot;{0}&quot; was not recognized as a valid dimension..
         /// </summary>
         internal static string MalformedDimensionValue {
             get {

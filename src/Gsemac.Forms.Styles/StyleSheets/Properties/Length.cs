@@ -10,6 +10,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
+        public static Length Zero => new Length(0, string.Empty);
+
         public Length(double value) :
             this(value, LengthUnit.Pixel) {
         }

@@ -3,7 +3,7 @@ using System;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
 
-    public static class InitialValueFactoryExtensions {
+    public static class PropertyInitialValueFactoryExtensions {
 
         // Public members
 

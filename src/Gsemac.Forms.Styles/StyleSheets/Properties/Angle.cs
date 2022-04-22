@@ -10,6 +10,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
+        public static Angle Zero => new Angle(0, string.Empty);
+
         public Angle(double value) :
             this(value, AngleUnit.Degree) {
         }

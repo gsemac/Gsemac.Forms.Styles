@@ -1,63 +1,11 @@
-﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
+﻿using System;
+using System.Drawing;
+
+namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     internal static class PropertyUtilities {
 
         // Public members
-
-        public static bool IsInheritable(string propertyName) {
-
-            // https://stackoverflow.com/a/30536051/5383169 (David Bonnet)
-
-            if (propertyName is null)
-                return false;
-
-            switch (propertyName.ToLowerInvariant()) {
-
-                case PropertyName.BorderCollapse:
-                case PropertyName.BorderSpacing:
-                case PropertyName.CaptionSide:
-                case PropertyName.Color:
-                case PropertyName.Cursor:
-                case PropertyName.Direction:
-                case PropertyName.EmptyCells:
-                case PropertyName.FontFamily:
-                case PropertyName.FontSize:
-                case PropertyName.FontStyle:
-                case PropertyName.FontVariant:
-                case PropertyName.FontWeight:
-                case PropertyName.FontSizeAdjust:
-                case PropertyName.FontStretch:
-                case PropertyName.Font:
-                case PropertyName.LetterSpacing:
-                case PropertyName.LineHeight:
-                case PropertyName.ListStyleImage:
-                case PropertyName.ListStylePosition:
-                case PropertyName.ListStyleType:
-                case PropertyName.ListStyle:
-                case PropertyName.Orphans:
-                case PropertyName.Quotes:
-                case PropertyName.TabSize:
-                case PropertyName.TextAlign:
-                case PropertyName.TextAlignLast:
-                case PropertyName.TextDecorationColor:
-                case PropertyName.TextIndent:
-                case PropertyName.TextJustify:
-                case PropertyName.TextShadow:
-                case PropertyName.TextTransform:
-                case PropertyName.Visibility:
-                case PropertyName.WhiteSpace:
-                case PropertyName.Widows:
-                case PropertyName.WordBreak:
-                case PropertyName.WordSpacing:
-                case PropertyName.WordWrap:
-                    return true;
-
-                default:
-                    return false;
-
-            }
-
-        }
 
         public static bool IsBorderRadiusProperty(IProperty property) {
 
@@ -84,6 +32,52 @@
                property.Name == PropertyName.BorderBottomColor ||
                property.Name == PropertyName.BorderLeftColor ||
                property.Name == PropertyName.BorderColor;
+
+        }
+
+        public static string SerializeColor(Color value) {
+
+            return ColorTranslator.ToHtml(value).ToLowerInvariant();
+
+        }
+        public static string SerializeBorderStyle(BorderStyle value) {
+
+            switch (value) {
+
+                case BorderStyle.Dotted:
+                    return "dotted";
+
+                case BorderStyle.Dashed:
+                    return "dashed";
+
+                case BorderStyle.Solid:
+                    return "solid";
+
+                case BorderStyle.Double:
+                    return "double";
+
+                case BorderStyle.Groove:
+                    return "groove";
+
+                case BorderStyle.Ridge:
+                    return "ridge";
+
+                case BorderStyle.Inset:
+                    return "inset";
+
+                case BorderStyle.Outset:
+                    return "outset";
+
+                case BorderStyle.None:
+                    return "none";
+
+                case BorderStyle.Hidden:
+                    return "hidden";
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(value));
+
+            }
 
         }
 

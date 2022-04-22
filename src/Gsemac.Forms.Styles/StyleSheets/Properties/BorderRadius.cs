@@ -6,10 +6,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
     public sealed class BorderRadius :
         IEnumerable<Length> {
 
-        public Length TopLeft { get; } = Length.FromPixels(0);
-        public Length TopRight { get; } = Length.FromPixels(0);
-        public Length BottomRight { get; } = Length.FromPixels(0);
-        public Length BottomLeft { get; } = Length.FromPixels(0);
+        public Length TopLeft { get; } = Length.Zero;
+        public Length TopRight { get; } = Length.Zero;
+        public Length BottomRight { get; } = Length.Zero;
+        public Length BottomLeft { get; } = Length.Zero;
 
         public BorderRadius() {
         }

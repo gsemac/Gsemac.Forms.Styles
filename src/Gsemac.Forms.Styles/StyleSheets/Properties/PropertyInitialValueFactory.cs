@@ -40,6 +40,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 case PropertyName.BorderLeftStyle:
                     return PropertyValue.Create(BorderStyle.None);
 
+                case PropertyName.BorderTopWidth:
+                case PropertyName.BorderRightWidth:
+                case PropertyName.BorderBottomWidth:
+                case PropertyName.BorderLeftWidth:
+                    return PropertyValue.Create(Length.Zero);
+
                 case PropertyName.Color:
                     return PropertyValue.Create(Color.Black); // Dependant on user agent
 

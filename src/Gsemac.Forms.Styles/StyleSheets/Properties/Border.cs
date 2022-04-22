@@ -7,7 +7,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
-        public Length Width { get; } = Length.FromPixels(0);
+        public Length Width { get; } = Length.Zero;
         public BorderStyle Style { get; } = BorderStyle.None;
         public Color Color { get; } = Color.Black;
 
@@ -26,6 +26,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             Width = width;
             Style = style;
             Color = color;
+
+        }
+
+        public override string ToString() {
+
+            return $"{Width} {PropertyUtilities.SerializeBorderStyle(Style)} {PropertyUtilities.SerializeColor(Color)}";
 
         }
 
