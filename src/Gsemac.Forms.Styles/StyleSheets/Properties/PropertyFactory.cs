@@ -13,6 +13,18 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public static PropertyFactory Default => new PropertyFactory();
 
+        public PropertyFactory() :
+            this(InitialValueFactory.Default) {
+        }
+        public PropertyFactory(IInitialValueFactory initialValueFactory) {
+
+            if (initialValueFactory is null)
+                throw new ArgumentNullException(nameof(initialValueFactory));
+
+            this.initialValueFactory = initialValueFactory;
+
+        }
+
         public IProperty Create(string propertyName, IPropertyValue[] arguments) {
 
             switch (propertyName) {
@@ -63,13 +75,15 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Private members
 
-        private static Property<T> CreateDefaultProperty<T>(string propertyName) {
+        private readonly IInitialValueFactory initialValueFactory;
 
-            return new Property<T>(propertyName, PropertyUtilities.GetInitialValue<T>(propertyName), PropertyUtilities.IsInheritable(propertyName));
+        private Property<T> CreateDefaultProperty<T>(string propertyName) {
+
+            return new Property<T>(propertyName, initialValueFactory.GetInitialValue<T>(propertyName), PropertyUtilities.IsInheritable(propertyName));
 
         }
 
-        private static Property<BackgroundImage> CreateBackgroundImageProperty(IPropertyValue[] arguments) {
+        private Property<BackgroundImage> CreateBackgroundImageProperty(IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
                 return CreateDefaultProperty<BackgroundImage>(PropertyName.BackgroundImage);
@@ -79,23 +93,23 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 PropertyUtilities.IsInheritable(PropertyName.BackgroundImage));
 
         }
-        private static BorderProperty CreateBorderProperty(IPropertyValue[] arguments) {
+        private BorderProperty CreateBorderProperty(IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
-                return new BorderProperty(PropertyUtilities.GetInitialValue<Border>(PropertyName.Border));
+                return new BorderProperty(initialValueFactory.GetInitialValue<Border>(PropertyName.Border));
 
             return new BorderProperty(CreateBorder(arguments));
 
         }
-        private static BorderRadiusProperty CreateBorderRadiusProperty(IPropertyValue[] arguments) {
+        private BorderRadiusProperty CreateBorderRadiusProperty(IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
-                return new BorderRadiusProperty(PropertyUtilities.GetInitialValue<BorderRadius>(PropertyName.BorderRadius));
+                return new BorderRadiusProperty(initialValueFactory.GetInitialValue<BorderRadius>(PropertyName.BorderRadius));
 
             return new BorderRadiusProperty(CreateBorderRadius(arguments));
 
         }
-        private static Property<BorderStyle> CreateBorderStyleProperty(string propertyName, IPropertyValue[] arguments) {
+        private Property<BorderStyle> CreateBorderStyleProperty(string propertyName, IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
                 return CreateDefaultProperty<BorderStyle>(propertyName);
@@ -105,7 +119,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 PropertyUtilities.IsInheritable(propertyName));
 
         }
-        private static Property<Color> CreateColorProperty(string propertyName, IPropertyValue[] arguments) {
+        private Property<Color> CreateColorProperty(string propertyName, IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
                 return CreateDefaultProperty<Color>(propertyName);
@@ -115,7 +129,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 PropertyUtilities.IsInheritable(propertyName));
 
         }
-        private static Property<IMeasurement> CreateMeasurementProperty(string propertyName, IPropertyValue[] arguments) {
+        private Property<IMeasurement> CreateMeasurementProperty(string propertyName, IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
                 return CreateDefaultProperty<IMeasurement>(propertyName);

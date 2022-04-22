@@ -190,13 +190,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         // TODO: The property dictionary should be case-insensitive
 
         private readonly IDictionary<string, IProperty> properties = new OrderedDictionary<string, IProperty>();
+        private readonly IInitialValueFactory initialValueFactory = InitialValueFactory.Default;
 
         private T GetPropertyValueOrDefault<T>(string propertyName) {
 
             if (properties.TryGetValue(propertyName, out IProperty property) && property.ValueType.Equals(typeof(T)))
                 return (T)property.Value;
 
-            return PropertyUtilities.GetInitialValue<T>(propertyName, this);
+            return initialValueFactory.GetInitialValue<T>(propertyName, this);
 
         }
         private IProperty GetPropertyOrDefault(string propertyName) {
