@@ -6,6 +6,7 @@
         public const string Rgb = "rgb";
         public const string Rgba = "rgba";
         public const string Url = "url";
+        public const string Var = "var";
 
     }
 

@@ -13,26 +13,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
             if (propertyValue is null)
                 throw new ArgumentNullException(nameof(propertyValue));
 
-            if (TryAs(propertyValue, out T value))
-                return value;
-
-            throw new InvalidCastException(string.Format(ExceptionMessages.CannotCastPropertyOfTypeToType, propertyValue.Type, typeof(T)));
-
-        }
-        public static bool TryAs<T>(this IPropertyValue propertyValue, out T value) {
-
-            value = default;
-
-            if (propertyValue is null)
-                throw new ArgumentNullException(nameof(propertyValue));
-
             if (typeof(T) == propertyValue.Type) {
 
                 // If the type is an exact match, we can simply cast the value directly.
 
-                value = (T)propertyValue.Value;
-
-                return true;
+                return (T)propertyValue.Value;
 
             }
             else {
@@ -41,17 +26,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
 
                 if (valueConverter is object) {
 
-                    value = (T)valueConverter.Convert(propertyValue.Value);
-
-                    return true;
+                    return (T)valueConverter.Convert(propertyValue.Value);
 
                 }
 
             }
 
-            // We were not able to cast to the requested type.
-
-            return false;
+            throw new InvalidCastException(string.Format(ExceptionMessages.CannotCastPropertyOfTypeToType, propertyValue.Type, typeof(T)));
 
         }
 

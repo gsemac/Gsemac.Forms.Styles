@@ -141,6 +141,9 @@
   <data name="InvalidUnit" xml:space="preserve">
     <value>"{0}" is not a valid unit.</value>
   </data>
+  <data name="InvalidVariableName" xml:space="preserve">
+    <value>"{0}" is not a valid variable name.</value>
+  </data>
   <data name="MalformedPropertyValueAsType" xml:space="preserve">
     <value>Unable to parse "{0}" as '{1}'.</value>
   </data>

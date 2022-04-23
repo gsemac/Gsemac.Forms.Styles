@@ -18,6 +18,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         public string Name { get; }
 
         public bool IsInheritable { get; }
+        public bool IsVariable => Name.StartsWith("--");
 
         public Type ValueType => typeof(T);
 

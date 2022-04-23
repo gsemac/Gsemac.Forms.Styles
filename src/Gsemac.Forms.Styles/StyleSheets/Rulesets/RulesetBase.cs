@@ -65,6 +65,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         }
         public bool Remove(string propertyName) {
 
+            variableReferencingProperties.Remove(propertyName);
+
             return properties.Remove(propertyName);
 
         }
@@ -73,10 +75,6 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
             if (property is null)
                 throw new ArgumentNullException(nameof(property));
-
-            // Remove any existing property with the same name so that the property is added to end of the dictionary.
-
-            Remove(property.Name);
 
             // If the property has child properties (e.g. is a shorthand property), add those properties instead.
             // This way, when the user queries for the shorthand property, they always get the most up-to-date values.
@@ -89,7 +87,56 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
                     Add(childProperty);
 
             }
+            else if (property.IsVariable) {
+
+                // We need to update all properties that reference this variable.
+                // Don't remove the properties, only update them-- this preserves their position in the ruleset.
+
+                properties.Add(property.Name, property);
+
+                foreach (IProperty propertyToUpdate in variableReferencingProperties.Values.Where(p => p.Value.As<VariableReference>().Name.Equals(property.Name)).ToArray()) {
+
+                    variableReferencingProperties.Remove(propertyToUpdate.Name);
+
+                    Add(propertyToUpdate);
+
+                }
+
+            }
+            else if (property.Value.Is<VariableReference>()) {
+
+                // If the property value is a variable reference, we will resolve the reference immediately.
+
+                variableReferencingProperties.Add(property.Name, property);
+
+                string variableName = property.Value.As<VariableReference>().Name;
+                IPropertyValue variableValue;
+
+                if (properties.TryGetValue(variableName, out IProperty referencedVariable)) {
+
+                    variableValue = referencedVariable.Value;
+
+                }
+                else {
+
+                    // The variable hasn't been defined yet, so use the default value.
+
+                    variableValue = initialValueFactory.GetInitialValue(property.Name);
+
+                }
+
+                IProperty resolvedProperty = propertyFactory.Create(property.Name, variableValue);
+
+                // Update the property if it exists, preserving its position in the ruleset.
+
+                properties[property.Name] = resolvedProperty;
+
+            }
             else {
+
+                // Remove any existing property with the same name so that the property is added to end of the dictionary.
+
+                Remove(property.Name);
 
                 properties.Add(property.Name, property);
 
@@ -123,7 +170,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
                 return false;
 
             if (properties.TryGetValue(property.Name, out IProperty value) && property.Equals(value))
-                return properties.Remove(property.Name);
+                return Remove(property.Name);
 
             return false;
 
@@ -203,6 +250,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         // TODO: The property dictionary should be case-insensitive
 
         private readonly IDictionary<string, IProperty> properties = new OrderedDictionary<string, IProperty>();
+        private readonly IDictionary<string, IProperty> variableReferencingProperties = new Dictionary<string, IProperty>();
         private readonly IPropertyInitialValueFactory initialValueFactory = PropertyInitialValueFactory.Default;
 
         private T GetPropertyValueOrDefault<T>(string propertyName) {

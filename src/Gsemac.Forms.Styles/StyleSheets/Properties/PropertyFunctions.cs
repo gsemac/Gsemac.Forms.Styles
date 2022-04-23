@@ -17,16 +17,19 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             switch (functionName) {
 
                 case PropertyFunctionName.LinearGradient:
-                    return LinearGradient(arguments);
+                    return PropertyValue.Create(LinearGradient(arguments));
 
                 case PropertyFunctionName.Rgb:
-                    return Rgb(arguments);
+                    return PropertyValue.Create(Rgb(arguments));
 
                 case PropertyFunctionName.Rgba:
-                    return Rgba(arguments);
+                    return PropertyValue.Create(Rgba(arguments));
 
                 case PropertyFunctionName.Url:
-                    return Url(arguments);
+                    return PropertyValue.Create(Url(arguments));
+
+                case PropertyFunctionName.Var:
+                    return PropertyValue.Create(Var(arguments));
 
                 default:
                     throw new InvalidFunctionException(functionName);
@@ -35,7 +38,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
-        public static IPropertyValue<ILinearGradient> LinearGradient(IPropertyValue[] arguments) {
+        public static ILinearGradient LinearGradient(IPropertyValue[] arguments) {
 
             const int minimumArguments = 2;
 
@@ -47,10 +50,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             ILinearGradient gradient = new LinearGradient(angle.ToDegrees(), colors);
 
-            return PropertyValue.Create(gradient);
+            return gradient;
 
         }
-        public static IPropertyValue<Color> Rgb(IPropertyValue[] arguments) {
+        public static Color Rgb(IPropertyValue[] arguments) {
 
             const int requiredArguments = 3;
 
@@ -63,10 +66,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             Color color = Color.FromArgb(r, g, b);
 
-            return PropertyValue.Create(color);
+            return color;
 
         }
-        public static IPropertyValue<Color> Rgba(IPropertyValue[] arguments) {
+        public static Color Rgba(IPropertyValue[] arguments) {
 
             const int requiredArguments = 4;
 
@@ -80,10 +83,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             Color color = Color.FromArgb((int)Math.Round(byte.MaxValue * alpha), r, g, b); ;
 
-            return PropertyValue.Create(color);
+            return color;
 
         }
-        public static IPropertyValue<string> Url(IPropertyValue[] arguments) {
+        public static string Url(IPropertyValue[] arguments) {
 
             const int requiredArguments = 1;
 
@@ -96,7 +99,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             resourcePath = resourcePath.Trim('"', '\'');
 
-            return PropertyValue.Create(resourcePath);
+            return resourcePath;
+
+        }
+        public static VariableReference Var(IPropertyValue[] arguments) {
+
+            const int requiredArguments = 1;
+
+            if (arguments.Length != requiredArguments)
+                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, PropertyFunctionName.Var, requiredArguments, arguments.Length));
+
+            return new VariableReference(arguments[0].As<string>());
 
         }
 

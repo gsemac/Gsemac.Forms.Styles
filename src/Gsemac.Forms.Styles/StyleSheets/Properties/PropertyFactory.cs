@@ -27,7 +27,20 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public IProperty Create(string propertyName, IPropertyValue[] arguments) {
 
-            switch (propertyName) {
+            if (propertyName is null)
+                throw new ArgumentNullException(nameof(propertyName));
+
+            propertyName = propertyName.Trim();
+
+            // Check if we're defining a variable (using the "--" prefix).
+            // Variable names are case-sensitive.
+
+            if (propertyName.StartsWith("--"))
+                return CreatePropertyFromSingleArgument<string>(propertyName, arguments);
+
+            // Standard property names are not case-sensitive.
+
+            switch (propertyName.ToLowerInvariant()) {
 
                 case PropertyName.Border:
                     return CreateBorderProperty(arguments);
@@ -81,37 +94,49 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         private readonly IPropertyInitialValueFactory initialValueFactory;
 
-        private Property<T> CreatePropertyWithDefaultValue<T>(string propertyName) {
+        private IProperty CreatePropertyWithDefaultValue<T>(string propertyName) {
 
             T value = initialValueFactory.GetInitialValue<T>(propertyName);
             bool isInheritable = IsInheritable(propertyName);
 
-            return new Property<T>(propertyName, value, isInheritable);
+            return Property.Create(propertyName, value, isInheritable);
 
         }
-        private Property<T> CreatePropertyFromSingleArgument<T>(string propertyName, IPropertyValue[] arguments) {
+        private IProperty CreatePropertyFromSingleArgument<T>(string propertyName, IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
                 return CreatePropertyWithDefaultValue<T>(propertyName);
 
-            T value = arguments.First().As<T>();
             bool isInheritable = IsInheritable(propertyName);
 
-            return new Property<T>(propertyName, value, isInheritable);
+            if (IsVariableReference(arguments)) {
+
+                VariableReference value = arguments[0].As<VariableReference>();
+
+                return Property.Create(propertyName, value, isInheritable);
+
+            }
+            else {
+
+                T value = arguments.First().As<T>();
+
+                return Property.Create(propertyName, value, isInheritable);
+
+            }
 
         }
 
-        private Property<BackgroundImage> CreateBackgroundImageProperty(IPropertyValue[] arguments) {
+        private IProperty CreateBackgroundImageProperty(IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
                 return CreatePropertyWithDefaultValue<BackgroundImage>(PropertyName.BackgroundImage);
 
-            return new Property<BackgroundImage>(PropertyName.BackgroundImage,
+            return Property.Create(PropertyName.BackgroundImage,
                 CreateBackgroundImage(arguments),
                 IsInheritable(PropertyName.BackgroundImage));
 
         }
-        private BorderProperty CreateBorderProperty(IPropertyValue[] arguments) {
+        private IProperty CreateBorderProperty(IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
                 return new BorderProperty(initialValueFactory.GetInitialValue<Border>(PropertyName.Border));
@@ -119,7 +144,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             return new BorderProperty(CreateBorder(arguments));
 
         }
-        private BorderRadiusProperty CreateBorderRadiusProperty(IPropertyValue[] arguments) {
+        private IProperty CreateBorderRadiusProperty(IPropertyValue[] arguments) {
 
             if (arguments is null || arguments.Length <= 0)
                 return new BorderRadiusProperty(initialValueFactory.GetInitialValue<BorderRadius>(PropertyName.BorderRadius));
@@ -132,9 +157,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             value = default;
 
-            if (arguments.Length == 1 && arguments.First().TryAs(out T valueAsT)) {
+            if (arguments.Length == 1 && arguments.First().Is<T>()) {
 
-                value = valueAsT;
+                value = (T)arguments.First().Value;
 
                 return true;
 
@@ -257,6 +282,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                     return false;
 
             }
+
+        }
+        private static bool IsVariableReference(IPropertyValue[] arguments) {
+
+            return arguments.Length == 1 &&
+                arguments[0].Is<VariableReference>();
 
         }
 

@@ -133,6 +133,15 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid variable name..
+        /// </summary>
+        internal static string InvalidVariableName {
+            get {
+                return ResourceManager.GetString("InvalidVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to parse &quot;{0}&quot; as &apos;{1}&apos;..
         /// </summary>
         internal static string MalformedPropertyValueAsType {

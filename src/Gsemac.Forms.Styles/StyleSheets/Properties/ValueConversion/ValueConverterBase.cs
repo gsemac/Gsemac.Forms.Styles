@@ -16,6 +16,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
             if (value is SourceT)
                 return Convert((SourceT)value);
 
+            if (value is null)
+                throw new ArgumentNullException(nameof(value));
+
             throw new ArgumentException(string.Format(ExceptionMessages.CannotConvertObjectsOfType, value.GetType()), nameof(value));
 
         }
