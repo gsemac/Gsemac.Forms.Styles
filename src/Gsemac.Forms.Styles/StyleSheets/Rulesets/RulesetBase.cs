@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
@@ -30,8 +31,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public Borders Border => GetBorder();
         public Border BorderBottom => GetBorderBottom();
         public Color BorderBottomColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderBottomColor);
-        public Length BorderBottomLeftRadius => GetPropertyValueOrDefault<Length>(PropertyName.BorderBottomLeftRadius);
-        public Length BorderBottomRightRadius => GetPropertyValueOrDefault<Length>(PropertyName.BorderBottomRightRadius);
+        public ILengthOrPercentage BorderBottomLeftRadius => GetPropertyValueOrDefault<ILengthOrPercentage>(PropertyName.BorderBottomLeftRadius);
+        public ILengthOrPercentage BorderBottomRightRadius => GetPropertyValueOrDefault<ILengthOrPercentage>(PropertyName.BorderBottomRightRadius);
         public BorderStyle BorderBottomStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderBottomStyle);
         public Length BorderBottomWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderBottomWidth);
         public Border BorderLeft => GetBorderLeft();
@@ -45,8 +46,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public Length BorderRightWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderRightWidth);
         public Border BorderTop => GetBorderTop();
         public Color BorderTopColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderTopColor);
-        public Length BorderTopLeftRadius => GetPropertyValueOrDefault<Length>(PropertyName.BorderTopLeftRadius);
-        public Length BorderTopRightRadius => GetPropertyValueOrDefault<Length>(PropertyName.BorderTopRightRadius);
+        public ILengthOrPercentage BorderTopLeftRadius => GetPropertyValueOrDefault<ILengthOrPercentage>(PropertyName.BorderTopLeftRadius);
+        public ILengthOrPercentage BorderTopRightRadius => GetPropertyValueOrDefault<ILengthOrPercentage>(PropertyName.BorderTopRightRadius);
         public BorderStyle BorderTopStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderTopStyle);
         public Length BorderTopWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderTopWidth);
         public Color Color => GetPropertyValueOrDefault<Color>(PropertyName.Color);
@@ -77,10 +78,22 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
             Remove(property.Name);
 
-            properties.Add(property.Name, property);
+            // If the property has child properties (e.g. is a shorthand property), add those properties instead.
+            // This way, when the user queries for the shorthand property, they always get the most up-to-date values.
 
-            foreach (IProperty childProperty in property.GetChildProperties(propertyFactory))
-                Add(childProperty);
+            IEnumerable<IProperty> childProperties = property.GetChildProperties(propertyFactory);
+
+            if (childProperties.Any()) {
+
+                foreach (IProperty childProperty in childProperties)
+                    Add(childProperty);
+
+            }
+            else {
+
+                properties.Add(property.Name, property);
+
+            }
 
         }
         public void Clear() {
@@ -194,7 +207,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         private T GetPropertyValueOrDefault<T>(string propertyName) {
 
-            if (properties.TryGetValue(propertyName, out IProperty property) && property.Value.Is<T>())
+            if (properties.TryGetValue(propertyName, out IProperty property))
                 return property.Value.As<T>();
 
             return initialValueFactory.GetInitialValue<T>(propertyName, this);

@@ -1,5 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
+using Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -36,9 +37,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             sb.Append(": ");
 
             if (ValueType.Equals(typeof(Color)))
-                sb.Append(PropertyUtilities.SerializeColor(value.As<Color>()));
+                sb.Append(new ColorToStringConverter().Convert(value.As<Color>()));
             else if (ValueType.Equals(typeof(BorderStyle)))
-                sb.Append(PropertyUtilities.SerializeBorderStyle(value.As<BorderStyle>()));
+                sb.Append(new BorderStyleToStringConverter().Convert(value.As<BorderStyle>()));
             else
                 sb.Append(Value.ToString());
 

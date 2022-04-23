@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Styles.Properties;
+using Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion;
 using System;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
@@ -34,22 +35,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
                 return true;
 
             }
-            else if (propertyValue.Type.Equals(typeof(IDimension)) && TypeUtilities.IsNumericType(typeof(T))) {
+            else {
 
-                // Since all numbers are parsed as measurements, allow them to be casted into numeric types.
+                IValueConverter valueConverter = ValueConverterFactory.Default.Create(propertyValue.Type, typeof(T));
 
-                value = (T)Convert.ChangeType(propertyValue.As<IDimension>().Value, typeof(T));
+                if (valueConverter is object) {
 
-                return true;
+                    value = (T)valueConverter.Convert(propertyValue.Value);
 
-            }
-            else if (propertyValue.Type.Equals(typeof(string)) && PropertyValue.TryParse((string)propertyValue.Value, out PropertyValue<T> parsedStringValue)) {
+                    return true;
 
-                // Attempt to parse the string into the desired type.
-
-                value = parsedStringValue.Value;
-
-                return true;
+                }
 
             }
 

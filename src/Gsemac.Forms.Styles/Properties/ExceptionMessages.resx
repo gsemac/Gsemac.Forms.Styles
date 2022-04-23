@@ -121,7 +121,10 @@
     <value>Cannot apply style to object of type '{0}'.</value>
   </data>
   <data name="CannotCastPropertyOfTypeToType" xml:space="preserve">
-    <value>Cannot cast property of type '{0}' to type '{1}'.</value>
+    <value>Cannot cast property of type '{0}' to '{1}'.</value>
+  </data>
+  <data name="CannotConvertObjectsOfType" xml:space="preserve">
+    <value>Cannot convert objects of type '{0}'.</value>
   </data>
   <data name="CannotRenderType" xml:space="preserve">
     <value>Cannot render objects of type '{0}'.</value>

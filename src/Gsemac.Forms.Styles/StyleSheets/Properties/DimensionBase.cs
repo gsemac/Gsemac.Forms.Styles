@@ -43,25 +43,25 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Protected members
 
-        protected DimensionBase(double value, string unit) {
+        protected DimensionBase(double value, string unit, IEnumerable<string> validUnits) {
 
             if (unit is null)
                 throw new ArgumentNullException(nameof(unit));
 
-            if (!string.IsNullOrWhiteSpace(unit))
-                unit = unit.Trim().ToLowerInvariant();
+            if (validUnits is null)
+                throw new ArgumentNullException(nameof(validUnits));
+
+            unit = unit.Trim().ToLowerInvariant();
 
             // Allow the units to be omitted only if the value is 0.
 
-            if (value != 0 && (string.IsNullOrWhiteSpace(unit) || !GetValidUnits().Contains(unit)))
+            if (value != 0 && (string.IsNullOrWhiteSpace(unit) || !validUnits.Contains(unit)))
                 throw new ArgumentException(string.Format(ExceptionMessages.UnrecognizedUnits, unit), nameof(unit));
 
             Value = value;
             Unit = unit;
 
         }
-
-        protected abstract IEnumerable<string> GetValidUnits();
 
     }
 

@@ -46,14 +46,15 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
                 case PropertyName.BorderBottomLeftRadius:
                 case PropertyName.BorderBottomRightRadius:
+                case PropertyName.BorderTopLeftRadius:
+                case PropertyName.BorderTopRightRadius:
+                    return CreatePropertyFromSingleArgument<ILengthOrPercentage>(propertyName, arguments);
+
                 case PropertyName.BorderBottomWidth:
                 case PropertyName.BorderLeftWidth:
                 case PropertyName.BorderRightWidth:
-                case PropertyName.BorderTopLeftRadius:
-                case PropertyName.BorderTopRightRadius:
                 case PropertyName.BorderTopWidth:
                 case PropertyName.BorderWidth:
-                case PropertyName.Opacity:
                     return CreatePropertyFromSingleArgument<Length>(propertyName, arguments);
 
                 case PropertyName.BorderBottomStyle:
@@ -65,6 +66,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
                 case PropertyName.BackgroundImage:
                     return CreateBackgroundImageProperty(arguments);
+
+                case PropertyName.Opacity:
+                    return CreatePropertyFromSingleArgument<double>(propertyName, arguments);
 
                 default:
                     throw new InvalidPropertyException(string.Format(ExceptionMessages.UnrecognizedProperty, propertyName));

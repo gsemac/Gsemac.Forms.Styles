@@ -9,49 +9,49 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
-        public static double ToDegrees(IDimension measurement) {
+        public static double ToDegrees(IDimension dimension) {
 
-            if (measurement is null)
-                throw new ArgumentNullException(nameof(measurement));
+            if (dimension is null)
+                throw new ArgumentNullException(nameof(dimension));
 
-            switch (measurement.Unit) {
+            switch (dimension.Unit) {
 
                 case AngleUnit.Degree:
-                    return measurement.Value;
+                    return dimension.Value;
 
                 case AngleUnit.Gradian:
-                    return MathUtilities.GradiansToDegrees(measurement.Value);
+                    return MathUtilities.GradiansToDegrees(dimension.Value);
 
                 case AngleUnit.Radian:
-                    return MathUtilities.RadiansToDegrees(measurement.Value);
+                    return MathUtilities.RadiansToDegrees(dimension.Value);
 
                 case AngleUnit.Turn:
-                    return MathUtilities.TurnsToDegrees(measurement.Value);
+                    return MathUtilities.TurnsToDegrees(dimension.Value);
 
                 default:
-                    throw new InvalidOperationException(string.Format(ExceptionMessages.UnitCannotBeConvertedToDegreesWithUnit, measurement.Unit));
+                    throw new InvalidOperationException(string.Format(ExceptionMessages.UnitCannotBeConvertedToDegreesWithUnit, dimension.Unit));
 
             }
 
         }
 
-        public static int ToPixels(IDimension measurement, INode2 node, Rectangle viewport) {
+        public static int ToPixels(IDimension dimension, INode2 node, Rectangle viewport) {
 
-            return ToPixels(measurement, node, viewport, DefaultDpi);
+            return ToPixels(dimension, node, viewport, DefaultDpi);
 
         }
-        public static int ToPixels(IDimension measurement, INode2 node, Rectangle viewport, int dpi) {
+        public static int ToPixels(IDimension dimension, INode2 node, Rectangle viewport, int dpi) {
 
-            if (measurement is null)
-                throw new ArgumentNullException(nameof(measurement));
+            if (dimension is null)
+                throw new ArgumentNullException(nameof(dimension));
 
-            switch (measurement.Unit) {
+            switch (dimension.Unit) {
 
                 case LengthUnit.Pixel:
-                    return (int)measurement.Value;
+                    return (int)dimension.Value;
 
                 default:
-                    throw new InvalidOperationException(string.Format(ExceptionMessages.UnitCannotBeConvertedToPixelsWithUnit, measurement.Unit));
+                    throw new InvalidOperationException(string.Format(ExceptionMessages.UnitCannotBeConvertedToPixelsWithUnit, dimension.Unit));
 
             }
 

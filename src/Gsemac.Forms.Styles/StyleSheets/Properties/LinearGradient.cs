@@ -26,7 +26,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
         public LinearGradient(double degrees, IEnumerable<Color> colorStops) :
-            this(Angle.FromDegrees(degrees), colorStops.Select(color => new ColorStop(color))) {
+            this(new Angle(degrees, AngleUnit.Degree), colorStops.Select(color => new ColorStop(color))) {
         }
 
     }

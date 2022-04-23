@@ -47,7 +47,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                     return PropertyValue.Create(Length.Zero);
 
                 case PropertyName.Color:
-                    return PropertyValue.Create(Color.Black); // Dependant on user agent
+                    return PropertyValue.Create(Color.Black); // Depends on user agent
+
+                case PropertyName.Opacity:
+                    return PropertyValue.Create(1.0);
 
                 default:
                     return PropertyValue.Null;

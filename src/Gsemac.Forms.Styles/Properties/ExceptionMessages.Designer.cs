@@ -70,11 +70,20 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot cast property of type &apos;{0}&apos; to type &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Cannot cast property of type &apos;{0}&apos; to &apos;{1}&apos;..
         /// </summary>
         internal static string CannotCastPropertyOfTypeToType {
             get {
                 return ResourceManager.GetString("CannotCastPropertyOfTypeToType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot convert objects of type &apos;{0}&apos;..
+        /// </summary>
+        internal static string CannotConvertObjectsOfType {
+            get {
+                return ResourceManager.GetString("CannotConvertObjectsOfType", resourceCulture);
             }
         }
         

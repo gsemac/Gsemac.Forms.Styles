@@ -16,8 +16,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         BackgroundImage BackgroundImage { get; }
         Borders Border { get; }
         Color BorderBottomColor { get; }
-        Length BorderBottomLeftRadius { get; }
-        Length BorderBottomRightRadius { get; }
+        ILengthOrPercentage BorderBottomLeftRadius { get; }
+        ILengthOrPercentage BorderBottomRightRadius { get; }
         BorderStyle BorderBottomStyle { get; }
         Length BorderBottomWidth { get; }
         Color BorderLeftColor { get; }
@@ -28,8 +28,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         BorderStyle BorderRightStyle { get; }
         Length BorderRightWidth { get; }
         Color BorderTopColor { get; }
-        Length BorderTopLeftRadius { get; }
-        Length BorderTopRightRadius { get; }
+        ILengthOrPercentage BorderTopLeftRadius { get; }
+        ILengthOrPercentage BorderTopRightRadius { get; }
         BorderStyle BorderTopStyle { get; }
         Length BorderTopWidth { get; }
         Color Color { get; }

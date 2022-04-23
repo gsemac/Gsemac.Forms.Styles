@@ -4,16 +4,16 @@ using System.Collections.Generic;
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     public sealed class BorderRadius :
-        IEnumerable<Length> {
+        IEnumerable<ILengthOrPercentage> {
 
-        public Length TopLeft { get; } = Length.Zero;
-        public Length TopRight { get; } = Length.Zero;
-        public Length BottomRight { get; } = Length.Zero;
-        public Length BottomLeft { get; } = Length.Zero;
+        public ILengthOrPercentage TopLeft { get; } = Length.Zero;
+        public ILengthOrPercentage TopRight { get; } = Length.Zero;
+        public ILengthOrPercentage BottomRight { get; } = Length.Zero;
+        public ILengthOrPercentage BottomLeft { get; } = Length.Zero;
 
         public BorderRadius() {
         }
-        public BorderRadius(Length value) {
+        public BorderRadius(ILengthOrPercentage value) {
 
             TopLeft = value;
             TopRight = value;
@@ -21,7 +21,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             BottomRight = value;
 
         }
-        public BorderRadius(Length topLeftBottomRight, Length topRightBottomLeft) {
+        public BorderRadius(ILengthOrPercentage topLeftBottomRight, ILengthOrPercentage topRightBottomLeft) {
 
             TopLeft = topLeftBottomRight;
             TopRight = topRightBottomLeft;
@@ -29,7 +29,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             BottomRight = topLeftBottomRight;
 
         }
-        public BorderRadius(Length topLeft, Length topRightBottomLeft, Length bottomRight) {
+        public BorderRadius(ILengthOrPercentage topLeft, ILengthOrPercentage topRightBottomLeft, ILengthOrPercentage bottomRight) {
 
             TopLeft = topLeft;
             TopRight = topRightBottomLeft;
@@ -37,7 +37,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             BottomRight = bottomRight;
 
         }
-        public BorderRadius(Length topLeft, Length topRight, Length bottomRight, Length bottomLeft) {
+        public BorderRadius(ILengthOrPercentage topLeft, ILengthOrPercentage topRight, ILengthOrPercentage bottomRight, ILengthOrPercentage bottomLeft) {
 
             TopLeft = topLeft;
             TopRight = topRight;
@@ -46,7 +46,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
-        public IEnumerator<Length> GetEnumerator() {
+        public IEnumerator<ILengthOrPercentage> GetEnumerator() {
 
             yield return TopLeft;
             yield return TopRight;

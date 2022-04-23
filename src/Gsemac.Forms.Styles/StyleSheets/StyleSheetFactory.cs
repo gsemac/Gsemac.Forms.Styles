@@ -121,8 +121,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                         lexer.Read(out _); // Eat the token
 
-                        if (PropertyValue.TryParse(token.Value, out PropertyValue parsedPropertyValue))
-                            values.Add(parsedPropertyValue);
+                        values.Add(PropertyValue.Create(token.Value));
 
                         break;
 
@@ -170,8 +169,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                     case StyleSheetLexerTokenType.Value:
 
-                        if (PropertyValue.TryParse(token.Value, out PropertyValue parsedPropertyValue))
-                            functionArgs.Add(parsedPropertyValue);
+                        functionArgs.Add(PropertyValue.Create(token.Value));
 
                         break;
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion;
+using System;
 using System.Drawing;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
@@ -31,7 +32,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public override string ToString() {
 
-            return $"{Width} {PropertyUtilities.SerializeBorderStyle(Style)} {PropertyUtilities.SerializeColor(Color)}";
+            return $"{Width} {new BorderStyleToStringConverter().Convert(Style)} {new ColorToStringConverter().Convert(Color)}";
 
         }
 
