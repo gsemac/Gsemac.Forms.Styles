@@ -71,7 +71,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                     return CreatePropertyFromSingleArgument<double>(propertyName, arguments);
 
                 default:
-                    throw new InvalidPropertyException(string.Format(ExceptionMessages.UnrecognizedProperty, propertyName));
+                    throw new InvalidPropertyException(string.Format(ExceptionMessages.InvalidPropertyName, propertyName));
 
             }
 

@@ -9,27 +9,19 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
-        public InvalidPropertyException(string propertyName) :
-            base(CreateMessage(propertyName)) {
-        }
-        public InvalidPropertyException(string propertyName, Exception innerException) :
-            base(CreateMessage(propertyName), innerException) {
-        }
         public InvalidPropertyException() {
+        }
+        public InvalidPropertyException(string message) :
+            base(message) {
+        }
+        public InvalidPropertyException(string message, Exception innerException) :
+            base(message, innerException) {
         }
 
         // Protected members
 
         protected InvalidPropertyException(SerializationInfo serializationInfo, StreamingContext streamingContext) :
             base(serializationInfo, streamingContext) {
-        }
-
-        // Private members
-
-        private static string CreateMessage(string propertyName) {
-
-            return $"\"{propertyName}\" is not a valid property.";
-
         }
 
     }

@@ -192,7 +192,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         break;
 
                     default:
-                        throw new UnexpectedTokenException(string.Format(ExceptionMessages.UnexpectedTokenTypeWithType, token.Type));
+                        throw new UnexpectedTokenException(string.Format(ExceptionMessages.UnexpectedToken, token.Type));
 
                 }
 

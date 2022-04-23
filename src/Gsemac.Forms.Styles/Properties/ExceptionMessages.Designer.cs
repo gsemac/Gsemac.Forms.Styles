@@ -97,25 +97,43 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The string &quot;{0}&quot; was not recognized as a valid dimension..
+        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid dimension..
         /// </summary>
-        internal static string MalformedDimensionValue {
+        internal static string InvalidDimension {
             get {
-                return ResourceManager.GetString("MalformedDimensionValue", resourceCulture);
+                return ResourceManager.GetString("InvalidDimension", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The string &quot;{0}&quot; is not a valid property value..
+        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid property name..
         /// </summary>
-        internal static string MalformedPropertyValue {
+        internal static string InvalidPropertyName {
             get {
-                return ResourceManager.GetString("MalformedPropertyValue", resourceCulture);
+                return ResourceManager.GetString("InvalidPropertyName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The string &quot;{0}&quot; cannot be parsed as &apos;{1}&apos;..
+        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid property value..
+        /// </summary>
+        internal static string InvalidPropertyValue {
+            get {
+                return ResourceManager.GetString("InvalidPropertyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid unit..
+        /// </summary>
+        internal static string InvalidUnit {
+            get {
+                return ResourceManager.GetString("InvalidUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to parse &quot;{0}&quot; as &apos;{1}&apos;..
         /// </summary>
         internal static string MalformedPropertyValueAsType {
             get {
@@ -144,45 +162,27 @@ namespace Gsemac.Forms.Styles.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Encountered unexpected token &apos;{0}&apos;..
         /// </summary>
-        internal static string UnexpectedTokenTypeWithType {
+        internal static string UnexpectedToken {
             get {
-                return ResourceManager.GetString("UnexpectedTokenTypeWithType", resourceCulture);
+                return ResourceManager.GetString("UnexpectedToken", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The unit &quot;{0}&quot; cannot be converted to degrees..
+        ///   Looks up a localized string similar to Unit &quot;{0}&quot; cannot be converted to degrees..
         /// </summary>
-        internal static string UnitCannotBeConvertedToDegreesWithUnit {
+        internal static string UnitCannotBeConvertedToDegrees {
             get {
-                return ResourceManager.GetString("UnitCannotBeConvertedToDegreesWithUnit", resourceCulture);
+                return ResourceManager.GetString("UnitCannotBeConvertedToDegrees", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The unit &quot;{0}&quot; cannot be converted to pixels..
+        ///   Looks up a localized string similar to Unit &quot;{0}&quot; cannot be converted to pixels..
         /// </summary>
-        internal static string UnitCannotBeConvertedToPixelsWithUnit {
+        internal static string UnitCannotBeConvertedToPixels {
             get {
-                return ResourceManager.GetString("UnitCannotBeConvertedToPixelsWithUnit", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The string &quot;{0}&quot; was not recognized as a valid property..
-        /// </summary>
-        internal static string UnrecognizedProperty {
-            get {
-                return ResourceManager.GetString("UnrecognizedProperty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The string &quot;{0}&quot; was not recognized as a valid unit..
-        /// </summary>
-        internal static string UnrecognizedUnits {
-            get {
-                return ResourceManager.GetString("UnrecognizedUnits", resourceCulture);
+                return ResourceManager.GetString("UnitCannotBeConvertedToPixels", resourceCulture);
             }
         }
     }

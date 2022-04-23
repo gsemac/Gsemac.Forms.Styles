@@ -129,14 +129,20 @@
   <data name="CannotRenderType" xml:space="preserve">
     <value>Cannot render objects of type '{0}'.</value>
   </data>
-  <data name="MalformedDimensionValue" xml:space="preserve">
-    <value>The string "{0}" was not recognized as a valid dimension.</value>
+  <data name="InvalidDimension" xml:space="preserve">
+    <value>"{0}" is not a valid dimension.</value>
   </data>
-  <data name="MalformedPropertyValue" xml:space="preserve">
-    <value>The string "{0}" is not a valid property value.</value>
+  <data name="InvalidPropertyName" xml:space="preserve">
+    <value>"{0}" is not a valid property name.</value>
+  </data>
+  <data name="InvalidPropertyValue" xml:space="preserve">
+    <value>"{0}" is not a valid property value.</value>
+  </data>
+  <data name="InvalidUnit" xml:space="preserve">
+    <value>"{0}" is not a valid unit.</value>
   </data>
   <data name="MalformedPropertyValueAsType" xml:space="preserve">
-    <value>The string "{0}" cannot be parsed as '{1}'.</value>
+    <value>Unable to parse "{0}" as '{1}'.</value>
   </data>
   <data name="PropertyFunctionRequiresNArguments" xml:space="preserve">
     <value>Function "{0}" requires {1} argument(s), but {2} were given.</value>
@@ -144,19 +150,13 @@
   <data name="PropertyNameCannotBeEmpty" xml:space="preserve">
     <value>Property name cannot be empty.</value>
   </data>
-  <data name="UnexpectedTokenTypeWithType" xml:space="preserve">
+  <data name="UnexpectedToken" xml:space="preserve">
     <value>Encountered unexpected token '{0}'.</value>
   </data>
-  <data name="UnitCannotBeConvertedToDegreesWithUnit" xml:space="preserve">
-    <value>The unit "{0}" cannot be converted to degrees.</value>
+  <data name="UnitCannotBeConvertedToDegrees" xml:space="preserve">
+    <value>Unit "{0}" cannot be converted to degrees.</value>
   </data>
-  <data name="UnitCannotBeConvertedToPixelsWithUnit" xml:space="preserve">
-    <value>The unit "{0}" cannot be converted to pixels.</value>
-  </data>
-  <data name="UnrecognizedProperty" xml:space="preserve">
-    <value>The string "{0}" was not recognized as a valid property.</value>
-  </data>
-  <data name="UnrecognizedUnits" xml:space="preserve">
-    <value>The string "{0}" was not recognized as a valid unit.</value>
+  <data name="UnitCannotBeConvertedToPixels" xml:space="preserve">
+    <value>Unit "{0}" cannot be converted to pixels.</value>
   </data>
 </root>

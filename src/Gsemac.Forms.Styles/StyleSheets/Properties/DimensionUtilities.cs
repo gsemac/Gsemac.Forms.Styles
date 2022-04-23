@@ -29,7 +29,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                     return MathUtilities.TurnsToDegrees(dimension.Value);
 
                 default:
-                    throw new InvalidOperationException(string.Format(ExceptionMessages.UnitCannotBeConvertedToDegreesWithUnit, dimension.Unit));
+                    throw new InvalidOperationException(string.Format(ExceptionMessages.UnitCannotBeConvertedToDegrees, dimension.Unit));
 
             }
 
@@ -51,7 +51,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                     return (int)dimension.Value;
 
                 default:
-                    throw new InvalidOperationException(string.Format(ExceptionMessages.UnitCannotBeConvertedToPixelsWithUnit, dimension.Unit));
+                    throw new InvalidOperationException(string.Format(ExceptionMessages.UnitCannotBeConvertedToPixels, dimension.Unit));
 
             }
 

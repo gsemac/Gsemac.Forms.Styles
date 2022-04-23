@@ -56,7 +56,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             // Allow the units to be omitted only if the value is 0.
 
             if (value != 0 && (string.IsNullOrWhiteSpace(unit) || !validUnits.Contains(unit)))
-                throw new ArgumentException(string.Format(ExceptionMessages.UnrecognizedUnits, unit), nameof(unit));
+                throw new ArgumentException(string.Format(ExceptionMessages.InvalidUnit, unit), nameof(unit));
 
             Value = value;
             Unit = unit;
