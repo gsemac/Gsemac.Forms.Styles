@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.StyleSheets.Rulesets;
+using System;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
 
@@ -8,26 +9,31 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
 
         public static IProperty Create(this IPropertyFactory factory, string propertyName) {
 
+            return Create(factory, propertyName, Ruleset.Empty);
+
+        }
+        public static IProperty Create(this IPropertyFactory factory, string propertyName, IRuleset ruleset) {
+
             if (factory is null)
                 throw new ArgumentNullException(nameof(factory));
 
-            return factory.Create(propertyName, null);
+            return factory.Create(propertyName, null, ruleset);
 
         }
         public static IProperty Create(this IPropertyFactory factory, string propertyName, IPropertyValue argument) {
 
+            return Create(factory, propertyName, argument, Ruleset.Empty);
+
+        }
+        public static IProperty Create(this IPropertyFactory factory, string propertyName, IPropertyValue argument, IRuleset ruleset) {
+
             if (factory is null)
                 throw new ArgumentNullException(nameof(factory));
 
-            return factory.Create(propertyName, new[] { argument });
+            if (argument is null)
+                throw new ArgumentNullException(nameof(argument));
 
-        }
-        public static IProperty Create<T>(this IPropertyFactory factory, string propertyName, T argument) {
-
-            if (argument is IPropertyValue)
-                return Create(factory, propertyName, (IPropertyValue)argument);
-
-            return factory.Create(propertyName, (IPropertyValue)PropertyValue.Create(argument));
+            return factory.Create(propertyName, new[] { argument }, ruleset);
 
         }
 

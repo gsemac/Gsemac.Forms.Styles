@@ -110,26 +110,25 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
                 variableReferencingProperties.Add(property.Name, property);
 
                 string variableName = property.Value.As<VariableReference>().Name;
-                IPropertyValue variableValue;
 
-                if (properties.TryGetValue(variableName, out IProperty referencedVariable)) {
+                IProperty updatedProperty;
 
-                    variableValue = referencedVariable.Value;
+                if (properties.TryGetValue(variableName, out IProperty referencedVariableProperty)) {
+
+                    updatedProperty = propertyFactory.Create(property.Name, referencedVariableProperty.Value, this);
 
                 }
                 else {
 
                     // The variable hasn't been defined yet, so use the default value.
 
-                    variableValue = initialValueFactory.GetInitialValue(property.Name);
+                    updatedProperty = propertyFactory.Create(property.Name, this);
 
                 }
 
-                IProperty resolvedProperty = propertyFactory.Create(property.Name, variableValue);
-
                 // Update the property if it exists, preserving its position in the ruleset.
 
-                properties[property.Name] = resolvedProperty;
+                properties[property.Name] = updatedProperty;
 
             }
             else {
@@ -251,14 +250,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         private readonly IDictionary<string, IProperty> properties = new OrderedDictionary<string, IProperty>();
         private readonly IDictionary<string, IProperty> variableReferencingProperties = new Dictionary<string, IProperty>();
-        private readonly IPropertyInitialValueFactory initialValueFactory = PropertyInitialValueFactory.Default;
 
         private T GetPropertyValueOrDefault<T>(string propertyName) {
 
-            if (properties.TryGetValue(propertyName, out IProperty property))
-                return property.Value.As<T>();
-
-            return initialValueFactory.GetInitialValue<T>(propertyName, this);
+            return GetPropertyOrDefault(propertyName).Value.As<T>();
 
         }
         private IProperty GetPropertyOrDefault(string propertyName) {
@@ -266,7 +261,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             if (properties.TryGetValue(propertyName, out IProperty property))
                 return property;
 
-            return propertyFactory.Create(propertyName);
+            return propertyFactory.Create(propertyName, this);
 
         }
 

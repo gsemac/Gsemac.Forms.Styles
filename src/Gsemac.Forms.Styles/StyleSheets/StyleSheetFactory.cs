@@ -59,7 +59,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                                 try {
 
-                                    property = propertyFactory.Create(currentPropertyName, propertyValues);
+                                    property = propertyFactory.Create(currentPropertyName, propertyValues, currentRuleset);
 
                                 }
                                 catch (Exception ex) {

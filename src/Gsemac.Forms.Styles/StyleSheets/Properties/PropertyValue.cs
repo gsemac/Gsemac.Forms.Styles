@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gsemac.Core;
+using System;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
@@ -10,11 +11,40 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         public Type Type { get; }
         public object Value { get; }
 
-        public static PropertyValue Null { get; } = new PropertyValue(typeof(object), null);
+        public static PropertyValue Null => new PropertyValue(typeof(object), null);
+
+        public static PropertyValue Initial => Create("initial");
 
         public static PropertyValue<T> Create<T>(T value) {
 
             return new PropertyValue<T>(value);
+
+        }
+
+        public override bool Equals(object obj) {
+
+            if (obj is IPropertyValue other) {
+
+                return other.Type.Equals(Type) &&
+                    other.Value.Equals(Value);
+
+            }
+
+            return false;
+
+        }
+        public override int GetHashCode() {
+
+            return new HashCodeBuilder()
+                .Add(Type)
+                .Add(Value)
+                .GetHashCode();
+
+        }
+
+        public override string ToString() {
+
+            return Value.ToString();
 
         }
 

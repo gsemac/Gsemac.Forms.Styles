@@ -1,12 +1,8 @@
-﻿using Gsemac.Forms.Styles.Dom;
-using Gsemac.Forms.Styles.StyleSheets.Extensions;
+﻿using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
-using Gsemac.Forms.Styles.StyleSheets.Rulesets.Extensions;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers {
@@ -82,12 +78,12 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         private IRuleset CreateDefaultCheckRuleset() {
 
-            IRuleset ruleset = new Ruleset();
-
-            ruleset.Add(PropertyFactory.Default.Create(PropertyName.BackgroundColor, "white"));
-            ruleset.Add(PropertyFactory.Default.Create(PropertyName.BorderColor, "#707070"));
-            ruleset.Add(PropertyFactory.Default.Create(PropertyName.BorderWidth, "1px"));
-            ruleset.Add(PropertyFactory.Default.Create(PropertyName.Color, "black"));
+            IRuleset ruleset = new Ruleset {
+                PropertyFactory.Default.Create(PropertyName.BackgroundColor, PropertyValue.Create("white")),
+                PropertyFactory.Default.Create(PropertyName.BorderColor, PropertyValue.Create("#707070")),
+                PropertyFactory.Default.Create(PropertyName.BorderWidth, PropertyValue.Create("1px")),
+                PropertyFactory.Default.Create(PropertyName.Color, PropertyValue.Create("black")),
+            };
 
             return ruleset;
 

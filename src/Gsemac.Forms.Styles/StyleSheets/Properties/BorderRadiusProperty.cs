@@ -17,10 +17,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public override IEnumerable<IProperty> GetChildProperties(IPropertyFactory propertyFactory) {
 
-            yield return propertyFactory.Create(PropertyName.BorderTopLeftRadius, Value.TopLeft);
-            yield return propertyFactory.Create(PropertyName.BorderTopRightRadius, Value.TopRight);
-            yield return propertyFactory.Create(PropertyName.BorderBottomRightRadius, Value.BottomRight);
-            yield return propertyFactory.Create(PropertyName.BorderBottomLeftRadius, Value.BottomLeft);
+            yield return propertyFactory.Create(PropertyName.BorderTopLeftRadius, PropertyValue.Create(Value.TopLeft));
+            yield return propertyFactory.Create(PropertyName.BorderTopRightRadius, PropertyValue.Create(Value.TopRight));
+            yield return propertyFactory.Create(PropertyName.BorderBottomRightRadius, PropertyValue.Create(Value.BottomRight));
+            yield return propertyFactory.Create(PropertyName.BorderBottomLeftRadius, PropertyValue.Create(Value.BottomLeft));
 
         }
 
