@@ -4,6 +4,11 @@
 
         // Public members
 
+        public static Property<T> Create<T>(string name, T value) {
+
+            return Create(name, value, isInheritable: false);
+
+        }
         public static Property<T> Create<T>(string name, T value, bool isInheritable) {
 
             return new Property<T>(name, value, isInheritable);
