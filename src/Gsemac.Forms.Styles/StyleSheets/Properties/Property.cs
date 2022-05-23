@@ -1,8 +1,16 @@
 ﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public class Property {
+    public class Property :
+        PropertyBase {
 
         // Public members
+
+        public Property(string name, IPropertyValue value) :
+            base(name, value, isInheritable: false) {
+        }
+        public Property(string name, IPropertyValue value, bool isInheritable) :
+            base(name, value, isInheritable) {
+        }
 
         public static Property<T> Create<T>(string name, T value) {
 

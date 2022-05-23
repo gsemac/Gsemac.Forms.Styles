@@ -9,20 +9,19 @@ using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public abstract class PropertyBase<T> :
-        IProperty<T> {
+    public abstract class PropertyBase :
+      IProperty {
 
         // Public members
 
-        public T Value => value.Value;
         public string Name { get; }
+        public IPropertyValue Value { get; }
 
         public bool IsInheritable { get; }
+        public bool IsShorthand => this.GetChildProperties().Any();
         public bool IsVariable => Name.StartsWith("--");
 
-        public Type ValueType => typeof(T);
-
-        IPropertyValue IProperty.Value => value;
+        public Type ValueType => Value.Type;
 
         public virtual IEnumerable<IProperty> GetChildProperties(IPropertyFactory propertyFactory) {
 
@@ -38,9 +37,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             sb.Append(": ");
 
             if (ValueType.Equals(typeof(Color)))
-                sb.Append(new ColorToStringConverter().Convert(value.As<Color>()));
+                sb.Append(new ColorToStringConverter().Convert(Value.As<Color>()));
             else if (ValueType.Equals(typeof(BorderStyle)))
-                sb.Append(new BorderStyleToStringConverter().Convert(value.As<BorderStyle>()));
+                sb.Append(new BorderStyleToStringConverter().Convert(Value.As<BorderStyle>()));
             else
                 sb.Append(Value.ToString());
 
@@ -50,10 +49,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Protected members
 
-        protected PropertyBase(string name, T value, bool isInheritable) {
+        protected PropertyBase(string name, IPropertyValue value, bool isInheritable) {
 
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
+
+            if (value is null)
+                throw new ArgumentNullException(nameof(value));
 
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException(ExceptionMessages.PropertyNameCannotBeEmpty);
@@ -62,15 +64,26 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 throw new ArgumentNullException(nameof(value));
 
             Name = name;
+            Value = value;
             IsInheritable = isInheritable;
-
-            this.value = PropertyValue.Create(value);
 
         }
 
-        // Private members
+    }
 
-        private readonly IPropertyValue<T> value;
+    public abstract class PropertyBase<T> :
+        PropertyBase,
+        IProperty<T> {
+
+        // Public members
+
+        public new T Value => base.Value.As<T>();
+
+        // Protected members
+
+        protected PropertyBase(string name, T value, bool isInheritable) :
+            base(name, PropertyValue.Create(value), isInheritable) {
+        }
 
     }
 

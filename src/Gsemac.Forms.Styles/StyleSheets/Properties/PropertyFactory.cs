@@ -7,6 +7,11 @@
 
         public static PropertyFactory Default => new PropertyFactory();
 
+        public PropertyFactory() { }
+        public PropertyFactory(IPropertyFactoryOptions options) :
+            base(options) {
+        }
+
     }
 
 }

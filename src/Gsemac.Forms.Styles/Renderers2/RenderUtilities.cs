@@ -1,8 +1,8 @@
-﻿using Gsemac.Forms.Styles.Renderers.Extensions;
+﻿using Gsemac.Forms.Styles.Properties;
+using Gsemac.Forms.Styles.Renderers.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
-using Gsemac.Forms.Styles.StyleSheets.Rulesets.Extensions;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -78,9 +78,18 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         public static void Clear(Graphics graphics, IRuleset style) {
 
-            //IProperty clearColorProperty = style.GetProperty("--clear-color");
+            IProperty clearColorProperty = style.Get(CustomPropertyName.ClearColor);
 
-            graphics.Clear(Color.Transparent);
+            if (clearColorProperty is object && clearColorProperty.Value.Is<Color>()) {
+
+                graphics.Clear(clearColorProperty.Value.As<Color>());
+
+            }
+            else {
+
+                graphics.Clear(Color.Transparent);
+
+            }
 
         }
 

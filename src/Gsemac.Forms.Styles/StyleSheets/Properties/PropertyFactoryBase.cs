@@ -74,13 +74,29 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                     return CreatePropertyFromSingleArgument<double>(propertyName, arguments, ruleset);
 
                 default:
-                    throw new InvalidPropertyException(string.Format(ExceptionMessages.InvalidPropertyName, propertyName));
+
+                    if (!options.AllowUnknownProperties)
+                        throw new InvalidPropertyException(string.Format(ExceptionMessages.InvalidPropertyName, propertyName));
+
+                    return CreateUnknownProperty(propertyName, arguments);
 
             }
 
         }
 
         // Protected members
+
+        protected PropertyFactoryBase() :
+            this(PropertyFactoryOptions.Default) {
+        }
+        protected PropertyFactoryBase(IPropertyFactoryOptions options) {
+
+            if (options is null)
+                throw new ArgumentNullException(nameof(options));
+
+            this.options = options;
+
+        }
 
         protected virtual IPropertyValue GetInitialValue(string propertyName, IRuleset ruleset) {
 
@@ -146,6 +162,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         private const string VariablePrefix = "--";
 
+        private readonly IPropertyFactoryOptions options;
+
         private IProperty CreatePropertyWithDefaultValue<T>(string propertyName, IRuleset ruleset) {
 
             if (ruleset is null)
@@ -185,6 +203,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 return Property.Create(propertyName, value, isInheritable);
 
             }
+
+        }
+        private IProperty CreateUnknownProperty(string propertyName, IPropertyValue[] arguments) {
+
+            // Unknown properties will be treated in a very basic fashion because we don't know anything about how they should be initialized.
+            // For now, complex custom properties should be handled by creating a custom PropertyFactory implementation.
+
+            return new Property(propertyName, arguments.FirstOrDefault());
 
         }
 

@@ -9,6 +9,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         IPropertyValue Value { get; }
 
         bool IsInheritable { get; }
+        bool IsShorthand { get; }
         bool IsVariable { get; }
 
         Type ValueType { get; }
