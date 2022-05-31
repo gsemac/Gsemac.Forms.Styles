@@ -43,6 +43,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Protected members
 
+        protected DimensionBase(double value, string unit) :
+            this(value, unit, Enumerable.Empty<string>()) {
+        }
         protected DimensionBase(double value, string unit, IEnumerable<string> validUnits) {
 
             if (unit is null)
@@ -55,7 +58,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             // Allow the units to be omitted only if the value is 0.
 
-            if (value != 0 && (string.IsNullOrWhiteSpace(unit) || !validUnits.Contains(unit)))
+            if (value != 0 && (string.IsNullOrWhiteSpace(unit) || (validUnits.Any() && !validUnits.Contains(unit))))
                 throw new ArgumentException(string.Format(ExceptionMessages.InvalidUnit, unit), nameof(unit));
 
             Value = value;

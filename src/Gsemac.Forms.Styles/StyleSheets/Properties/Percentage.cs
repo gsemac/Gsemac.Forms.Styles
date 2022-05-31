@@ -2,7 +2,7 @@
 
     public sealed class Percentage :
         DimensionBase,
-        ILengthOrPercentage {
+        ILengthPercentage {
 
         // Public members
 

@@ -31,25 +31,26 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public Borders Border => GetBorder();
         public Border BorderBottom => GetBorderBottom();
         public Color BorderBottomColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderBottomColor);
-        public ILengthOrPercentage BorderBottomLeftRadius => GetPropertyValueOrDefault<ILengthOrPercentage>(PropertyName.BorderBottomLeftRadius);
-        public ILengthOrPercentage BorderBottomRightRadius => GetPropertyValueOrDefault<ILengthOrPercentage>(PropertyName.BorderBottomRightRadius);
+        public ILengthPercentage BorderBottomLeftRadius => GetPropertyValueOrDefault<ILengthPercentage>(PropertyName.BorderBottomLeftRadius);
+        public ILengthPercentage BorderBottomRightRadius => GetPropertyValueOrDefault<ILengthPercentage>(PropertyName.BorderBottomRightRadius);
         public BorderStyle BorderBottomStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderBottomStyle);
-        public Length BorderBottomWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderBottomWidth);
+        public LineWidth BorderBottomWidth => GetPropertyValueOrDefault<LineWidth>(PropertyName.BorderBottomWidth);
         public Border BorderLeft => GetBorderLeft();
         public Color BorderLeftColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderLeftColor);
         public BorderStyle BorderLeftStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderLeftStyle);
-        public Length BorderLeftWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderLeftWidth);
-        public BorderRadius BorderRadius => GetBorderRadius();
+        public LineWidth BorderLeftWidth => GetPropertyValueOrDefault<LineWidth>(PropertyName.BorderLeftWidth);
+        public BorderRadii BorderRadius => GetBorderRadius();
         public Border BorderRight => GetBorderRight();
         public Color BorderRightColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderRightColor);
         public BorderStyle BorderRightStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderRightStyle);
-        public Length BorderRightWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderRightWidth);
+        public LineWidth BorderRightWidth => GetPropertyValueOrDefault<LineWidth>(PropertyName.BorderRightWidth);
         public Border BorderTop => GetBorderTop();
         public Color BorderTopColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderTopColor);
-        public ILengthOrPercentage BorderTopLeftRadius => GetPropertyValueOrDefault<ILengthOrPercentage>(PropertyName.BorderTopLeftRadius);
-        public ILengthOrPercentage BorderTopRightRadius => GetPropertyValueOrDefault<ILengthOrPercentage>(PropertyName.BorderTopRightRadius);
+        public ILengthPercentage BorderTopLeftRadius => GetPropertyValueOrDefault<ILengthPercentage>(PropertyName.BorderTopLeftRadius);
+        public ILengthPercentage BorderTopRightRadius => GetPropertyValueOrDefault<ILengthPercentage>(PropertyName.BorderTopRightRadius);
         public BorderStyle BorderTopStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderTopStyle);
-        public Length BorderTopWidth => GetPropertyValueOrDefault<Length>(PropertyName.BorderTopWidth);
+        public LineWidth BorderTopWidth => GetPropertyValueOrDefault<LineWidth>(PropertyName.BorderTopWidth);
+        public BorderWidths BorderWidth => GetBorderWidth();
         public Color Color => GetPropertyValueOrDefault<Color>(PropertyName.Color);
         public double Opacity => GetPropertyValueOrDefault<double>(PropertyName.Opacity);
 
@@ -290,10 +291,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             return new Border(BorderTopWidth, BorderTopStyle, BorderTopColor);
 
         }
-        private BorderRadius GetBorderRadius() {
+        private BorderRadii GetBorderRadius() {
 
-            return new BorderRadius(BorderTopLeftRadius, BorderTopRightRadius, BorderBottomRightRadius, BorderBottomLeftRadius);
+            return new BorderRadii(BorderTopLeftRadius, BorderTopRightRadius, BorderBottomRightRadius, BorderBottomLeftRadius);
 
+        }
+        private BorderWidths GetBorderWidth() {
+
+            return new BorderWidths(BorderTopWidth, BorderRightWidth, BorderBottomWidth, BorderLeftWidth);
         }
 
         // Private members

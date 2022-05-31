@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public sealed class BorderRadius :
-        IEnumerable<ILengthOrPercentage> {
+    public sealed class BorderRadii :
+        IEnumerable<ILengthPercentage> {
 
-        public ILengthOrPercentage TopLeft { get; } = Length.Zero;
-        public ILengthOrPercentage TopRight { get; } = Length.Zero;
-        public ILengthOrPercentage BottomRight { get; } = Length.Zero;
-        public ILengthOrPercentage BottomLeft { get; } = Length.Zero;
+        public ILengthPercentage TopLeft { get; } = Length.Zero;
+        public ILengthPercentage TopRight { get; } = Length.Zero;
+        public ILengthPercentage BottomRight { get; } = Length.Zero;
+        public ILengthPercentage BottomLeft { get; } = Length.Zero;
 
-        public BorderRadius() {
+        public BorderRadii() {
         }
-        public BorderRadius(ILengthOrPercentage value) {
+        public BorderRadii(ILengthPercentage value) {
 
             TopLeft = value;
             TopRight = value;
@@ -21,7 +21,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             BottomRight = value;
 
         }
-        public BorderRadius(ILengthOrPercentage topLeftBottomRight, ILengthOrPercentage topRightBottomLeft) {
+        public BorderRadii(ILengthPercentage topLeftBottomRight, ILengthPercentage topRightBottomLeft) {
 
             TopLeft = topLeftBottomRight;
             TopRight = topRightBottomLeft;
@@ -29,7 +29,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             BottomRight = topLeftBottomRight;
 
         }
-        public BorderRadius(ILengthOrPercentage topLeft, ILengthOrPercentage topRightBottomLeft, ILengthOrPercentage bottomRight) {
+        public BorderRadii(ILengthPercentage topLeft, ILengthPercentage topRightBottomLeft, ILengthPercentage bottomRight) {
 
             TopLeft = topLeft;
             TopRight = topRightBottomLeft;
@@ -37,7 +37,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             BottomRight = bottomRight;
 
         }
-        public BorderRadius(ILengthOrPercentage topLeft, ILengthOrPercentage topRight, ILengthOrPercentage bottomRight, ILengthOrPercentage bottomLeft) {
+        public BorderRadii(ILengthPercentage topLeft, ILengthPercentage topRight, ILengthPercentage bottomRight, ILengthPercentage bottomLeft) {
 
             TopLeft = topLeft;
             TopRight = topRight;
@@ -46,7 +46,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
-        public IEnumerator<ILengthOrPercentage> GetEnumerator() {
+        public IEnumerator<ILengthPercentage> GetEnumerator() {
 
             yield return TopLeft;
             yield return TopRight;

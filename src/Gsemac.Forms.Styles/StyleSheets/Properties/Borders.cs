@@ -24,7 +24,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             Left = left;
 
         }
-        public Borders(Length width, BorderStyle style, Color color) {
+        public Borders(LineWidth width, BorderStyle style, Color color) {
 
             Top = new Border(width, style, color);
             Right = new Border(width, style, color);

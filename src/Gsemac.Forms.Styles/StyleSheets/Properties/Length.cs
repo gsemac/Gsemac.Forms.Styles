@@ -1,8 +1,8 @@
 ﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public sealed class Length :
+    public class Length :
         DimensionBase,
-        ILengthOrPercentage {
+        ILengthPercentage {
 
         // Public members
 

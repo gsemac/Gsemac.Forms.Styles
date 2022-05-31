@@ -4,14 +4,14 @@ using System.Collections.Generic;
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     public sealed class BorderRadiusProperty :
-        PropertyBase<BorderRadius> {
+        PropertyBase<BorderRadii> {
 
         // Public members
 
         public BorderRadiusProperty() :
-            this(new BorderRadius()) {
+            this(new BorderRadii()) {
         }
-        public BorderRadiusProperty(BorderRadius value) :
+        public BorderRadiusProperty(BorderRadii value) :
             base(PropertyName.BorderRadius, value, isInheritable: false) {
         }
 

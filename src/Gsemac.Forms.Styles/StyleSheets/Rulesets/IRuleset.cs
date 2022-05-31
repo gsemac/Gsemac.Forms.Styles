@@ -16,22 +16,23 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         BackgroundImage BackgroundImage { get; }
         Borders Border { get; }
         Color BorderBottomColor { get; }
-        ILengthOrPercentage BorderBottomLeftRadius { get; }
-        ILengthOrPercentage BorderBottomRightRadius { get; }
+        ILengthPercentage BorderBottomLeftRadius { get; }
+        ILengthPercentage BorderBottomRightRadius { get; }
         BorderStyle BorderBottomStyle { get; }
-        Length BorderBottomWidth { get; }
+        LineWidth BorderBottomWidth { get; }
         Color BorderLeftColor { get; }
         BorderStyle BorderLeftStyle { get; }
-        Length BorderLeftWidth { get; }
-        BorderRadius BorderRadius { get; }
+        LineWidth BorderLeftWidth { get; }
+        BorderRadii BorderRadius { get; }
         Color BorderRightColor { get; }
         BorderStyle BorderRightStyle { get; }
-        Length BorderRightWidth { get; }
+        LineWidth BorderRightWidth { get; }
         Color BorderTopColor { get; }
-        ILengthOrPercentage BorderTopLeftRadius { get; }
-        ILengthOrPercentage BorderTopRightRadius { get; }
+        ILengthPercentage BorderTopLeftRadius { get; }
+        ILengthPercentage BorderTopRightRadius { get; }
         BorderStyle BorderTopStyle { get; }
-        Length BorderTopWidth { get; }
+        LineWidth BorderTopWidth { get; }
+        BorderWidths BorderWidth { get; }
         Color Color { get; }
         double Opacity { get; }
 

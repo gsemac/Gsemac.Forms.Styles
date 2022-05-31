@@ -8,7 +8,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
-        public Length Width { get; } = Length.Zero;
+        public LineWidth Width { get; } = LineWidth.Zero;
         public BorderStyle Style { get; } = BorderStyle.None;
         public Color Color { get; } = Color.Black;
 
@@ -19,7 +19,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             Color = color;
 
         }
-        public Border(Length width, BorderStyle style, Color color) {
+        public Border(LineWidth width, BorderStyle style, Color color) {
 
             if (width is null)
                 throw new ArgumentNullException(nameof(width));

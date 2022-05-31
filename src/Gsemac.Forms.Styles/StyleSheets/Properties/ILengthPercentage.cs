@@ -1,6 +1,6 @@
 ﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public interface ILengthOrPercentage :
+    public interface ILengthPercentage :
         IDimension {
     }
 

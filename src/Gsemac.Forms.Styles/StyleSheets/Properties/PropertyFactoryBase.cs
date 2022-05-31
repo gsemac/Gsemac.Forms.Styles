@@ -51,14 +51,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 case PropertyName.BorderBottomRightRadius:
                 case PropertyName.BorderTopLeftRadius:
                 case PropertyName.BorderTopRightRadius:
-                    return CreatePropertyFromSingleArgument<ILengthOrPercentage>(propertyName, arguments, ruleset);
+                    return CreatePropertyFromSingleArgument<ILengthPercentage>(propertyName, arguments, ruleset);
 
                 case PropertyName.BorderBottomWidth:
                 case PropertyName.BorderLeftWidth:
                 case PropertyName.BorderRightWidth:
                 case PropertyName.BorderTopWidth:
-                case PropertyName.BorderWidth:
-                    return CreatePropertyFromSingleArgument<Length>(propertyName, arguments, ruleset);
+                    return CreatePropertyFromSingleArgument<LineWidth>(propertyName, arguments, ruleset);
 
                 case PropertyName.BorderBottomStyle:
                 case PropertyName.BorderLeftStyle:
@@ -66,6 +65,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 case PropertyName.BorderStyle:
                 case PropertyName.BorderTopStyle:
                     return CreatePropertyFromSingleArgument<BorderStyle>(propertyName, arguments, ruleset);
+
+                case PropertyName.BorderWidth:
+                    return CreateBorderWidthProperty(arguments, ruleset);
 
                 case PropertyName.BackgroundImage:
                     return CreateBackgroundImageProperty(arguments, ruleset);
@@ -244,9 +246,20 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 throw new ArgumentNullException(nameof(ruleset));
 
             if (arguments is null || arguments.Length <= 0)
-                return new BorderRadiusProperty(GetInitialValue<BorderRadius>(PropertyName.BorderRadius, ruleset));
+                return new BorderRadiusProperty(GetInitialValue<BorderRadii>(PropertyName.BorderRadius, ruleset));
 
             return new BorderRadiusProperty(CreateBorderRadius(arguments));
+
+        }
+        private IProperty CreateBorderWidthProperty(IPropertyValue[] arguments, IRuleset ruleset) {
+
+            if (ruleset is null)
+                throw new ArgumentNullException(nameof(ruleset));
+
+            if (arguments is null || arguments.Length <= 0)
+                return new BorderWidthProperty(GetInitialValue<BorderWidths>(PropertyName.BorderWidth, ruleset));
+
+            return new BorderWidthProperty(CreateBorderWidth(arguments));
 
         }
 
@@ -307,9 +320,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             //return new Border(borderWidth, borderStyle.Value, borderColor);
 
         }
-        private static BorderRadius CreateBorderRadius(IPropertyValue[] arguments) {
+        private static BorderRadii CreateBorderRadius(IPropertyValue[] arguments) {
 
-            if (TryGetValueAsTypeDirectly(arguments, out BorderRadius value))
+            if (TryGetValueAsTypeDirectly(arguments, out BorderRadii value))
                 return value;
 
             Length[] measurments = arguments
@@ -317,13 +330,32 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 .ToArray();
 
             if (measurments.Count() == 4)
-                return new BorderRadius(measurments[0], measurments[1], measurments[2], measurments[3]);
+                return new BorderRadii(measurments[0], measurments[1], measurments[2], measurments[3]);
             else if (measurments.Count() == 3)
-                return new BorderRadius(measurments[0], measurments[1], measurments[2]);
+                return new BorderRadii(measurments[0], measurments[1], measurments[2]);
             else if (measurments.Count() == 2)
-                return new BorderRadius(measurments[0], measurments[1]);
+                return new BorderRadii(measurments[0], measurments[1]);
             else
-                return new BorderRadius(measurments[0]);
+                return new BorderRadii(measurments[0]);
+
+        }
+        private static BorderWidths CreateBorderWidth(IPropertyValue[] arguments) {
+
+            if (TryGetValueAsTypeDirectly(arguments, out BorderWidths value))
+                return value;
+
+            LineWidth[] measurments = arguments
+                .Select(arg => arg.As<LineWidth>())
+                .ToArray();
+
+            if (measurments.Count() == 4)
+                return new BorderWidths(measurments[0], measurments[1], measurments[2], measurments[3]);
+            else if (measurments.Count() == 3)
+                return new BorderWidths(measurments[0], measurments[1], measurments[2]);
+            else if (measurments.Count() == 2)
+                return new BorderWidths(measurments[0], measurments[1]);
+            else
+                return new BorderWidths(measurments[0]);
 
         }
 

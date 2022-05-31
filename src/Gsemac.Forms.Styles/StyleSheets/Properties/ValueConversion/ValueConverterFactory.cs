@@ -40,6 +40,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
             RegisterValueConverter(new StringToColorConverter());
             RegisterValueConverter(new StringToDoubleConverter());
             RegisterValueConverter(new StringToLengthConverter());
+            RegisterValueConverter(new StringToLineWidthConverter());
             RegisterValueConverter(new StringToPercentageConverter());
 
         }
