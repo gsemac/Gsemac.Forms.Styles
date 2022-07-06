@@ -24,8 +24,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public int Count => properties.Count;
         public bool IsReadOnly => properties.IsReadOnly;
 
+        public StyleOrigin Origin { get; } = StyleOrigin.User;
         public ISelector Selector { get; }
 
+        public Color AccentColor => GetPropertyValueOrDefault<Color>(PropertyName.AccentColor);
         public Color BackgroundColor => GetPropertyValueOrDefault<Color>(PropertyName.BackgroundColor);
         public BackgroundImage BackgroundImage => GetPropertyValueOrDefault<BackgroundImage>(PropertyName.BackgroundImage);
         public Borders Border => GetBorder();
@@ -77,15 +79,15 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             if (property is null)
                 throw new ArgumentNullException(nameof(property));
 
-            // If the property has child properties (e.g. is a shorthand property), add those properties instead.
+            // If the property has longhand properties (e.g. is a shorthand property), add those properties instead.
             // This way, when the user queries for the shorthand property, they always get the most up-to-date values.
 
-            IEnumerable<IProperty> childProperties = property.GetChildProperties(propertyFactory);
+            IEnumerable<IProperty> longhandProperties = property.GetLonghandProperties(propertyFactory);
 
-            if (childProperties.Any()) {
+            if (longhandProperties.Any()) {
 
-                foreach (IProperty childProperty in childProperties)
-                    Add(childProperty);
+                foreach (IProperty longhandProperty in longhandProperties)
+                    Add(longhandProperty);
 
             }
             else if (property.IsVariable) {
@@ -224,6 +226,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         protected RulesetBase(ISelector selector) :
             this(selector, PropertyFactory.Default) {
         }
+        protected RulesetBase(ISelector selector, StyleOrigin origin) :
+          this(selector, PropertyFactory.Default) {
+
+            Origin = origin;
+
+        }
         protected RulesetBase(ISelector selector, IPropertyFactory propertyFactory) :
             this(propertyFactory) {
 
@@ -249,6 +257,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         // TODO: The property dictionary should be case-insensitive
 
+        private readonly IPropertyFactory propertyFactory;
         private readonly IDictionary<string, IProperty> properties = new OrderedDictionary<string, IProperty>();
         private readonly IDictionary<string, IProperty> variableReferencingProperties = new Dictionary<string, IProperty>();
 
@@ -300,10 +309,6 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
             return new BorderWidths(BorderTopWidth, BorderRightWidth, BorderBottomWidth, BorderLeftWidth);
         }
-
-        // Private members
-
-        private readonly IPropertyFactory propertyFactory;
 
     }
 

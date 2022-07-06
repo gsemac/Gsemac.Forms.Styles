@@ -12,7 +12,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
             if (property is null)
                 throw new ArgumentNullException(nameof(property));
 
-            return property.GetChildProperties(PropertyFactory.Default);
+            return property.GetLonghandProperties(PropertyFactory.Default);
 
         }
 

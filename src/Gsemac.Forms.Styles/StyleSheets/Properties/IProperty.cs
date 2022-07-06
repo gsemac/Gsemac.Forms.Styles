@@ -14,7 +14,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         Type ValueType { get; }
 
-        IEnumerable<IProperty> GetChildProperties(IPropertyFactory propertyFactory);
+        IEnumerable<IProperty> GetLonghandProperties(IPropertyFactory propertyFactory);
 
     }
 

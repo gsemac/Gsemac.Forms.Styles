@@ -23,7 +23,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public Type ValueType => Value.Type;
 
-        public virtual IEnumerable<IProperty> GetChildProperties(IPropertyFactory propertyFactory) {
+        public virtual IEnumerable<IProperty> GetLonghandProperties(IPropertyFactory propertyFactory) {
 
             return Enumerable.Empty<IProperty>();
 

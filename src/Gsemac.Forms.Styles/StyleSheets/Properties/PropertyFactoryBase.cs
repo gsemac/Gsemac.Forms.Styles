@@ -35,6 +35,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 case PropertyName.Border:
                     return CreateBorderProperty(arguments, ruleset);
 
+                case PropertyName.AccentColor:
                 case PropertyName.BackgroundColor:
                 case PropertyName.BorderBottomColor:
                 case PropertyName.BorderColor:
@@ -106,6 +107,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 return null;
 
             switch (propertyName.ToLowerInvariant()) {
+
+                case PropertyName.AccentColor:
+                    return PropertyValue.Auto;
 
                 case PropertyName.BackgroundImage:
                     return PropertyValue.Create(new BackgroundImage());

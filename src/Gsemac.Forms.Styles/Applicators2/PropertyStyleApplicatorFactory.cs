@@ -4,12 +4,12 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    public class UserPaintControlStyleApplicatorFactory :
-        INodeStyleApplicatorFactory {
+    public class PropertyStyleApplicatorFactory :
+        IStyleApplicatorFactory {
 
         // Public members
 
-        public UserPaintControlStyleApplicatorFactory() {
+        public PropertyStyleApplicatorFactory() {
 
             InitializeApplicatorDictionary();
 
@@ -20,7 +20,10 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             if (applicators.TryGetValue(forType, out var applicator))
                 return applicator;
 
-            return new NullNodeStyleApplicator();
+            if (typeof(Control).IsAssignableFrom(forType))
+                return new ControlStyleApplicator<Control>();
+
+            return new NoStyleApplicator();
 
         }
 
@@ -30,7 +33,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         private void InitializeApplicatorDictionary() {
 
-            applicators.Add(typeof(Button), new UserPaintControlStyleApplicator<Button>());
+            applicators.Add(typeof(Button), new ButtonStyleApplicator());
 
         }
 

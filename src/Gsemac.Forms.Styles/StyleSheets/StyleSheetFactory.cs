@@ -69,7 +69,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                                 }
 
-                                if (property != null)
+                                if (property is object)
                                     currentRuleset.Add(property);
 
                             }
@@ -79,7 +79,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
                         case StyleSheetLexerTokenType.Tag:
                         case StyleSheetLexerTokenType.Class:
                         case StyleSheetLexerTokenType.Id:
-                            currentRuleset = new Ruleset(ReadSelector(lexer));
+                            currentRuleset = new Ruleset(ReadSelector(lexer), options.Origin);
                             continue;
 
                     }

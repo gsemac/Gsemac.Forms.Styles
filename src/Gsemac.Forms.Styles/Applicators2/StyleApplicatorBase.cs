@@ -11,8 +11,8 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         public abstract void ApplyStyle(object obj, IRuleset ruleset);
 
-        public virtual void InitializeObject(object obj) { }
-        public virtual void DeinitializeObject(object obj) { }
+        public virtual void InitializeStyle(object obj) { }
+        public virtual void DeinitializeStyle(object obj) { }
 
     }
 
@@ -24,21 +24,21 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         public abstract void ApplyStyle(T obj, IRuleset ruleset);
 
-        public virtual void InitializeObject(T obj) { }
-        public virtual void DeinitializeObject(T obj) { }
+        public virtual void InitializeStyle(T obj) { }
+        public virtual void DeinitializeStyle(T obj) { }
 
-        public override void InitializeObject(object obj) {
+        public override void InitializeStyle(object obj) {
 
-            ValidateTarget(obj);
+            ValidateStyleTarget(obj);
 
-            InitializeObject((T)obj);
+            InitializeStyle((T)obj);
 
         }
-        public override void DeinitializeObject(object obj) {
+        public override void DeinitializeStyle(object obj) {
 
-            ValidateTarget(obj);
+            ValidateStyleTarget(obj);
 
-            DeinitializeObject((T)obj);
+            DeinitializeStyle((T)obj);
 
         }
         public override void ApplyStyle(object obj, IRuleset ruleset) {
@@ -49,7 +49,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             if (ruleset is null)
                 throw new ArgumentNullException(nameof(ruleset));
 
-            ValidateTarget(obj);
+            ValidateStyleTarget(obj);
 
             ApplyStyle((T)obj, ruleset);
 
@@ -57,7 +57,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Private members
 
-        private void ValidateTarget(object obj) {
+        private void ValidateStyleTarget(object obj) {
 
             if (obj is null)
                 throw new ArgumentNullException(nameof(obj));

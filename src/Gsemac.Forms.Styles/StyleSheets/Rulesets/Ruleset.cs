@@ -18,6 +18,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public Ruleset(ISelector selector) :
             base(selector) {
         }
+        public Ruleset(ISelector selector, StyleOrigin origin) :
+           base(selector, origin) {
+        }
         public Ruleset(ISelector selector, IPropertyFactory propertyFactory) :
             base(selector, propertyFactory) {
         }

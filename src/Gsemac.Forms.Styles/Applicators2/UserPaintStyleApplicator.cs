@@ -6,15 +6,15 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    internal class UserPaintControlStyleApplicator<T> :
+    internal class UserPaintStyleApplicator<T> :
         ControlStyleApplicatorBase<T> where T : Control {
 
         // Public members
 
-        public UserPaintControlStyleApplicator() :
-            this(ControlStyleRendererFactory.Default) {
+        public UserPaintStyleApplicator() :
+            this(ControlRendererFactory.Default) {
         }
-        public UserPaintControlStyleApplicator(IStyleRendererFactory styleRendererFactory) {
+        public UserPaintStyleApplicator(IStyleRendererFactory styleRendererFactory) {
 
             if (styleRendererFactory is null)
                 throw new ArgumentNullException(nameof(styleRendererFactory));
@@ -23,7 +23,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         }
 
-        public override void InitializeObject(T obj) {
+        public override void InitializeStyle(T obj) {
 
             if (obj is null)
                 throw new ArgumentNullException(nameof(obj));
@@ -37,10 +37,10 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             }
 
-            base.InitializeObject(obj);
+            base.InitializeStyle(obj);
 
         }
-        public override void DeinitializeObject(T obj) {
+        public override void DeinitializeStyle(T obj) {
 
             if (obj is null)
                 throw new ArgumentNullException(nameof(obj));
@@ -49,7 +49,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             styles.Remove(obj);
 
-            base.DeinitializeObject(obj);
+            base.DeinitializeStyle(obj);
 
         }
 

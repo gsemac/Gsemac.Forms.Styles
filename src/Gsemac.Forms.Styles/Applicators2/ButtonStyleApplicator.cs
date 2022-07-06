@@ -7,8 +7,8 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    public class ButtonPropertyControlStyleApplicator :
-         PropertyControlStyleApplicator<Button> {
+    public class ButtonStyleApplicator :
+         ControlStyleApplicator<Button> {
 
         // Public members
 

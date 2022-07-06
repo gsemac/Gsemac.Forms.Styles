@@ -13,7 +13,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public static PropertyValue Null => new PropertyValue(typeof(object), null);
 
+        public static PropertyValue Auto => Create("auto");
+        public static PropertyValue Inherit => Create("inherit");
         public static PropertyValue Initial => Create("initial");
+        public static PropertyValue Revert => Create("revert");
+        public static PropertyValue RevertLayer => Create("revert-layer");
+        public static PropertyValue Unset => Create("unset");
 
         public static PropertyValue<T> Create<T>(T value) {
 

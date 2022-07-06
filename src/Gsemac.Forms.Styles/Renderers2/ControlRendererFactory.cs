@@ -4,14 +4,14 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers2 {
 
-    public class ControlStyleRendererFactory :
+    public class ControlRendererFactory :
         IStyleRendererFactory {
 
         // Public members
 
-        public static ControlStyleRendererFactory Default => new ControlStyleRendererFactory();
+        public static ControlRendererFactory Default => new ControlRendererFactory();
 
-        public ControlStyleRendererFactory() {
+        public ControlRendererFactory() {
 
             InitializeApplicatorDictionary();
 
@@ -32,7 +32,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         private void InitializeApplicatorDictionary() {
 
-            renderers.Add(typeof(Button), new ButtonStyleRenderer());
+            renderers.Add(typeof(Button), new ButtonRenderer());
 
         }
 

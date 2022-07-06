@@ -7,31 +7,34 @@ namespace Gsemac.Forms.Styles.StyleSheets.Extensions {
 
         // Public members
 
-        public static IStyleSheet Parse(this IStyleSheetFactory styleSheetFactory, string input) {
+        public static IStyleSheet Parse(this IStyleSheetFactory styleSheetFactory, string value) {
 
-            return styleSheetFactory.Parse(input, StyleSheetOptions.Default);
+            return styleSheetFactory.Parse(value, StyleSheetOptions.Default);
 
         }
-        public static IStyleSheet Parse(this IStyleSheetFactory styleSheetFactory, string input, IStyleSheetOptions options) {
+        public static IStyleSheet Parse(this IStyleSheetFactory styleSheetFactory, string value, IStyleSheetOptions options) {
 
-            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(input)))
+            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(value)))
                 return styleSheetFactory.FromStream(stream, options);
 
         }
+
         public static IStyleSheet FromStream(this IStyleSheetFactory styleSheetFactory, Stream stream) {
 
-            return styleSheetFactory.FromStream(stream, StyleSheetOptions.Default);
+            return FromStream(styleSheetFactory, stream, StyleSheetOptions.Default);
 
         }
+        public static IStyleSheet FromStream(this IStyleSheetFactory styleSheetFactory, Stream stream, IStyleSheetOptions options) {
+
+            return styleSheetFactory.FromStream(stream, options);
+
+        }
+
         public static IStyleSheet FromFile(this IStyleSheetFactory styleSheetFactory, string filePath) {
 
             // The FileReader is set such that files are read relative to the stylesheet.
 
-            return styleSheetFactory.FromFile(filePath, new StyleSheetOptions() {
-                FileReader = new FileSystemFileReader() {
-                    RootPath = Path.GetDirectoryName(filePath)
-                }
-            });
+            return styleSheetFactory.FromFile(filePath);
 
         }
         public static IStyleSheet FromFile(this IStyleSheetFactory styleSheetFactory, string filePath, IStyleSheetOptions options) {

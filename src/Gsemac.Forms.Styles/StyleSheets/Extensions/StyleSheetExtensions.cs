@@ -45,7 +45,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Extensions {
 
             IRuleset ruleset = new Ruleset();
 
-            ruleset.InheritPropertiesFrom(parentRuleset);
+            ruleset.Inherit(parentRuleset);
             ruleset.AddRange(styleSheet.GetRuleset(node));
 
             return ruleset;

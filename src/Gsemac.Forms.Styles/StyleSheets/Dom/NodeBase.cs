@@ -92,7 +92,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
             if (Parent is object) {
 
-                ruleset.InheritPropertiesFrom(Parent.GetComputedStyle());
+                ruleset.Inherit(Parent.GetComputedStyle());
 
             }
 

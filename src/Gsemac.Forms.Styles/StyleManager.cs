@@ -16,7 +16,7 @@ namespace Gsemac.Forms.Styles {
 
         public ICollection<IStyleSheet> StyleSheets { get; } = new List<IStyleSheet>();
 
-        public StyleManager(INodeStyleApplicatorFactory styleApplicatorFactory) {
+        public StyleManager(IStyleApplicatorFactory styleApplicatorFactory) {
 
             if (styleApplicatorFactory is null)
                 throw new ArgumentNullException(nameof(styleApplicatorFactory));
@@ -154,7 +154,7 @@ namespace Gsemac.Forms.Styles {
         }
 
         private readonly IDictionary<Control, ControlInfo> controlInfo = new Dictionary<Control, ControlInfo>();
-        private readonly INodeStyleApplicatorFactory styleApplicatorFactory;
+        private readonly IStyleApplicatorFactory styleApplicatorFactory;
         private readonly IMessageFilter messageFilter;
         private bool addedMessageFilter;
         private bool disposedValue;
@@ -239,7 +239,7 @@ namespace Gsemac.Forms.Styles {
                     // Apply the new styles to the control.
 
                     if (!info.StyleInitialized)
-                        info.StyleApplicator.InitializeObject(node.Control);
+                        info.StyleApplicator.InitializeStyle(node.Control);
 
                     info.StyleApplicator.ApplyStyle(node.Control, node.GetComputedStyle());
 
@@ -249,7 +249,7 @@ namespace Gsemac.Forms.Styles {
                     // Restore the control to its default appearance.
 
                     if (info.StyleApplicator is object)
-                        info.StyleApplicator.DeinitializeObject(node.Control);
+                        info.StyleApplicator.DeinitializeStyle(node.Control);
 
                     info.StyleInitialized = false;
 

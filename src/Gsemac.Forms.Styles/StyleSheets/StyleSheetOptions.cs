@@ -5,10 +5,9 @@
 
         // Public members
 
-        public bool CacheRulesets { get; set; } = true;
+        public string ColorScheme { get; set; }
         public bool IgnoreInvalidProperties { get; set; } = false;
-
-        public IFileReader FileReader { get; set; } = new FileSystemFileReader();
+        public StyleOrigin Origin { get; set; } = StyleOrigin.User;
 
         public static StyleSheetOptions Default => new StyleSheetOptions();
 

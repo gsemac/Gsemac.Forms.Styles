@@ -15,7 +15,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             base(PropertyName.BorderRadius, value, isInheritable: false) {
         }
 
-        public override IEnumerable<IProperty> GetChildProperties(IPropertyFactory propertyFactory) {
+        public override IEnumerable<IProperty> GetLonghandProperties(IPropertyFactory propertyFactory) {
 
             yield return propertyFactory.Create(PropertyName.BorderTopLeftRadius, PropertyValue.Create(Value.TopLeft));
             yield return propertyFactory.Create(PropertyName.BorderTopRightRadius, PropertyValue.Create(Value.TopRight));

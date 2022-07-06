@@ -10,8 +10,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         IProperty this[string propertyName] { get; }
 
+        StyleOrigin Origin { get; }
         ISelector Selector { get; }
 
+        Color AccentColor { get; }
         Color BackgroundColor { get; }
         BackgroundImage BackgroundImage { get; }
         Borders Border { get; }

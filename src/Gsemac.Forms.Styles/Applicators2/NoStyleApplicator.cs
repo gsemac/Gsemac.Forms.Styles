@@ -2,7 +2,7 @@
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    internal class NullNodeStyleApplicator :
+    internal class NoStyleApplicator :
         StyleApplicatorBase {
 
         // Public members

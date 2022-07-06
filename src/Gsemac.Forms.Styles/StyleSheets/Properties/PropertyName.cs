@@ -4,6 +4,7 @@
 
         // Public members
 
+        public const string AccentColor = "accent-color";
         public const string Background = "background";
         public const string BackgroundColor = "background-color";
         public const string BackgroundImage = "background-image";

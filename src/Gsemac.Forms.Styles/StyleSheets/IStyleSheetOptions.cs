@@ -2,10 +2,9 @@
 
     public interface IStyleSheetOptions {
 
-        bool CacheRulesets { get; set; }
-        bool IgnoreInvalidProperties { get; set; }
-
-        IFileReader FileReader { get; set; }
+        string ColorScheme { get; }
+        bool IgnoreInvalidProperties { get; }
+        StyleOrigin Origin { get; }
 
     }
 
