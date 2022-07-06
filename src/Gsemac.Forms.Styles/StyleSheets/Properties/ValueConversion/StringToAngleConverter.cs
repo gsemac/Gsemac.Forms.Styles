@@ -7,7 +7,7 @@
 
         public override Angle Convert(string value) {
 
-            var baseConverter = new StringToDimensionConverter(AngleUnit.GetUnits());
+            var baseConverter = new StringToDimensionConverter(Units.GetAngleUnits());
 
             IDimension dimension = baseConverter.Convert(value);
 

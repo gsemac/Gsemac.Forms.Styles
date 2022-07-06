@@ -16,16 +16,16 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             switch (dimension.Unit) {
 
-                case AngleUnit.Degree:
+                case Units.Degree:
                     return dimension.Value;
 
-                case AngleUnit.Gradian:
+                case Units.Gradian:
                     return MathUtilities.GradiansToDegrees(dimension.Value);
 
-                case AngleUnit.Radian:
+                case Units.Radian:
                     return MathUtilities.RadiansToDegrees(dimension.Value);
 
-                case AngleUnit.Turn:
+                case Units.Turn:
                     return MathUtilities.TurnsToDegrees(dimension.Value);
 
                 default:
@@ -47,7 +47,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             switch (dimension.Unit) {
 
-                case LengthUnit.Pixel:
+                case Units.Pixel:
                     return (int)dimension.Value;
 
                 default:

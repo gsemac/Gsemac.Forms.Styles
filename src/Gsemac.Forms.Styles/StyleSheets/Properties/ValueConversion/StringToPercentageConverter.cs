@@ -7,7 +7,7 @@
 
         public override Percentage Convert(string value) {
 
-            var baseConverter = new StringToDimensionConverter(PercentageUnit.GetUnits());
+            var baseConverter = new StringToDimensionConverter(Units.GetPercentageUnits());
 
             IDimension dimension = baseConverter.Convert(value);
 

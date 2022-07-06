@@ -9,10 +9,10 @@
         public static Length Zero => new Length(0, string.Empty);
 
         public Length(double value) :
-            this(value, LengthUnit.Pixel) {
+            this(value, Units.Pixel) {
         }
         public Length(double value, string unit) :
-            base(value, unit, LengthUnit.GetUnits()) {
+            base(value, unit, Units.GetLengthUnits()) {
         }
 
     }

@@ -8,10 +8,10 @@
         public static Angle Zero => new Angle(0, string.Empty);
 
         public Angle(double value) :
-            this(value, AngleUnit.Degree) {
+            this(value, Properties.Units.Degree) {
         }
         public Angle(double value, string unit) :
-            base(value, unit, AngleUnit.GetUnits()) {
+            base(value, unit, Properties.Units.GetAngleUnits()) {
         }
 
     }

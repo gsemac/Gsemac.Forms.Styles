@@ -7,7 +7,7 @@
 
         public override Length Convert(string value) {
 
-            var baseConverter = new StringToDimensionConverter(LengthUnit.GetUnits());
+            var baseConverter = new StringToDimensionConverter(Units.GetLengthUnits());
 
             IDimension dimension = baseConverter.Convert(value);
 
@@ -15,7 +15,7 @@
             string dimensionUnit = dimension.Unit;
 
             if (dimensionValue > 0 && string.IsNullOrWhiteSpace(dimensionUnit))
-                dimensionUnit = LengthUnit.Pixel;
+                dimensionUnit = Units.Pixel;
 
             return new Length(dimensionValue, dimensionUnit);
 
