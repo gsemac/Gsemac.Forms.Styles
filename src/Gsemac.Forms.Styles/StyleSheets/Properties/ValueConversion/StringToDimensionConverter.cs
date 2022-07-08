@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.Properties;
+﻿using Gsemac.Data.ValueConversion;
+using Gsemac.Forms.Styles.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +21,15 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
         }
 
-        public override IDimension Convert(string value) {
+        public override bool TryConvert(string value, out IDimension result) {
+
+            result = default;
 
             if (value is null)
-                throw new ArgumentNullException(nameof(value));
+                return false;
 
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException(string.Format(ExceptionMessages.MalformedPropertyValueAsType, value, DestinationType), nameof(value));
+                return false;
 
             string measurementsPattern = string.Join("|", validUnits);
 
@@ -40,11 +43,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
                 string unit = m.Groups["unit"].Value;
 
-                return new ParsedDimension(parsedValue, unit);
+                result = new ParsedDimension(parsedValue, unit);
 
             }
 
-            throw new ArgumentException(string.Format(ExceptionMessages.MalformedPropertyValueAsType, value, DestinationType), nameof(value));
+            return result is object;
 
         }
 

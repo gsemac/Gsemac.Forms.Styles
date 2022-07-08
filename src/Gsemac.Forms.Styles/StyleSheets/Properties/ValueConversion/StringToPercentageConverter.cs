@@ -1,17 +1,27 @@
-﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
+﻿using Gsemac.Data.ValueConversion;
+
+namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
     internal class StringToPercentageConverter :
         ValueConverterBase<string, Percentage> {
 
         // Public members
 
-        public override Percentage Convert(string value) {
+        public override bool TryConvert(string value, out Percentage result) {
+
+            result = default;
 
             var baseConverter = new StringToDimensionConverter(Units.GetPercentageUnits());
 
-            IDimension dimension = baseConverter.Convert(value);
+            if (baseConverter.TryConvert(value, out IDimension dimension)) {
 
-            return new Percentage(dimension.Value);
+                result = new Percentage(dimension.Value);
+
+                return true;
+
+            }
+
+            return false;
 
         }
 

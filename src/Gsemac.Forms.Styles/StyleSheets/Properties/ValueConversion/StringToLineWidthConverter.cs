@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gsemac.Data.ValueConversion;
+using System;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
@@ -7,24 +8,38 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
         // Public members
 
-        public override LineWidth Convert(string value) {
+        public override bool TryConvert(string value, out LineWidth result) {
+
+            result = default;
 
             if (value is null)
-                throw new ArgumentNullException(nameof(value));
+                return false;
 
             switch (value.Trim().ToLowerInvariant()) {
 
                 case "thin":
-                    return LineWidth.Thin;
+                    result = LineWidth.Thin;
+                    return true;
 
                 case "medium":
-                    return LineWidth.Medium;
+                    result = LineWidth.Medium;
+                    return true;
 
                 case "thick":
-                    return LineWidth.Thick;
+                    result = LineWidth.Thick;
+                    return true;
 
                 default:
-                    return new LineWidth(new StringToLengthConverter().Convert(value));
+
+                    if (new StringToLengthConverter().TryConvert(value, out Length length)) {
+
+                        result = new LineWidth(length);
+
+                        return true;
+
+                    }
+
+                    return false;
 
             }
 

@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.Properties;
+﻿using Gsemac.Data.ValueConversion;
+using Gsemac.Forms.Styles.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion;
 using System;
 
@@ -33,7 +34,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             }
             else {
 
-                IValueConverter valueConverter = ValueConverterFactory.Default.Create(propertyValue.Type, type);
+                IValueConverter valueConverter = StyleValueConverterFactory.Default.Create(propertyValue.Type, type);
 
                 if (valueConverter is object) {
 

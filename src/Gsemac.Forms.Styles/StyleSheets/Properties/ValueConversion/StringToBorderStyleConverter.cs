@@ -1,5 +1,4 @@
-﻿using Gsemac.Forms.Styles.Properties;
-using System;
+﻿using Gsemac.Data.ValueConversion;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
@@ -8,45 +7,57 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
         // Public members
 
-        public override BorderStyle Convert(string value) {
+        public override bool TryConvert(string value, out BorderStyle result) {
+
+            result = default;
 
             if (value is null)
-                throw new ArgumentNullException(nameof(value));
+                return false;
 
             switch (value.Trim().ToLowerInvariant()) {
 
                 case "dotted":
-                    return BorderStyle.Dotted;
+                    result = BorderStyle.Dotted;
+                    return true;
 
                 case "dashed":
-                    return BorderStyle.Dashed;
+                    result = BorderStyle.Dashed;
+                    return true;
 
                 case "solid":
-                    return BorderStyle.Solid;
+                    result = BorderStyle.Solid;
+                    return true;
 
                 case "double":
-                    return BorderStyle.Double;
+                    result = BorderStyle.Double;
+                    return true;
 
                 case "groove":
-                    return BorderStyle.Groove;
+                    result = BorderStyle.Groove;
+                    return true;
 
                 case "ridge":
-                    return BorderStyle.Ridge;
+                    result = BorderStyle.Ridge;
+                    return true;
 
                 case "inset":
-                    return BorderStyle.Inset;
+                    result = BorderStyle.Inset;
+                    return true;
 
                 case "outset":
-                    return BorderStyle.Outset;
+                    result = BorderStyle.Outset;
+                    return true;
 
                 case "none":
-                    return BorderStyle.None;
+                    result = BorderStyle.None;
+                    return true;
 
                 case "hidden":
-                    return BorderStyle.Hidden;
+                    result = BorderStyle.Hidden;
+                    return true;
 
                 default:
-                    throw new ArgumentException(string.Format(ExceptionMessages.MalformedPropertyValueAsType, value, DestinationType), nameof(value));
+                    return false;
 
             }
 

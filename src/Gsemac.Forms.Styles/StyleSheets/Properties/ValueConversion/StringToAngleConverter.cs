@@ -1,20 +1,30 @@
-﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
+﻿using Gsemac.Data.ValueConversion;
+
+namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
     internal class StringToAngleConverter :
         ValueConverterBase<string, Angle> {
 
         // Public members
 
-        public override Angle Convert(string value) {
+        public override bool TryConvert(string value, out Angle result) {
+
+            result = default;
 
             var baseConverter = new StringToDimensionConverter(Units.GetAngleUnits());
 
-            IDimension dimension = baseConverter.Convert(value);
+            if (baseConverter.TryConvert(value, out IDimension dimension)) {
 
-            double dimensionValue = dimension.Value;
-            string dimensionUnit = dimension.Unit;
+                double dimensionValue = dimension.Value;
+                string dimensionUnit = dimension.Unit;
 
-            return new Angle(dimensionValue, dimensionUnit);
+                result = new Angle(dimensionValue, dimensionUnit);
+
+                return true;
+
+            }
+
+            return false;
 
         }
 

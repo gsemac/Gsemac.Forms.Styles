@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Gsemac.Data.ValueConversion;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
@@ -7,42 +7,53 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
         // Public members
 
-        public override string Convert(BorderStyle value) {
+        public override bool TryConvert(BorderStyle value, out string result) {
 
             switch (value) {
 
                 case BorderStyle.Dotted:
-                    return "dotted";
+                    result = "dotted";
+                    return true;
 
                 case BorderStyle.Dashed:
-                    return "dashed";
+                    result = "dashed";
+                    return true;
 
                 case BorderStyle.Solid:
-                    return "solid";
+                    result = "solid";
+                    return true;
 
                 case BorderStyle.Double:
-                    return "double";
+                    result = "double";
+                    return true;
 
                 case BorderStyle.Groove:
-                    return "groove";
+                    result = "groove";
+                    return true;
 
                 case BorderStyle.Ridge:
-                    return "ridge";
+                    result = "ridge";
+                    return true;
 
                 case BorderStyle.Inset:
-                    return "inset";
+                    result = "inset";
+                    return true;
 
                 case BorderStyle.Outset:
-                    return "outset";
+                    result = "outset";
+                    return true;
 
                 case BorderStyle.None:
-                    return "none";
+                    result = "none";
+                    return true;
 
                 case BorderStyle.Hidden:
-                    return "hidden";
+                    result = "hidden";
+                    return true;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(value));
+                    result = default;
+                    return false;
 
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using Gsemac.Data.ValueConversion;
+using System.Drawing;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
@@ -7,9 +8,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
         // Public members
 
-        public override string Convert(Color value) {
+        public override bool TryConvert(Color value, out string result) {
 
-            return ColorTranslator.ToHtml(value).ToLowerInvariant();
+            result = ColorTranslator.ToHtml(value).ToLowerInvariant();
+
+            return true;
 
         }
 

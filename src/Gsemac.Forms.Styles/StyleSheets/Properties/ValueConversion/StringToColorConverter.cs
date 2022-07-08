@@ -1,4 +1,4 @@
-﻿using Gsemac.Forms.Styles.Properties;
+﻿using Gsemac.Data.ValueConversion;
 using System;
 using System.Drawing;
 
@@ -9,24 +9,46 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
         // Public members
 
-        public override Color Convert(string value) {
+        public override bool TryConvert(string value, out Color result) {
+
+            result = default;
 
             if (value is null)
-                throw new ArgumentNullException(nameof(value));
+                return false;
 
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException(string.Format(ExceptionMessages.MalformedPropertyValueAsType, value, DestinationType), nameof(value));
+                return false;
 
-            value = value.Replace("grey", "gray");
+            value = value.ToLowerInvariant()
+                .Replace("grey", "gray");
 
-            switch (value.ToLowerInvariant()) {
+            switch (value) {
 
                 case Keyword.CanvasText:
-                    return SystemColorPalette.Default.CanvasText;
+                    result = SystemColorPalette.Default.CanvasText;
+                    return true;
+
+                case Keyword.Initial:
+                    // Ideally, we should never end up trying to access a color property with the value "initial"
+                    result = Color.Black;
+                    return true;
+
+                default:
+
+                    try {
+
+                        result = ColorTranslator.FromHtml(value);
+
+                    }
+                    catch (Exception) {
+
+                        return false;
+
+                    }
+
+                    return true;
 
             }
-
-            return ColorTranslator.FromHtml(value);
 
         }
 
