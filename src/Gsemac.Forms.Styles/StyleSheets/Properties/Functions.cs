@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    internal static class PropertyFunctions {
+    internal static class Functions {
 
         // Public members
 
@@ -16,19 +16,19 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             switch (functionName) {
 
-                case PropertyFunctionName.LinearGradient:
+                case FunctionName.LinearGradient:
                     return PropertyValue.Create(LinearGradient(arguments));
 
-                case PropertyFunctionName.Rgb:
+                case FunctionName.Rgb:
                     return PropertyValue.Create(Rgb(arguments));
 
-                case PropertyFunctionName.Rgba:
+                case FunctionName.Rgba:
                     return PropertyValue.Create(Rgba(arguments));
 
-                case PropertyFunctionName.Url:
+                case FunctionName.Url:
                     return PropertyValue.Create(Url(arguments));
 
-                case PropertyFunctionName.Var:
+                case FunctionName.Var:
                     return PropertyValue.Create(Var(arguments));
 
                 default:
@@ -43,7 +43,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             const int minimumArguments = 2;
 
             if (arguments.Length < minimumArguments)
-                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, PropertyFunctionName.LinearGradient, minimumArguments, arguments.Length));
+                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.LinearGradient, minimumArguments, arguments.Length));
 
             IDimension angle = arguments[0].As<IDimension>();
             Color[] colors = arguments.Skip(1).Select(arg => arg.As<Color>()).ToArray();
@@ -58,7 +58,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             const int requiredArguments = 3;
 
             if (arguments.Length != requiredArguments)
-                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, PropertyFunctionName.LinearGradient, requiredArguments, arguments.Length));
+                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.LinearGradient, requiredArguments, arguments.Length));
 
             int r = arguments[0].As<int>();
             int g = arguments[1].As<int>();
@@ -74,7 +74,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             const int requiredArguments = 4;
 
             if (arguments.Length != requiredArguments)
-                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, PropertyFunctionName.LinearGradient, requiredArguments, arguments.Length));
+                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.LinearGradient, requiredArguments, arguments.Length));
 
             int r = arguments[0].As<int>();
             int g = arguments[1].As<int>();
@@ -91,7 +91,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             const int requiredArguments = 1;
 
             if (arguments.Length != requiredArguments)
-                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, PropertyFunctionName.LinearGradient, requiredArguments, arguments.Length));
+                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.LinearGradient, requiredArguments, arguments.Length));
 
             string resourcePath = arguments[0].As<string>();
 
@@ -107,7 +107,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             const int requiredArguments = 1;
 
             if (arguments.Length != requiredArguments)
-                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, PropertyFunctionName.Var, requiredArguments, arguments.Length));
+                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.Var, requiredArguments, arguments.Length));
 
             return new VariableReference(arguments[0].As<string>());
 

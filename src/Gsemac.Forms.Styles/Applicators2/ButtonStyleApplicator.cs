@@ -1,5 +1,4 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets.Properties;
-using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System.Drawing;
 using System.Linq;

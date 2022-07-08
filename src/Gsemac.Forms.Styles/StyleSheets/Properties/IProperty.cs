@@ -7,14 +7,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         string Name { get; }
         IPropertyValue Value { get; }
+        Type ValueType { get; }
 
-        bool IsInheritable { get; }
+        bool Inherited { get; }
         bool IsShorthand { get; }
         bool IsVariable { get; }
 
-        Type ValueType { get; }
-
-        IEnumerable<IProperty> GetLonghandProperties(IPropertyFactory propertyFactory);
+        IEnumerable<IProperty> GetLonghands();
 
     }
 

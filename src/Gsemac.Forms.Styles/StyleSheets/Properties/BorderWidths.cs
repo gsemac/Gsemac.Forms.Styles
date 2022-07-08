@@ -8,10 +8,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
-        public LineWidth Top { get; } = LineWidth.Zero;
-        public LineWidth Right { get; } = LineWidth.Zero;
-        public LineWidth Bottom { get; } = LineWidth.Zero;
-        public LineWidth Left { get; } = LineWidth.Zero;
+        public LineWidth Top { get; } = LineWidth.Medium;
+        public LineWidth Right { get; } = LineWidth.Medium;
+        public LineWidth Bottom { get; } = LineWidth.Medium;
+        public LineWidth Left { get; } = LineWidth.Medium;
 
         public BorderWidths() {
         }

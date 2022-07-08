@@ -32,6 +32,61 @@
 
         }
 
+        public static bool IsInheritable(string propertyName) {
+
+            // https://stackoverflow.com/a/30536051/5383169 (David Bonnet)
+
+            if (propertyName is null)
+                return false;
+
+            switch (propertyName.ToLowerInvariant()) {
+
+                case PropertyName.BorderCollapse:
+                case PropertyName.BorderSpacing:
+                case PropertyName.CaptionSide:
+                case PropertyName.Color:
+                case PropertyName.Cursor:
+                case PropertyName.Direction:
+                case PropertyName.EmptyCells:
+                case PropertyName.FontFamily:
+                case PropertyName.FontSize:
+                case PropertyName.FontStyle:
+                case PropertyName.FontVariant:
+                case PropertyName.FontWeight:
+                case PropertyName.FontSizeAdjust:
+                case PropertyName.FontStretch:
+                case PropertyName.Font:
+                case PropertyName.LetterSpacing:
+                case PropertyName.LineHeight:
+                case PropertyName.ListStyleImage:
+                case PropertyName.ListStylePosition:
+                case PropertyName.ListStyleType:
+                case PropertyName.ListStyle:
+                case PropertyName.Orphans:
+                case PropertyName.Quotes:
+                case PropertyName.TabSize:
+                case PropertyName.TextAlign:
+                case PropertyName.TextAlignLast:
+                case PropertyName.TextDecorationColor:
+                case PropertyName.TextIndent:
+                case PropertyName.TextJustify:
+                case PropertyName.TextShadow:
+                case PropertyName.TextTransform:
+                case PropertyName.Visibility:
+                case PropertyName.WhiteSpace:
+                case PropertyName.Widows:
+                case PropertyName.WordBreak:
+                case PropertyName.WordSpacing:
+                case PropertyName.WordWrap:
+                    return true;
+
+                default:
+                    return false;
+
+            }
+
+        }
+
     }
 
 }

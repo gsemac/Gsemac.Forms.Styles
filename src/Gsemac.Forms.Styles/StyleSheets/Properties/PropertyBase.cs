@@ -1,5 +1,4 @@
 ﻿using Gsemac.Forms.Styles.Properties;
-using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion;
 using System;
 using System.Collections.Generic;
@@ -17,13 +16,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         public string Name { get; }
         public IPropertyValue Value { get; }
 
-        public bool IsInheritable { get; }
-        public bool IsShorthand => this.GetChildProperties().Any();
+        public bool Inherited { get; }
+        public bool IsShorthand => GetLonghands().Any();
         public bool IsVariable => Name.StartsWith("--");
 
         public Type ValueType => Value.Type;
 
-        public virtual IEnumerable<IProperty> GetLonghandProperties(IPropertyFactory propertyFactory) {
+        public virtual IEnumerable<IProperty> GetLonghands() {
 
             return Enumerable.Empty<IProperty>();
 
@@ -49,7 +48,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Protected members
 
-        protected PropertyBase(string name, IPropertyValue value, bool isInheritable) {
+        protected PropertyBase(string name, IPropertyValue value, bool inherited) {
 
             if (name is null)
                 throw new ArgumentNullException(nameof(name));
@@ -65,7 +64,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             Name = name;
             Value = value;
-            IsInheritable = isInheritable;
+            Inherited = inherited;
 
         }
 
@@ -81,8 +80,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Protected members
 
-        protected PropertyBase(string name, T value, bool isInheritable) :
-            base(name, PropertyValue.Create(value), isInheritable) {
+        protected PropertyBase(string name, T value, bool inherited) :
+            base(name, PropertyValue.Create(value), inherited) {
         }
 
     }

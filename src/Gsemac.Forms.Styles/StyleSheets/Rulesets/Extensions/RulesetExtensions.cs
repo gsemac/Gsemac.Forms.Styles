@@ -14,7 +14,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets.Extensions {
             if (other is null)
                 throw new ArgumentNullException(nameof(other));
 
-            foreach (IProperty property in other.Where(p => p.IsInheritable))
+            foreach (IProperty property in other.Where(p => p.Inherited))
                 ruleset.Add(property);
 
         }

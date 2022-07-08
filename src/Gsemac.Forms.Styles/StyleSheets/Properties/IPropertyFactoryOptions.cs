@@ -2,7 +2,7 @@
 
     public interface IPropertyFactoryOptions {
 
-        bool AllowUnknownProperties { get; }
+        bool AllowUndefinedProperties { get; }
 
     }
 

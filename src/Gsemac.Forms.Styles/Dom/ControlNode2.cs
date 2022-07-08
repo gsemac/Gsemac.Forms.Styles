@@ -1,7 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Dom;
 using Gsemac.Forms.Styles.StyleSheets.Properties;
-using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Drawing;

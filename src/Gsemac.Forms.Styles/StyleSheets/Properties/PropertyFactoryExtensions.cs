@@ -1,7 +1,7 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 
-namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
+namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     public static class PropertyFactoryExtensions {
 
@@ -9,7 +9,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
 
         public static IProperty Create(this IPropertyFactory factory, string propertyName) {
 
-            return Create(factory, propertyName, Ruleset.Empty);
+            return factory.Create(propertyName, Ruleset.Empty);
 
         }
         public static IProperty Create(this IPropertyFactory factory, string propertyName, IRuleset ruleset) {
@@ -17,12 +17,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
             if (factory is null)
                 throw new ArgumentNullException(nameof(factory));
 
-            return factory.Create(propertyName, null, ruleset);
+            return factory.Create(propertyName, new IPropertyValue[] { });
 
         }
         public static IProperty Create(this IPropertyFactory factory, string propertyName, IPropertyValue argument) {
 
-            return Create(factory, propertyName, argument, Ruleset.Empty);
+            return factory.Create(propertyName, argument, Ruleset.Empty);
 
         }
         public static IProperty Create(this IPropertyFactory factory, string propertyName, IPropertyValue argument, IRuleset ruleset) {
@@ -33,7 +33,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.Extensions {
             if (argument is null)
                 throw new ArgumentNullException(nameof(argument));
 
-            return factory.Create(propertyName, new[] { argument }, ruleset);
+            return factory.Create(propertyName, new[] { argument });
 
         }
 

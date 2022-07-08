@@ -34,7 +34,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Extensions {
 
             // The FileReader is set such that files are read relative to the stylesheet.
 
-            return styleSheetFactory.FromFile(filePath);
+            return styleSheetFactory.FromFile(filePath, StyleSheetOptions.Default);
 
         }
         public static IStyleSheet FromFile(this IStyleSheetFactory styleSheetFactory, string filePath, IStyleSheetOptions options) {

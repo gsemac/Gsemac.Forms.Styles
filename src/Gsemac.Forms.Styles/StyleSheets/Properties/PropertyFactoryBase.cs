@@ -1,7 +1,6 @@
 ﻿using Gsemac.Forms.Styles.Properties;
-using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
-using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -12,13 +11,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
-        public IProperty Create(string propertyName, IPropertyValue[] arguments, IRuleset ruleset) {
+        public IProperty Create(string propertyName, IPropertyValue[] arguments) {
 
             if (propertyName is null)
                 throw new ArgumentNullException(nameof(propertyName));
 
-            if (ruleset is null)
-                throw new ArgumentNullException(nameof(ruleset));
+            if (arguments is null)
+                arguments = Enumerable.Empty<IPropertyValue>().ToArray();
 
             propertyName = propertyName.Trim();
 
@@ -26,64 +25,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             // Variable names are case-sensitive.
 
             if (propertyName.StartsWith(VariablePrefix))
-                return CreatePropertyFromSingleArgument<string>(propertyName, arguments, ruleset);
+                return CreateVariableProperty(propertyName, arguments);
 
             // Standard property names are not case-sensitive.
 
-            switch (propertyName.ToLowerInvariant()) {
+            if (definitions.TryGetValue(propertyName, out IPropertyDefinition definition))
+                return definition.Create(arguments);
 
-                case PropertyName.Border:
-                    return CreateBorderProperty(arguments, ruleset);
+            if (!options.AllowUndefinedProperties)
+                throw new InvalidPropertyException(string.Format(ExceptionMessages.InvalidPropertyName, propertyName));
 
-                case PropertyName.AccentColor:
-                case PropertyName.BackgroundColor:
-                case PropertyName.BorderBottomColor:
-                case PropertyName.BorderColor:
-                case PropertyName.BorderLeftColor:
-                case PropertyName.BorderRightColor:
-                case PropertyName.BorderTopColor:
-                case PropertyName.Color:
-                    return CreatePropertyFromSingleArgument<Color>(propertyName, arguments, ruleset);
-
-                case PropertyName.BorderRadius:
-                    return CreateBorderRadiusProperty(arguments, ruleset);
-
-                case PropertyName.BorderBottomLeftRadius:
-                case PropertyName.BorderBottomRightRadius:
-                case PropertyName.BorderTopLeftRadius:
-                case PropertyName.BorderTopRightRadius:
-                    return CreatePropertyFromSingleArgument<ILengthPercentage>(propertyName, arguments, ruleset);
-
-                case PropertyName.BorderBottomWidth:
-                case PropertyName.BorderLeftWidth:
-                case PropertyName.BorderRightWidth:
-                case PropertyName.BorderTopWidth:
-                    return CreatePropertyFromSingleArgument<LineWidth>(propertyName, arguments, ruleset);
-
-                case PropertyName.BorderBottomStyle:
-                case PropertyName.BorderLeftStyle:
-                case PropertyName.BorderRightStyle:
-                case PropertyName.BorderStyle:
-                case PropertyName.BorderTopStyle:
-                    return CreatePropertyFromSingleArgument<BorderStyle>(propertyName, arguments, ruleset);
-
-                case PropertyName.BorderWidth:
-                    return CreateBorderWidthProperty(arguments, ruleset);
-
-                case PropertyName.BackgroundImage:
-                    return CreateBackgroundImageProperty(arguments, ruleset);
-
-                case PropertyName.Opacity:
-                    return CreatePropertyFromSingleArgument<double>(propertyName, arguments, ruleset);
-
-                default:
-
-                    if (!options.AllowUnknownProperties)
-                        throw new InvalidPropertyException(string.Format(ExceptionMessages.InvalidPropertyName, propertyName));
-
-                    return CreateUnknownProperty(propertyName, arguments);
-
-            }
+            return CreateUndefinedProperty(propertyName, arguments);
 
         }
 
@@ -99,68 +51,22 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             this.options = options;
 
-        }
-
-        protected virtual IPropertyValue GetInitialValue(string propertyName, IRuleset ruleset) {
-
-            if (string.IsNullOrWhiteSpace(propertyName))
-                return null;
-
-            switch (propertyName.ToLowerInvariant()) {
-
-                case PropertyName.AccentColor:
-                    return PropertyValue.Auto;
-
-                case PropertyName.BackgroundImage:
-                    return PropertyValue.Create(new BackgroundImage());
-
-                case PropertyName.BackgroundColor:
-                    return PropertyValue.Create(Color.Transparent);
-
-                case PropertyName.Border:
-                    return PropertyValue.Create(new Border(ruleset.Color));
-
-                case PropertyName.BorderTopColor:
-                case PropertyName.BorderRightColor:
-                case PropertyName.BorderBottomColor:
-                case PropertyName.BorderLeftColor:
-                    return PropertyValue.Create(ruleset.Color);
-
-                case PropertyName.BorderTopStyle:
-                case PropertyName.BorderRightStyle:
-                case PropertyName.BorderBottomStyle:
-                case PropertyName.BorderLeftStyle:
-                    return PropertyValue.Create(BorderStyle.None);
-
-                case PropertyName.BorderTopWidth:
-                case PropertyName.BorderRightWidth:
-                case PropertyName.BorderBottomWidth:
-                case PropertyName.BorderLeftWidth:
-                    return PropertyValue.Create(Length.Zero);
-
-                case PropertyName.Color:
-                    return PropertyValue.Create(Color.Black); // Depends on user agent
-
-                case PropertyName.Opacity:
-                    return PropertyValue.Create(1.0);
-
-                default:
-                    return PropertyValue.Null;
-
-            }
+            AddDefaultDefinitions();
 
         }
-        protected T GetInitialValue<T>(string propertyName, IRuleset ruleset) {
 
-            if (ruleset is null)
-                throw new ArgumentNullException(nameof(ruleset));
+        protected void AddDefinition(IPropertyDefinition definition) {
 
-            IPropertyValue initialValue = GetInitialValue(propertyName, ruleset);
+            if (definition is null)
+                throw new ArgumentNullException(nameof(definition));
 
-            if (initialValue is object && initialValue.Type.Equals(typeof(T)))
-                return (T)initialValue.Value;
+            // Allow the same property to be defined multiple times.
+            // This is because multiple properties might define the same shorthands (e.g. "border-top" and "border-width").
 
-            return default;
+            definitions[definition.Name] = definition;
+
+            foreach (IPropertyDefinition longhandDefinition in definition.GetLonghands())
+                AddDefinition(longhandDefinition);
 
         }
 
@@ -169,258 +75,130 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         private const string VariablePrefix = "--";
 
         private readonly IPropertyFactoryOptions options;
+        private readonly IDictionary<string, IPropertyDefinition> definitions = new Dictionary<string, IPropertyDefinition>(StringComparer.OrdinalIgnoreCase);
 
-        private IProperty CreatePropertyWithDefaultValue<T>(string propertyName, IRuleset ruleset) {
+        private void AddDefaultDefinitions() {
 
-            if (ruleset is null)
-                throw new ArgumentNullException(nameof(ruleset));
+            // Any properties where the initial value is controlled by the user agent will not have an initial value set.
 
-            T value = GetInitialValue<T>(propertyName, ruleset);
-            bool isInheritable = IsInheritable(propertyName);
+            AddDefinition(Build(PropertyName.AccentColor)
+                .WithType<Color>()
+                .WithInitial(PropertyValue.Auto)
+                .Build());
 
-            return Property.Create(propertyName, value, isInheritable);
+            AddDefinition(Build(PropertyName.BackgroundColor)
+                .WithInitial(Color.Transparent)
+                .Build());
+
+            AddDefinition(Build(PropertyName.BackgroundImage)
+                .WithType<BackgroundImage>()
+                .WithInitial(PropertyValue.None)
+                .Build());
+
+            AddDefinition(Build(PropertyName.Border)
+                .WithType<Borders>()
+                .WithLonghand(PropertyName.BorderTop, (Borders p) => p.Top)
+                    .WithLonghand(PropertyName.BorderTopWidth, (Border p) => p.Width).WithInitial(LineWidth.Medium).End()
+                    .WithLonghand(PropertyName.BorderTopStyle, (Border p) => p.Style).WithInitial(BorderStyle.None).End()
+                    .WithLonghand(PropertyName.BorderTopColor, (Border p) => p.Color).WithInitial(PropertyValue.CurrentColor).End()
+                    .End()
+              .WithLonghand(PropertyName.BorderRight, (Borders p) => p.Right)
+                    .WithLonghand(PropertyName.BorderRightWidth, (Border p) => p.Width).WithInitial(LineWidth.Medium).End()
+                    .WithLonghand(PropertyName.BorderRightStyle, (Border p) => p.Style).WithInitial(BorderStyle.None).End()
+                    .WithLonghand(PropertyName.BorderRightColor, (Border p) => p.Color).WithInitial(PropertyValue.CurrentColor).End()
+                    .End()
+              .WithLonghand(PropertyName.BorderBottom, (Borders p) => p.Bottom)
+                    .WithLonghand(PropertyName.BorderBottomWidth, (Border p) => p.Width).WithInitial(LineWidth.Medium).End()
+                    .WithLonghand(PropertyName.BorderBottomStyle, (Border p) => p.Style).WithInitial(BorderStyle.None).End()
+                    .WithLonghand(PropertyName.BorderBottomColor, (Border p) => p.Color).WithInitial(PropertyValue.CurrentColor).End()
+                    .End()
+              .WithLonghand(PropertyName.BorderLeft, (Borders p) => p.Left)
+                    .WithLonghand(PropertyName.BorderLeftWidth, (Border p) => p.Width).WithInitial(LineWidth.Medium).End()
+                    .WithLonghand(PropertyName.BorderLeftStyle, (Border p) => p.Style).WithInitial(BorderStyle.None).End()
+                    .WithLonghand(PropertyName.BorderLeftColor, (Border p) => p.Color).WithInitial(PropertyValue.CurrentColor).End()
+                    .End()
+              .Build());
+
+            AddDefinition(Build(PropertyName.BorderBottomStyle)
+                .WithInitial(BorderStyle.None)
+                .Build());
+
+            AddDefinition(Build(PropertyName.BorderColor)
+                .WithType<Color>()
+                .Build());
+
+            AddDefinition(Build(PropertyName.BorderLeftStyle)
+                .WithInitial(BorderStyle.None)
+                .Build());
+
+            AddDefinition(Build(PropertyName.BorderRadius)
+                .WithInitial(new BorderRadii())
+                .WithLonghand(PropertyName.BorderTopLeftRadius, (BorderRadii p) => p.TopLeft).WithInitial(Length.Zero).End()
+                .WithLonghand(PropertyName.BorderTopRightRadius, (BorderRadii p) => p.TopRight).WithInitial(Length.Zero).End()
+                .WithLonghand(PropertyName.BorderBottomRightRadius, (BorderRadii p) => p.BottomRight).WithInitial(Length.Zero).End()
+                .WithLonghand(PropertyName.BorderBottomLeftRadius, (BorderRadii p) => p.BottomLeft).WithInitial(Length.Zero).End()
+                .Build());
+
+            AddDefinition(Build(PropertyName.BorderRightStyle)
+                .WithInitial(BorderStyle.None)
+                .Build());
+
+            AddDefinition(Build(PropertyName.BorderStyle)
+                .WithType<BorderStyle>()
+                .Build());
+
+            AddDefinition(Build(PropertyName.BorderTopStyle)
+                .WithInitial(BorderStyle.None)
+                .Build());
+
+            AddDefinition(Build(PropertyName.BorderWidth)
+                .WithType<BorderWidths>()
+                .WithInitial(new BorderWidths())
+                .WithLonghand(PropertyName.BorderTopWidth, (BorderWidths p) => p.Top).WithInitial(LineWidth.Medium).End()
+                .WithLonghand(PropertyName.BorderRightWidth, (BorderWidths p) => p.Right).WithInitial(LineWidth.Medium).End()
+                .WithLonghand(PropertyName.BorderBottomWidth, (BorderWidths p) => p.Bottom).WithInitial(LineWidth.Medium).End()
+                .WithLonghand(PropertyName.BorderLeftWidth, (BorderWidths p) => p.Left).WithInitial(LineWidth.Medium).End()
+                .Build());
+
+            AddDefinition(Build(PropertyName.Color)
+                .WithType<Color>()
+                .Build());
+
+            AddDefinition(Build(PropertyName.Opacity)
+                .WithType<double>()
+                .WithInitial(1.0)
+                .Build());
 
         }
-        private IProperty CreatePropertyFromSingleArgument<T>(string propertyName, IPropertyValue[] arguments, IRuleset ruleset) {
 
-            if (ruleset is null)
-                throw new ArgumentNullException(nameof(ruleset));
+        private IPropertyDefinitionBuilder Build(string propertyName) {
 
-            // Treat "initial" as a string if we're initializing a variable.
-
-            bool propertyIsVariable = propertyName.StartsWith(VariablePrefix);
-
-            if (arguments is null || arguments.Length <= 0 || (!propertyIsVariable && arguments[0].Equals(PropertyValue.Initial)))
-                return CreatePropertyWithDefaultValue<T>(propertyName, ruleset);
-
-            bool isInheritable = IsInheritable(propertyName);
-
-            if (IsVariableReference(arguments)) {
-
-                VariableReference value = arguments[0].As<VariableReference>();
-
-                return Property.Create(propertyName, value, isInheritable);
-
-            }
-            else {
-
-                T value = arguments.First().As<T>();
-
-                return Property.Create(propertyName, value, isInheritable);
-
-            }
+            return new PropertyDefinitionBuilder(propertyName);
 
         }
-        private IProperty CreateUnknownProperty(string propertyName, IPropertyValue[] arguments) {
+
+        private IProperty CreateVariableProperty(string propertyName, IPropertyValue[] arguments) {
+
+            if (propertyName is null)
+                throw new ArgumentNullException(nameof(propertyName));
+
+            if (arguments is null)
+                throw new ArgumentNullException(nameof(arguments));
+
+            // TODO: Variables can represent multiple arguments, not just one.
+            // https://developer.mozilla.org/en-US/docs/Web/CSS/--*
+
+            // Variables are always inheritable.
+
+            return Property.Create(propertyName, arguments[0], inherited: true);
+
+        }
+        private IProperty CreateUndefinedProperty(string propertyName, IPropertyValue[] arguments) {
 
             // Unknown properties will be treated in a very basic fashion because we don't know anything about how they should be initialized.
             // For now, complex custom properties should be handled by creating a custom PropertyFactory implementation.
 
             return new Property(propertyName, arguments.FirstOrDefault());
-
-        }
-
-        private IProperty CreateBackgroundImageProperty(IPropertyValue[] arguments, IRuleset ruleset) {
-
-            if (ruleset is null)
-                throw new ArgumentNullException(nameof(ruleset));
-
-            if (arguments is null || arguments.Length <= 0)
-                return CreatePropertyWithDefaultValue<BackgroundImage>(PropertyName.BackgroundImage, ruleset);
-
-            return Property.Create(PropertyName.BackgroundImage,
-                CreateBackgroundImage(arguments),
-                IsInheritable(PropertyName.BackgroundImage));
-
-        }
-        private IProperty CreateBorderProperty(IPropertyValue[] arguments, IRuleset ruleset) {
-
-            if (ruleset is null)
-                throw new ArgumentNullException(nameof(ruleset));
-
-            if (arguments is null || arguments.Length <= 0)
-                return new BorderProperty(GetInitialValue<Border>(PropertyName.Border, ruleset));
-
-            return new BorderProperty(CreateBorder(arguments));
-
-        }
-        private IProperty CreateBorderRadiusProperty(IPropertyValue[] arguments, IRuleset ruleset) {
-
-            if (ruleset is null)
-                throw new ArgumentNullException(nameof(ruleset));
-
-            if (arguments is null || arguments.Length <= 0)
-                return new BorderRadiusProperty(GetInitialValue<BorderRadii>(PropertyName.BorderRadius, ruleset));
-
-            return new BorderRadiusProperty(CreateBorderRadius(arguments));
-
-        }
-        private IProperty CreateBorderWidthProperty(IPropertyValue[] arguments, IRuleset ruleset) {
-
-            if (ruleset is null)
-                throw new ArgumentNullException(nameof(ruleset));
-
-            if (arguments is null || arguments.Length <= 0)
-                return new BorderWidthProperty(GetInitialValue<BorderWidths>(PropertyName.BorderWidth, ruleset));
-
-            return new BorderWidthProperty(CreateBorderWidth(arguments));
-
-        }
-
-        private static bool TryGetValueAsTypeDirectly<T>(IPropertyValue[] arguments, out T value) {
-
-            value = default;
-
-            if (arguments.Length == 1 && arguments.First().Is<T>()) {
-
-                value = (T)arguments.First().Value;
-
-                return true;
-
-            }
-
-            return false;
-
-        }
-
-        private static BackgroundImage CreateBackgroundImage(IPropertyValue[] arguments) {
-
-            if (TryGetValueAsTypeDirectly(arguments, out BackgroundImage value))
-                return value;
-
-            return new BackgroundImage(arguments.Select(v => v.As<IImage>()));
-
-        }
-        private static Border CreateBorder(IPropertyValue[] arguments) {
-
-            if (TryGetValueAsTypeDirectly(arguments, out Border value))
-                return value;
-
-            // TODO: Implement this
-
-            throw new NotImplementedException();
-
-            //// At least a border style MUST be specified.
-            //// Arguments are allowed to occur in any order.
-
-            //BorderStyle? borderStyle = values.Select(value => value.GetString())
-            //    .Select(value => PropertyUtilities.TryParseBorderStyle(value, out BorderStyle result) ? (BorderStyle?)result : null)
-            //    .Where(result => result != null)
-            //    .FirstOrDefault();
-
-            //if (!borderStyle.HasValue)
-            //    throw new ArgumentException(nameof(values));
-
-            //double borderWidth = values.Select(value => value.GetString())
-            //    .Select(value => PropertyUtilities.TryParseNumber(value, out double result) ? (double?)result : null)
-            //    .Where(result => result != null)
-            //    .FirstOrDefault() ?? 0.0;
-
-            //Color borderColor = values.Select(value => value.GetString())
-            //   .Select(value => PropertyUtilities.TryParseColor(value, out Color result) ? (Color?)result : null)
-            //   .Where(result => result != null)
-            //   .FirstOrDefault() ?? default;
-
-            //return new Border(borderWidth, borderStyle.Value, borderColor);
-
-        }
-        private static BorderRadii CreateBorderRadius(IPropertyValue[] arguments) {
-
-            if (TryGetValueAsTypeDirectly(arguments, out BorderRadii value))
-                return value;
-
-            Length[] measurments = arguments
-                .Select(arg => arg.As<Length>())
-                .ToArray();
-
-            if (measurments.Count() == 4)
-                return new BorderRadii(measurments[0], measurments[1], measurments[2], measurments[3]);
-            else if (measurments.Count() == 3)
-                return new BorderRadii(measurments[0], measurments[1], measurments[2]);
-            else if (measurments.Count() == 2)
-                return new BorderRadii(measurments[0], measurments[1]);
-            else
-                return new BorderRadii(measurments[0]);
-
-        }
-        private static BorderWidths CreateBorderWidth(IPropertyValue[] arguments) {
-
-            if (TryGetValueAsTypeDirectly(arguments, out BorderWidths value))
-                return value;
-
-            LineWidth[] measurments = arguments
-                .Select(arg => arg.As<LineWidth>())
-                .ToArray();
-
-            if (measurments.Count() == 4)
-                return new BorderWidths(measurments[0], measurments[1], measurments[2], measurments[3]);
-            else if (measurments.Count() == 3)
-                return new BorderWidths(measurments[0], measurments[1], measurments[2]);
-            else if (measurments.Count() == 2)
-                return new BorderWidths(measurments[0], measurments[1]);
-            else
-                return new BorderWidths(measurments[0]);
-
-        }
-
-        private static bool IsInheritable(string propertyName) {
-
-            // https://stackoverflow.com/a/30536051/5383169 (David Bonnet)
-
-            if (propertyName is null)
-                return false;
-
-            switch (propertyName.ToLowerInvariant()) {
-
-                case PropertyName.BorderCollapse:
-                case PropertyName.BorderSpacing:
-                case PropertyName.CaptionSide:
-                case PropertyName.Color:
-                case PropertyName.Cursor:
-                case PropertyName.Direction:
-                case PropertyName.EmptyCells:
-                case PropertyName.FontFamily:
-                case PropertyName.FontSize:
-                case PropertyName.FontStyle:
-                case PropertyName.FontVariant:
-                case PropertyName.FontWeight:
-                case PropertyName.FontSizeAdjust:
-                case PropertyName.FontStretch:
-                case PropertyName.Font:
-                case PropertyName.LetterSpacing:
-                case PropertyName.LineHeight:
-                case PropertyName.ListStyleImage:
-                case PropertyName.ListStylePosition:
-                case PropertyName.ListStyleType:
-                case PropertyName.ListStyle:
-                case PropertyName.Orphans:
-                case PropertyName.Quotes:
-                case PropertyName.TabSize:
-                case PropertyName.TextAlign:
-                case PropertyName.TextAlignLast:
-                case PropertyName.TextDecorationColor:
-                case PropertyName.TextIndent:
-                case PropertyName.TextJustify:
-                case PropertyName.TextShadow:
-                case PropertyName.TextTransform:
-                case PropertyName.Visibility:
-                case PropertyName.WhiteSpace:
-                case PropertyName.Widows:
-                case PropertyName.WordBreak:
-                case PropertyName.WordSpacing:
-                case PropertyName.WordWrap:
-                    return true;
-
-                default:
-                    return false;
-
-            }
-
-        }
-        private static bool IsVariableReference(IPropertyValue[] arguments) {
-
-            return arguments.Length == 1 &&
-                arguments[0].Is<VariableReference>();
 
         }
 

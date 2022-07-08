@@ -1,4 +1,5 @@
 ﻿using Gsemac.Core;
+using Gsemac.Forms.Styles.Properties;
 using System;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
@@ -11,14 +12,20 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         public Type Type { get; }
         public object Value { get; }
 
-        public static PropertyValue Null => new PropertyValue(typeof(object), null);
+        public bool IsKeyword { get; private set; }
+        public bool IsVariableReference => Type.Equals(typeof(VariableReference));
 
-        public static PropertyValue Auto => Create("auto");
-        public static PropertyValue Inherit => Create("inherit");
-        public static PropertyValue Initial => Create("initial");
-        public static PropertyValue Revert => Create("revert");
-        public static PropertyValue RevertLayer => Create("revert-layer");
-        public static PropertyValue Unset => Create("unset");
+        public static PropertyValue Null => Create(typeof(object), null);
+
+        public static PropertyValue Inherit => Create("inherit", isKeyword: true);
+        public static PropertyValue Initial => Create("initial", isKeyword: true);
+        public static PropertyValue Revert => Create("revert", isKeyword: true);
+        public static PropertyValue RevertLayer => Create("revert-layer", isKeyword: true);
+        public static PropertyValue Unset => Create("unset", isKeyword: true);
+
+        public static PropertyValue Auto => Create("auto", isKeyword: true);
+        public static PropertyValue CurrentColor => Create("currentcolor", isKeyword: true);
+        public static PropertyValue None => Create("none", isKeyword: true);
 
         public static PropertyValue<T> Create<T>(T value) {
 
@@ -60,8 +67,27 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             if (type is null)
                 throw new ArgumentNullException(nameof(type));
 
+            if (!type.IsAssignableFrom(value.GetType()))
+                throw new ArgumentException(string.Format(ExceptionMessages.GivenTypeDoesNotMatchValueType, type, value.GetType()), nameof(type));
+
             Type = type;
             Value = value;
+
+        }
+
+        internal static PropertyValue Create(Type type, object value) {
+
+            return new PropertyValue(type, value);
+
+        }
+
+        // Private members
+
+        private static PropertyValue Create<T>(T value, bool isKeyword) {
+
+            return new PropertyValue(typeof(T), value) {
+                IsKeyword = isKeyword,
+            };
 
         }
 

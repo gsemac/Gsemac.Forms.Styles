@@ -1,6 +1,6 @@
 ﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    internal static class PropertyFunctionName {
+    internal static class FunctionName {
 
         public const string LinearGradient = "linear-gradient";
         public const string Rgb = "rgb";

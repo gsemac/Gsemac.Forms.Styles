@@ -5,7 +5,7 @@
 
         // Public members
 
-        public bool AllowUnknownProperties { get; set; } = true;
+        public bool AllowUndefinedProperties { get; set; } = true;
 
         public static PropertyFactoryOptions Default => new PropertyFactoryOptions();
 

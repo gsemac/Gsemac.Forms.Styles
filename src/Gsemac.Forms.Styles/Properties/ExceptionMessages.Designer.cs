@@ -97,11 +97,29 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type &apos;{0}&apos; does not match the type of the given object (&apos;{1}&apos;)..
+        /// </summary>
+        internal static string GivenTypeDoesNotMatchValueType {
+            get {
+                return ResourceManager.GetString("GivenTypeDoesNotMatchValueType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid dimension..
         /// </summary>
         internal static string InvalidDimension {
             get {
                 return ResourceManager.GetString("InvalidDimension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot create property &quot;{0}&quot; with the given arguments..
+        /// </summary>
+        internal static string InvalidPropertyArguments {
+            get {
+                return ResourceManager.GetString("InvalidPropertyArguments", resourceCulture);
             }
         }
         

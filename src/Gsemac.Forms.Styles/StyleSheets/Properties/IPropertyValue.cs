@@ -7,6 +7,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         Type Type { get; }
         object Value { get; }
 
+        bool IsKeyword { get; }
+        bool IsVariableReference { get; }
+
     }
 
     public interface IPropertyValue<T> :

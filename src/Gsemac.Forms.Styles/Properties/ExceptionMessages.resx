@@ -129,8 +129,14 @@
   <data name="CannotRenderType" xml:space="preserve">
     <value>Cannot render objects of type '{0}'.</value>
   </data>
+  <data name="GivenTypeDoesNotMatchValueType" xml:space="preserve">
+    <value>Type '{0}' does not match the type of the given object ('{1}').</value>
+  </data>
   <data name="InvalidDimension" xml:space="preserve">
     <value>"{0}" is not a valid dimension.</value>
+  </data>
+  <data name="InvalidPropertyArguments" xml:space="preserve">
+    <value>Cannot create property "{0}" with the given arguments.</value>
   </data>
   <data name="InvalidPropertyName" xml:space="preserve">
     <value>"{0}" is not a valid property name.</value>

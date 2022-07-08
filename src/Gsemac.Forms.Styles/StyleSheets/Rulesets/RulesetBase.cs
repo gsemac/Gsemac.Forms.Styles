@@ -1,7 +1,6 @@
 ﻿using Gsemac.Collections;
 using Gsemac.Collections.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Properties;
-using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Selectors;
 using System;
 using System.Collections;
@@ -82,7 +81,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             // If the property has longhand properties (e.g. is a shorthand property), add those properties instead.
             // This way, when the user queries for the shorthand property, they always get the most up-to-date values.
 
-            IEnumerable<IProperty> longhandProperties = property.GetLonghandProperties(propertyFactory);
+            IEnumerable<IProperty> longhandProperties = property.GetLonghands();
 
             if (longhandProperties.Any()) {
 

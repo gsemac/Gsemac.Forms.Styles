@@ -5,7 +5,7 @@
 
         // Public members
 
-        public static PropertyFactory Default => new PropertyFactory();
+        public static PropertyFactory Default { get; } = new PropertyFactory();
 
         public PropertyFactory() { }
         public PropertyFactory(IPropertyFactoryOptions options) :

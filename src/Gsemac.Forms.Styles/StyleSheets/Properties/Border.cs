@@ -8,9 +8,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
-        public LineWidth Width { get; } = LineWidth.Zero;
+        public LineWidth Width { get; } = LineWidth.Medium;
         public BorderStyle Style { get; } = BorderStyle.None;
-        public Color Color { get; } = Color.Black;
+        public Color Color { get; } = Color.Black; // currentcolor
 
         public Border() {
         }

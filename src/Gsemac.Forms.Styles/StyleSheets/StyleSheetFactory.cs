@@ -59,7 +59,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                                 try {
 
-                                    property = propertyFactory.Create(currentPropertyName, propertyValues, currentRuleset);
+                                    property = propertyFactory.Create(currentPropertyName, propertyValues);
 
                                 }
                                 catch (Exception ex) {
@@ -198,7 +198,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
             }
 
-            IPropertyValue returnValue = PropertyFunctions.EvaluateFunction(functionName, functionArgs.ToArray());
+            IPropertyValue returnValue = Functions.EvaluateFunction(functionName, functionArgs.ToArray());
 
             return returnValue;
 

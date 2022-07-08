@@ -12,17 +12,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             this(new BorderRadii()) {
         }
         public BorderRadiusProperty(BorderRadii value) :
-            base(PropertyName.BorderRadius, value, isInheritable: false) {
+            base(PropertyName.BorderRadius, value, inherited: false) {
         }
 
-        public override IEnumerable<IProperty> GetLonghandProperties(IPropertyFactory propertyFactory) {
+        //public override IEnumerable<IProperty> GetLonghands(IPropertyFactory propertyFactory) {
 
-            yield return propertyFactory.Create(PropertyName.BorderTopLeftRadius, PropertyValue.Create(Value.TopLeft));
-            yield return propertyFactory.Create(PropertyName.BorderTopRightRadius, PropertyValue.Create(Value.TopRight));
-            yield return propertyFactory.Create(PropertyName.BorderBottomRightRadius, PropertyValue.Create(Value.BottomRight));
-            yield return propertyFactory.Create(PropertyName.BorderBottomLeftRadius, PropertyValue.Create(Value.BottomLeft));
+        //    yield return propertyFactory.Create(PropertyName.BorderTopLeftRadius, PropertyValue.Create(Value.TopLeft));
+        //    yield return propertyFactory.Create(PropertyName.BorderTopRightRadius, PropertyValue.Create(Value.TopRight));
+        //    yield return propertyFactory.Create(PropertyName.BorderBottomRightRadius, PropertyValue.Create(Value.BottomRight));
+        //    yield return propertyFactory.Create(PropertyName.BorderBottomLeftRadius, PropertyValue.Create(Value.BottomLeft));
 
-        }
+        //}
 
     }
 

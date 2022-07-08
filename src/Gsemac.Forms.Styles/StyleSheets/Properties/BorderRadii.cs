@@ -13,6 +13,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public BorderRadii() {
         }
+
         public BorderRadii(ILengthPercentage value) {
 
             TopLeft = value;
@@ -44,6 +45,19 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             BottomLeft = bottomLeft;
             BottomRight = bottomRight;
 
+        }
+
+        public BorderRadii(int value) :
+            this(new Length(value)) {
+        }
+        public BorderRadii(int topLeftBottomRight, int topRightBottomLeft) :
+           this(new Length(topLeftBottomRight), new Length(topRightBottomLeft)) {
+        }
+        public BorderRadii(int topLeft, int topRightBottomLeft, int bottomRight) :
+           this(new Length(topLeft), new Length(topRightBottomLeft), new Length(bottomRight)) {
+        }
+        public BorderRadii(int topLeft, int topRight, int bottomRight, int bottomLeft) :
+            this(new Length(topLeft), new Length(topRight), new Length(bottomRight), new Length(bottomLeft)) {
         }
 
         public IEnumerator<ILengthPercentage> GetEnumerator() {
