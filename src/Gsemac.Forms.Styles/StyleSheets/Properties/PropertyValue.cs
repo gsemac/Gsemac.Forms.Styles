@@ -15,17 +15,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         public bool IsKeyword { get; private set; }
         public bool IsVariableReference => Type.Equals(typeof(VariableReference));
 
-        public static PropertyValue Null => Create(typeof(object), null);
+        public static PropertyValue Inherit => Create(Keyword.Inherit, isKeyword: true);
+        public static PropertyValue Initial => Create(Keyword.Initial, isKeyword: true);
+        public static PropertyValue Revert => Create(Keyword.Revert, isKeyword: true);
+        public static PropertyValue RevertLayer => Create(Keyword.RevertLayer, isKeyword: true);
+        public static PropertyValue Unset => Create(Keyword.Unset, isKeyword: true);
 
-        public static PropertyValue Inherit => Create("inherit", isKeyword: true);
-        public static PropertyValue Initial => Create("initial", isKeyword: true);
-        public static PropertyValue Revert => Create("revert", isKeyword: true);
-        public static PropertyValue RevertLayer => Create("revert-layer", isKeyword: true);
-        public static PropertyValue Unset => Create("unset", isKeyword: true);
+        public static PropertyValue Auto => Create(Keyword.Auto, isKeyword: true);
+        public static PropertyValue None => Create(Keyword.None, isKeyword: true);
 
-        public static PropertyValue Auto => Create("auto", isKeyword: true);
-        public static PropertyValue CurrentColor => Create("currentcolor", isKeyword: true);
-        public static PropertyValue None => Create("none", isKeyword: true);
+        public static PropertyValue CanvasText => Create(Keyword.CanvasText, isKeyword: true);
+        public static PropertyValue CurrentColor => Create(Keyword.CurrentColor, isKeyword: true);
 
         public static PropertyValue<T> Create<T>(T value) {
 

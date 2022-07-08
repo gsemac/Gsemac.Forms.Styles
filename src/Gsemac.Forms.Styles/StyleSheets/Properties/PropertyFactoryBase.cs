@@ -162,6 +162,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             AddDefinition(Build(PropertyName.Color)
                 .WithType<Color>()
+                .WithInitial(PropertyValue.CanvasText)
                 .Build());
 
             AddDefinition(Build(PropertyName.Opacity)

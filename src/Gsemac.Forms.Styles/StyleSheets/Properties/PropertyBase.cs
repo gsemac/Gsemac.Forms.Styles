@@ -9,7 +9,7 @@ using System.Text;
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     public abstract class PropertyBase :
-      IProperty {
+        IProperty {
 
         // Public members
 

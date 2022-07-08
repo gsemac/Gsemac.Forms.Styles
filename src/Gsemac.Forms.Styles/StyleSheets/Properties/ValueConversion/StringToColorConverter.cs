@@ -19,6 +19,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
             value = value.Replace("grey", "gray");
 
+            switch (value.ToLowerInvariant()) {
+
+                case Keyword.CanvasText:
+                    return SystemColorPalette.Default.CanvasText;
+
+            }
+
             return ColorTranslator.FromHtml(value);
 
         }
