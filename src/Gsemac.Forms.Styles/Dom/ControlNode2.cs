@@ -49,9 +49,9 @@ namespace Gsemac.Forms.Styles.Dom {
 
         // Protected members
 
-        protected override IRuleset ComputeStyle() {
+        protected override IRuleset ComputeStyle(IComputeContext context) {
 
-            IRuleset ruleset = base.ComputeStyle();
+            IRuleset ruleset = base.ComputeStyle(context);
 
             if (!ruleset.Contains(PropertyName.BackgroundColor))
                 ruleset.Add(PropertyFactory.Default.Create(PropertyName.BackgroundColor, PropertyValue.Create(GetBackgroundColor(Control))));
@@ -63,8 +63,13 @@ namespace Gsemac.Forms.Styles.Dom {
             // Since nothing is rendered in these "holes", if we try to clear with Color.Transparent, we'll just get a black background around the control.
             // To resolve this, the clear color should be equal to the background color of the parent control.
 
-            if (Parent is object)
-                ruleset.Add(PropertyFactory.Default.Create(CustomPropertyName.ClearColor, PropertyValue.Create(Parent.GetComputedStyle().BackgroundColor)));
+            if (Parent is object) {
+
+                Color clearColor = Parent.GetComputedStyle(context).BackgroundColor;
+
+                ruleset.Add(PropertyFactory.Default.Create(CustomPropertyName.ClearColor, PropertyValue.Create(clearColor)));
+
+            }
 
             return ruleset;
 

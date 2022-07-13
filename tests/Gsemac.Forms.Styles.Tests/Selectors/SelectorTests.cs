@@ -2,7 +2,7 @@
 using Gsemac.Forms.Styles.StyleSheets.Selectors;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Gsemac.Forms.Styles.StyleSheets.Tests {
+namespace Gsemac.Forms.Styles.Selectors.Tests {
 
     [TestClass]
     public class SelectorTests {

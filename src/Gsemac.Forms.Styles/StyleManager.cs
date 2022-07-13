@@ -241,7 +241,7 @@ namespace Gsemac.Forms.Styles {
                     if (!info.StyleInitialized)
                         info.StyleApplicator.InitializeStyle(node.Control);
 
-                    info.StyleApplicator.ApplyStyle(node.Control, node.GetComputedStyle());
+                    //info.StyleApplicator.ApplyStyle(node.Control, node.GetComputedStyle());
 
                 }
                 else if (info.StyleInitialized) {

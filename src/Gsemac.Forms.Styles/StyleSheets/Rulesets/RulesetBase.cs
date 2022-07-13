@@ -23,8 +23,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public int Count => properties.Count;
         public bool IsReadOnly => properties.IsReadOnly;
 
-        public StyleOrigin Origin { get; } = StyleOrigin.User;
-        public ISelector Selector { get; }
+        public StyleOrigin Origin { get; } = DefaultOrigin;
+        public ISelector Selector { get; } = DefaultSelector;
 
         public Color AccentColor => GetPropertyValueOrDefault<Color>(PropertyName.AccentColor);
         public Color BackgroundColor => GetPropertyValueOrDefault<Color>(PropertyName.BackgroundColor);
@@ -55,100 +55,27 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public Color Color => GetPropertyValueOrDefault<Color>(PropertyName.Color);
         public double Opacity => GetPropertyValueOrDefault<double>(PropertyName.Opacity);
 
-        public IProperty Get(string propertyName) {
-
-            return GetPropertyOrDefault(propertyName);
-
-        }
-        public bool Contains(string propertyName) {
-
-            return properties.ContainsKey(propertyName);
-
-        }
-        public bool Remove(string propertyName) {
-
-            variableReferencingProperties.Remove(propertyName);
-
-            return properties.Remove(propertyName);
-
-        }
-
         public void Add(IProperty property) {
 
             if (property is null)
                 throw new ArgumentNullException(nameof(property));
 
-            // If the property has longhand properties (e.g. is a shorthand property), add those properties instead.
-            // This way, when the user queries for the shorthand property, they always get the most up-to-date values.
+            // Remove any existing property with the same name so that the property is added to end of the dictionary.
 
-            IEnumerable<IProperty> longhandProperties = property.GetLonghands();
+            Remove(property.Name);
 
-            if (longhandProperties.Any()) {
+            properties.Add(property.Name, property);
 
-                foreach (IProperty longhandProperty in longhandProperties)
-                    Add(longhandProperty);
-
-            }
-            else if (property.IsVariable) {
-
-                // We need to update all properties that reference this variable.
-                // Don't remove the properties, only update them-- this preserves their position in the ruleset.
-
-                properties.Add(property.Name, property);
-
-                foreach (IProperty propertyToUpdate in variableReferencingProperties.Values.Where(p => p.Value.As<VariableReference>().Name.Equals(property.Name)).ToArray()) {
-
-                    variableReferencingProperties.Remove(propertyToUpdate.Name);
-
-                    Add(propertyToUpdate);
-
-                }
-
-            }
-            else if (property.Value.Is<VariableReference>()) {
-
-                // If the property value is a variable reference, we will resolve the reference immediately.
-
-                variableReferencingProperties.Add(property.Name, property);
-
-                string variableName = property.Value.As<VariableReference>().Name;
-
-                IProperty updatedProperty;
-
-                if (properties.TryGetValue(variableName, out IProperty referencedVariableProperty)) {
-
-                    updatedProperty = propertyFactory.Create(property.Name, referencedVariableProperty.Value, this);
-
-                }
-                else {
-
-                    // The variable hasn't been defined yet, so use the default value.
-
-                    updatedProperty = propertyFactory.Create(property.Name, this);
-
-                }
-
-                // Update the property if it exists, preserving its position in the ruleset.
-
-                properties[property.Name] = updatedProperty;
-
-            }
-            else {
-
-                // Remove any existing property with the same name so that the property is added to end of the dictionary.
-
-                Remove(property.Name);
-
-                properties.Add(property.Name, property);
-
-            }
+            AddLonghands(property);
 
         }
-        public void Clear() {
 
-            properties.Clear();
+        public IProperty Get(string propertyName) {
+
+            return GetPropertyOrDefault(propertyName);
 
         }
+
         public bool Contains(IProperty property) {
 
             if (property is null)
@@ -160,20 +87,50 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             return false;
 
         }
-        public void CopyTo(IProperty[] array, int arrayIndex) {
+        public bool Contains(string propertyName) {
 
-            properties.Values.CopyTo(array, arrayIndex);
+            return properties.ContainsKey(propertyName);
 
         }
+
         public bool Remove(IProperty property) {
 
             if (property is null)
                 return false;
 
-            if (properties.TryGetValue(property.Name, out IProperty value) && property.Equals(value))
-                return Remove(property.Name);
+            // Find the property we're going to remove.
+            // The property should exactly match one we already have in the ruleset.
+
+            if (!(properties.TryGetValue(property.Name, out IProperty propertyToRemove) && property.Equals(propertyToRemove)))
+                return false;
+
+            // Remove the property.
+
+            properties.Remove(propertyToRemove.Name);
+
+            RemoveLonghands(propertyToRemove);
+
+            return true;
+
+        }
+        public bool Remove(string propertyName) {
+
+            if (properties.TryGetValue(propertyName, out IProperty property))
+                return Remove(property);
 
             return false;
+
+        }
+
+        public void Clear() {
+
+            properties.Clear();
+
+        }
+
+        public void CopyTo(IProperty[] array, int arrayIndex) {
+
+            properties.Values.CopyTo(array, arrayIndex);
 
         }
 
@@ -212,41 +169,25 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         // Protected members
 
         protected RulesetBase() :
-            this(PropertyFactory.Default) {
-        }
-        protected RulesetBase(IPropertyFactory propertyFactory) {
-
-            if (propertyFactory is null)
-                throw new ArgumentNullException(nameof(propertyFactory));
-
-            this.propertyFactory = propertyFactory;
-
+            this(DefaultSelector) {
         }
         protected RulesetBase(ISelector selector) :
-            this(selector, PropertyFactory.Default) {
+            this(selector, DefaultOrigin) {
         }
-        protected RulesetBase(ISelector selector, StyleOrigin origin) :
-          this(selector, PropertyFactory.Default) {
+        protected RulesetBase(ISelector selector, StyleOrigin origin) {
 
+            if (selector is null)
+                throw new ArgumentNullException(nameof(selector));
+
+            Selector = selector;
             Origin = origin;
 
         }
-        protected RulesetBase(ISelector selector, IPropertyFactory propertyFactory) :
-            this(propertyFactory) {
-
-            Selector = selector;
-
-        }
         protected RulesetBase(IRuleset other) :
-            this(other, PropertyFactory.Default) {
-        }
-        protected RulesetBase(IRuleset other, IPropertyFactory propertyFactory) :
-             this(propertyFactory) {
+            this(other?.Selector ?? DefaultSelector, other?.Origin ?? DefaultOrigin) {
 
             if (other is null)
                 throw new ArgumentNullException(nameof(other));
-
-            Selector = other.Selector;
 
             this.AddRange(other);
 
@@ -254,11 +195,28 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         // Private members
 
-        // TODO: The property dictionary should be case-insensitive
+        private class LonghandInfo {
 
-        private readonly IPropertyFactory propertyFactory;
-        private readonly IDictionary<string, IProperty> properties = new OrderedDictionary<string, IProperty>();
-        private readonly IDictionary<string, IProperty> variableReferencingProperties = new Dictionary<string, IProperty>();
+            // Public members
+
+            public IProperty Parent { get; }
+            public IProperty Property { get; }
+
+            public LonghandInfo(IProperty property, IProperty parent) {
+
+                Property = property;
+                Parent = parent;
+
+            }
+
+        }
+
+        private const StyleOrigin DefaultOrigin = StyleOrigin.User;
+        private static readonly Selector DefaultSelector = Selectors.Selector.Empty;
+
+        private readonly IPropertyFactory propertyFactory = PropertyFactory.Default;
+        private readonly IDictionary<string, IProperty> properties = new OrderedDictionary<string, IProperty>(StringComparer.OrdinalIgnoreCase);
+        private readonly IDictionary<string, List<LonghandInfo>> longhandProperties = new Dictionary<string, List<LonghandInfo>>(StringComparer.OrdinalIgnoreCase);
 
         private T GetPropertyValueOrDefault<T>(string propertyName) {
 
@@ -267,10 +225,46 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         }
         private IProperty GetPropertyOrDefault(string propertyName) {
 
+            // We want to return the latest value of a property, whether it was set explicitly or through a shorthand property.
+
+            if (longhandProperties.TryGetValue(propertyName, out var longhands) && longhands.Any())
+                return longhands.Last().Property;
+
             if (properties.TryGetValue(propertyName, out IProperty property))
                 return property;
 
-            return propertyFactory.Create(propertyName, this);
+            return propertyFactory.Create(propertyName);
+
+        }
+
+        private void AddLonghands(IProperty property) {
+
+            // Convert the property to a set of longhand properties.
+            // If the property is already a longhand property, we'll use it directly.
+
+            IEnumerable<IProperty> longhands = property.GetLonghands();
+
+            if (!longhands.Any())
+                longhands = new[] { property };
+
+            foreach (IProperty longhand in longhands) {
+
+                LonghandInfo longhandInfo = new LonghandInfo(longhand, parent: property);
+
+                if (!longhandProperties.ContainsKey(longhand.Name))
+                    longhandProperties.Add(longhand.Name, new List<LonghandInfo>());
+
+                longhandProperties[longhand.Name].Add(longhandInfo);
+
+            }
+
+        }
+        private void RemoveLonghands(IProperty property) {
+
+            // Remove all longhand properties that belong to this property.
+
+            if (longhandProperties.TryGetValue(property.Name, out var longhands))
+                longhands.RemoveAll(i => ReferenceEquals(i.Parent, property));
 
         }
 

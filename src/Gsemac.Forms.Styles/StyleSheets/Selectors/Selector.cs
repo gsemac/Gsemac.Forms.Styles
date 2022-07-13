@@ -12,6 +12,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
         // Public members
 
+        public static Selector Empty => new Selector();
+
         public Selector(ISelector selector) {
 
             selectors = new List<ISelector>() {
@@ -121,7 +123,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
         // Private members
 
-        private readonly IEnumerable<ISelector> selectors;
+        private readonly IEnumerable<ISelector> selectors = Enumerable.Empty<ISelector>();
+
+        private Selector() { }
 
     }
 

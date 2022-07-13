@@ -1,6 +1,6 @@
 ﻿using Gsemac.Collections.Extensions;
 using Gsemac.Collections.Specialized;
-using Gsemac.Core;
+using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets.Extensions;
 using System;
@@ -28,9 +28,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
         public ICollection<NodeState> States { get; }
         public ICollection<IRuleset> Styles { get; }
 
-        public IRuleset GetComputedStyle() {
+        public IRuleset GetComputedStyle(IComputeContext context) {
 
-            return style.Value;
+            if (styleIsDirty) {
+
+                style = ComputeStyle(context);
+
+                styleIsDirty = false;
+
+            }
+
+            return style;
 
         }
 
@@ -80,24 +88,23 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
             styles.CollectionChanged += StylesChangedHandler;
 
-            // Initialize style.
-
-            style = new ResettableLazy<IRuleset>(ComputeStyle);
-
         }
 
-        protected virtual IRuleset ComputeStyle() {
+        protected virtual IRuleset ComputeStyle(IComputeContext context) {
+
+            // Begin by building up the initial set of rules.
 
             IRuleset ruleset = new Ruleset();
 
-            if (Parent is object) {
-
-                ruleset.Inherit(Parent.GetComputedStyle());
-
-            }
-
             foreach (IRuleset style in Styles)
                 ruleset.AddRange(style);
+
+            if (Parent is object)
+                ruleset.Inherit(Parent.GetComputedStyle(context));
+
+            // Resolve all variable references.
+
+
 
             return ruleset;
 
@@ -126,11 +133,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
         // Private members
 
-        private readonly IResettableLazy<IRuleset> style;
+        private IRuleset style;
+        bool styleIsDirty = true;
 
         private void StylesChangedHandler(object sender, EventArgs e) {
 
-            style.Reset();
+            styleIsDirty = true;
 
         }
 

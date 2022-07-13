@@ -106,7 +106,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid dimension..
+        ///   Looks up a localized string similar to The string &apos;{0}&apos; does not represent a valid dimension..
         /// </summary>
         internal static string InvalidDimension {
             get {
@@ -124,7 +124,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid property name..
+        ///   Looks up a localized string similar to The string &apos;{0}&apos; is not a valid property name..
         /// </summary>
         internal static string InvalidPropertyName {
             get {
@@ -133,7 +133,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid property value..
+        ///   Looks up a localized string similar to The string &apos;{0}&apos; is not a valid property value..
         /// </summary>
         internal static string InvalidPropertyValue {
             get {
@@ -142,7 +142,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid unit..
+        ///   Looks up a localized string similar to The string &apos;{0}&apos; is not a valid unit..
         /// </summary>
         internal static string InvalidUnit {
             get {
@@ -151,7 +151,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;{0}&quot; is not a valid variable name..
+        ///   Looks up a localized string similar to The string &apos;{0}&apos; is not a valid variable name..
         /// </summary>
         internal static string InvalidVariableName {
             get {
@@ -160,7 +160,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to parse &quot;{0}&quot; as &apos;{1}&apos;..
+        ///   Looks up a localized string similar to Unable to parse string &apos;{0}&apos; as type &apos;{1}&apos;..
         /// </summary>
         internal static string MalformedPropertyValueAsType {
             get {
@@ -169,7 +169,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Function &quot;{0}&quot; requires {1} argument(s), but {2} were given..
+        ///   Looks up a localized string similar to Function &apos;{0}&apos; requires {1} argument(s), but {2} were given..
         /// </summary>
         internal static string PropertyFunctionRequiresNArguments {
             get {
@@ -196,7 +196,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unit &quot;{0}&quot; cannot be converted to degrees..
+        ///   Looks up a localized string similar to Unit &apos;{0}&apos; cannot be converted to degrees..
         /// </summary>
         internal static string UnitCannotBeConvertedToDegrees {
             get {

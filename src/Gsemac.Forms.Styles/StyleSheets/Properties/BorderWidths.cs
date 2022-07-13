@@ -48,6 +48,19 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
+        public BorderWidths(int value) :
+            this(new LineWidth(value)) {
+        }
+        public BorderWidths(int vertical, int horizontal) :
+           this(new LineWidth(vertical), new LineWidth(horizontal)) {
+        }
+        public BorderWidths(int top, int horizontal, int bottom) :
+           this(new LineWidth(top), new LineWidth(horizontal), new LineWidth(bottom)) {
+        }
+        public BorderWidths(int top, int right, int bottom, int left) :
+            this(new LineWidth(top), new LineWidth(right), new LineWidth(bottom), new LineWidth(left)) {
+        }
+
         public IEnumerator<LineWidth> GetEnumerator() {
 
             yield return Top;
