@@ -2,6 +2,7 @@
 using Gsemac.Forms.Styles.Dom;
 using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Dom;
+using Gsemac.Forms.Styles.StyleSheets.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -241,7 +242,7 @@ namespace Gsemac.Forms.Styles {
                     if (!info.StyleInitialized)
                         info.StyleApplicator.InitializeStyle(node.Control);
 
-                    //info.StyleApplicator.ApplyStyle(node.Control, node.GetComputedStyle());
+                    info.StyleApplicator.ApplyStyle(node.Control, node.GetComputedStyle(new ComputeContext(null)));
 
                 }
                 else if (info.StyleInitialized) {

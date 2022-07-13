@@ -1,8 +1,6 @@
-﻿using Gsemac.Collections.Extensions;
-using Gsemac.Collections.Specialized;
+﻿using Gsemac.Collections.Specialized;
 using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
-using Gsemac.Forms.Styles.StyleSheets.Rulesets.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -92,21 +90,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
         protected virtual IRuleset ComputeStyle(IComputeContext context) {
 
-            // Begin by building up the initial set of rules.
-
-            IRuleset ruleset = new Ruleset();
-
-            foreach (IRuleset style in Styles)
-                ruleset.AddRange(style);
-
-            if (Parent is object)
-                ruleset.Inherit(Parent.GetComputedStyle(context));
-
-            // Resolve all variable references.
-
-
-
-            return ruleset;
+            return context.ComputeStyle(this, Styles);
 
         }
 

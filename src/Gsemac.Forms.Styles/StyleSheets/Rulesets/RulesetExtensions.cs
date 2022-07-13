@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace Gsemac.Forms.Styles.StyleSheets.Rulesets.Extensions {
+namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
     public static class RulesetExtensions {
 
