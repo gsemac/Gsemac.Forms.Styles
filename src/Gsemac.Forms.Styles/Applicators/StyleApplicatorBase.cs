@@ -131,7 +131,7 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         protected virtual bool HasStyles(Control control) {
 
-            return StyleSheet.GetRulesets(new ControlNode2(control)).Any();
+            return StyleSheet.GetStyles(new ControlNode2(control)).Any();
 
         }
 

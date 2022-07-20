@@ -1,32 +1,54 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets.Dom;
+using System;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
-    public class IDSelector :
+    public class IdSelector :
         ISelector {
 
         // Public members
 
-        public string Name { get; }
+        public int Specificity => SelectorUtilities.GetSpecificity(WeightCategory.Id);
 
-        public IDSelector(string name) {
+        public IdSelector(string id) {
 
-            Name = name?.TrimStart('#');
+            this.id = FormatId(id);
 
         }
 
-        public bool IsMatch(INode2 node) {
+        public ISelectorMatch Match(INode2 node) {
 
-            if (string.IsNullOrEmpty(Name))
-                return false;
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
 
-            return node.Id.Equals(Name);
+            if (!string.IsNullOrEmpty(id) && node.Id.Equals(id))
+                return new SelectorMatch(this);
+
+            return SelectorMatch.Failure;
 
         }
 
         public override string ToString() {
 
-            return $"#{Name}";
+            return $"#{id}";
+
+        }
+
+        // Private members
+
+        private readonly string id;
+
+        private static string FormatId(string id) {
+
+            if (string.IsNullOrWhiteSpace(id))
+                return string.Empty;
+
+            if (id.StartsWith("#"))
+                id = id.Substring(1, id.Length - 1);
+
+            id = id.Trim();
+
+            return id;
 
         }
 

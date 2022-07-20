@@ -102,7 +102,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         private ISelector ReadSelector(IStyleSheetLexer lexer) {
 
-            return Selector.FromLexer(lexer);
+            return SelectorFactory.FromLexer(lexer);
 
         }
         private IPropertyValue[] ReadPropertyValues(IStyleSheetLexer lexer) {

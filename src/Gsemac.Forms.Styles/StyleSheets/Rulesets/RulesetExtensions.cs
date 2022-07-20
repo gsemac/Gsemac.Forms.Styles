@@ -6,6 +6,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
     public static class RulesetExtensions {
 
+        // Public members
+
         public static void Inherit(this IRuleset ruleset, IRuleset other) {
 
             if (ruleset is null)

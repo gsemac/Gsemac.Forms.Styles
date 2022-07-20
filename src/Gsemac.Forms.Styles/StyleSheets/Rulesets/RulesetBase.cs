@@ -212,7 +212,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         }
 
         private const StyleOrigin DefaultOrigin = StyleOrigin.User;
-        private static readonly Selector DefaultSelector = Selectors.Selector.Empty;
+        private static readonly ISelector DefaultSelector = Selectors.Selector.Empty;
 
         private readonly IPropertyFactory propertyFactory = PropertyFactory.Default;
         private readonly IDictionary<string, IProperty> properties = new OrderedDictionary<string, IProperty>(StringComparer.OrdinalIgnoreCase);

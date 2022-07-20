@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets.Dom;
+using System;
 using System.Linq;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
@@ -8,18 +9,26 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
         // Public members
 
-        public ClassSelector(string name) {
+        public int Specificity => SelectorUtilities.GetSpecificity(WeightCategory.Class);
 
-            className = name?.TrimStart('.');
+        public ClassSelector(string className) {
+
+            this.className = FormatClassName(className);
 
         }
 
-        public bool IsMatch(INode2 node) {
+        public ISelectorMatch Match(INode2 node) {
 
-            if (string.IsNullOrEmpty(className))
-                return false;
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
 
-            return node.Classes.Any(c => c.TrimStart('.').Equals(className));
+            // Class names are case-sensitive.
+            // https://stackoverflow.com/a/12533957/5383169 (BoltClock)
+
+            if (!string.IsNullOrEmpty(className) && node.Classes.Any(c => FormatClassName(c).Equals(className)))
+                return new SelectorMatch(this);
+
+            return SelectorMatch.Failure;
 
         }
 
@@ -32,6 +41,20 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
         // Private members
 
         private readonly string className;
+
+        private static string FormatClassName(string className) {
+
+            if (string.IsNullOrWhiteSpace(className))
+                return string.Empty;
+
+            if (className.StartsWith("."))
+                className = className.Substring(1, className.Length - 1);
+
+            className = className.Trim();
+
+            return className;
+
+        }
 
     }
 

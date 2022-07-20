@@ -7,7 +7,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
     public interface IStyleSheet :
         IEnumerable<IRuleset> {
 
-        IEnumerable<IRuleset> GetRulesets(INode2 node);
+        IEnumerable<IRuleset> GetStyles(INode2 node);
 
     }
 

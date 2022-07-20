@@ -8,22 +8,26 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
         // Public members
 
+        public int Specificity => SelectorUtilities.GetSpecificity(WeightCategory.Type);
+
         public PseudoElementSelector(string elementName) {
 
-            this.elementName = elementName?.TrimStart(':');
+            this.elementName = FormatElementName(elementName);
 
         }
 
-        public bool IsMatch(INode2 node) {
+        public ISelectorMatch Match(INode2 node) {
+
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+
+            if (string.IsNullOrEmpty(elementName))
+                return SelectorMatch.Failure;
 
             throw new NotImplementedException();
 
-            if (string.IsNullOrEmpty(elementName))
-                return false;
-
-            // return node.PseudoElement.TrimStart(':').Equals(elementName, StringComparison.OrdinalIgnoreCase);
-
         }
+
 
         public override string ToString() {
 
@@ -34,6 +38,20 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
         // Private members
 
         private readonly string elementName;
+
+        private static string FormatElementName(string elementName) {
+
+            if (string.IsNullOrWhiteSpace(elementName))
+                return string.Empty;
+
+            if (elementName.StartsWith("::"))
+                elementName = elementName.Substring(2, elementName.Length - 2);
+
+            elementName = elementName.Trim();
+
+            return elementName;
+
+        }
 
     }
 

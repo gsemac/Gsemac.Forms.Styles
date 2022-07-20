@@ -22,14 +22,18 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
         }
 
-        public IEnumerable<IRuleset> GetRulesets(INode2 node) {
+        public IEnumerable<IRuleset> GetStyles(INode2 node) {
 
-            IList<IRuleset> result = new List<IRuleset>();
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
 
-            foreach (IRuleset ruleset in rulesets.Where(r => r.Selector.IsMatch(node)))
-                result.Add(ruleset);
-
-            return result;
+            return rulesets
+                .Select(ruleset => Tuple.Create(ruleset, ruleset.Selector.Match(node)))
+                .Where(pair => pair.Item2.Success)
+                .OrderBy(pair => pair.Item1.Origin)
+                .ThenBy(pair => pair.Item2.Specificity)
+                .Select(pair => pair.Item1)
+                .ToArray();
 
         }
 

@@ -9,17 +9,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
         // Public members
 
-        public void AddId(string name) {
+        public void WithId(string name) {
 
-            rhsSelector.Add(new IDSelector(name));
+            rhsSelector.Add(new IdSelector(name));
 
         }
-        public void AddClass(string name) {
+        public void WithClass(string name) {
 
             rhsSelector.Add(new ClassSelector(name));
 
         }
-        public void AddPseudoClass(string name) {
+        public void WithPseudoClass(string name) {
 
             rhsSelector.Add(new PseudoClassSelector(name));
 
@@ -29,39 +29,44 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
             rhsSelector.Add(new PseudoElementSelector(name));
 
         }
-        public void AddTag(string name) {
+        public void WithTag(string name) {
 
             rhsSelector.Add(new TypeSelector(name));
 
         }
+        public void WithUniversal() {
 
-        public void AddSelector() {
-
-            CommitCurrentSelector(false);
+            rhsSelector.Add(new UniversalSelector());
 
         }
-        public void AddDescendantCombinator() {
+
+        public void WithSelector() {
+
+            CommitCurrentSelector(isLhsSelector: false);
+
+        }
+        public void WithDescendantCombinator() {
 
             CommitCurrentSelector(true);
 
             currentCombinator = CombinatorType.Descendant;
 
         }
-        public void AddChildCombinator() {
+        public void WithChildCombinator() {
 
             CommitCurrentSelector(true);
 
             currentCombinator = CombinatorType.Child;
 
         }
-        public void AddAdjacentSiblingCombinator() {
+        public void WithAdjacentSiblingCombinator() {
 
             CommitCurrentSelector(true);
 
             currentCombinator = CombinatorType.AdjacentSibling;
 
         }
-        public void AddGeneralSiblingCombinator() {
+        public void WithGeneralSiblingCombinator() {
 
             CommitCurrentSelector(true);
 
@@ -108,11 +113,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
         private readonly IList<ISelector> completedSelectors = new List<ISelector>();
         private CombinatorType currentCombinator = CombinatorType.None;
 
-        private void CommitCurrentSelector(bool isLhsOfCombinator) {
+        private void CommitCurrentSelector(bool isLhsSelector) {
 
             if (rhsSelector.Any()) {
 
-                ISelector committingSelector = rhsSelector.Count() == 1 ? rhsSelector.First() : new Selector(rhsSelector);
+                ISelector committingSelector = rhsSelector.Count() == 1 ? rhsSelector.First() : new CompositeSelector(rhsSelector);
 
                 switch (currentCombinator) {
 
@@ -146,7 +151,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
                     default:
 
-                        if (!isLhsOfCombinator) {
+                        if (!isLhsSelector) {
 
                             // If this selector is not the left-hand side of a combinator, just add the selector directly to the list.
 

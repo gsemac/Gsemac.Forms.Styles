@@ -30,7 +30,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Extensions {
 
             // TODO: Get rid of this
 
-            return styleSheet.GetRulesets(node).First();
+            return styleSheet.GetStyles(node).First();
 
         }
         public static IRuleset GetRuleset(this IStyleSheet styleSheet, INode2 node, bool inherit) {

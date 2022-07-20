@@ -8,31 +8,37 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
         // Public members
 
-        public string Name { get; }
+        public int Specificity => SelectorUtilities.GetSpecificity(WeightCategory.Type);
 
-        public TypeSelector(string name) {
+        public TypeSelector(string type) {
 
-            Name = name;
+            this.type = type;
 
         }
 
-        public bool IsMatch(INode2 node) {
+        public ISelectorMatch Match(INode2 node) {
 
-            if (string.IsNullOrEmpty(Name))
-                return false;
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
 
-            if (Name.Equals("*"))
-                return true;
+            // Tags are not case-sensitive.
 
-            return node.Tag.Equals(Name, StringComparison.OrdinalIgnoreCase);
+            if (!string.IsNullOrEmpty(type) && node.Tag.Equals(type, StringComparison.OrdinalIgnoreCase))
+                return new SelectorMatch(this);
+
+            return SelectorMatch.Failure;
 
         }
 
         public override string ToString() {
 
-            return Name;
+            return type;
 
         }
+
+        // Private members
+
+        private readonly string type;
 
     }
 

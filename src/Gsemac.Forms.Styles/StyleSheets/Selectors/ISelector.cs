@@ -4,7 +4,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
     public interface ISelector {
 
-        bool IsMatch(INode2 node);
+        int Specificity { get; }
+
+        ISelectorMatch Match(INode2 node);
 
     }
 

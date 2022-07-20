@@ -8,26 +8,38 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
         // Public members
 
+        public int Specificity => SelectorUtilities.GetSpecificity(WeightCategory.Class);
+
         public PseudoClassSelector(string className) {
 
-            this.className = className?.TrimStart(':');
+            this.className = FormatClassName(className);
 
         }
 
-        public bool IsMatch(INode2 node) {
-            Console.WriteLine(node.States.Contains(NodeState.Hover));
+        public ISelectorMatch Match(INode2 node) {
+
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+
+            // Pseudo-class names are not case-sensitive.
+
+            bool success = false;
+
             switch (className) {
 
                 case "focus":
-                    return node.States.Contains(NodeState.Focus);
+                    success = node.States.Contains(NodeState.Focus);
+                    break;
 
                 case "hover":
-                    return node.States.Contains(NodeState.Hover);
-
-                default:
-                    return false;
+                    success = node.States.Contains(NodeState.Hover);
+                    break;
 
             }
+
+            return success ?
+                new SelectorMatch(this) :
+                SelectorMatch.Failure;
 
         }
 
@@ -40,6 +52,20 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
         // Private members
 
         private readonly string className;
+
+        private static string FormatClassName(string className) {
+
+            if (string.IsNullOrWhiteSpace(className))
+                return string.Empty;
+
+            if (className.StartsWith(":"))
+                className = className.Substring(1, className.Length - 1);
+
+            className = className.Trim().ToLowerInvariant();
+
+            return className;
+
+        }
 
     }
 

@@ -353,7 +353,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Lexers {
 
                         possibleDescendantCombinator = false;
 
-                        ReadTag();
+                        ReadTagOrUniversalSelector();
 
                         break;
 
@@ -436,7 +436,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Lexers {
             }
 
         }
-        private void ReadTag() {
+        private void ReadTagOrUniversalSelector() {
 
             StringBuilder valueBuilder = new StringBuilder();
 
@@ -451,8 +451,16 @@ namespace Gsemac.Forms.Styles.StyleSheets.Lexers {
 
             }
 
-            if (valueBuilder.Length > 0)
-                tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Tag, valueBuilder.ToString()));
+            if (valueBuilder.Length > 0) {
+
+                string value = valueBuilder.ToString();
+
+                if (value.Equals("*"))
+                    tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.UniversalSelector, value));
+                else
+                    tokens.Enqueue(new StyleSheetLexerToken(StyleSheetLexerTokenType.Tag, value));
+
+            }
 
         }
         private void ReadCombinator() {

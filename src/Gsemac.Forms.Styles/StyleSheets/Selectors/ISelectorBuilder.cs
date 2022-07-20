@@ -2,16 +2,17 @@
 
     public interface ISelectorBuilder {
 
-        void AddId(string name);
-        void AddClass(string name);
-        void AddPseudoClass(string name);
-        void AddTag(string name);
+        void WithId(string value);
+        void WithClass(string value);
+        void WithPseudoClass(string value);
+        void WithTag(string value);
+        void WithUniversal();
 
-        void AddSelector();
-        void AddDescendantCombinator();
-        void AddChildCombinator();
-        void AddAdjacentSiblingCombinator();
-        void AddGeneralSiblingCombinator();
+        void WithSelector();
+        void WithDescendantCombinator();
+        void WithChildCombinator();
+        void WithAdjacentSiblingCombinator();
+        void WithGeneralSiblingCombinator();
 
         ISelector Build();
 

@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets.Dom;
+using System;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
@@ -7,22 +8,30 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
         // Public members
 
+        public int Specificity => parentSelector.Specificity + childSelector.Specificity;
+
         public ChildSelector(ISelector parentSelector, ISelector childSelector) {
+
+            if (parentSelector is null)
+                throw new ArgumentNullException(nameof(parentSelector));
+
+            if (childSelector is null)
+                throw new ArgumentNullException(nameof(childSelector));
 
             this.parentSelector = parentSelector;
             this.childSelector = childSelector;
 
         }
 
-        public bool IsMatch(INode2 node) {
+        public ISelectorMatch Match(INode2 node) {
 
-            if (parentSelector is null || childSelector is null)
-                return false;
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
 
-            if (node.Parent is null)
-                return false;
+            if (node.Parent is object && childSelector.IsMatch(node) && parentSelector.IsMatch(node.Parent))
+                return new SelectorMatch(this);
 
-            return childSelector.IsMatch(node) && parentSelector.IsMatch(node.Parent);
+            return SelectorMatch.Failure;
 
         }
 

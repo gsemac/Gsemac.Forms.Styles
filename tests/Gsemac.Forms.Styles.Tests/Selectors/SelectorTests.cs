@@ -11,7 +11,7 @@ namespace Gsemac.Forms.Styles.Selectors.Tests {
         public void TestSelectorWithMultiplePseudoClasses() {
 
             string selectorStr = ".class:active:hover";
-            ISelector selector = Selector.Parse(selectorStr);
+            ISelector selector = SelectorFactory.Default.Parse(selectorStr);
 
             UserNode node = new UserNode(string.Empty, new[] { "class" });
 
