@@ -12,7 +12,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         IPropertyDefinitionBuilder WithInitial(IPropertyValue value);
 
         IPropertyDefinitionBuilder WithLonghand(string name, LonghandPropertyValueFactory longhandValueFactory);
-        IPropertyDefinitionBuilder End();
+        IPropertyDefinitionBuilder EndProperty();
 
         IPropertyDefinition Build();
 

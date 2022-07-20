@@ -72,7 +72,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             return longhandBuilder;
 
         }
-        public IPropertyDefinitionBuilder End() {
+        public IPropertyDefinitionBuilder EndProperty() {
 
             if (parentBuilder is object)
                 return parentBuilder;
