@@ -255,7 +255,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
         }
         private bool ComputeStyles(INode2 node) {
 
-            IEnumerable<IRuleset> styles = styleSheets.SelectMany(styleSheet => styleSheet.GetRulesets(node))
+            IEnumerable<IRuleset> styles = styleSheets.SelectMany(styleSheet => styleSheet.GetStyles(node))
                 .Where(ruleset => ruleset.Any());
 
             if (!styles.Any()) {

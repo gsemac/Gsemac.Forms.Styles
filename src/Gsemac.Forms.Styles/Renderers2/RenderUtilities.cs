@@ -78,9 +78,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         public static void Clear(Graphics graphics, IRuleset style) {
 
-            IProperty clearColorProperty = style.Get(CustomPropertyName.ClearColor);
-
-            if (clearColorProperty is object && clearColorProperty.Value.Is<Color>()) {
+            if (style.TryGetValue(CustomPropertyName.ClearColor, out IProperty clearColorProperty) && clearColorProperty.Value.Is<Color>()) {
 
                 graphics.Clear(clearColorProperty.Value.As<Color>());
 
@@ -118,11 +116,11 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             int bottomLeft = (int)(style.BorderBottomLeftRadius?.Value ?? 0);
             int bottomRight = (int)(style.BorderBottomRightRadius?.Value ?? 0);
 
-            if (style.Contains(PropertyName.BackgroundColor)) {
+            if (style.ContainsKey(PropertyName.BackgroundColor)) {
 
                 Color backgroundColor = style.BackgroundColor;
 
-                if (style.Contains(PropertyName.Opacity))
+                if (style.ContainsKey(PropertyName.Opacity))
                     backgroundColor = GetColorWithAlpha(backgroundColor, (float)style.Opacity);
 
                 using (Brush brush = new SolidBrush(backgroundColor)) {

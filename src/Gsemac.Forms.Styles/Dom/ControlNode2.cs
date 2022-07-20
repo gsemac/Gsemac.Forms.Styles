@@ -49,14 +49,14 @@ namespace Gsemac.Forms.Styles.Dom {
 
         // Protected members
 
-        protected override IRuleset ComputeStyle(IComputeContext context) {
+        protected override IRuleset ComputeStyle(IStyleComputationContext context) {
 
             IRuleset ruleset = base.ComputeStyle(context);
 
-            if (!ruleset.Contains(PropertyName.BackgroundColor))
+            if (!ruleset.ContainsKey(PropertyName.BackgroundColor))
                 ruleset.Add(PropertyFactory.Default.Create(PropertyName.BackgroundColor, PropertyValue.Create(GetBackgroundColor(Control))));
 
-            if (!ruleset.Contains(PropertyName.Color))
+            if (!ruleset.ContainsKey(PropertyName.Color))
                 ruleset.Add(PropertyFactory.Default.Create(PropertyName.Color, PropertyValue.Create(Control.ForeColor)));
 
             // When rendering a control with child controls, "holes" clipped out around child controls.

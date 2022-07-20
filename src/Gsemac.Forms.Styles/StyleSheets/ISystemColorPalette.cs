@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Gsemac.Forms.Styles.StyleSheets.Properties {
+namespace Gsemac.Forms.Styles.StyleSheets {
 
     // https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#system_colors
 

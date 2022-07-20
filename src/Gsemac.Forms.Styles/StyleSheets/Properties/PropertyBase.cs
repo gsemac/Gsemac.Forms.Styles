@@ -16,9 +16,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         public string Name { get; }
         public IPropertyValue Value { get; }
 
-        public bool Inherited { get; }
+        public bool Inherited => inherited || Value.Equals(PropertyValue.Inherit);
         public bool IsShorthand => GetLonghands().Any();
-        public bool IsVariable => Name.StartsWith("--");
+        public bool IsVariable => PropertyUtilities.IsVariable(Name);
 
         public Type ValueType => Value.Type;
 
@@ -64,9 +64,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             Name = name;
             Value = value;
-            Inherited = inherited;
+
+            this.inherited = inherited;
 
         }
+
+        // Private members
+
+        private readonly bool inherited = false;
 
     }
 

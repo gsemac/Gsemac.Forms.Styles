@@ -8,7 +8,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
     public interface IRuleset :
         ICollection<IProperty> {
 
-        IProperty this[string propertyName] { get; }
+        IProperty this[string propertyName] { get; set; }
 
         StyleOrigin Origin { get; }
         ISelector Selector { get; }
@@ -38,9 +38,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         Color Color { get; }
         double Opacity { get; }
 
-        IProperty Get(string propertyName);
-        bool Contains(string propertyName);
+        bool ContainsKey(string propertyName);
         bool Remove(string propertyName);
+        bool TryGetValue(string propertyName, out IProperty value);
 
     }
 

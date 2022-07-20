@@ -32,6 +32,16 @@
 
         }
 
+        public static bool IsVariable(string propertyName) {
+
+            if (string.IsNullOrEmpty(propertyName))
+                return false;
+
+            return propertyName
+                .TrimStart()
+                .StartsWith("--");
+
+        }
         public static bool IsInheritable(string propertyName) {
 
             // https://stackoverflow.com/a/30536051/5383169 (David Bonnet)

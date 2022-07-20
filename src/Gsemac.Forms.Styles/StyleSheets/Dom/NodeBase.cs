@@ -1,5 +1,4 @@
 ﻿using Gsemac.Collections.Specialized;
-using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Collections.Generic;
@@ -26,7 +25,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
         public ICollection<NodeState> States { get; }
         public ICollection<IRuleset> Styles { get; }
 
-        public IRuleset GetComputedStyle(IComputeContext context) {
+        public IRuleset GetComputedStyle(IStyleComputationContext context) {
 
             if (styleIsDirty) {
 
@@ -88,7 +87,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
         }
 
-        protected virtual IRuleset ComputeStyle(IComputeContext context) {
+        protected virtual IRuleset ComputeStyle(IStyleComputationContext context) {
 
             return context.ComputeStyle(this, Styles);
 

@@ -17,7 +17,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         // Public members
 
         public IProperty this[string propertyName] {
-            get => Get(propertyName);
+            get => properties[propertyName];
+            set => UpdateProperty(value);
         }
 
         public int Count => properties.Count;
@@ -70,9 +71,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         }
 
-        public IProperty Get(string propertyName) {
+        public bool TryGetValue(string propertyName, out IProperty value) {
 
-            return GetPropertyOrDefault(propertyName);
+            return properties.TryGetValue(propertyName, out value);
 
         }
 
@@ -87,7 +88,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             return false;
 
         }
-        public bool Contains(string propertyName) {
+        public bool ContainsKey(string propertyName) {
 
             return properties.ContainsKey(propertyName);
 
@@ -237,7 +238,48 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         }
 
+        private void AddProperty(IProperty property) {
+
+            if (property is null)
+                throw new ArgumentNullException(nameof(property));
+
+            // Remove any existing property with the same name so that the property is added to end of the dictionary.
+
+            Remove(property.Name);
+
+            properties.Add(property.Name, property);
+
+            AddLonghands(property);
+
+        }
+        private void UpdateProperty(IProperty property) {
+
+            if (property is null)
+                throw new ArgumentNullException(nameof(property));
+
+            // Update the property without changing its position in the dictionary.
+
+            if (TryGetValue(property.Name, out IProperty existingProperty)) {
+
+                RemoveLonghands(existingProperty);
+
+                properties[property.Name] = property;
+
+                AddLonghands(property);
+
+            }
+            else {
+
+                Add(property);
+
+            }
+
+        }
+
         private void AddLonghands(IProperty property) {
+
+            if (property is null)
+                throw new ArgumentNullException(nameof(property));
 
             // Convert the property to a set of longhand properties.
             // If the property is already a longhand property, we'll use it directly.
@@ -260,6 +302,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         }
         private void RemoveLonghands(IProperty property) {
+
+            if (property is null)
+                throw new ArgumentNullException(nameof(property));
 
             // Remove all longhand properties that belong to this property.
 

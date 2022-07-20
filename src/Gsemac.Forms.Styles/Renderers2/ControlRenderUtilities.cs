@@ -11,7 +11,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         public static void ApplyColorProperties(Control control, IRuleset ruleset) {
 
-            if (ruleset.Contains(PropertyName.BackgroundColor) && ruleset.BackgroundColor != control.BackColor) {
+            if (ruleset.ContainsKey(PropertyName.BackgroundColor) && ruleset.BackgroundColor != control.BackColor) {
 
                 Color backColor = ruleset.BackgroundColor;
 
@@ -22,7 +22,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             }
 
-            if (ruleset.Contains(PropertyName.Color) && ruleset.Color != control.ForeColor)
+            if (ruleset.ContainsKey(PropertyName.Color) && ruleset.Color != control.ForeColor)
                 control.ForeColor = ruleset.Color;
 
         }

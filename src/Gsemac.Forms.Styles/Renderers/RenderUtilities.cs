@@ -92,11 +92,11 @@ namespace Gsemac.Forms.Styles.Renderers {
             int bottomLeft = (int)(ruleset.BorderBottomLeftRadius?.Value ?? 0);
             int bottomRight = (int)(ruleset.BorderBottomRightRadius?.Value ?? 0);
 
-            if (ruleset.Contains(PropertyName.BackgroundColor)) {
+            if (ruleset.ContainsKey(PropertyName.BackgroundColor)) {
 
                 Color backgroundColor = ruleset.BackgroundColor; //?.Value ?? SystemColors.Control;
 
-                if (ruleset.Contains(PropertyName.Opacity))
+                if (ruleset.ContainsKey(PropertyName.Opacity))
                     backgroundColor = GetColorWithAlpha(backgroundColor, (float)ruleset.Opacity);
 
                 using (Brush brush = new SolidBrush(backgroundColor)) {

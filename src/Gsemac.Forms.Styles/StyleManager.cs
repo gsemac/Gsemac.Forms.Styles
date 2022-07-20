@@ -3,6 +3,7 @@ using Gsemac.Forms.Styles.Dom;
 using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Dom;
 using Gsemac.Forms.Styles.StyleSheets.Properties;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -242,7 +243,9 @@ namespace Gsemac.Forms.Styles {
                     if (!info.StyleInitialized)
                         info.StyleApplicator.InitializeStyle(node.Control);
 
-                    info.StyleApplicator.ApplyStyle(node.Control, node.GetComputedStyle(new ComputeContext(null)));
+                    IStyleComputationContext context = new StyleComputationContext();
+
+                    info.StyleApplicator.ApplyStyle(node.Control, node.GetComputedStyle(context));
 
                 }
                 else if (info.StyleInitialized) {
@@ -257,8 +260,6 @@ namespace Gsemac.Forms.Styles {
                     info.State.Restore(node.Control);
 
                 }
-
-                Console.WriteLine($"{DateTimeOffset.Now} Rerendering style for {node.Id}");
 
                 node.Control.Invalidate();
 
