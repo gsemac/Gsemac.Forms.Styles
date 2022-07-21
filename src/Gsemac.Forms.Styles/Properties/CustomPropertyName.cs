@@ -2,7 +2,7 @@
 
     public static class CustomPropertyName {
 
-        public const string ClearColor = "-wf-clear-color";
+        public const string ClearColor = "-forms-clear-color";
 
     }
 

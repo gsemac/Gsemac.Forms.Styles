@@ -276,10 +276,16 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             // Unknown properties will be treated in a very basic fashion because we don't know anything about how they should be initialized.
             // For now, complex custom properties should be handled by creating a custom PropertyFactory implementation.
 
-            IPropertyDefinition definition = Define(propertyName)
-                .Build();
+            IPropertyDefinitionBuilder definition = new PropertyDefinitionBuilder(propertyName);
 
-            return Create(definition, arguments);
+            if (arguments.Any()) {
+
+                definition.WithInitial(arguments[0])
+                    .WithType(arguments[0].Type);
+
+            }
+
+            return Create(definition.Build(), arguments);
 
         }
 
