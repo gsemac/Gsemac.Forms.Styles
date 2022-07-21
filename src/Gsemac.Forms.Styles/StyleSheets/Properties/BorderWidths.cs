@@ -77,6 +77,15 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public override string ToString() {
 
+            if (Top.Equals(Right) && Top.Equals(Bottom) && Top.Equals(Left))
+                return $"{Top}";
+
+            if (Top.Equals(Bottom) && Left.Equals(Right))
+                return $"{Top} {Left}";
+
+            if (Left.Equals(Right))
+                return $"{Top} {Left} {Bottom}";
+
             return $"{Top} {Right} {Bottom} {Left}";
 
         }

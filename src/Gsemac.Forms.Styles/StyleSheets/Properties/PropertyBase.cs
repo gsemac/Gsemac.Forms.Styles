@@ -2,8 +2,6 @@
 using Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using System.Text;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
@@ -13,18 +11,22 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Public members
 
-        public string Name { get; }
+        public string Name => definition.Name;
         public IPropertyValue Value { get; }
 
-        public bool Inherited => inherited || Value.Equals(PropertyValue.Inherit);
-        public bool IsShorthand => GetLonghands().Any();
-        public bool IsVariable => PropertyUtilities.IsVariable(Name);
+        public bool Inherited => definition.Inherited || Value.Equals(PropertyValue.Inherit);
+        public bool IsShorthand => definition.IsShorthand;
+        public bool IsVariable => PropertyUtilities.IsVariableName(Name);
 
-        public Type ValueType => Value.Type;
+        public Type ValueType => definition.ValueType;
 
         public virtual IEnumerable<IProperty> GetLonghands() {
 
-            return Enumerable.Empty<IProperty>();
+            foreach (ILonghandPropertyDefinition longhand in definition.GetLonghands()) {
+
+                yield return propertyFactory.Create(longhand.Name, longhand.ValueFactory(Value));
+
+            }
 
         }
 
@@ -35,12 +37,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             sb.Append(Name);
             sb.Append(": ");
 
-            if (ValueType.Equals(typeof(Color)))
-                sb.Append(new ColorToStringConverter().Convert(Value.As<Color>()));
-            else if (ValueType.Equals(typeof(BorderStyle)))
-                sb.Append(new BorderStyleToStringConverter().Convert(Value.As<BorderStyle>()));
-            else
-                sb.Append(Value.ToString());
+            object propertyValue = Value.Value;
+
+            string propertyValueStr = StyleValueConverterFactory.Default
+                .Create(propertyValue.GetType(), typeof(string))
+                .Convert(propertyValue)
+                .ToString();
+
+            sb.Append(propertyValueStr);
 
             return sb.ToString();
 
@@ -57,37 +61,39 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 throw new ArgumentNullException(nameof(value));
 
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException(ExceptionMessages.PropertyNameCannotBeEmpty);
+                throw new ArgumentException(ExceptionMessages.PropertyNameCannotBeEmpty, nameof(name));
 
             if (value is object obj && obj is null)
                 throw new ArgumentNullException(nameof(value));
 
-            Name = name;
+            definition = new PropertyDefinitionBuilder(name)
+                .WithInherited(inherited)
+                .WithType(value.Type)
+                .Build();
+
             Value = value;
 
-            this.inherited = inherited;
+        }
+        protected PropertyBase(IPropertyDefinition definition, IPropertyValue value, IPropertyFactory propertyFactory) {
+
+            if (definition is null)
+                throw new ArgumentNullException(nameof(definition));
+
+            if (value is null)
+                throw new ArgumentNullException(nameof(value));
+
+            if (propertyFactory is null)
+                throw new ArgumentNullException(nameof(propertyFactory));
+
+            this.definition = definition;
+            Value = value;
 
         }
 
         // Private members
 
-        private readonly bool inherited = false;
-
-    }
-
-    public abstract class PropertyBase<T> :
-        PropertyBase,
-        IProperty<T> {
-
-        // Public members
-
-        public new T Value => base.Value.As<T>();
-
-        // Protected members
-
-        protected PropertyBase(string name, T value, bool inherited) :
-            base(name, PropertyValue.Create(value), inherited) {
-        }
+        private readonly IPropertyDefinition definition;
+        private readonly IPropertyFactory propertyFactory = PropertyFactory.Default;
 
     }
 

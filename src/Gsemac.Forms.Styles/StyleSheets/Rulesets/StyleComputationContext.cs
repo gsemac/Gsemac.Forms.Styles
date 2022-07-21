@@ -4,6 +4,7 @@ using Gsemac.Forms.Styles.StyleSheets.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Gsemac.Forms.Styles.StyleSheets.Properties.PropertyUtilities;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
@@ -40,14 +41,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
                 throw new ArgumentNullException(nameof(styles));
 
             // Compute the property value in a loop, because variable references might resolve to keywords and vice-versa.
+            // We'll keep track of the identifiers we've seen so that we don't try to resolve them more than once.
 
-            while (IsVariableReference(property) || IsKeywordReference(property)) {
+            HashSet<string> seenIdentifiers = new HashSet<string>();
 
-                if (IsVariableReference(property))
-                    property = ResolveVariableReference(property, styles);
+            while (IsVariableReference(property.Value) || IsKeyword(property.Value)) {
 
-                if (IsKeywordReference(property))
-                    property = ResolveKeywordReference(property, node, styles);
+                if (IsVariableReference(property.Value))
+                    property = ResolveVariableReference(property, styles, seenIdentifiers);
+
+                if (IsKeyword(property.Value))
+                    property = ResolveKeywordReference(property, node, styles, seenIdentifiers);
 
             }
 
@@ -90,7 +94,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         private readonly ISystemColorPalette systemColorPalette;
         private readonly IPropertyFactory propertyFactory;
 
-        private IProperty ResolveVariableReference(IProperty property, IEnumerable<IRuleset> styles) {
+        private IProperty ResolveVariableReference(IProperty property, IEnumerable<IRuleset> styles, HashSet<string> seenVariables) {
 
             if (property is null)
                 throw new ArgumentNullException(nameof(property));
@@ -98,18 +102,21 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             if (styles is null)
                 throw new ArgumentNullException(nameof(styles));
 
-            HashSet<string> seenVariables = new HashSet<string>();
+            if (seenVariables is null)
+                throw new ArgumentNullException(nameof(seenVariables));
 
             // The variable may resolve to another variable reference, so this process is recursive.
 
-            while (IsVariableReference(property)) {
+            while (IsVariableReference(property.Value)) {
 
                 // Get the name of the referenced variable.
 
-                string variableName = property.Value.As<string>();
+                string variableName = GetVariableReferenceName(property.Value);
 
-                if (!PropertyUtilities.IsVariable(variableName))
-                    return property;
+                // If we've encountered a cycle (from previous calls) or an invalid variable name, just reset the property.
+
+                if (!IsVariableName(variableName) || seenVariables.Contains(variableName))
+                    return propertyFactory.Create(property.Name, PropertyValue.Unset);
 
                 seenVariables.Add(variableName);
 
@@ -131,7 +138,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
                 // If the value of this variable is another variable we've encountered already, we have a cycle.
                 // If we find a cycle, just reset the property.
 
-                if (variableValue.IsVariableReference && seenVariables.Contains(variableValue.As<string>()))
+                if (IsVariableReference(variableValue) && seenVariables.Contains(GetVariableReferenceName(variableValue)))
                     return propertyFactory.Create(property.Name, PropertyValue.Unset);
 
                 // Create a new property with the new value.
@@ -144,7 +151,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         }
 
-        private IProperty ResolveKeywordReference(IProperty property, INode2 node, IEnumerable<IRuleset> styles) {
+        private IProperty ResolveKeywordReference(IProperty property, INode2 node, IEnumerable<IRuleset> styles, HashSet<string> seenKeywords) {
 
             if (property is null)
                 throw new ArgumentNullException(nameof(property));
@@ -155,15 +162,21 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             if (styles is null)
                 throw new ArgumentNullException(nameof(styles));
 
-            HashSet<string> seenKeywords = new HashSet<string>();
+            if (styles is null)
+                throw new ArgumentNullException(nameof(styles));
 
             // The variable may resolve to another keyword, so this process is recursive.
 
-            while (IsKeywordReference(property)) {
+            while (IsKeyword(property.Value)) {
 
                 // Get the name of the keyword.
 
                 string keyword = property.Value.As<string>();
+
+                // If we've encountered a cycle (from previous calls), create a fallback property.
+
+                if (seenKeywords.Contains(keyword))
+                    return CreateFallbackProperty(property);
 
                 seenKeywords.Add(keyword);
 
@@ -192,21 +205,19 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
                         break;
 
                     case Keyword.CurrentColor:
-                        property = ResolveCurrentColorKeyword(property, styles);
+                        property = ResolveCurrentColorKeyword(property, node, styles);
                         break;
 
                 }
 
-                if (property.Value.IsKeyword && seenKeywords.Contains(property.Value.As<string>())) {
+                if (IsKeyword(property.Value) && seenKeywords.Contains(property.Value.As<string>())) {
 
                     // If we've found ourselves in a cycle of keywords, we'll return a default value for the property.
                     // This might happen if "initial" is resolved as "revert" (due to no initial value being specified in the property definition),
                     // but the user agent doesn't specify a value for a property, causing it to get resolved back to "initial".
                     // With well-defined properties, this shouldn't occur.
 
-                    IPropertyValue initialPropertyValue = PropertyValue.Create(property.ValueType, Activator.CreateInstance(property.ValueType));
-
-                    return propertyFactory.Create(property.Name, initialPropertyValue);
+                    return CreateFallbackProperty(property);
 
                 }
 
@@ -303,7 +314,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         }
 
-        private IProperty ResolveCurrentColorKeyword(IProperty property, IEnumerable<IRuleset> styles) {
+        private IProperty ResolveCurrentColorKeyword(IProperty property, INode2 node, IEnumerable<IRuleset> styles) {
 
             if (property is null)
                 throw new ArgumentNullException(nameof(property));
@@ -318,26 +329,34 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
                 .FirstOrDefault();
 
             if (colorProperty is null)
-                return propertyFactory.Create(property.Name, PropertyValue.Revert);
+                colorProperty = propertyFactory.Create(PropertyName.Color);
+
+            // Make sure we use the computed value for the "color" property, because it may be set to a variable or a keyword.
+            // If we use the value directly, it may be interpreted incorrectly by the consuming property.
+
+            colorProperty = ComputeProperty(colorProperty, node, styles);
 
             return propertyFactory.Create(property.Name, colorProperty.Value);
 
         }
 
-        private static bool IsVariableReference(IProperty property) {
+        private IProperty CreateFallbackProperty(IProperty property) {
 
             if (property is null)
                 throw new ArgumentNullException(nameof(property));
 
-            return property.Value.IsVariableReference;
+            IPropertyValue initialPropertyValue = PropertyValue.Create(property.ValueType, Activator.CreateInstance(property.ValueType));
+
+            return propertyFactory.Create(property.Name, initialPropertyValue);
 
         }
-        private static bool IsKeywordReference(IProperty property) {
 
-            if (property is null)
-                throw new ArgumentNullException(nameof(property));
+        private static string GetVariableReferenceName(IPropertyValue value) {
 
-            return property.Value.IsKeyword;
+            if (value is null)
+                throw new ArgumentNullException(nameof(value));
+
+            return value.As<VariableReference>().Name;
 
         }
 

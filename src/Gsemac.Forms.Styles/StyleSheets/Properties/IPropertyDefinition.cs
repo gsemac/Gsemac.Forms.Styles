@@ -6,16 +6,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
     public interface IPropertyDefinition {
 
         string Name { get; }
-
         Type ValueType { get; }
         IPropertyValue InitialValue { get; }
 
-        bool IsShorthand { get; }
         bool Inherited { get; }
+        bool IsShorthand { get; }
 
-        IProperty Create(IPropertyValue[] arguments);
-
-        IEnumerable<IPropertyDefinition> GetLonghands();
+        IEnumerable<ILonghandPropertyDefinition> GetLonghands();
 
     }
 

@@ -6,8 +6,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
     public interface IProperty {
 
         string Name { get; }
-        IPropertyValue Value { get; }
         Type ValueType { get; }
+        IPropertyValue Value { get; }
 
         bool Inherited { get; }
         bool IsShorthand { get; }

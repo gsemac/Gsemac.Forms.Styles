@@ -1,4 +1,6 @@
-﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
+﻿using System;
+
+namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     internal static class PropertyUtilities {
 
@@ -32,16 +34,6 @@
 
         }
 
-        public static bool IsVariable(string propertyName) {
-
-            if (string.IsNullOrEmpty(propertyName))
-                return false;
-
-            return propertyName
-                .TrimStart()
-                .StartsWith("--");
-
-        }
         public static bool IsInheritable(string propertyName) {
 
             // https://stackoverflow.com/a/30536051/5383169 (David Bonnet)
@@ -94,6 +86,62 @@
                     return false;
 
             }
+
+        }
+
+        public static bool IsVariableName(string propertyName) {
+
+            if (string.IsNullOrEmpty(propertyName))
+                return false;
+
+            return propertyName
+                .TrimStart()
+                .StartsWith("--");
+
+        }
+        public static bool IsVariableReference(IPropertyValue value) {
+
+            if (value is null)
+                throw new ArgumentNullException(nameof(value));
+
+            return value.Type.Equals(typeof(VariableReference));
+
+        }
+        public static bool IsKeyword(string value) {
+
+            if (string.IsNullOrEmpty(value))
+                return false;
+
+            switch (value.Trim().ToLowerInvariant()) {
+
+                case Keyword.Inherit:
+                case Keyword.Initial:
+                case Keyword.Revert:
+                case Keyword.RevertLayer:
+                case Keyword.Unset:
+
+                case Keyword.Auto:
+                case Keyword.None:
+
+                case Keyword.CanvasText:
+                case Keyword.CurrentColor:
+                    return true;
+
+                default:
+                    return false;
+
+            }
+
+        }
+        public static bool IsKeyword(IPropertyValue value) {
+
+            if (value is null)
+                throw new ArgumentNullException(nameof(value));
+
+            if (!value.Is<string>())
+                return false;
+
+            return IsKeyword(value.As<string>());
 
         }
 

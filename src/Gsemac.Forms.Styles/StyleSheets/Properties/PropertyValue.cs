@@ -12,20 +12,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         public Type Type { get; }
         public object Value { get; }
 
-        public bool IsKeyword { get; private set; }
-        public bool IsVariableReference => Type.Equals(typeof(VariableReference));
+        public static PropertyValue Inherit => Create(Keyword.Inherit);
+        public static PropertyValue Initial => Create(Keyword.Initial);
+        public static PropertyValue Revert => Create(Keyword.Revert);
+        public static PropertyValue RevertLayer => Create(Keyword.RevertLayer);
+        public static PropertyValue Unset => Create(Keyword.Unset);
 
-        public static PropertyValue Inherit => Create(Keyword.Inherit, isKeyword: true);
-        public static PropertyValue Initial => Create(Keyword.Initial, isKeyword: true);
-        public static PropertyValue Revert => Create(Keyword.Revert, isKeyword: true);
-        public static PropertyValue RevertLayer => Create(Keyword.RevertLayer, isKeyword: true);
-        public static PropertyValue Unset => Create(Keyword.Unset, isKeyword: true);
+        public static PropertyValue Auto => Create(Keyword.Auto);
+        public static PropertyValue None => Create(Keyword.None);
 
-        public static PropertyValue Auto => Create(Keyword.Auto, isKeyword: true);
-        public static PropertyValue None => Create(Keyword.None, isKeyword: true);
-
-        public static PropertyValue CanvasText => Create(Keyword.CanvasText, isKeyword: true);
-        public static PropertyValue CurrentColor => Create(Keyword.CurrentColor, isKeyword: true);
+        public static PropertyValue CanvasText => Create(Keyword.CanvasText);
+        public static PropertyValue CurrentColor => Create(Keyword.CurrentColor);
 
         public static PropertyValue<T> Create<T>(T value) {
 
@@ -78,16 +75,6 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         internal static PropertyValue Create(Type type, object value) {
 
             return new PropertyValue(type, value);
-
-        }
-
-        // Private members
-
-        private static PropertyValue Create<T>(T value, bool isKeyword) {
-
-            return new PropertyValue(typeof(T), value) {
-                IsKeyword = isKeyword,
-            };
 
         }
 

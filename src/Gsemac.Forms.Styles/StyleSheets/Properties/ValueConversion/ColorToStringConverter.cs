@@ -12,6 +12,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
             result = ColorTranslator.ToHtml(value).ToLowerInvariant();
 
+            // Treat "empty" colors the same as black.
+
+            if (string.IsNullOrWhiteSpace(result))
+                result = ColorTranslator.ToHtml(Color.Black).ToLowerInvariant();
+
             return true;
 
         }

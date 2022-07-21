@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.Properties;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
@@ -17,7 +19,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public IPropertyDefinitionBuilder WithName(string value) {
 
-            value = (value ?? string.Empty).Trim();
+            value = FormatPropertyName(value);
+
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException(ExceptionMessages.PropertyNameCannotBeEmpty, nameof(value));
 
             definition.Name = value;
 
@@ -67,7 +72,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             longhandBuilder.WithName(name);
 
-            longhands.Add(new LonghandPropertyInfo(longhandBuilder, longhandValueFactory));
+            longhands.Add(new LonghandPropertyBuilderInfo(longhandBuilder, longhandValueFactory));
 
             return longhandBuilder;
 
@@ -92,19 +97,107 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Private members
 
-        private class LonghandPropertyInfo {
+        private class LonghandPropertyBuilderInfo {
 
             // Public members
 
             public PropertyDefinitionBuilder Builder { get; }
             public LonghandPropertyValueFactory ValueFactory { get; }
 
-            public LonghandPropertyInfo(PropertyDefinitionBuilder builder, LonghandPropertyValueFactory valueFactory) {
+            public LonghandPropertyBuilderInfo(PropertyDefinitionBuilder builder, LonghandPropertyValueFactory valueFactory) {
 
                 Builder = builder;
                 ValueFactory = valueFactory;
 
             }
+
+        }
+
+        private class PropertyDefinition :
+            IPropertyDefinition {
+
+            // Public members
+
+            public string Name {
+                get => name;
+                set => name = FormatPropertyName(value);
+            }
+            public Type ValueType { get; set; } = typeof(object);
+            public IPropertyValue InitialValue { get; set; } = PropertyValue.Initial;
+
+            public bool Inherited { get; set; } = false;
+            public bool IsShorthand => longhands.Any();
+
+            public IEnumerable<ILonghandPropertyDefinition> GetLonghands() {
+
+                return longhands.ToArray();
+
+            }
+
+            public PropertyDefinition() { }
+            public PropertyDefinition(IPropertyDefinition definition) {
+
+                if (definition is null)
+                    throw new ArgumentNullException(nameof(definition));
+
+                Name = definition.Name;
+                ValueType = definition.ValueType;
+                InitialValue = definition.InitialValue;
+                Inherited = definition.Inherited;
+
+                foreach (ILonghandPropertyDefinition longhand in definition.GetLonghands())
+                    longhands.Add(longhand);
+
+            }
+
+            public void AddLonghand(IPropertyDefinition definition, LonghandPropertyValueFactory valueFactory) {
+
+                if (definition is null)
+                    throw new ArgumentNullException(nameof(definition));
+
+                if (valueFactory is null)
+                    throw new ArgumentNullException(nameof(valueFactory));
+
+                longhands.Add(new LonghandPropertyDefinition(definition, valueFactory));
+
+            }
+            public void AddLonghand(ILonghandPropertyDefinition definition) {
+
+                if (definition is null)
+                    throw new ArgumentNullException(nameof(definition));
+
+                longhands.Add(definition);
+
+            }
+
+            // Private members
+
+            private class LonghandPropertyDefinition :
+                PropertyDefinition,
+                ILonghandPropertyDefinition {
+
+                // Public members
+
+                public LonghandPropertyValueFactory ValueFactory { get; }
+
+                public LonghandPropertyDefinition(IPropertyDefinition definition, LonghandPropertyValueFactory valueFactory) :
+                    base(definition) {
+
+                    if (definition is null)
+                        throw new ArgumentNullException(nameof(definition));
+
+                    if (valueFactory is null)
+                        throw new ArgumentNullException(nameof(valueFactory));
+
+                    ValueFactory = valueFactory;
+
+                }
+            }
+
+            private readonly IList<ILonghandPropertyDefinition> longhands = new List<ILonghandPropertyDefinition>();
+            private string name = string.Empty;
+
+
 
         }
 
@@ -119,7 +212,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             if (buildParent)
                 return Build();
 
-            foreach (LonghandPropertyInfo longhand in longhands)
+            foreach (LonghandPropertyBuilderInfo longhand in longhands)
                 definition.AddLonghand(longhand.Builder.Build(buildParent: false), longhand.ValueFactory);
 
             longhands.Clear();
@@ -130,8 +223,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         private readonly IPropertyDefinitionBuilder parentBuilder;
         private readonly PropertyDefinition definition = new PropertyDefinition();
-        private readonly List<LonghandPropertyInfo> longhands = new List<LonghandPropertyInfo>();
+        private readonly List<LonghandPropertyBuilderInfo> longhands = new List<LonghandPropertyBuilderInfo>();
         private bool setValueType = false;
+
+        private static string FormatPropertyName(string value) {
+
+            return (value ?? string.Empty)?.Trim();
+
+        }
 
     }
 

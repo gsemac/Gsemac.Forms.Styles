@@ -1,5 +1,6 @@
 ﻿using Gsemac.Collections;
 using Gsemac.Collections.Extensions;
+using Gsemac.Forms.Styles.StyleSheets.Dom;
 using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Selectors;
 using System;
@@ -58,16 +59,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         public void Add(IProperty property) {
 
-            if (property is null)
-                throw new ArgumentNullException(nameof(property));
-
-            // Remove any existing property with the same name so that the property is added to end of the dictionary.
-
-            Remove(property.Name);
-
-            properties.Add(property.Name, property);
-
-            AddLonghands(property);
+            AddProperty(property);
 
         }
 
@@ -221,7 +213,15 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         private T GetPropertyValueOrDefault<T>(string propertyName) {
 
-            return GetPropertyOrDefault(propertyName).Value.As<T>();
+            IProperty property = GetPropertyOrDefault(propertyName);
+
+            // Resolve the property to the best of our abilty according to the information available in the ruleset.
+
+            IStyleComputationContext context = new StyleComputationContext();
+
+            property = context.ComputeProperty(property, Node.Empty, new[] { this });
+
+            return property.Value.As<T>();
 
         }
         private IProperty GetPropertyOrDefault(string propertyName) {
