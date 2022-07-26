@@ -33,6 +33,15 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
+        public override string ToString() {
+
+            // The string representation of the "border" property only supports a single set of styles for all borders.
+            // Therefore, we will serialize as a single border as if all of the border properties were equal.
+
+            return Top.ToString();
+
+        }
+
         public IEnumerator<Border> GetEnumerator() {
 
             yield return Top;

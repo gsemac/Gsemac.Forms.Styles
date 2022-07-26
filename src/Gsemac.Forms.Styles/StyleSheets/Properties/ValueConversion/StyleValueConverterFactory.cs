@@ -7,9 +7,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
         // Public members
 
-        public static StyleValueConverterFactory Default { get; } = new StyleValueConverterFactory();
-
-        public StyleValueConverterFactory() {
+        public StyleValueConverterFactory() :
+            base(CreateOptions()) {
 
             AddDefaultValueConverters();
 
@@ -27,6 +26,15 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
             AddValueConverter(new StringToLengthConverter());
             AddValueConverter(new StringToLineWidthConverter());
             AddValueConverter(new StringToPercentageConverter());
+
+        }
+
+        private static IValueConverterFactoryOptions CreateOptions() {
+
+            return new ValueConverterFactoryOptions() {
+                EnableDefaultConverters = true,
+                EnableDerivedClassLookup = true,
+            };
 
         }
 

@@ -31,29 +31,29 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public Color AccentColor => GetPropertyValueOrDefault<Color>(PropertyName.AccentColor);
         public Color BackgroundColor => GetPropertyValueOrDefault<Color>(PropertyName.BackgroundColor);
         public BackgroundImage BackgroundImage => GetPropertyValueOrDefault<BackgroundImage>(PropertyName.BackgroundImage);
-        public Borders Border => GetBorder();
-        public Border BorderBottom => GetBorderBottom();
+        public Borders Border => GetPropertyValueOrDefault<Borders>(PropertyName.Border);
+        public Border BorderBottom => GetPropertyValueOrDefault<Border>(PropertyName.BorderBottom);
         public Color BorderBottomColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderBottomColor);
         public ILengthPercentage BorderBottomLeftRadius => GetPropertyValueOrDefault<ILengthPercentage>(PropertyName.BorderBottomLeftRadius);
         public ILengthPercentage BorderBottomRightRadius => GetPropertyValueOrDefault<ILengthPercentage>(PropertyName.BorderBottomRightRadius);
         public BorderStyle BorderBottomStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderBottomStyle);
         public LineWidth BorderBottomWidth => GetPropertyValueOrDefault<LineWidth>(PropertyName.BorderBottomWidth);
-        public Border BorderLeft => GetBorderLeft();
+        public Border BorderLeft => GetPropertyValueOrDefault<Border>(PropertyName.BorderLeft);
         public Color BorderLeftColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderLeftColor);
         public BorderStyle BorderLeftStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderLeftStyle);
         public LineWidth BorderLeftWidth => GetPropertyValueOrDefault<LineWidth>(PropertyName.BorderLeftWidth);
-        public BorderRadii BorderRadius => GetBorderRadius();
-        public Border BorderRight => GetBorderRight();
+        public BorderRadii BorderRadius => GetPropertyValueOrDefault<BorderRadii>(PropertyName.BorderRadius);
+        public Border BorderRight => GetPropertyValueOrDefault<Border>(PropertyName.BorderRight);
         public Color BorderRightColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderRightColor);
         public BorderStyle BorderRightStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderRightStyle);
         public LineWidth BorderRightWidth => GetPropertyValueOrDefault<LineWidth>(PropertyName.BorderRightWidth);
-        public Border BorderTop => GetBorderTop();
+        public Border BorderTop => GetPropertyValueOrDefault<Border>(PropertyName.BorderTop);
         public Color BorderTopColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderTopColor);
         public ILengthPercentage BorderTopLeftRadius => GetPropertyValueOrDefault<ILengthPercentage>(PropertyName.BorderTopLeftRadius);
         public ILengthPercentage BorderTopRightRadius => GetPropertyValueOrDefault<ILengthPercentage>(PropertyName.BorderTopRightRadius);
         public BorderStyle BorderTopStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderTopStyle);
         public LineWidth BorderTopWidth => GetPropertyValueOrDefault<LineWidth>(PropertyName.BorderTopWidth);
-        public BorderWidths BorderWidth => GetBorderWidth();
+        public BorderWidths BorderWidth => GetPropertyValueOrDefault<BorderWidths>(PropertyName.BorderWidth);
         public Color Color => GetPropertyValueOrDefault<Color>(PropertyName.Color);
         public double Opacity => GetPropertyValueOrDefault<double>(PropertyName.Opacity);
 
@@ -213,7 +213,25 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
         private T GetPropertyValueOrDefault<T>(string propertyName) {
 
+            return GetPropertyValueOrDefault(propertyName).As<T>();
+
+        }
+        private IPropertyValue GetPropertyValueOrDefault(string propertyName) {
+
             IProperty property = GetPropertyOrDefault(propertyName);
+
+            // If this is a shorthand property that has been added before, we'll construct a value using the most recent longhand values we have.
+
+            if (property.IsShorthand) {
+
+                IPropertyValue[] arguments = property.Definition.Longhands
+                    .Select(longhand => longhand.Name)
+                    .Select(name => GetPropertyValueOrDefault(name))
+                    .ToArray();
+
+                property = propertyFactory.Create(property.Name, arguments);
+
+            }
 
             // Resolve the property to the best of our abilty according to the information available in the ruleset.
 
@@ -221,7 +239,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
             property = context.ComputeProperty(property, Node.Empty, new[] { this });
 
-            return property.Value.As<T>();
+            return property.Value;
 
         }
         private IProperty GetPropertyOrDefault(string propertyName) {
@@ -284,7 +302,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             // Convert the property to a set of longhand properties.
             // If the property is already a longhand property, we'll use it directly.
 
-            IEnumerable<IProperty> longhands = property.GetLonghands();
+            IEnumerable<IProperty> longhands = CreateLonghands(property);
 
             if (!longhands.Any())
                 longhands = new[] { property };
@@ -301,6 +319,28 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             }
 
         }
+        private IEnumerable<IProperty> CreateLonghands(IProperty property) {
+
+            if (property is null)
+                throw new ArgumentNullException(nameof(property));
+
+            if (!property.IsShorthand)
+                yield break;
+
+            // Compute the final value of the current property before attempting to create its longhands, because they may dependent on its final value.
+            // For example, the longhands may not be anticipating a keyword such as "initial".
+
+            IStyleComputationContext context = new StyleComputationContext();
+
+            IProperty baseProperty = context.ComputeProperty(property, Node.Empty, new[] { this });
+
+            foreach (ILonghandPropertyDefinition longhand in property.Definition.Longhands) {
+
+                yield return propertyFactory.Create(longhand.Name, longhand.ValueFactory(baseProperty.Value));
+
+            }
+
+        }
         private void RemoveLonghands(IProperty property) {
 
             if (property is null)
@@ -311,41 +351,6 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             if (longhandProperties.TryGetValue(property.Name, out var longhands))
                 longhands.RemoveAll(i => ReferenceEquals(i.Parent, property));
 
-        }
-
-        private Borders GetBorder() {
-
-            return new Borders(BorderTop, BorderRight, BorderBottom, BorderLeft);
-
-        }
-        private Border GetBorderBottom() {
-
-            return new Border(BorderBottomWidth, BorderBottomStyle, BorderBottomColor);
-
-        }
-        private Border GetBorderLeft() {
-
-            return new Border(BorderLeftWidth, BorderLeftStyle, BorderLeftColor);
-
-        }
-        private Border GetBorderRight() {
-
-            return new Border(BorderRightWidth, BorderRightStyle, BorderRightColor);
-
-        }
-        private Border GetBorderTop() {
-
-            return new Border(BorderTopWidth, BorderTopStyle, BorderTopColor);
-
-        }
-        private BorderRadii GetBorderRadius() {
-
-            return new BorderRadii(BorderTopLeftRadius, BorderTopRightRadius, BorderBottomRightRadius, BorderBottomLeftRadius);
-
-        }
-        private BorderWidths GetBorderWidth() {
-
-            return new BorderWidths(BorderTopWidth, BorderRightWidth, BorderBottomWidth, BorderLeftWidth);
         }
 
     }

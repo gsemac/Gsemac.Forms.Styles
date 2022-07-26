@@ -159,6 +159,9 @@
   <data name="PropertyNameCannotBeEmpty" xml:space="preserve">
     <value>Property name cannot be empty.</value>
   </data>
+  <data name="PropertyRequiresNArguments" xml:space="preserve">
+    <value>Property '{0}' requires {1} argument(s), but {2} were given.</value>
+  </data>
   <data name="UnexpectedToken" xml:space="preserve">
     <value>Encountered unexpected token '{0}'.</value>
   </data>

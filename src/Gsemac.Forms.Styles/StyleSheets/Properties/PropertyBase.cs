@@ -1,5 +1,7 @@
 ﻿using Gsemac.Forms.Styles.Properties;
+using Gsemac.Forms.Styles.StyleSheets.Dom;
 using Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,23 +14,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         // Public members
 
         public string Name => definition.Name;
+        public Type ValueType => definition.ValueType;
         public IPropertyValue Value { get; }
 
-        public bool Inherited => definition.Inherited || Value.Equals(PropertyValue.Inherit);
+        public bool Inherited => definition.Inherited;
         public bool IsShorthand => definition.IsShorthand;
-        public bool IsVariable => PropertyUtilities.IsVariableName(Name);
+        public bool IsVariable => definition.IsVariable;
 
-        public Type ValueType => definition.ValueType;
-
-        public virtual IEnumerable<IProperty> GetLonghands() {
-
-            foreach (ILonghandPropertyDefinition longhand in definition.GetLonghands()) {
-
-                yield return propertyFactory.Create(longhand.Name, longhand.ValueFactory(Value));
-
-            }
-
-        }
+        public IPropertyDefinition Definition => definition;
 
         public override string ToString() {
 
@@ -39,7 +32,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             object propertyValue = Value.Value;
 
-            string propertyValueStr = StyleValueConverterFactory.Default
+            string propertyValueStr = new StyleValueConverterFactory()
                 .Create(propertyValue.GetType(), typeof(string))
                 .Convert(propertyValue)
                 .ToString();
@@ -74,16 +67,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             Value = value;
 
         }
-        protected PropertyBase(IPropertyDefinition definition, IPropertyValue value, IPropertyFactory propertyFactory) {
+        protected PropertyBase(IPropertyDefinition definition, IPropertyValue value) {
 
             if (definition is null)
                 throw new ArgumentNullException(nameof(definition));
 
             if (value is null)
                 throw new ArgumentNullException(nameof(value));
-
-            if (propertyFactory is null)
-                throw new ArgumentNullException(nameof(propertyFactory));
 
             this.definition = definition;
             Value = value;
@@ -93,7 +83,6 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         // Private members
 
         private readonly IPropertyDefinition definition;
-        private readonly IPropertyFactory propertyFactory = PropertyFactory.Default;
 
     }
 

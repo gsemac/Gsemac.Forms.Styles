@@ -66,7 +66,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             definitions[definition.Name] = definition;
 
-            foreach (IPropertyDefinition longhandDefinition in definition.GetLonghands())
+            foreach (IPropertyDefinition longhandDefinition in definition.Longhands)
                 AddDefinition(longhandDefinition);
 
         }
@@ -106,6 +106,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 propertyValue = PropertyValue.Create(CreateBorder(arguments));
 
             }
+            else if (definition.ValueType.Equals(typeof(Borders))) {
+
+                propertyValue = PropertyValue.Create(CreateBorders(arguments));
+
+            }
             else if (definition.ValueType.Equals(typeof(BorderRadii))) {
 
                 propertyValue = PropertyValue.Create(CreateBorderRadius(arguments));
@@ -134,7 +139,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             // Create the new property.
 
-            return new Property(definition, propertyValue, this);
+            return new Property(definition, propertyValue);
 
         }
 
@@ -145,8 +150,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             // Public members
 
-            public Property(IPropertyDefinition definition, IPropertyValue value, IPropertyFactory propertyFactory) :
-                base(definition, value, propertyFactory) {
+            public Property(IPropertyDefinition definition, IPropertyValue value) :
+                base(definition, value) {
             }
 
         }
@@ -156,6 +161,19 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         private readonly IPropertyFactoryOptions options;
         private readonly IDictionary<string, IPropertyDefinition> definitions = new Dictionary<string, IPropertyDefinition>(StringComparer.OrdinalIgnoreCase);
 
+        private IPropertyDefinitionBuilder Define(string propertyName) {
+
+            return new PropertyDefinitionBuilder(propertyName);
+
+        }
+        private void AddDefinition(IPropertyDefinitionBuilder builder) {
+
+            if (builder is null)
+                throw new ArgumentNullException(nameof(builder));
+
+            AddDefinition(builder.Build());
+
+        }
         private void AddDefaultDefinitions() {
 
             // Any properties where the initial value is controlled by the user agent will not have an initial value set.
@@ -237,20 +255,6 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
-        private IPropertyDefinitionBuilder Define(string propertyName) {
-
-            return new PropertyDefinitionBuilder(propertyName);
-
-        }
-        private void AddDefinition(IPropertyDefinitionBuilder builder) {
-
-            if (builder is null)
-                throw new ArgumentNullException(nameof(builder));
-
-            AddDefinition(builder.Build());
-
-        }
-
         private IProperty CreateVariableProperty(string propertyName, IPropertyValue[] arguments) {
 
             if (propertyName is null)
@@ -289,6 +293,28 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
+        private static bool TryTakeArgumentAs<T>(IList<IPropertyValue> arguments, out T value) {
+
+            if (arguments is null)
+                throw new ArgumentException(nameof(arguments));
+
+            value = default;
+
+            foreach (IPropertyValue arg in arguments) {
+
+                if (arg.TryAs(out T tArg))
+                    arguments.Remove(arg);
+
+                value = tArg;
+
+                return true;
+
+            }
+
+            return false;
+
+        }
+
         private static BackgroundImage CreateBackgroundImage(IPropertyValue[] arguments) {
 
             return new BackgroundImage(arguments.Select(v => v.As<IImage>()));
@@ -296,38 +322,43 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         }
         private static Border CreateBorder(IPropertyValue[] arguments) {
 
-            // TODO: Implement this
+            if (arguments is null)
+                throw new ArgumentNullException(nameof(arguments));
 
-            throw new NotImplementedException();
+            IList<IPropertyValue> argumentsList = arguments.ToList();
 
-            //// At least a border style MUST be specified.
-            //// Arguments are allowed to occur in any order.
+            LineWidth width = TryTakeArgumentAs(argumentsList, out LineWidth lineWidthResult) ?
+                lineWidthResult :
+                LineWidth.Medium;
 
-            //BorderStyle? borderStyle = values.Select(value => value.GetString())
-            //    .Select(value => PropertyUtilities.TryParseBorderStyle(value, out BorderStyle result) ? (BorderStyle?)result : null)
-            //    .Where(result => result != null)
-            //    .FirstOrDefault();
+            BorderStyle borderStyle = TryTakeArgumentAs(argumentsList, out BorderStyle borderStyleResult) ?
+                borderStyleResult :
+                BorderStyle.None;
 
-            //if (!borderStyle.HasValue)
-            //    throw new ArgumentException(nameof(values));
+            Color color = TryTakeArgumentAs(argumentsList, out Color colorResult) ?
+                colorResult :
+                Color.Black;
 
-            //double borderWidth = values.Select(value => value.GetString())
-            //    .Select(value => PropertyUtilities.TryParseNumber(value, out double result) ? (double?)result : null)
-            //    .Where(result => result != null)
-            //    .FirstOrDefault() ?? 0.0;
+            return new Border(width, borderStyle, color);
 
-            //Color borderColor = values.Select(value => value.GetString())
-            //   .Select(value => PropertyUtilities.TryParseColor(value, out Color result) ? (Color?)result : null)
-            //   .Where(result => result != null)
-            //   .FirstOrDefault() ?? default;
+        }
+        private static Borders CreateBorders(IPropertyValue[] arguments) {
 
-            //return new Border(borderWidth, borderStyle.Value, borderColor);
+            if (arguments is null)
+                throw new ArgumentNullException(nameof(arguments));
+
+            return new Borders(
+                arguments[0].As<Border>(),
+                arguments[1].As<Border>(),
+                arguments[2].As<Border>(),
+                arguments[3].As<Border>()
+                );
 
         }
         private static BorderRadii CreateBorderRadius(IPropertyValue[] arguments) {
 
-            Length[] measurments = arguments
-                .Select(arg => arg.As<Length>())
+            ILengthPercentage[] measurments = arguments
+                .Select(arg => arg.As<ILengthPercentage>())
                 .ToArray();
 
             if (measurments.Count() == 4)

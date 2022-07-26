@@ -187,6 +187,15 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Property &apos;{0}&apos; requires {1} argument(s), but {2} were given..
+        /// </summary>
+        internal static string PropertyRequiresNArguments {
+            get {
+                return ResourceManager.GetString("PropertyRequiresNArguments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Encountered unexpected token &apos;{0}&apos;..
         /// </summary>
         internal static string UnexpectedToken {

@@ -11,8 +11,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         bool Inherited { get; }
         bool IsShorthand { get; }
+        bool IsVariable { get; }
 
-        IEnumerable<ILonghandPropertyDefinition> GetLonghands();
+        IEnumerable<ILonghandPropertyDefinition> Longhands { get; }
 
     }
 

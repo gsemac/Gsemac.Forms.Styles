@@ -14,6 +14,19 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public Border() {
         }
+        public Border(LineWidth width) {
+
+            if (width is null)
+                throw new ArgumentNullException(nameof(width));
+
+            Width = width;
+
+        }
+        public Border(BorderStyle style) {
+
+            Style = style;
+
+        }
         public Border(Color color) {
 
             Color = color;

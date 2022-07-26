@@ -127,12 +127,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             public bool Inherited { get; set; } = false;
             public bool IsShorthand => longhands.Any();
+            public bool IsVariable => PropertyUtilities.IsVariableName(Name);
 
-            public IEnumerable<ILonghandPropertyDefinition> GetLonghands() {
-
-                return longhands.ToArray();
-
-            }
+            public IEnumerable<ILonghandPropertyDefinition> Longhands => longhands.ToArray();
 
             public PropertyDefinition() { }
             public PropertyDefinition(IPropertyDefinition definition) {
@@ -145,7 +142,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 InitialValue = definition.InitialValue;
                 Inherited = definition.Inherited;
 
-                foreach (ILonghandPropertyDefinition longhand in definition.GetLonghands())
+                foreach (ILonghandPropertyDefinition longhand in definition.Longhands)
                     longhands.Add(longhand);
 
             }

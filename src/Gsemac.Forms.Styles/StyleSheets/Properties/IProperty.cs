@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
@@ -13,7 +12,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         bool IsShorthand { get; }
         bool IsVariable { get; }
 
-        IEnumerable<IProperty> GetLonghands();
+        IPropertyDefinition Definition { get; }
 
     }
 

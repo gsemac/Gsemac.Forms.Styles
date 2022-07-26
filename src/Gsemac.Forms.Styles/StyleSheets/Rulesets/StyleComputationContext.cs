@@ -81,14 +81,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             if (node.Parent is object) {
 
                 IEnumerable<IProperty> inheritedProperties = node.Parent.GetComputedStyle(this)
-                    .Where(property => property.Inherited);
+                    .Where(property => property.Inherited)
+                    .Where(property => !computedStyle.TryGetValue(property.Name, out IProperty value) || value.Value.Equals(PropertyValue.Inherit));
+
+                computedStyle.AddRange(inheritedProperties);
 
             }
 
             return computedStyle;
 
         }
-
+ 
         // Private members
 
         private readonly ISystemColorPalette systemColorPalette;
