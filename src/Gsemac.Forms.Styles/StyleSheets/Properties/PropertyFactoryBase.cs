@@ -106,6 +106,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 propertyValue = PropertyValue.Create(CreateBorder(arguments));
 
             }
+            else if (definition.ValueType.Equals(typeof(BorderColors))) {
+
+                propertyValue = PropertyValue.Create(CreateBorderColors(arguments));
+
+            }
             else if (definition.ValueType.Equals(typeof(Borders))) {
 
                 propertyValue = PropertyValue.Create(CreateBorders(arguments));
@@ -216,7 +221,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 .WithInitial(BorderStyle.None));
 
             AddDefinition(Define(PropertyName.BorderColor)
-                .WithType<Color>());
+                .WithType<BorderColors>()
+                .WithLonghand(PropertyName.BorderTopColor, (BorderColors p) => p.Top).WithInitial(PropertyValue.CurrentColor).EndProperty()
+                .WithLonghand(PropertyName.BorderRightColor, (BorderColors p) => p.Right).WithInitial(PropertyValue.CurrentColor).EndProperty()
+                .WithLonghand(PropertyName.BorderBottomColor, (BorderColors p) => p.Bottom).WithInitial(PropertyValue.CurrentColor).EndProperty()
+                .WithLonghand(PropertyName.BorderLeftColor, (BorderColors p) => p.Left).WithInitial(PropertyValue.CurrentColor).EndProperty());
 
             AddDefinition(Define(PropertyName.BorderLeftStyle)
                 .WithInitial(BorderStyle.None));
@@ -317,6 +326,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         private static BackgroundImage CreateBackgroundImage(IPropertyValue[] arguments) {
 
+            if (arguments is null)
+                throw new ArgumentNullException(nameof(arguments));
+
             return new BackgroundImage(arguments.Select(v => v.As<IImage>()));
 
         }
@@ -342,6 +354,25 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             return new Border(width, borderStyle, color);
 
         }
+        private static BorderColors CreateBorderColors(IPropertyValue[] arguments) {
+
+            if (arguments is null)
+                throw new ArgumentNullException(nameof(arguments));
+
+            Color[] colors = arguments
+                .Select(arg => arg.As<Color>())
+                .ToArray();
+
+            if (colors.Count() == 4)
+                return new BorderColors(colors[0], colors[1], colors[2], colors[3]);
+            else if (colors.Count() == 3)
+                return new BorderColors(colors[0], colors[1], colors[2]);
+            else if (colors.Count() == 2)
+                return new BorderColors(colors[0], colors[1]);
+            else
+                return new BorderColors(colors[0]);
+
+        }
         private static Borders CreateBorders(IPropertyValue[] arguments) {
 
             if (arguments is null)
@@ -356,6 +387,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
         private static BorderRadii CreateBorderRadius(IPropertyValue[] arguments) {
+
+            if (arguments is null)
+                throw new ArgumentNullException(nameof(arguments));
 
             ILengthPercentage[] measurments = arguments
                 .Select(arg => arg.As<ILengthPercentage>())
@@ -372,6 +406,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
         private static BorderWidths CreateBorderWidths(IPropertyValue[] arguments) {
+
+            if (arguments is null)
+                throw new ArgumentNullException(nameof(arguments));
 
             LineWidth[] measurments = arguments
                 .Select(arg => arg.As<LineWidth>())

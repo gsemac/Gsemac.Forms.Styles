@@ -38,6 +38,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public ILengthPercentage BorderBottomRightRadius => GetPropertyValueOrDefault<ILengthPercentage>(PropertyName.BorderBottomRightRadius);
         public BorderStyle BorderBottomStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderBottomStyle);
         public LineWidth BorderBottomWidth => GetPropertyValueOrDefault<LineWidth>(PropertyName.BorderBottomWidth);
+        public BorderColors BorderColor => GetPropertyValueOrDefault<BorderColors>(PropertyName.BorderColor);
         public Border BorderLeft => GetPropertyValueOrDefault<Border>(PropertyName.BorderLeft);
         public Color BorderLeftColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderLeftColor);
         public BorderStyle BorderLeftStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderLeftStyle);
@@ -142,8 +143,16 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(Selector?.ToString() ?? "");
-            sb.AppendLine(" {");
+            string selectorStr = Selector?.ToString() ?? string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(selectorStr)) {
+
+                sb.Append(selectorStr);
+                sb.Append(' ');
+
+            }
+
+            sb.AppendLine("{");
 
             foreach (IProperty property in this) {
 

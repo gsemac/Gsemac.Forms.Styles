@@ -60,6 +60,21 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             this(new Length(topLeft), new Length(topRight), new Length(bottomRight), new Length(bottomLeft)) {
         }
 
+        public override string ToString() {
+
+            if (TopLeft.Equals(TopRight) && TopLeft.Equals(BottomRight) && TopLeft.Equals(BottomLeft))
+                return $"{TopLeft}";
+
+            if (TopLeft.Equals(BottomRight) && TopRight.Equals(BottomLeft))
+                return $"{TopLeft} {TopRight}";
+
+            if (TopRight.Equals(BottomLeft))
+                return $"{TopLeft} {TopRight} {BottomRight}";
+
+            return $"{TopLeft} {TopRight} {BottomRight} {BottomLeft}";
+
+        }
+
         public IEnumerator<ILengthPercentage> GetEnumerator() {
 
             yield return TopLeft;
@@ -71,12 +86,6 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         IEnumerator IEnumerable.GetEnumerator() {
 
             return GetEnumerator();
-
-        }
-
-        public override string ToString() {
-
-            return $"{TopLeft} {TopRight} {BottomRight} {BottomLeft}";
 
         }
 
