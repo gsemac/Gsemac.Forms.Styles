@@ -34,6 +34,9 @@
 	  <Compile Update="Properties\ExceptionMessages.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	  </Compile>
+	  <Compile Update="Properties\StyleSheets.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

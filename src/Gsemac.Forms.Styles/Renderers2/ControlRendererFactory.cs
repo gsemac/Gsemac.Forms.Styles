@@ -9,11 +9,11 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         // Public members
 
-        public static ControlRendererFactory Default => new ControlRendererFactory();
+        public static ControlRendererFactory Default { get; } = new ControlRendererFactory();
 
         public ControlRendererFactory() {
 
-            InitializeApplicatorDictionary();
+            InitializeDefaultRenderers();
 
         }
 
@@ -30,9 +30,10 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         private readonly IDictionary<Type, IStyleRenderer> renderers = new Dictionary<Type, IStyleRenderer>();
 
-        private void InitializeApplicatorDictionary() {
+        private void InitializeDefaultRenderers() {
 
             renderers.Add(typeof(Button), new ButtonRenderer());
+            renderers.Add(typeof(CheckBox), new CheckBoxRenderer());
 
         }
 

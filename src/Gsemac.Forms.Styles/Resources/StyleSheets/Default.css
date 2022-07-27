@@ -1,0 +1,15 @@
+/* 
+    Colors were selected for the default style based on a default Windows 8.1 install.
+*/
+
+checkbox {
+    accent-color: white;
+}
+
+checkbox:hover {
+    accent-color: rgb(243, 249, 255);
+}
+
+checkbox:active {
+    accent-color: rgb(217, 236, 255);
+}

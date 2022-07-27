@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Gsemac.Drawing;
+using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers2 {
@@ -34,52 +36,60 @@ namespace Gsemac.Forms.Styles.Renderers2 {
         private const int CheckBoxWidth = 13;
 
         private void DrawCheckBox(CheckBox checkBox, IRenderContext context) {
-         
-            Color baseColor = context.Style.AccentColor;
 
-            Rectangle clientRect = context.ClientRectangle;
+            // Draw the background.
 
-            Rectangle checkRect = new Rectangle(
-                clientRect.X,
-                clientRect.Y + (int)(clientRect.Height / 2.0f - CheckBoxWidth / 2.0f) - 1,
+            Rectangle checkBoxRect = new Rectangle(
+                context.ClientRectangle.X,
+                context.ClientRectangle.Y + (int)(context.ClientRectangle.Height / 2.0f - CheckBoxWidth / 2.0f) - 1,
                 CheckBoxWidth,
                 CheckBoxWidth
-                );
+            );
 
-            //e.StyleRenderer.PaintBackground(e.Graphics, checkRect, ruleset);
-            //e.StyleRenderer.PaintBorder(e.Graphics, checkRect, ruleset);
+            Color baseColor = context.Style.AccentColor;
 
-            //// Draw the checkmark.
+            Color backgroundColor = baseColor;
+            Color outlineColor = ColorUtilities.Shade(backgroundColor, 0.5f);
+            Color checkColor = ColorUtilities.Shade(backgroundColor, 0.5f);
 
-            //if (control.Checked) {
+            using (Brush brush = new SolidBrush(backgroundColor))
+                context.Graphics.FillRectangle(brush, checkBoxRect);
 
-            //    using (Pen pen = new Pen(ruleset.Color?.Value ?? SystemColors.ControlText)) {
+            using (Pen pen = new Pen(outlineColor))
+                context.Graphics.DrawRectangle(pen, checkBoxRect);
 
-            //        e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            // Draw the checkmark.
 
-            //        pen.Alignment = PenAlignment.Center;
-            //        pen.Width = 2.0f;
-            //        pen.StartCap = LineCap.Square;
-            //        pen.EndCap = LineCap.Square;
+            if (checkBox.Checked) {
 
-            //        e.Graphics.DrawLine(pen, checkRect.X + 3, checkRect.Y + checkRect.Height / 2.0f, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5);
-            //        e.Graphics.DrawLine(pen, checkRect.X + checkRect.Width / 2.0f - 1, checkRect.Y + checkRect.Height - 5, checkRect.X + checkRect.Width - 4, checkRect.Y + 3);
+                using (Pen pen = new Pen(checkColor)) {
 
-            //    }
+                    context.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            //}
+                    pen.Alignment = PenAlignment.Center;
+                    pen.Width = 2.0f;
+                    pen.StartCap = LineCap.Square;
+                    pen.EndCap = LineCap.Square;
+
+                    context.Graphics.DrawLine(pen, checkBoxRect.X + 3, checkBoxRect.Y + checkBoxRect.Height / 2.0f, checkBoxRect.X + checkBoxRect.Width / 2.0f - 1, checkBoxRect.Y + checkBoxRect.Height - 5);
+                    context.Graphics.DrawLine(pen, checkBoxRect.X + checkBoxRect.Width / 2.0f - 1, checkBoxRect.Y + checkBoxRect.Height - 5, checkBoxRect.X + checkBoxRect.Width - 4, checkBoxRect.Y + 3);
+
+                }
+
+            }
 
         }
         private void DrawText(CheckBox checkBox, IRenderContext context) {
 
-            Rectangle clientRect = context.ClientRectangle;
+            int textXOffset = 3;
+            int textYOffset = -1;
 
             Rectangle textRect = new Rectangle(
-                clientRect.X + CheckBoxWidth + 3,
-                clientRect.Y - 1,
-                clientRect.Width,
-                clientRect.Height
-                );
+                context.ClientRectangle.X + CheckBoxWidth + textXOffset,
+                context.ClientRectangle.Y + textYOffset,
+                context.ClientRectangle.Width,
+                context.ClientRectangle.Height
+            );
 
             context.DrawText(textRect, checkBox.Text, checkBox.Font, ControlUtilities.GetTextFormatFlags(checkBox.TextAlign));
 

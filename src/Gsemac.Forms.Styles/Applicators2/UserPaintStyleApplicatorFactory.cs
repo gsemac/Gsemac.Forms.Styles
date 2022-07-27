@@ -32,6 +32,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
         private void InitializeApplicatorDictionary() {
 
             applicators.Add(typeof(Button), new UserPaintStyleApplicator<Button>());
+            applicators.Add(typeof(CheckBox), new UserPaintStyleApplicator<CheckBox>());
 
         }
 
