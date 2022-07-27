@@ -76,13 +76,11 @@ namespace Gsemac.Forms.Styles.Dom {
 
         public override int GetHashCode() {
 
-            IHashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-
-            hashCodeBuilder.Add(control);
-            hashCodeBuilder.Add((int)States);
-            hashCodeBuilder.Add(Parent);
-
-            return hashCodeBuilder.GetHashCode();
+            return new HashCodeBuilder()
+                .WithValue(control)
+                .WithValue((int)States)
+                .WithValue(Parent)
+                .Build();
 
         }
 

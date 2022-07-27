@@ -45,8 +45,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
         public override int GetHashCode() {
 
             return new HashCodeBuilder()
-                .Add(Type)
-                .Add(Value)
+                .WithValue(Type)
+                .WithValue(Value)
                 .GetHashCode();
 
         }

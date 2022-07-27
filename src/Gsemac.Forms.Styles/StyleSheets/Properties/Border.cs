@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion;
+﻿using Gsemac.Data.ValueConversion;
+using Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion;
 using System;
 using System.Drawing;
 

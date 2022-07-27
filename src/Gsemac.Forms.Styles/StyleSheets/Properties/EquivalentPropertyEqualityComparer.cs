@@ -22,8 +22,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             // Names are case-insensitive, but some values are not (e.g. URLs).
 
-            hashCodeBuilder.Add(obj.Name.ToLowerInvariant());
-            hashCodeBuilder.Add(obj.Value);
+            hashCodeBuilder.WithValue(obj.Name.ToLowerInvariant());
+            hashCodeBuilder.WithValue(obj.Value);
 
             return hashCodeBuilder.Build();
 

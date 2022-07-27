@@ -32,7 +32,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
         private static IValueConverterFactoryOptions CreateOptions() {
 
             return new ValueConverterFactoryOptions() {
-                EnableDefaultConverters = true,
+                EnableDefaultConversions = true,
                 EnableDerivedClassLookup = true,
                 EnableTransitiveLookup = true,
             };

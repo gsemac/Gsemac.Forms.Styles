@@ -21,12 +21,12 @@ namespace Gsemac.Forms.Styles.Dom {
             IHashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
 
             foreach (string @class in Classes)
-                hashCodeBuilder.Add(@class);
+                hashCodeBuilder.WithValue(@class);
 
-            hashCodeBuilder.Add(Tag);
-            hashCodeBuilder.Add(Id);
-            hashCodeBuilder.Add((int)States);
-            hashCodeBuilder.Add(Parent);
+            hashCodeBuilder.WithValue(Tag);
+            hashCodeBuilder.WithValue(Id);
+            hashCodeBuilder.WithValue((int)States);
+            hashCodeBuilder.WithValue(Parent);
 
             return hashCodeBuilder.GetHashCode();
 

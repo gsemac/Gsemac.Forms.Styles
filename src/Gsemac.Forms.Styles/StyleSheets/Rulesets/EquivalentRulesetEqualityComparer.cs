@@ -25,7 +25,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             IHashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
 
             foreach (IProperty property in obj.OrderBy(p => p.Name, StringComparer.OrdinalIgnoreCase))
-                hashCodeBuilder.Add(propertyComparer.GetHashCode(property));
+                hashCodeBuilder.WithValue(propertyComparer.GetHashCode(property));
 
             return hashCodeBuilder.Build();
 
