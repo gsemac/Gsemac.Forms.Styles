@@ -48,6 +48,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public Color BorderRightColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderRightColor);
         public BorderStyle BorderRightStyle => GetPropertyValueOrDefault<BorderStyle>(PropertyName.BorderRightStyle);
         public LineWidth BorderRightWidth => GetPropertyValueOrDefault<LineWidth>(PropertyName.BorderRightWidth);
+        public BorderStyles BorderStyle => GetPropertyValueOrDefault<BorderStyles>(PropertyName.BorderStyle);
         public Border BorderTop => GetPropertyValueOrDefault<Border>(PropertyName.BorderTop);
         public Color BorderTopColor => GetPropertyValueOrDefault<Color>(PropertyName.BorderTopColor);
         public ILengthPercentage BorderTopLeftRadius => GetPropertyValueOrDefault<ILengthPercentage>(PropertyName.BorderTopLeftRadius);

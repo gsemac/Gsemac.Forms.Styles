@@ -121,6 +121,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 propertyValue = PropertyValue.Create(CreateBorderRadius(arguments));
 
             }
+            else if (definition.ValueType.Equals(typeof(BorderStyles))) {
+
+                propertyValue = PropertyValue.Create(CreateBorderStyles(arguments));
+
+            }
             else if (definition.ValueType.Equals(typeof(BorderWidths))) {
 
                 propertyValue = PropertyValue.Create(CreateBorderWidths(arguments));
@@ -217,18 +222,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                     .WithLonghand(PropertyName.BorderLeftColor, (Border p) => p.Color).WithInitial(PropertyValue.CurrentColor).EndProperty()
                     .EndProperty());
 
-            AddDefinition(Define(PropertyName.BorderBottomStyle)
-                .WithInitial(BorderStyle.None));
-
             AddDefinition(Define(PropertyName.BorderColor)
                 .WithType<BorderColors>()
                 .WithLonghand(PropertyName.BorderTopColor, (BorderColors p) => p.Top).WithInitial(PropertyValue.CurrentColor).EndProperty()
                 .WithLonghand(PropertyName.BorderRightColor, (BorderColors p) => p.Right).WithInitial(PropertyValue.CurrentColor).EndProperty()
                 .WithLonghand(PropertyName.BorderBottomColor, (BorderColors p) => p.Bottom).WithInitial(PropertyValue.CurrentColor).EndProperty()
                 .WithLonghand(PropertyName.BorderLeftColor, (BorderColors p) => p.Left).WithInitial(PropertyValue.CurrentColor).EndProperty());
-
-            AddDefinition(Define(PropertyName.BorderLeftStyle)
-                .WithInitial(BorderStyle.None));
 
             AddDefinition(Define(PropertyName.BorderRadius)
                 .WithInitial(new BorderRadii())
@@ -237,14 +236,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 .WithLonghand(PropertyName.BorderBottomRightRadius, (BorderRadii p) => p.BottomRight).WithInitial(Length.Zero).EndProperty()
                 .WithLonghand(PropertyName.BorderBottomLeftRadius, (BorderRadii p) => p.BottomLeft).WithInitial(Length.Zero).EndProperty());
 
-            AddDefinition(Define(PropertyName.BorderRightStyle)
-                .WithInitial(BorderStyle.None));
-
             AddDefinition(Define(PropertyName.BorderStyle)
-                .WithType<BorderStyle>());
-
-            AddDefinition(Define(PropertyName.BorderTopStyle)
-                .WithInitial(BorderStyle.None));
+                .WithType<BorderStyles>()
+                .WithLonghand(PropertyName.BorderTopStyle, (BorderStyles p) => p.Top).WithInitial(BorderStyle.None).EndProperty()
+                .WithLonghand(PropertyName.BorderRightStyle, (BorderStyles p) => p.Right).WithInitial(BorderStyle.None).EndProperty()
+                .WithLonghand(PropertyName.BorderBottomStyle, (BorderStyles p) => p.Bottom).WithInitial(BorderStyle.None).EndProperty()
+                .WithLonghand(PropertyName.BorderLeftStyle, (BorderStyles p) => p.Left).WithInitial(BorderStyle.None).EndProperty());
 
             AddDefinition(Define(PropertyName.BorderWidth)
                 .WithType<BorderWidths>()
@@ -403,6 +400,25 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 return new BorderRadii(measurments[0], measurments[1]);
             else
                 return new BorderRadii(measurments[0]);
+
+        }
+        private static BorderStyles CreateBorderStyles(IPropertyValue[] arguments) {
+
+            if (arguments is null)
+                throw new ArgumentNullException(nameof(arguments));
+
+            BorderStyle[] borderStyles = arguments
+                .Select(arg => arg.As<BorderStyle>())
+                .ToArray();
+
+            if (borderStyles.Count() == 4)
+                return new BorderStyles(borderStyles[0], borderStyles[1], borderStyles[2], borderStyles[3]);
+            else if (borderStyles.Count() == 3)
+                return new BorderStyles(borderStyles[0], borderStyles[1], borderStyles[2]);
+            else if (borderStyles.Count() == 2)
+                return new BorderStyles(borderStyles[0], borderStyles[1]);
+            else
+                return new BorderStyles(borderStyles[0]);
 
         }
         private static BorderWidths CreateBorderWidths(IPropertyValue[] arguments) {

@@ -22,6 +22,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         ILengthPercentage BorderBottomRightRadius { get; }
         BorderStyle BorderBottomStyle { get; }
         LineWidth BorderBottomWidth { get; }
+        BorderColors BorderColor { get; }
         Color BorderLeftColor { get; }
         BorderStyle BorderLeftStyle { get; }
         LineWidth BorderLeftWidth { get; }
@@ -29,6 +30,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         Color BorderRightColor { get; }
         BorderStyle BorderRightStyle { get; }
         LineWidth BorderRightWidth { get; }
+        BorderStyles BorderStyle { get; }
         Color BorderTopColor { get; }
         ILengthPercentage BorderTopLeftRadius { get; }
         ILengthPercentage BorderTopRightRadius { get; }
