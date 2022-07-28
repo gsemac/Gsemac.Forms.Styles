@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace Gsemac.Forms.Styles.StyleSheets.Extensions {
+namespace Gsemac.Forms.Styles.StyleSheets {
 
     public static class StyleSheetFactoryExtensions {
 

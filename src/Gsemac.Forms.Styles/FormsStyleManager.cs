@@ -2,7 +2,6 @@
 using Gsemac.Forms.Styles.Dom;
 using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Dom;
-using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Collections.Generic;
@@ -11,26 +10,32 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles {
 
-    public class StyleManager :
+    public class FormsStyleManager :
         IStyleManager {
 
         // Public members
 
         public ICollection<IStyleSheet> StyleSheets { get; } = new List<IStyleSheet>();
 
-        public StyleManager(IStyleApplicatorFactory styleApplicatorFactory) {
+        public FormsStyleManager() :
+            this(StyleManagerOptions.Default) {
 
-            if (styleApplicatorFactory is null)
-                throw new ArgumentNullException(nameof(styleApplicatorFactory));
+        }
+        public FormsStyleManager(IStyleManagerOptions options) {
 
-            this.messageFilter = new StyleManagerMessageFilter(this);
-            this.styleApplicatorFactory = styleApplicatorFactory;
+            if (options is null)
+                throw new ArgumentNullException(nameof(options));
 
+            this.options = options;
+
+            messageFilter = new StyleManagerMessageFilter(this);
         }
 
         public void ApplyStyles() {
 
-            if (!HasStyles()) {
+            InitializeStyleApplicatorFactory();
+
+            if (!HasStyleSheets()) {
 
                 // If there are no style sheets, clear styles instead.
 
@@ -62,11 +67,13 @@ namespace Gsemac.Forms.Styles {
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
+            InitializeStyleApplicatorFactory();
+
             // Clear all existing styles for this control before attempting to apply them.
 
             ResetStyles(control);
 
-            if (HasStyles())
+            if (HasStyleSheets())
                 ApplyStylesInternal(control, createStyleWatcher: true, recursive: true);
 
         }
@@ -93,14 +100,7 @@ namespace Gsemac.Forms.Styles {
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
-            //// Remove any DOMs associated with the control.
-
-            //controlDoms.Remove(control);
-
-            //// Restore the state of the control and its children.
-            //// This will removed the stored state information.
-
-            //RestoreControlState(control, recursive: true);
+            ResetStylesInternal(control, recursive: true);
 
         }
 
@@ -119,6 +119,8 @@ namespace Gsemac.Forms.Styles {
             if (!disposedValue) {
 
                 if (disposing) {
+
+                    ResetStyles();
 
                 }
 
@@ -156,18 +158,53 @@ namespace Gsemac.Forms.Styles {
         }
 
         private readonly IDictionary<Control, ControlInfo> controlInfo = new Dictionary<Control, ControlInfo>();
-        private readonly IStyleApplicatorFactory styleApplicatorFactory;
+        private readonly IStyleManagerOptions options = StyleManagerOptions.Default;
         private readonly IMessageFilter messageFilter;
+        private IStyleApplicatorFactory styleApplicatorFactory;
         private bool addedMessageFilter;
         private bool disposedValue;
 
-        private bool HasStyles() {
+        private bool HasStyleSheets() {
 
             return StyleSheets is object && StyleSheets.Any();
 
         }
 
-        public void ApplyStylesInternal(Control control, bool createStyleWatcher, bool recursive) {
+        private void RestoreControlState(Control control, ControlInfo controlInfo) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            if (controlInfo is null)
+                throw new ArgumentNullException(nameof(controlInfo));
+
+            // Restore the control to its default appearance.
+
+            if (controlInfo.StyleApplicator is object)
+                controlInfo.StyleApplicator.DeinitializeStyle(control);
+
+            controlInfo.StyleInitialized = false;
+
+            controlInfo.State.Restore(control);
+
+
+        }
+        private IEnumerable<Control> GetChildControls(Control control) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            foreach (Control childControl in control.Controls)
+                yield return childControl;
+
+            // The context menu isn't stored in the child control collection.
+
+            if (control.ContextMenuStrip is object)
+                yield return control.ContextMenuStrip;
+
+        }
+
+        private void ApplyStylesInternal(Control control, bool createStyleWatcher, bool recursive) {
 
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
@@ -182,13 +219,8 @@ namespace Gsemac.Forms.Styles {
 
                 // Apply styles to all child controls.
 
-                foreach (Control childControl in control.Controls)
+                foreach (Control childControl in GetChildControls(control))
                     ApplyStylesInternal(childControl, createStyleWatcher: false, recursive: recursive);
-
-                // The context menu won't be stored in the child control collection, so apply its styles separately.
-
-                if (control.ContextMenuStrip is object)
-                    ApplyStylesInternal(control.ContextMenuStrip, createStyleWatcher: false, recursive: recursive);
 
             }
 
@@ -206,9 +238,47 @@ namespace Gsemac.Forms.Styles {
 
             }
 
-            // Remove the control information we've saved when the control is disposed.
+            // Remove the control information we've saved if the control is disposed.
 
             control.Disposed += ControlDisposedHandler;
+
+        }
+        private void ResetStylesInternal(Control control, bool recursive) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            if (controlInfo.TryGetValue(control, out ControlInfo info)) {
+
+                // Restore the control to its default appearance.
+
+                RestoreControlState(control, info);
+
+                // Remove the metadata we have stored.
+
+                controlInfo.Remove(control);
+
+                info.Dispose();
+
+            }
+
+            if (recursive) {
+
+                // Reset styles for all child controls.
+
+                foreach (Control childControl in GetChildControls(control))
+                    ResetStylesInternal(childControl, recursive: recursive);
+
+            }
+
+        }
+
+        private void InitializeStyleApplicatorFactory() {
+
+            if (options.EnableCustomRendering)
+                styleApplicatorFactory = new UserPaintStyleApplicatorFactory();
+            else
+                styleApplicatorFactory = new PropertyStyleApplicatorFactory();
 
         }
 
@@ -252,12 +322,7 @@ namespace Gsemac.Forms.Styles {
 
                     // Restore the control to its default appearance.
 
-                    if (info.StyleApplicator is object)
-                        info.StyleApplicator.DeinitializeStyle(node.Control);
-
-                    info.StyleInitialized = false;
-
-                    info.State.Restore(node.Control);
+                    RestoreControlState(node.Control, info);
 
                 }
 

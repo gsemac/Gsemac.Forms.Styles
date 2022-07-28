@@ -25,21 +25,21 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestForm));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Node1");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Node0", new System.Windows.Forms.TreeNode[] {
-            treeNode1});
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Node3");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Node5");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Node4", new System.Windows.Forms.TreeNode[] {
-            treeNode4});
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Node2", new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode5});
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Node1");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Node0", new System.Windows.Forms.TreeNode[] {
+            treeNode7});
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Node3");
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Node5");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Node4", new System.Windows.Forms.TreeNode[] {
+            treeNode10});
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Node2", new System.Windows.Forms.TreeNode[] {
+            treeNode9,
+            treeNode11});
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "item 1",
             "item2"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("item 2");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("item 3");
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("item 2");
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("item 3");
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
@@ -74,11 +74,11 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.ApplyUserPaintStylesButton = new System.Windows.Forms.Button();
+            this.ApplyPropertiesStylesButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
+            this.ClearStylesButton = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuItem1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItem2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,7 +93,7 @@
             this.item1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.item2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.button6 = new System.Windows.Forms.Button();
+            this.ShowNewFormButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -380,21 +380,21 @@
             // 
             this.treeView1.Location = new System.Drawing.Point(6, 183);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "Node1";
-            treeNode1.Text = "Node1";
-            treeNode2.Name = "Node0";
-            treeNode2.Text = "Node0";
-            treeNode3.Name = "Node3";
-            treeNode3.Text = "Node3";
-            treeNode4.Name = "Node5";
-            treeNode4.Text = "Node5";
-            treeNode5.Name = "Node4";
-            treeNode5.Text = "Node4";
-            treeNode6.Name = "Node2";
-            treeNode6.Text = "Node2";
+            treeNode7.Name = "Node1";
+            treeNode7.Text = "Node1";
+            treeNode8.Name = "Node0";
+            treeNode8.Text = "Node0";
+            treeNode9.Name = "Node3";
+            treeNode9.Text = "Node3";
+            treeNode10.Name = "Node5";
+            treeNode10.Text = "Node5";
+            treeNode11.Name = "Node4";
+            treeNode11.Text = "Node4";
+            treeNode12.Name = "Node2";
+            treeNode12.Text = "Node2";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2,
-            treeNode6});
+            treeNode8,
+            treeNode12});
             this.treeView1.Size = new System.Drawing.Size(189, 197);
             this.treeView1.TabIndex = 2;
             // 
@@ -428,9 +428,9 @@
             this.listView1.FullRowSelect = true;
             this.listView1.HideSelection = false;
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3});
+            listViewItem4,
+            listViewItem5,
+            listViewItem6});
             this.listView1.Location = new System.Drawing.Point(6, 7);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(189, 170);
@@ -476,27 +476,27 @@
             this.textBox6.TabIndex = 0;
             this.textBox6.Text = "Anchored left and right";
             // 
-            // button1
+            // ApplyUserPaintStylesButton
             // 
-            this.button1.Location = new System.Drawing.Point(12, 52);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(161, 27);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Apply styles (UserPaint)";
-            this.toolTip1.SetToolTip(this.button1, "This is a tool tip");
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            this.ApplyUserPaintStylesButton.Location = new System.Drawing.Point(12, 52);
+            this.ApplyUserPaintStylesButton.Name = "ApplyUserPaintStylesButton";
+            this.ApplyUserPaintStylesButton.Size = new System.Drawing.Size(161, 27);
+            this.ApplyUserPaintStylesButton.TabIndex = 1;
+            this.ApplyUserPaintStylesButton.Text = "Apply styles (UserPaint)";
+            this.toolTip1.SetToolTip(this.ApplyUserPaintStylesButton, "This is a tool tip");
+            this.ApplyUserPaintStylesButton.UseVisualStyleBackColor = true;
+            this.ApplyUserPaintStylesButton.Click += new System.EventHandler(this.ApplyUserPaintStylesButton_Click);
             // 
-            // button2
+            // ApplyPropertiesStylesButton
             // 
-            this.button2.Location = new System.Drawing.Point(12, 83);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(161, 27);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Apply styles (Properties)";
-            this.toolTip1.SetToolTip(this.button2, "This is another tool tip.\r\n\r\nThis one spans more than one line.");
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Button2_Click);
+            this.ApplyPropertiesStylesButton.Location = new System.Drawing.Point(12, 83);
+            this.ApplyPropertiesStylesButton.Name = "ApplyPropertiesStylesButton";
+            this.ApplyPropertiesStylesButton.Size = new System.Drawing.Size(161, 27);
+            this.ApplyPropertiesStylesButton.TabIndex = 2;
+            this.ApplyPropertiesStylesButton.Text = "Apply styles (Properties)";
+            this.toolTip1.SetToolTip(this.ApplyPropertiesStylesButton, "This is another tool tip.\r\n\r\nThis one spans more than one line.");
+            this.ApplyPropertiesStylesButton.UseVisualStyleBackColor = true;
+            this.ApplyPropertiesStylesButton.Click += new System.EventHandler(this.ApplyPropertiesStylesButton_Click);
             // 
             // panel1
             // 
@@ -517,15 +517,15 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "label2";
             // 
-            // button4
+            // ClearStylesButton
             // 
-            this.button4.Location = new System.Drawing.Point(12, 116);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(161, 27);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "Clear styles";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.Button4_Click);
+            this.ClearStylesButton.Location = new System.Drawing.Point(12, 116);
+            this.ClearStylesButton.Name = "ClearStylesButton";
+            this.ClearStylesButton.Size = new System.Drawing.Size(161, 27);
+            this.ClearStylesButton.TabIndex = 5;
+            this.ClearStylesButton.Text = "Clear styles";
+            this.ClearStylesButton.UseVisualStyleBackColor = true;
+            this.ClearStylesButton.Click += new System.EventHandler(this.ClearStylesButton_Click);
             // 
             // menuStrip1
             // 
@@ -625,15 +625,15 @@
             this.item2ToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.item2ToolStripMenuItem.Text = "item 2";
             // 
-            // button6
+            // ShowNewFormButton
             // 
-            this.button6.Location = new System.Drawing.Point(12, 151);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(161, 27);
-            this.button6.TabIndex = 8;
-            this.button6.Text = "Show new form";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.ShowNewFormButton.Location = new System.Drawing.Point(12, 151);
+            this.ShowNewFormButton.Name = "ShowNewFormButton";
+            this.ShowNewFormButton.Size = new System.Drawing.Size(161, 27);
+            this.ShowNewFormButton.TabIndex = 8;
+            this.ShowNewFormButton.Text = "Show new form";
+            this.ShowNewFormButton.UseVisualStyleBackColor = true;
+            this.ShowNewFormButton.Click += new System.EventHandler(this.ShowNewFormButton_Click);
             // 
             // TestForm
             // 
@@ -641,12 +641,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(681, 480);
             this.ContextMenuStrip = this.contextMenuStrip1;
-            this.Controls.Add(this.button6);
+            this.Controls.Add(this.ShowNewFormButton);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.ApplyUserPaintStylesButton);
+            this.Controls.Add(this.ClearStylesButton);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.ApplyPropertiesStylesButton);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
@@ -683,8 +683,8 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button ApplyUserPaintStylesButton;
+        private System.Windows.Forms.Button ApplyPropertiesStylesButton;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox1;
@@ -692,7 +692,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button ClearStylesButton;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.RadioButton radioButton2;
@@ -731,7 +731,7 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button ShowNewFormButton;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.TextBox textBox6;
     }

@@ -7,8 +7,8 @@ namespace Gsemac.Forms.Styles.Applicators {
         void ApplyStyles();
         void ClearStyles();
 
-        void ApplyStyles(Control control, IStyleOptions options = null);
-        void ClearStyles(Control control, IStyleOptions options = null);
+        void ApplyStyles(Control control, IStyleApplicationOptions options = null);
+        void ClearStyles(Control control, IStyleApplicationOptions options = null);
 
     }
 

@@ -1,8 +1,5 @@
 ﻿using Gsemac.Forms.Styles;
-using Gsemac.Forms.Styles.Applicators;
-using Gsemac.Forms.Styles.Applicators2;
 using Gsemac.Forms.Styles.StyleSheets;
-using Gsemac.Forms.Styles.StyleSheets.Extensions;
 using System;
 using System.Windows.Forms;
 
@@ -17,42 +14,35 @@ namespace ThemeTesting {
 
             InitializeComponent();
 
-            INodeStyleApplicatorFactory styleApplicatorFactory = new UserPaintControlStyleApplicatorFactory();
-            IStyleManager styleManager = new StyleManager(styleApplicatorFactory);
+            InitializeStyleManager();
 
-            styleManager.StyleSheets.Add(LoadStyleSheet());
+        }
+
+        private void ApplyUserPaintStylesButton_Click(object sender, EventArgs e) {
+
+            styleManagerOptions.EnableCustomRendering = true;
 
             styleManager.ApplyStyles();
 
         }
+        private void ApplyPropertiesStylesButton_Click(object sender, EventArgs e) {
 
-        private void Button1_Click(object sender, EventArgs e) {
+            styleManagerOptions.EnableCustomRendering = false;
 
-            styleApplicator = new UserPaintStyleApplicator(LoadStyleSheet(),
-                StyleApplicatorOptions.AddMessageFilter | StyleApplicatorOptions.DisposeStyleSheet);
-
-            styleApplicator.ApplyStyles();
+            styleManager.ApplyStyles();
 
         }
-        private void Button2_Click(object sender, EventArgs e) {
+        private void ClearStylesButton_Click(object sender, EventArgs e) {
 
-            styleApplicator = new PropertyStyleApplicator(LoadStyleSheet(),
-                StyleApplicatorOptions.AddMessageFilter | StyleApplicatorOptions.DisposeStyleSheet);
-
-            styleApplicator.ApplyStyles();
-
-        }
-        private void Button4_Click(object sender, EventArgs e) {
-
-            ClearStyles();
+            styleManager.ResetStyles();
 
         }
 
-        private void button6_Click(object sender, EventArgs e) {
+        private void ShowNewFormButton_Click(object sender, EventArgs e) {
 
-            Form form = new Form();
-
-            form.StartPosition = FormStartPosition.CenterParent;
+            Form form = new Form {
+                StartPosition = FormStartPosition.CenterParent
+            };
 
             form.Controls.Add(new Label() {
                 AutoSize = false,
@@ -66,18 +56,22 @@ namespace ThemeTesting {
 
         // Private members
 
-        Gsemac.Forms.Styles.Applicators.IStyleApplicator styleApplicator;
+        private readonly StyleManagerOptions styleManagerOptions = new StyleManagerOptions();
+        private IStyleManager styleManager;
 
-        private IStyleSheet LoadStyleSheet() {
+        private void InitializeStyleManager() {
 
-            //return new StyleSheetFactory().FromFile("DarkUI.css");
-            return new StyleSheetFactory().FromFile("Test.css");
+            styleManager = new FormsStyleManager(styleManagerOptions);
+
+            InitializeStyleSheets();
 
         }
-        private void ClearStyles() {
+        private void InitializeStyleSheets() {
 
-            if (styleApplicator != null)
-                styleApplicator.ClearStyles();
+            IStyleSheetFactory styleSheetFactory = StyleSheetFactory.Default;
+
+            styleManager.StyleSheets.Add(styleSheetFactory.FromFile("Test.css"));
+            //styleManager.StyleSheets.Add(styleSheetFactory.FromFile("DarkUI.css"));
 
         }
 
