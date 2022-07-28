@@ -36,8 +36,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public override string ToString() {
 
-            var converter = new StyleValueConverterFactory()
-                .Create<Color, string>();
+            var converter = StyleValueConverterFactory.Default.Create<Color, string>();
 
             if (Top.Equals(Right) && Top.Equals(Bottom) && Top.Equals(Left))
                 return converter.Convert(Top);

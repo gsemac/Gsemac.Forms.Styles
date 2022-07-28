@@ -32,7 +32,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
             object propertyValue = Value.Value;
 
-            string propertyValueStr = new StyleValueConverterFactory()
+            string propertyValueStr = StyleValueConverterFactory.Default
                 .Create(propertyValue.GetType(), typeof(string))
                 .Convert(propertyValue)
                 .ToString();

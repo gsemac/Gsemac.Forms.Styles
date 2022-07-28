@@ -7,6 +7,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
         // Public members
 
+        public static StyleValueConverterFactory Default { get; } = new StyleValueConverterFactory();
+
         public StyleValueConverterFactory() :
             base(CreateOptions()) {
 
@@ -32,7 +34,6 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
         private static IValueConverterFactoryOptions CreateOptions() {
 
             return new ValueConverterFactoryOptions() {
-                EnableDefaultConversions = true,
                 EnableDerivedClassLookup = true,
                 EnableTransitiveLookup = true,
             };

@@ -35,8 +35,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         public override string ToString() {
 
-            var converter = new StyleValueConverterFactory()
-                .Create<BorderStyle, string>();
+            var converter = StyleValueConverterFactory.Default.Create<BorderStyle, string>();
 
             if (Top.Equals(Right) && Top.Equals(Bottom) && Top.Equals(Left))
                 return converter.Convert(Top);

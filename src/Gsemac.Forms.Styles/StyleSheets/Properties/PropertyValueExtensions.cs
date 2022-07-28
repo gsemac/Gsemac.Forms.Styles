@@ -89,7 +89,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         // Private members
 
-        private static readonly IValueConverterFactory valueConverterFactory = new StyleValueConverterFactory();
+        private static readonly IValueConverterFactory valueConverterFactory = StyleValueConverterFactory.Default;
 
     }
 
