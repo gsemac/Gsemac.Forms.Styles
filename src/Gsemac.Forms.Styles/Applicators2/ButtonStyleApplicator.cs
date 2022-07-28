@@ -1,8 +1,8 @@
-﻿using Gsemac.Forms.Styles.StyleSheets.Properties;
-using Gsemac.Forms.Styles.StyleSheets.Rulesets;
+﻿using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using BorderStyle = Gsemac.Forms.Styles.StyleSheets.Properties.BorderStyle;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
@@ -17,13 +17,9 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             button.FlatStyle = FlatStyle.Flat;
 
-            double borderWidth = style.Where(p => PropertyUtilities.IsBorderWidthProperty(p))
-                 .Select(p => p.Value.As<double>())
-                 .LastOrDefault();
-
-            Color borderColor = style.Where(p => PropertyUtilities.IsBorderColorProperty(p))
-                 .Select(p => p.Value.As<Color>())
-                 .LastOrDefault();
+            BorderStyle borderStyle = style.BorderStyle.Where(s => s != BorderStyle.None).LastOrDefault();
+            double borderWidth = borderStyle == BorderStyle.None ? 0 : style.BorderWidth.Max(width => width.Value);
+            Color borderColor = style.BorderColor.Where(color => color != style.Color).LastOrDefault();
 
             button.FlatAppearance.BorderColor = borderColor;
             button.FlatAppearance.BorderSize = (int)borderWidth;

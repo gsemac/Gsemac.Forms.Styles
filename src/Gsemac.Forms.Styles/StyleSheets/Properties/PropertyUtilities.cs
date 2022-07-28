@@ -15,24 +15,6 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 property.Name == PropertyName.BorderRadius;
 
         }
-        public static bool IsBorderWidthProperty(IProperty property) {
-
-            return property.Name == PropertyName.BorderTopWidth ||
-               property.Name == PropertyName.BorderRightWidth ||
-               property.Name == PropertyName.BorderBottomWidth ||
-               property.Name == PropertyName.BorderLeftWidth ||
-               property.Name == PropertyName.BorderWidth;
-
-        }
-        public static bool IsBorderColorProperty(IProperty property) {
-
-            return property.Name == PropertyName.BorderTopColor ||
-               property.Name == PropertyName.BorderRightColor ||
-               property.Name == PropertyName.BorderBottomColor ||
-               property.Name == PropertyName.BorderLeftColor ||
-               property.Name == PropertyName.BorderColor;
-
-        }
 
         public static bool IsInheritable(string propertyName) {
 
