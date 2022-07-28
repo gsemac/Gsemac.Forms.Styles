@@ -7,6 +7,7 @@
         Disabled,
         Enabled,
         Focus,
+        FocusVisible,
         Hover,
     }
 

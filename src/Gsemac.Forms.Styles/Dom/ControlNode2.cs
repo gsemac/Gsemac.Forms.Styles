@@ -29,6 +29,7 @@ namespace Gsemac.Forms.Styles.Dom {
             if (populateChildren)
                 AddChildren(control);
 
+            AddStates(control);
             AddEventHandlers(control);
 
         }
@@ -54,10 +55,10 @@ namespace Gsemac.Forms.Styles.Dom {
             IRuleset ruleset = base.ComputeStyle(context);
 
             if (!ruleset.ContainsKey(PropertyName.BackgroundColor))
-                ruleset.Add(PropertyFactory.Default.Create(PropertyName.BackgroundColor, PropertyValue.Create(GetBackgroundColor(Control))));
+                ruleset.Add(PropertyFactory.Default.Create(PropertyName.BackgroundColor, GetBackgroundColor(Control)));
 
             if (!ruleset.ContainsKey(PropertyName.Color))
-                ruleset.Add(PropertyFactory.Default.Create(PropertyName.Color, PropertyValue.Create(Control.ForeColor)));
+                ruleset.Add(PropertyFactory.Default.Create(PropertyName.Color, Control.ForeColor));
 
             // When rendering a control with child controls, "holes" clipped out around child controls.
             // Since nothing is rendered in these "holes", if we try to clear with Color.Transparent, we'll just get a black background around the control.
@@ -67,7 +68,7 @@ namespace Gsemac.Forms.Styles.Dom {
 
                 Color clearColor = Parent.GetComputedStyle(context).BackgroundColor;
 
-                ruleset.Add(PropertyFactory.Default.Create(CustomPropertyName.ClearColor, PropertyValue.Create(clearColor)));
+                ruleset.Add(PropertyFactory.Default.Create(CustomPropertyName.ClearColor, clearColor));
 
             }
 
@@ -116,12 +117,56 @@ namespace Gsemac.Forms.Styles.Dom {
                 AddChild(childControl);
 
         }
+        private void AddStates(Control control) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            SetEnabled(control.Enabled);
+            SetFocused(control.Focused);
+
+        }
         private void RemoveChild(Control control) {
 
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
             Children.Remove(new ControlNode2(control));
+
+        }
+
+        private void SetEnabled(bool enabled) {
+
+            if (enabled) {
+
+                States.Add(NodeState.Enabled);
+                States.Remove(NodeState.Disabled);
+
+            }
+            else {
+
+                States.Remove(NodeState.Enabled);
+                States.Add(NodeState.Disabled);
+
+            }
+
+        }
+        private void SetFocused(bool focused) {
+
+            if (focused) {
+
+                States.Add(NodeState.Focus);
+
+                if (ControlUtilities2.FocusCuesShown(Control))
+                    States.Add(NodeState.FocusVisible);
+
+            }
+            else {
+
+                States.Remove(NodeState.Focus);
+                States.Remove(NodeState.FocusVisible);
+
+            }
 
         }
 
@@ -132,14 +177,16 @@ namespace Gsemac.Forms.Styles.Dom {
 
             control.ControlAdded += ControlAddedHandler;
             control.ControlRemoved += ControlRemovedHandler;
-
             control.Disposed += DisposedHandler;
-
+            control.EnabledChanged += EnabledChangedHandler;
             control.GotFocus += GotFocusHandler;
+            control.KeyDown += KeyDownHandler;
+            control.KeyUp += KeyUpHandler;
             control.LostFocus += LostFocusHandler;
-
+            control.MouseDown += MouseDownHandler;
             control.MouseEnter += MouseEnterHandler;
             control.MouseLeave += MouseLeaveHandler;
+            control.MouseUp += MouseUpHandler;
 
         }
         private void RemoveEventHandlers(Control control) {
@@ -157,6 +204,86 @@ namespace Gsemac.Forms.Styles.Dom {
 
             control.MouseEnter -= MouseEnterHandler;
             control.MouseLeave -= MouseLeaveHandler;
+
+        }
+
+        private void ControlAddedHandler(object sender, ControlEventArgs e) {
+
+            AddChild(e.Control);
+
+        }
+        private void ControlRemovedHandler(object sender, ControlEventArgs e) {
+
+            RemoveChild(e.Control);
+
+        }
+        private void DisposedHandler(object sender, EventArgs e) {
+
+            RemoveEventHandlers((Control)sender);
+
+        }
+        private void EnabledChangedHandler(object sender, EventArgs e) {
+
+            bool enabled = ((Control)sender).Enabled;
+
+            SetEnabled(enabled);
+
+        }
+        private void GotFocusHandler(object sender, EventArgs e) {
+
+            SetFocused(true);
+
+        }
+        private void KeyDownHandler(object sender, KeyEventArgs e) {
+
+            if (sender is ButtonBase _) {
+
+                bool active = e.KeyCode == Keys.Space &&
+                    !e.Alt &&
+                    !e.Control &&
+                    !e.Shift;
+
+                if (active)
+                    States.Add(NodeState.Active);
+
+            }
+
+        }
+        private void KeyUpHandler(object sender, KeyEventArgs e) {
+
+            if (sender is ButtonBase _) {
+
+                bool notActive = e.KeyCode == Keys.Space;
+
+                if (notActive)
+                    States.Remove(NodeState.Active);
+
+            }
+
+        }
+        private void LostFocusHandler(object sender, EventArgs e) {
+
+            SetFocused(false);
+
+        }
+        private void MouseDownHandler(object sender, MouseEventArgs e) {
+
+            States.Add(NodeState.Active);
+
+        }
+        private void MouseEnterHandler(object sender, EventArgs e) {
+
+            States.Add(NodeState.Hover);
+
+        }
+        private void MouseLeaveHandler(object sender, EventArgs e) {
+
+            States.Remove(NodeState.Hover);
+
+        }
+        private void MouseUpHandler(object sender, MouseEventArgs e) {
+
+            States.Remove(NodeState.Active);
 
         }
 
@@ -205,42 +332,6 @@ namespace Gsemac.Forms.Styles.Dom {
                 throw new ArgumentNullException(nameof(control));
 
             return control.GetType().Name;
-
-        }
-
-        private void ControlAddedHandler(object sender, ControlEventArgs e) {
-
-            AddChild(e.Control);
-
-        }
-        private void ControlRemovedHandler(object sender, ControlEventArgs e) {
-
-            RemoveChild(e.Control);
-
-        }
-        private void DisposedHandler(object sender, EventArgs e) {
-
-            RemoveEventHandlers((Control)sender);
-
-        }
-        private void GotFocusHandler(object sender, EventArgs e) {
-
-            States.Add(NodeState.Focus);
-
-        }
-        private void LostFocusHandler(object sender, EventArgs e) {
-
-            States.Remove(NodeState.Focus);
-
-        }
-        private void MouseEnterHandler(object sender, EventArgs e) {
-
-            States.Add(NodeState.Hover);
-
-        }
-        private void MouseLeaveHandler(object sender, EventArgs e) {
-
-            States.Remove(NodeState.Hover);
 
         }
 

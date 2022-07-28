@@ -47,10 +47,11 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             );
 
             Color baseColor = context.Style.AccentColor;
+            double perceivedLightness = ColorUtilities.ComputePerceivedLightness(baseColor);
 
             Color backgroundColor = baseColor;
-            Color outlineColor = ColorUtilities.Shade(backgroundColor, 0.5f);
-            Color checkColor = ColorUtilities.Shade(backgroundColor, 0.5f);
+            Color outlineColor = ColorUtilities.Shade(baseColor, 0.5f);
+            Color checkColor = perceivedLightness > 0.5 ? Color.Black : Color.White;
 
             using (Brush brush = new SolidBrush(backgroundColor))
                 context.Graphics.FillRectangle(brush, checkBoxRect);
@@ -78,8 +79,34 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             }
 
+            // Draw the focus ring.
+
+            if (ControlUtilities2.FocusCuesShown(checkBox)) {
+
+                Rectangle focusRect = GetFocusRect(checkBox, context);
+
+                using (Pen pen = new Pen(context.Style.Color)) {
+
+                    context.Graphics.SmoothingMode = SmoothingMode.Default;
+
+                    pen.DashPattern = new float[] { 1, 1 };
+
+                    context.Graphics.DrawRectangle(pen, focusRect);
+
+                }
+
+            }
+
         }
         private void DrawText(CheckBox checkBox, IRenderContext context) {
+
+            Rectangle textRect = GetTextRect(context);
+
+            context.DrawText(textRect, checkBox.Text, checkBox.Font, ControlUtilities.GetTextFormatFlags(checkBox.TextAlign));
+
+        }
+
+        private Rectangle GetTextRect(IRenderContext context) {
 
             int textXOffset = 4;
             int textYOffset = -1;
@@ -91,7 +118,24 @@ namespace Gsemac.Forms.Styles.Renderers2 {
                 context.ClientRectangle.Height
             );
 
-            context.DrawText(textRect, checkBox.Text, checkBox.Font, ControlUtilities.GetTextFormatFlags(checkBox.TextAlign));
+            return textRect;
+
+        }
+        private Rectangle GetFocusRect(CheckBox checkBox, IRenderContext context) {
+
+            int focusXOffset = -1;
+            int focusYOffset = 2;
+
+            Rectangle textRect = GetTextRect(context);
+
+            Size textSize = TextRenderer.MeasureText(checkBox.Text, checkBox.Font);
+
+            return new Rectangle(
+                textRect.X + focusXOffset,
+                textRect.Y + focusYOffset,
+                textSize.Width,
+                textSize.Height
+            );
 
         }
 

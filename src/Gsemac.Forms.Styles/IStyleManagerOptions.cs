@@ -3,6 +3,7 @@
     public interface IStyleManagerOptions {
 
         bool EnableCustomRendering { get; }
+        bool EnableDefaultStyles { get; }
 
     }
 

@@ -25,17 +25,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
             bool success = false;
 
-            switch (className) {
-
-                case "focus":
-                    success = node.States.Contains(NodeState.Focus);
-                    break;
-
-                case "hover":
-                    success = node.States.Contains(NodeState.Hover);
-                    break;
-
-            }
+            if (Enum.TryParse(className, ignoreCase: true, out NodeState nodeState))
+                success = node.States.Contains(nodeState);
 
             return success ?
                 new SelectorMatch(this) :

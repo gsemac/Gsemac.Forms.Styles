@@ -4,6 +4,7 @@
 
 checkbox {
     accent-color: white;
+    color: black;
 }
 
 checkbox:hover {
@@ -12,4 +13,9 @@ checkbox:hover {
 
 checkbox:active {
     accent-color: rgb(217, 236, 255);
+}
+
+checkbox:disabled {
+    accent-color: rgb(230, 230, 230);
+    color: rgb(85, 85, 85);
 }

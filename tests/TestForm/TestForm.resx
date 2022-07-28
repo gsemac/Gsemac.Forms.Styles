@@ -121,14 +121,14 @@
   <data name="button3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vgAADr4B6kKxwAAAAEBJREFUOE+9yiEOwDAAxLD+/9MbiPFppDOMcv7yfGCNNlmjTdZokzXaZI02WaNN
+        vAAADrwBlbxySQAAAEBJREFUOE+9yiEOwDAAxLD+/9MbiPFppDOMcv7yfGCNNlmjTdZokzXaZI02WaNN
         1miTNdpkjTZZo03WaJP1snNeFC2uYPbaXyMAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAIAAAAP3aGbAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vgAADr4B6kKxwAAADdBJREFUeF7t2O2R29i1htGJywE5HkfjZBzMvSPp8ce4TPYmebgpjNb6N1V+0Wig
+        vAAADrwBlbxySQAADdBJREFUeF7t2O2R29i1htGJywE5HkfjZBzMvSPp8ce4TPYmebgpjNb6N1V+0Wig
         zmO0fgMAAAAAAAAAuJj/A/iQMjTXDmBdGZprB7CuDM21A1hXhubaAawrQ3PtANaVobl2AOvK0Fw7gHVl
         aK4dwLoyNNcOYF0ZmmsHsK4MzbUDWFeG5toBrCtDc+0A1pWhuXYA68rQXDuAdWVorh3AujI01w5gXRma
         awewrgzNtQNYV4bm2gGsK0Nz7QDWlaG5dgDrytBcO4B1ZWiuHcC6MjTXDmBdGZprB7CuDM21A1hXhuba
@@ -196,12 +196,6 @@
   <metadata name="Column2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="Column1.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="Column2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>392, 17</value>
   </metadata>
@@ -228,8 +222,5 @@
   </metadata>
   <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>237, 17</value>
-  </metadata>
-  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>392, 17</value>
   </metadata>
 </root>

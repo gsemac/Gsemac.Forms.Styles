@@ -29,6 +29,10 @@ namespace Gsemac.Forms.Styles {
             this.options = options;
 
             messageFilter = new StyleManagerMessageFilter(this);
+
+            if (options.EnableDefaultStyles)
+                InitializeDefaultStyles();
+
         }
 
         public void ApplyStyles() {
@@ -254,20 +258,24 @@ namespace Gsemac.Forms.Styles {
 
                 RestoreControlState(control, info);
 
+                // Some controls need to be invalidated manually to update the appearance (e.g. Panel).
+
+                control.Invalidate();
+
                 // Remove the metadata we have stored.
 
                 controlInfo.Remove(control);
 
                 info.Dispose();
 
-            }
+                if (recursive) {
 
-            if (recursive) {
+                    // Reset styles for all child controls.
 
-                // Reset styles for all child controls.
+                    foreach (Control childControl in GetChildControls(control))
+                        ResetStylesInternal(childControl, recursive: recursive);
 
-                foreach (Control childControl in GetChildControls(control))
-                    ResetStylesInternal(childControl, recursive: recursive);
+                }
 
             }
 
@@ -279,6 +287,16 @@ namespace Gsemac.Forms.Styles {
                 styleApplicatorFactory = new UserPaintStyleApplicatorFactory();
             else
                 styleApplicatorFactory = new PropertyStyleApplicatorFactory();
+
+        }
+        private void InitializeDefaultStyles() {
+
+            IStyleSheetFactory styleSheetFactory = StyleSheetFactory.Default;
+            IStyleSheetOptions styleSheetOptions = new StyleSheetOptions() {
+                Origin = StyleOrigin.UserAgent,
+            };
+
+            StyleSheets.Add(styleSheetFactory.Parse(Properties.StyleSheets.Default, styleSheetOptions));
 
         }
 

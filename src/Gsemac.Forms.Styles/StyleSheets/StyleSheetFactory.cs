@@ -76,9 +76,10 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                             continue;
 
-                        case StyleSheetLexerTokenType.Tag:
                         case StyleSheetLexerTokenType.Class:
                         case StyleSheetLexerTokenType.Id:
+                        case StyleSheetLexerTokenType.Tag:
+                        case StyleSheetLexerTokenType.UniversalSelector:
                             currentRuleset = new Ruleset(ReadSelector(lexer), options.Origin);
                             continue;
 
