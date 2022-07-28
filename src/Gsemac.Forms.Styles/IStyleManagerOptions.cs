@@ -4,6 +4,7 @@
 
         bool EnableCustomRendering { get; }
         bool EnableDefaultStyles { get; }
+        bool RequireNonDefaultStyles { get; }
 
     }
 

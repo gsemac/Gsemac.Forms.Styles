@@ -61,6 +61,8 @@ namespace ThemeTesting {
 
         private void InitializeStyleManager() {
 
+            styleManagerOptions.RequireNonDefaultStyles = false;
+
             styleManager = new FormsStyleManager(styleManagerOptions);
 
             InitializeStyleSheets();

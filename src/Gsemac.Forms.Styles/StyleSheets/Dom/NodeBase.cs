@@ -133,7 +133,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
             if (node is null)
                 throw new ArgumentNullException(nameof(node));
 
-            xmlWriter.WriteStartElement(node.Tag.ToLowerInvariant());
+            xmlWriter.WriteStartElement(node.Tag);
 
             if (!string.IsNullOrEmpty(node.Id)) {
 

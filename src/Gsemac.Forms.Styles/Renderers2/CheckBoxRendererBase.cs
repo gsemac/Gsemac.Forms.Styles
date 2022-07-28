@@ -9,10 +9,10 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         // Public members
 
-        public override void Render(TControl checkBox, IRenderContext context) {
+        public override void Render(TControl control, IRenderContext context) {
 
-            if (checkBox is null)
-                throw new ArgumentNullException(nameof(checkBox));
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
 
             if (context is null)
                 throw new ArgumentNullException(nameof(context));
@@ -21,11 +21,11 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             context.DrawBackground();
 
-            DrawCheck(checkBox, context);
-            DrawText(checkBox, context);
+            DrawCheck(control, context);
+            DrawText(control, context);
 
-            if (ControlUtilities2.FocusCuesShown(checkBox))
-                ControlRenderUtilities.DrawFocusRectangle(context.Graphics, GetFocusRect(checkBox, context), context.Style);
+            if (ControlUtilities2.FocusCuesShown(control))
+                ControlRenderUtilities.DrawFocusRectangle(context.Graphics, GetFocusRectangle(control, context), context.Style);
 
             context.DrawBorder();
 
@@ -35,25 +35,9 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         protected int CheckBoxWidth { get; } = 12;
 
-        protected abstract void DrawCheck(TControl checkBox, IRenderContext context);
+        protected abstract void DrawCheck(TControl control, IRenderContext context);
 
-        // Private members
-
-        private void DrawText(TControl checkBox, IRenderContext context) {
-
-            if (checkBox is null)
-                throw new ArgumentNullException(nameof(checkBox));
-
-            if (context is null)
-                throw new ArgumentNullException(nameof(context));
-
-            Rectangle textRect = GetTextRect(context);
-
-            context.DrawText(textRect, checkBox.Text, checkBox.Font, ControlUtilities.GetTextFormatFlags(checkBox.TextAlign));
-
-        }
-
-        private Rectangle GetTextRect(IRenderContext context) {
+        protected virtual Rectangle GetTextRectangle(TControl control, IRenderContext context) {
 
             int textXOffset = 4;
             int textYOffset = -1;
@@ -68,14 +52,14 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             return textRect;
 
         }
-        private Rectangle GetFocusRect(TControl checkBox, IRenderContext context) {
+        protected virtual Rectangle GetFocusRectangle(TControl control, IRenderContext context) {
 
             int focusXOffset = -1;
             int focusYOffset = 2;
 
-            Rectangle textRect = GetTextRect(context);
+            Rectangle textRect = GetTextRectangle(control, context);
 
-            Size textSize = TextRenderer.MeasureText(checkBox.Text, checkBox.Font);
+            Size textSize = TextRenderer.MeasureText(control.Text, control.Font);
 
             return new Rectangle(
                 textRect.X + focusXOffset,
@@ -83,6 +67,22 @@ namespace Gsemac.Forms.Styles.Renderers2 {
                 textSize.Width,
                 textSize.Height
             );
+
+        }
+
+        // Private members
+
+        private void DrawText(TControl control, IRenderContext context) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            if (context is null)
+                throw new ArgumentNullException(nameof(context));
+
+            Rectangle textRect = GetTextRectangle(control, context);
+
+            context.DrawText(textRect, control.Text, control.Font, ControlUtilities.GetTextFormatFlags(control.TextAlign));
 
         }
 

@@ -45,15 +45,11 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             using (Pen pen = new Pen(style.Color)) {
 
-                GraphicsState graphicsState = graphics.Save();
-
                 graphics.SmoothingMode = SmoothingMode.Default;
 
                 pen.DashPattern = new float[] { 1, 1 };
 
                 graphics.DrawRectangle(pen, rectangle);
-
-                graphics.Restore(graphicsState);
 
             }
 

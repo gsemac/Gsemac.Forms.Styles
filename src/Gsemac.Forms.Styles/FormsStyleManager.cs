@@ -324,7 +324,7 @@ namespace Gsemac.Forms.Styles {
 
             if (controlInfo.TryGetValue(node.Control, out ControlInfo info)) {
 
-                if (node.Styles.Any() && info.StyleApplicator is object) {
+                if (node.Styles.Any(style => !options.RequireNonDefaultStyles || style.Origin != StyleOrigin.UserAgent) && info.StyleApplicator is object) {
 
                     // Apply the new styles to the control.
 

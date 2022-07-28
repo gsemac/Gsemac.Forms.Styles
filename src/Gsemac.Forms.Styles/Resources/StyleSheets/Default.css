@@ -2,20 +2,20 @@
     Colors were selected for the default style based on a default Windows 8.1 install.
 */
 
-checkbox {
+checkbox, radiobutton {
     accent-color: white;
     color: black;
 }
 
-checkbox:hover {
+checkbox:hover, radiobutton:hover {
     accent-color: rgb(243, 249, 255);
 }
 
-checkbox:active {
+checkbox:active, radiobutton:active {
     accent-color: rgb(217, 236, 255);
 }
 
-checkbox:disabled {
+checkbox:disabled, radiobutton:disabled {
     accent-color: rgb(230, 230, 230);
     color: rgb(85, 85, 85);
 }

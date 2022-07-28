@@ -10,7 +10,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         // Protected members
 
-        protected override void DrawCheck(CheckBox checkBox, IRenderContext context) {
+        protected override void DrawCheck(CheckBox control, IRenderContext context) {
 
             // Draw the background.
 
@@ -36,7 +36,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             // Draw the checkmark.
 
-            if (checkBox.Checked) {
+            if (control.Checked) {
 
                 using (Pen pen = new Pen(checkColor)) {
 
