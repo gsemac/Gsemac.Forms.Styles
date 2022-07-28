@@ -19,7 +19,11 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             context.Clear();
 
-            context.DrawBackground();
+            Rectangle clientRect = context.ClientRectangle;
+
+            clientRect.Inflate(-1, -1);
+
+            context.DrawBackground(clientRect);
 
             if (button.Image is object) {
 
@@ -34,7 +38,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             context.DrawText(button.Text, button.Font, ControlUtilities.GetTextFormatFlags(button.TextAlign));
 
-            context.DrawBorder();
+            context.DrawBorder(clientRect);
 
         }
 

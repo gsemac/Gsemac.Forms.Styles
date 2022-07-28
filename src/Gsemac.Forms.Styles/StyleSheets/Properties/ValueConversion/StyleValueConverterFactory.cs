@@ -22,12 +22,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
             AddValueConverter(new BorderStyleToStringConverter());
             AddValueConverter(new ColorToStringConverter());
+            AddValueConverter(new SideOrCornerToAngleConverter());
             AddValueConverter(new StringToAngleConverter());
             AddValueConverter(new StringToBorderStyleConverter());
             AddValueConverter(new StringToColorConverter());
             AddValueConverter(new StringToLengthConverter());
             AddValueConverter(new StringToLineWidthConverter());
             AddValueConverter(new StringToPercentageConverter());
+            AddValueConverter(new StringToSideOrCornerConverter());
 
         }
 

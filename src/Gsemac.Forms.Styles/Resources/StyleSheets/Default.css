@@ -2,6 +2,32 @@
     Colors were selected for the default style based on a default Windows 8.1 install.
 */
 
+button {
+    background-color: rgb(233, 233, 233);
+    background-image: linear-gradient(to bottom, rgb(240, 240, 240), rgb(229, 229, 229));
+    border-color: rgb(172, 172, 172);
+    border-style: solid;
+    border-width: 1px;
+    color: black;
+}
+
+button:hover {
+    background-image: linear-gradient(to bottom, rgb(235, 244, 252), rgb(220, 236, 252));
+    border-color: rgb(126, 180, 234);
+}
+
+button:active {
+    background-image: linear-gradient(to bottom, rgb(218, 235, 252), rgb(196, 224, 252));
+    border-color: rgb(86, 157, 229);
+}
+
+button:disabled {
+    background-color: rgb(239, 239, 239);
+    background-image: none;
+    border-color: rgb(217, 217, 217);
+    color: rgb(85, 85, 85);
+}
+
 checkbox, radiobutton {
     accent-color: white;
     color: black;

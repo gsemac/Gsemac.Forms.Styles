@@ -135,14 +135,13 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             // Draw the background image.
 
-            //if (style.BackgroundImage.HasValue()) {
+            if (style.BackgroundImage.Any()) {
 
-            //    ClipToBorder(graphics, backgroundRect, style);
+                ClipToBorder(graphics, backgroundRect, style);
 
-            //    foreach (IImage image in style.BackgroundImage.Value.Images)
-            //        graphics.DrawImage(image, backgroundRect);
+                DrawBackgroundImage(graphics, backgroundRect, style.BackgroundImage);
 
-            //}
+            }
 
             graphics.Restore(state);
 
@@ -378,7 +377,31 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         }
 
-        private static void DrawGradient(Graphics graphics, Rectangle bounds, ILinearGradient gradient) {
+        private static void DrawBackgroundImage(Graphics graphics, Rectangle bounds, BackgroundImage backgroundImage) {
+
+            if (graphics is null)
+                throw new ArgumentNullException(nameof(graphics));
+
+            if (backgroundImage is null)
+                throw new ArgumentNullException(nameof(backgroundImage));
+
+            foreach (IImage image in backgroundImage)
+                DrawImage(graphics, bounds, image);
+
+        }
+        private static void DrawImage(Graphics graphics, Rectangle bounds, IImage image) {
+
+            if (graphics is null)
+                throw new ArgumentNullException(nameof(graphics));
+
+            if (image is null)
+                throw new ArgumentNullException(nameof(image));
+
+            if (image is LinearGradient linearGradient)
+                DrawLinearGradient(graphics, bounds, linearGradient);
+
+        }
+        private static void DrawLinearGradient(Graphics graphics, Rectangle bounds, LinearGradient gradient) {
 
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
@@ -396,11 +419,10 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
                     ColorBlend colorBlend = new ColorBlend {
                         Colors = gradient.ColorStops.Select(stop => stop.Color).ToArray(),
+                        Positions = Enumerable.Range(0, colorStopsCount)
+                            .Select(i => (float)i / (colorStopsCount - 1))
+                            .ToArray()
                     };
-
-                    colorBlend.Positions = Enumerable.Range(0, colorStopsCount)
-                         .Select(i => (float)i / (colorStopsCount - 1))
-                         .ToArray();
 
                     brush.InterpolationColors = colorBlend;
 

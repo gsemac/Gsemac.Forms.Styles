@@ -27,21 +27,21 @@ namespace Gsemac.Forms.Styles.Applicators2 {
         public virtual void InitializeStyle(T obj) { }
         public virtual void DeinitializeStyle(T obj) { }
 
-        public override void InitializeStyle(object obj) {
+        public sealed override void InitializeStyle(object obj) {
 
             ValidateStyleTarget(obj);
 
             InitializeStyle((T)obj);
 
         }
-        public override void DeinitializeStyle(object obj) {
+        public sealed override void DeinitializeStyle(object obj) {
 
             ValidateStyleTarget(obj);
 
             DeinitializeStyle((T)obj);
 
         }
-        public override void ApplyStyle(object obj, IRuleset ruleset) {
+        public sealed override void ApplyStyle(object obj, IRuleset ruleset) {
 
             if (obj is null)
                 throw new ArgumentNullException(nameof(obj));

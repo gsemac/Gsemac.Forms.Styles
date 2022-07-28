@@ -326,7 +326,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             if (arguments is null)
                 throw new ArgumentNullException(nameof(arguments));
 
-            return new BackgroundImage(arguments.Select(v => v.As<IImage>()));
+            IImage[] images = arguments
+                .Select(arg => arg.As<IImage>())
+                .ToArray();
+
+            return new BackgroundImage(images);
 
         }
         private static Border CreateBorder(IPropertyValue[] arguments) {

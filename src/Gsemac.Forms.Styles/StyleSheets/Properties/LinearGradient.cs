@@ -6,14 +6,14 @@ using System.Linq;
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
     public class LinearGradient :
-        ILinearGradient {
+        IGradient {
 
         // Public members
 
         public Angle Direction { get; }
         public IEnumerable<ColorStop> ColorStops { get; }
 
-        public LinearGradient(Angle direction, IEnumerable<ColorStop> colorStops) {
+        public LinearGradient(Angle direction, ColorStop[] colorStops) {
 
             if (direction is null)
                 throw new ArgumentNullException(nameof(direction));
@@ -25,8 +25,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             ColorStops = colorStops.ToArray();
 
         }
-        public LinearGradient(double degrees, IEnumerable<Color> colorStops) :
-            this(new Angle(degrees, Units.Degree), colorStops.Select(color => new ColorStop(color))) {
+        public LinearGradient(double degrees, Color[] colorStops) :
+            this(new Angle(degrees, Units.Degree), colorStops.Select(color => new ColorStop(color)).ToArray()) {
         }
 
     }

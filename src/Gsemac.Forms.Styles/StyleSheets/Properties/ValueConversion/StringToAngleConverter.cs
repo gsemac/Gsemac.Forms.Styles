@@ -11,6 +11,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
 
             result = default;
 
+            // Attempt to parse the string as a side-or-angle.
+
+            if (new StringToSideOrCornerConverter().TryConvert(value, out SideOrCorner sideOrCorner) &&
+                new SideOrCornerToAngleConverter().TryConvert(sideOrCorner, out result))
+                return true;
+
+            // Attempt to parse the string as a dimension.
+
             var baseConverter = new StringToDimensionConverter(Units.GetAngleUnits());
 
             if (baseConverter.TryConvert(value, out IDimension dimension)) {

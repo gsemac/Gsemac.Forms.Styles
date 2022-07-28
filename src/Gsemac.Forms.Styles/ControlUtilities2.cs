@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -39,6 +40,37 @@ namespace Gsemac.Forms.Styles {
             }
 
             return false;
+
+        }
+        public static void Inflate(Control control, int width, int height) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            if (control.Parent is object)
+                control.Parent.SuspendLayout();
+
+            control.SuspendLayout();
+
+            AnchorStyles anchors = control.Anchor;
+
+            control.Anchor = AnchorStyles.None;
+
+            control.Location = new Point(control.Location.X - width, control.Location.Y - height);
+            control.Width += width * 2;
+            control.Height += height * 2;
+
+            control.Anchor = anchors;
+
+            control.ResumeLayout();
+
+            if (control.Parent is object)
+                control.Parent.ResumeLayout();
+
+        }
+        public static void Inflate(Control control, Size size) {
+
+            Inflate(control, size.Width, size.Height);
 
         }
 

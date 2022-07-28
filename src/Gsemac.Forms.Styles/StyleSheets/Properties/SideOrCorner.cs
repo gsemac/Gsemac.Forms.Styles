@@ -1,6 +1,6 @@
 ﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public enum GradientDirection {
+    public enum SideOrCorner {
         BottomRight = 135,
         BottomLeft = 225,
         TopRight = 45,

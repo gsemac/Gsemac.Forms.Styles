@@ -11,6 +11,13 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Public members
 
+        public override void InitializeStyle(Button button) {
+
+            // Flat buttons are slightly larger than regular buttons.
+
+            ControlUtilities2.Inflate(button, -1, -1);
+
+        }
         public override void ApplyStyle(Button button, IRuleset style) {
 
             base.ApplyStyle(button, style);

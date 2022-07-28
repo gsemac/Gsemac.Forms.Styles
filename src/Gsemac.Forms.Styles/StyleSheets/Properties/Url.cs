@@ -1,13 +1,13 @@
 ﻿namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public class ImageUrl :
+    public class Url :
         IImage {
 
         // Public members
 
         public string Value { get; }
 
-        public ImageUrl(string value) {
+        public Url(string value) {
 
             Value = value;
 

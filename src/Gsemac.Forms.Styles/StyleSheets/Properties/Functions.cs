@@ -38,17 +38,17 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
         }
 
-        public static ILinearGradient LinearGradient(IPropertyValue[] arguments) {
+        public static LinearGradient LinearGradient(IPropertyValue[] arguments) {
 
             const int minimumArguments = 2;
 
             if (arguments.Length < minimumArguments)
                 throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.LinearGradient, minimumArguments, arguments.Length));
 
-            IDimension angle = arguments[0].As<IDimension>();
+            IDimension angle = arguments[0].As<Angle>();
             Color[] colors = arguments.Skip(1).Select(arg => arg.As<Color>()).ToArray();
 
-            ILinearGradient gradient = new LinearGradient(angle.ToDegrees(), colors);
+            LinearGradient gradient = new LinearGradient(angle.ToDegrees(), colors);
 
             return gradient;
 
