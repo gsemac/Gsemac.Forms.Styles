@@ -1,5 +1,4 @@
 ﻿using Gsemac.Drawing;
-using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -7,35 +6,11 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Renderers2 {
 
     public class CheckBoxRenderer :
-        StyleRendererBase<CheckBox> {
+        CheckBoxRendererBase<CheckBox> {
 
-        // Public members
+        // Protected members
 
-        public override void Render(CheckBox checkBox, IRenderContext context) {
-
-            if (checkBox is null)
-                throw new ArgumentNullException(nameof(checkBox));
-
-            if (context is null)
-                throw new ArgumentNullException(nameof(context));
-
-            context.Clear();
-
-            context.DrawBackground();
-
-            DrawCheckBox(checkBox, context);
-
-            DrawText(checkBox, context);
-
-            context.DrawBorder();
-
-        }
-
-        // Private members
-
-        private const int CheckBoxWidth = 12;
-
-        private void DrawCheckBox(CheckBox checkBox, IRenderContext context) {
+        protected override void DrawCheck(CheckBox checkBox, IRenderContext context) {
 
             // Draw the background.
 
@@ -78,64 +53,6 @@ namespace Gsemac.Forms.Styles.Renderers2 {
                 }
 
             }
-
-            // Draw the focus ring.
-
-            if (ControlUtilities2.FocusCuesShown(checkBox)) {
-
-                Rectangle focusRect = GetFocusRect(checkBox, context);
-
-                using (Pen pen = new Pen(context.Style.Color)) {
-
-                    context.Graphics.SmoothingMode = SmoothingMode.Default;
-
-                    pen.DashPattern = new float[] { 1, 1 };
-
-                    context.Graphics.DrawRectangle(pen, focusRect);
-
-                }
-
-            }
-
-        }
-        private void DrawText(CheckBox checkBox, IRenderContext context) {
-
-            Rectangle textRect = GetTextRect(context);
-
-            context.DrawText(textRect, checkBox.Text, checkBox.Font, ControlUtilities.GetTextFormatFlags(checkBox.TextAlign));
-
-        }
-
-        private Rectangle GetTextRect(IRenderContext context) {
-
-            int textXOffset = 4;
-            int textYOffset = -1;
-
-            Rectangle textRect = new Rectangle(
-                context.ClientRectangle.X + CheckBoxWidth + textXOffset,
-                context.ClientRectangle.Y + textYOffset,
-                context.ClientRectangle.Width,
-                context.ClientRectangle.Height
-            );
-
-            return textRect;
-
-        }
-        private Rectangle GetFocusRect(CheckBox checkBox, IRenderContext context) {
-
-            int focusXOffset = -1;
-            int focusYOffset = 2;
-
-            Rectangle textRect = GetTextRect(context);
-
-            Size textSize = TextRenderer.MeasureText(checkBox.Text, checkBox.Font);
-
-            return new Rectangle(
-                textRect.X + focusXOffset,
-                textRect.Y + focusYOffset,
-                textSize.Width,
-                textSize.Height
-            );
 
         }
 

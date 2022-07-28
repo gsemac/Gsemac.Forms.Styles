@@ -18,7 +18,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         // Public members
 
-        public override void Render(object obj, IRenderContext context) {
+        public sealed override void Render(object obj, IRenderContext context) {
 
             if (obj is null)
                 throw new ArgumentNullException(nameof(obj));
