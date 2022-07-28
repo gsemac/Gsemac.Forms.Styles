@@ -33,7 +33,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         // Private members
 
-        private const int CheckBoxWidth = 13;
+        private const int CheckBoxWidth = 12;
 
         private void DrawCheckBox(CheckBox checkBox, IRenderContext context) {
 
@@ -71,8 +71,8 @@ namespace Gsemac.Forms.Styles.Renderers2 {
                     pen.StartCap = LineCap.Square;
                     pen.EndCap = LineCap.Square;
 
-                    context.Graphics.DrawLine(pen, checkBoxRect.X + 3, checkBoxRect.Y + checkBoxRect.Height / 2.0f, checkBoxRect.X + checkBoxRect.Width / 2.0f - 1, checkBoxRect.Y + checkBoxRect.Height - 5);
-                    context.Graphics.DrawLine(pen, checkBoxRect.X + checkBoxRect.Width / 2.0f - 1, checkBoxRect.Y + checkBoxRect.Height - 5, checkBoxRect.X + checkBoxRect.Width - 4, checkBoxRect.Y + 3);
+                    context.Graphics.DrawLine(pen, checkBoxRect.X + 3, checkBoxRect.Y + checkBoxRect.Height / 2.0f, checkBoxRect.X + checkBoxRect.Width / 2.0f, checkBoxRect.Y + checkBoxRect.Height - 4);
+                    context.Graphics.DrawLine(pen, checkBoxRect.X + checkBoxRect.Width / 2.0f, checkBoxRect.Y + checkBoxRect.Height - 4, checkBoxRect.X + checkBoxRect.Width - 3, checkBoxRect.Y + 3);
 
                 }
 
@@ -81,7 +81,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
         }
         private void DrawText(CheckBox checkBox, IRenderContext context) {
 
-            int textXOffset = 3;
+            int textXOffset = 4;
             int textYOffset = -1;
 
             Rectangle textRect = new Rectangle(
