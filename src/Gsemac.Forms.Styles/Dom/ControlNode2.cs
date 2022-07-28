@@ -125,6 +125,11 @@ namespace Gsemac.Forms.Styles.Dom {
             SetEnabled(control.Enabled);
             SetFocused(control.Focused);
 
+            if (ControlUtilities2.IsChecked(control))
+                States.Add(NodeState.Checked);
+            else
+                States.Remove(NodeState.Checked);
+
         }
         private void RemoveChild(Control control) {
 
@@ -188,6 +193,17 @@ namespace Gsemac.Forms.Styles.Dom {
             control.MouseLeave += MouseLeaveHandler;
             control.MouseUp += MouseUpHandler;
 
+            if (control is CheckBox checkBox) {
+
+                checkBox.CheckedChanged += CheckedChangedHandler;
+
+            }
+            else if (control is RadioButton radioButton) {
+
+                radioButton.CheckedChanged += CheckedChangedHandler;
+
+            }
+
         }
         private void RemoveEventHandlers(Control control) {
 
@@ -196,17 +212,38 @@ namespace Gsemac.Forms.Styles.Dom {
 
             control.ControlAdded -= ControlAddedHandler;
             control.ControlRemoved -= ControlRemovedHandler;
-
             control.Disposed -= DisposedHandler;
-
+            control.EnabledChanged -= EnabledChangedHandler;
             control.GotFocus -= GotFocusHandler;
+            control.KeyDown -= KeyDownHandler;
+            control.KeyUp -= KeyUpHandler;
             control.LostFocus -= LostFocusHandler;
-
+            control.MouseDown -= MouseDownHandler;
             control.MouseEnter -= MouseEnterHandler;
             control.MouseLeave -= MouseLeaveHandler;
+            control.MouseUp -= MouseUpHandler;
+
+            if (control is CheckBox checkBox) {
+
+                checkBox.CheckedChanged -= CheckedChangedHandler;
+
+            }
+            else if (control is RadioButton radioButton) {
+
+                radioButton.CheckedChanged -= CheckedChangedHandler;
+
+            }
 
         }
 
+        private void CheckedChangedHandler(object sender, EventArgs e) {
+
+            if (ControlUtilities2.IsChecked((Control)sender))
+                States.Add(NodeState.Checked);
+            else
+                States.Remove(NodeState.Checked);
+
+        }
         private void ControlAddedHandler(object sender, ControlEventArgs e) {
 
             AddChild(e.Control);

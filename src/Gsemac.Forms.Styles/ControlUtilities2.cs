@@ -22,6 +22,25 @@ namespace Gsemac.Forms.Styles {
             return (bool)showFocusCuesProperty.GetValue(control, null);
 
         }
+        public static bool IsChecked(Control control) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            if (control is CheckBox checkBox) {
+
+                return checkBox.Checked;
+
+            }
+            else if (control is RadioButton radioButton) {
+
+                return radioButton.Checked;
+
+            }
+
+            return false;
+
+        }
 
     }
 
