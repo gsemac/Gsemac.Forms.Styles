@@ -9,10 +9,10 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         // Public members
 
-        public override void Render(Button button, IRenderContext context) {
+        public override void Render(Button control, IRenderContext context) {
 
-            if (button is null)
-                throw new ArgumentNullException(nameof(button));
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
 
             if (context is null)
                 throw new ArgumentNullException(nameof(context));
@@ -25,18 +25,26 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             context.DrawBackground(clientRect);
 
-            if (button.Image is object) {
+            if (control.Image is object) {
 
                 const int horizontalPadding = 4;
                 const int verticalPadding = 4;
 
-                Rectangle imageRect = new Rectangle(horizontalPadding, verticalPadding, button.Width - horizontalPadding * 2, button.Height - verticalPadding * 2);
+                Rectangle imageRect = new Rectangle(horizontalPadding, verticalPadding, control.Width - horizontalPadding * 2, control.Height - verticalPadding * 2);
 
-                context.DrawImage(button.Image, imageRect, button.ImageAlign);
+                context.DrawImage(control.Image, imageRect, control.ImageAlign);
 
             }
 
-            context.DrawText(button.Text, button.Font, ControlUtilities.GetTextFormatFlags(button.TextAlign));
+            context.DrawText(control.Text, control.Font, ControlUtilities.GetTextFormatFlags(control.TextAlign));
+
+            if (ControlUtilities2.FocusCuesShown(control)) {
+
+                Rectangle focusRectangle = new Rectangle(clientRect.X + 2, clientRect.Y + 2, clientRect.Width - 5, clientRect.Height - 5);
+
+                ControlRenderUtilities.DrawFocusRectangle(context.Graphics, focusRectangle, context.Style);
+
+            }
 
             context.DrawBorder(clientRect);
 
