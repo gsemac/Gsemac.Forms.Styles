@@ -33,6 +33,10 @@ namespace Gsemac.Forms.Styles.Applicators2 {
                 ControlUtilities.SetDoubleBuffered(obj, true);
                 ControlUtilities.SetStyle(obj, ControlStyles.UserPaint, true);
 
+                // Make sure we never add the PaintEventHandler more than once.
+                // InitializeStyle should not be called more than once, but let's be safe!
+
+                obj.Paint -= PaintEventHandler;
                 obj.Paint += PaintEventHandler;
 
             }

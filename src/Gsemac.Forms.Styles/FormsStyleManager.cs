@@ -328,8 +328,13 @@ namespace Gsemac.Forms.Styles {
 
                     // Apply the new styles to the control.
 
-                    if (!info.StyleInitialized)
+                    if (!info.StyleInitialized) {
+
                         info.StyleApplicator.InitializeStyle(node.Control);
+
+                        info.StyleInitialized = true;
+
+                    }
 
                     IStyleComputationContext context = new StyleComputationContext();
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Properties {
 
-    public class EquivalentPropertyEqualityComparer :
+    internal class EquivalentPropertyEqualityComparer :
         IEqualityComparer<IProperty> {
 
         // Public members

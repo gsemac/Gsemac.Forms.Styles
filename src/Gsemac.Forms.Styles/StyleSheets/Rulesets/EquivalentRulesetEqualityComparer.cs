@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
 
-    public class EquivalentRulesetEqualityComparer :
+    internal class EquivalentRulesetEqualityComparer :
         IEqualityComparer<IRuleset> {
 
         // Public members
