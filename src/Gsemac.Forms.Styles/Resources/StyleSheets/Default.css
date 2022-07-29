@@ -3,8 +3,8 @@
 */
 
 button {
-    background-color: rgb(233, 233, 233);
-    background-image: linear-gradient(to bottom, rgb(240, 240, 240), rgb(229, 229, 229));
+    background-color: rgb(240, 240, 240);
+    background-image: linear-gradient(to bottom, transparent, rgb(229, 229, 229));
     border-color: rgb(172, 172, 172);
     border-style: solid;
     border-width: 1px;
@@ -12,12 +12,14 @@ button {
 }
 
 button:hover {
-    background-image: linear-gradient(to bottom, rgb(235, 244, 252), rgb(220, 236, 252));
+    background-color: rgb(235, 244, 252);
+    background-image: linear-gradient(to bottom, transparent, rgb(220, 236, 252));
     border-color: rgb(126, 180, 234);
 }
 
 button:active {
-    background-image: linear-gradient(to bottom, rgb(218, 235, 252), rgb(196, 224, 252));
+    background-color: rgb(218, 235, 252);
+    background-image: linear-gradient(to bottom, transparent, rgb(196, 224, 252));
     border-color: rgb(86, 157, 229);
 }
 
