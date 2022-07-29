@@ -54,10 +54,13 @@ namespace Gsemac.Forms.Styles.Dom {
 
             IRuleset ruleset = base.ComputeStyle(context);
 
+            // We'll use the control's BackColor and ForeColor properties if they haven't been set by any styles.
+            // They will also be used in the event they were set to anything other than the default by the user.
+
             if (!ruleset.ContainsKey(PropertyName.BackgroundColor))
                 ruleset.Add(PropertyFactory.Default.Create(PropertyName.BackgroundColor, GetBackgroundColor(Control)));
 
-            if (!ruleset.ContainsKey(PropertyName.Color))
+            if (!ruleset.ContainsKey(PropertyName.Color) || !Control.ForeColor.Equals(Control.DefaultForeColor))
                 ruleset.Add(PropertyFactory.Default.Create(PropertyName.Color, Control.ForeColor));
 
             // When rendering a control with child controls, "holes" clipped out around child controls.
