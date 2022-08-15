@@ -8,7 +8,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom.Extensions {
 
         // Public members
 
-        public static IEnumerable<INode2> GetParents(this INode2 node) {
+        public static IEnumerable<INode2> GetAncestors(this INode2 node) {
 
             if (node is null)
                 throw new ArgumentNullException(nameof(node));

@@ -57,7 +57,7 @@ namespace ThemeTesting {
         // Private members
 
         private readonly StyleManagerOptions styleManagerOptions = new StyleManagerOptions();
-        private IStyleManager styleManager;
+        private IControlStyleManager styleManager;
 
         private void InitializeStyleManager() {
 
@@ -72,7 +72,7 @@ namespace ThemeTesting {
 
             IStyleSheetFactory styleSheetFactory = StyleSheetFactory.Default;
 
-            //styleManager.StyleSheets.Add(styleSheetFactory.FromFile("Test.css"));
+            styleManager.StyleSheets.Add(styleSheetFactory.FromFile("Test.css"));
             //styleManager.StyleSheets.Add(styleSheetFactory.FromFile("DarkUI.css"));
 
         }

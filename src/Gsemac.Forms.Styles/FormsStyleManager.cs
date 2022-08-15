@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.Applicators2;
+﻿using Gsemac.Core;
+using Gsemac.Forms.Styles.Applicators2;
 using Gsemac.Forms.Styles.Dom;
 using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Dom;
@@ -11,7 +12,7 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles {
 
     public class FormsStyleManager :
-        IStyleManager {
+        IControlStyleManager {
 
         // Public members
 
@@ -78,7 +79,7 @@ namespace Gsemac.Forms.Styles {
             ResetStyles(control);
 
             if (HasStyleSheets())
-                ApplyStylesInternal(control, createStyleWatcher: true, recursive: true);
+                ApplyStylesInternal(control, isTopLevelControl: true, recursive: true);
 
         }
         public void ResetStyles() {
@@ -135,33 +136,55 @@ namespace Gsemac.Forms.Styles {
 
         // Private members
 
-        private sealed class ControlInfo :
+        private sealed class ControlNodeInfo :
             IDisposable {
 
             // Public members
 
-            public IControlState State { get; }
-            public IStyleApplicator StyleApplicator { get; set; }
-            public bool StyleInitialized { get; set; } = false;
-            public INodeStyleWatcher StyleWatcher { get; set; }
+            public IControlState ControlState { get; }
+            public IStyleApplicator StyleApplicator { get; }
+            public IDomSelectorObserver SelectorObserver { get; }
 
-            public ControlInfo(Control control) {
+            public bool StyleInitialized { get; set; } = false;
+
+            public ControlNodeInfo(Control control) {
+
+                if (control is null)
+                    throw new ArgumentNullException(nameof(control));
 
                 // Only store visual state for forms, because we don't want to reposition them when resetting the style.
 
-                State = ControlState.Save(control, control is Form ? ControlStateOptions.StoreVisualProperties : ControlStateOptions.Default);
+                ControlState = Forms.ControlState.Save(control, control is Form ? ControlStateOptions.StoreVisualProperties : ControlStateOptions.Default);
+
+            }
+            public ControlNodeInfo(Control control, IStyleApplicator styleApplicator) :
+                this(control) {
+
+                if (styleApplicator is null)
+                    throw new ArgumentNullException(nameof(styleApplicator));
+
+                StyleApplicator = styleApplicator;
+
+            }
+            public ControlNodeInfo(Control control, IStyleApplicator styleApplicator, IDomSelectorObserver stylesObserver) :
+                this(control, styleApplicator) {
+
+                if (stylesObserver is null)
+                    throw new ArgumentNullException(nameof(stylesObserver));
+
+                SelectorObserver = stylesObserver;
 
             }
 
             public void Dispose() {
 
-                StyleWatcher?.Dispose();
+                SelectorObserver?.Dispose();
 
             }
 
         }
 
-        private readonly IDictionary<Control, ControlInfo> controlInfo = new Dictionary<Control, ControlInfo>();
+        private readonly IDictionary<Control, ControlNodeInfo> controlInfo = new Dictionary<Control, ControlNodeInfo>();
         private readonly IStyleManagerOptions options = StyleManagerOptions.Default;
         private readonly IMessageFilter messageFilter;
         private IStyleApplicatorFactory styleApplicatorFactory;
@@ -174,7 +197,7 @@ namespace Gsemac.Forms.Styles {
 
         }
 
-        private void RestoreControlState(Control control, ControlInfo controlInfo) {
+        private void RestoreControlState(Control control, ControlNodeInfo controlInfo) {
 
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
@@ -184,12 +207,19 @@ namespace Gsemac.Forms.Styles {
 
             // Restore the control to its default appearance.
 
+            if (controlInfo.SelectorObserver is object) {
+
+                controlInfo.SelectorObserver.SelectorChanged -= SelectorChangedHandler;
+                controlInfo.SelectorObserver.Dispose();
+
+            }                
+
             if (controlInfo.StyleApplicator is object)
                 controlInfo.StyleApplicator.DeinitializeStyle(control);
 
             controlInfo.StyleInitialized = false;
 
-            controlInfo.State.Restore(control);
+            controlInfo.ControlState.Restore(control);
 
 
         }
@@ -208,37 +238,52 @@ namespace Gsemac.Forms.Styles {
 
         }
 
-        private void ApplyStylesInternal(Control control, bool createStyleWatcher, bool recursive) {
+        private void ApplyStylesInternal(Control control, bool isTopLevelControl, bool recursive) {
 
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
-            ControlInfo info = new ControlInfo(control) {
-                StyleApplicator = styleApplicatorFactory.Create(control.GetType()),
-            };
+            IStyleApplicator styleApplicator = styleApplicatorFactory.Create(control.GetType());
 
-            controlInfo.Add(control, info);
+            ControlNodeInfo info;
+
+            if (isTopLevelControl) {
+
+                // Only top-level controls (i.e. Forms) should have style watchers attached to them.
+
+                INode2 controlNode = new ControlNode2(control);
+                IDomSelectorObserver stylesObserver = new DomSelectorObserver(controlNode);
+
+                stylesObserver.SelectorChanged += SelectorChangedHandler;
+
+                info = new ControlNodeInfo(control, styleApplicator, stylesObserver);
+
+                controlInfo.Add(control, info);
+
+            }
+            else {
+
+                info = new ControlNodeInfo(control, styleApplicator);
+
+                controlInfo.Add(control, info);
+
+            }
 
             if (recursive) {
 
                 // Apply styles to all child controls.
+                // The child control collection might change for wrapped controls (i.e. with BorderControl), so compute the array ahead of time.
 
-                foreach (Control childControl in GetChildControls(control))
-                    ApplyStylesInternal(childControl, createStyleWatcher: false, recursive: recursive);
+                foreach (Control childControl in GetChildControls(control).ToArray())
+                    ApplyStylesInternal(childControl, isTopLevelControl: false, recursive: recursive);
 
             }
 
-            // Only top-level controls (i.e. Forms) should have style watchers attached to them.
+            if (isTopLevelControl && info.SelectorObserver is object) {
 
-            if (createStyleWatcher) {
+                // Refresh the observer so that styles are updated.
 
-                INodeStyleWatcher styleWatcher = new NodeStyleWatcher(new ControlNode2(control), StyleSheets);
-
-                info.StyleWatcher = styleWatcher;
-
-                styleWatcher.StylesChanged += StylesChangedHandler;
-
-                styleWatcher.InvalidateStyles();
+                info.SelectorObserver.Refresh();
 
             }
 
@@ -252,7 +297,11 @@ namespace Gsemac.Forms.Styles {
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
-            if (controlInfo.TryGetValue(control, out ControlInfo info)) {
+            bool enableRecursion = false;
+
+            if (controlInfo.TryGetValue(control, out ControlNodeInfo info)) {
+
+                enableRecursion = true;
 
                 // Restore the control to its default appearance.
 
@@ -268,14 +317,20 @@ namespace Gsemac.Forms.Styles {
 
                 info.Dispose();
 
-                if (recursive) {
+            }
 
-                    // Reset styles for all child controls.
+            // Recurse through controls that are hidden from the DOM, in case their child controls have styles applied to them.
+            // See TextBoxUserPaintStyleApplicator for more information on why this might be necessary.
 
-                    foreach (Control childControl in GetChildControls(control))
-                        ResetStylesInternal(childControl, recursive: recursive);
+            enableRecursion = enableRecursion || IsDomHidden(control);
 
-                }
+            if (enableRecursion && recursive) {
+
+                // Reset styles for all child controls.
+                // The child control collection might change for wrapped controls (i.e. with BorderControl), so compute the array ahead of time.
+
+                foreach (Control childControl in GetChildControls(control).ToArray())
+                    ResetStylesInternal(childControl, recursive: recursive);
 
             }
 
@@ -306,31 +361,53 @@ namespace Gsemac.Forms.Styles {
 
             control.Disposed -= ControlDisposedHandler;
 
-            if (controlInfo.TryGetValue(control, out ControlInfo info)) {
+            if (controlInfo.TryGetValue(control, out ControlNodeInfo info)) {
 
                 controlInfo.Remove(control);
-
-                if (info.StyleWatcher is object)
-                    info.StyleWatcher.StylesChanged -= StylesChangedHandler;
 
                 info.Dispose();
 
             }
 
         }
-        private void StylesChangedHandler(object sender, StylesChangedEventArgs e) {
+        private void SelectorChangedHandler(object sender, NodeEventArgs e) {
 
-            ControlNode2 node = (ControlNode2)e.Node;
+            // We need to decide which styles apply to the current node.
+            // It may not have to be redrawn if the styles match the ones it already had applied.
 
-            if (controlInfo.TryGetValue(node.Control, out ControlInfo info)) {
+            int oldStylesHashCode = GetStylesHashCode(e.CurrentNode.Styles);
 
-                if (node.Styles.Any(style => !options.RequireNonDefaultStyles || style.Origin != StyleOrigin.UserAgent) && info.StyleApplicator is object) {
+            IEnumerable<IRuleset> styles = StyleSheets.SelectMany(styleSheet => styleSheet.GetStyles(e.CurrentNode))
+                .Where(ruleset => ruleset.Any());
+
+            int newStylesHashCode = GetStylesHashCode(styles);
+
+            if (oldStylesHashCode != newStylesHashCode) {
+
+                e.CurrentNode.Styles.Clear();
+
+                foreach (IRuleset style in styles)
+                    e.CurrentNode.Styles.Add(style);
+
+                RedrawNode(e.CurrentNode);
+
+            }
+
+        }
+
+        private void RedrawNode(INode2 node) {
+
+            ControlNode2 controlNode = (ControlNode2)node;
+
+            if (controlInfo.TryGetValue(controlNode.Control, out ControlNodeInfo info)) {
+
+                if (controlNode.Styles.Any(style => !options.RequireNonDefaultStyles || style.Origin != StyleOrigin.UserAgent) && info.StyleApplicator is object) {
 
                     // Apply the new styles to the control.
 
                     if (!info.StyleInitialized) {
 
-                        info.StyleApplicator.InitializeStyle(node.Control);
+                        info.StyleApplicator.InitializeStyle(controlNode.Control);
 
                         info.StyleInitialized = true;
 
@@ -338,20 +415,40 @@ namespace Gsemac.Forms.Styles {
 
                     IStyleComputationContext context = new StyleComputationContext();
 
-                    info.StyleApplicator.ApplyStyle(node.Control, node.GetComputedStyle(context));
+                    info.StyleApplicator.ApplyStyle(controlNode.Control, controlNode.GetComputedStyle(context));
 
                 }
                 else if (info.StyleInitialized) {
 
                     // Restore the control to its default appearance.
 
-                    RestoreControlState(node.Control, info);
+                    RestoreControlState(controlNode.Control, info);
 
                 }
 
-                node.Control.Invalidate();
+                controlNode.Control.Invalidate();
 
             }
+
+        }
+
+        private static int GetStylesHashCode(IEnumerable<IRuleset> styles) {
+
+            IEqualityComparer<IRuleset> styleComparer = new EquivalentRulesetEqualityComparer();
+
+            IHashCodeBuilder styleHashCodeBuilder = new HashCodeBuilder();
+
+            foreach (int hashCode in styles.Select(style => styleComparer.GetHashCode(style)))
+                styleHashCodeBuilder.WithValue(hashCode);
+
+            return styleHashCodeBuilder.GetHashCode();
+
+        }
+        private static bool IsDomHidden(Control control) {
+
+            return control.GetType()
+                .GetCustomAttributes(inherit: true)
+                .OfType<DomHiddenAttribute>().Any();
 
         }
 

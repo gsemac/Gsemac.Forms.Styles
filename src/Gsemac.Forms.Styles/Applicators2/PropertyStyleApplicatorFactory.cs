@@ -34,6 +34,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
         private void InitializeApplicatorDictionary() {
 
             applicators.Add(typeof(Button), new ButtonStyleApplicator());
+            applicators.Add(typeof(TextBox), new TextBoxStyleApplicator());
 
         }
 

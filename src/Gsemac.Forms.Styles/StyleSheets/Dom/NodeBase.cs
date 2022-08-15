@@ -14,8 +14,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
         // Public members
 
-        public event EventHandler<StyleInvalidatedEventArgs> StyleInvalidated;
-        public event EventHandler<StylesChangedEventArgs> StylesChanged;
+        public event EventHandler<NodeCollectionChangedEventArgs> ChildAdded;
+        public event EventHandler<NodeCollectionChangedEventArgs> ChildRemoved;
+        public event EventHandler<NodeEventArgs> SelectorChanged;
+        public event EventHandler<NodeEventArgs> StylesChanged;
 
         public string Tag { get; }
         public string Id { get; protected set; }
@@ -60,9 +62,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
         // Protected members
 
-        protected NodeBase(string tagName) {
+        protected NodeBase(string tag) {
 
-            Tag = tagName;
+            Tag = tag;
 
             // Initialize collections.
 
@@ -78,11 +80,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
             // Register event handlers.
 
-            children.CollectionChanged += (sender, e) => OnStyleInvalidated();
-            classes.CollectionChanged += (sender, e) => OnStyleInvalidated();
-            styles.CollectionChanged += (sender, e) => OnStylesChanged();
-            states.CollectionChanged += (sender, e) => OnStyleInvalidated();
-
+            children.CollectionChanged += ChildrenCollectionChangedHandler;
+            classes.CollectionChanged += SelectorChangedHandler;
+            states.CollectionChanged += SelectorChangedHandler;
             styles.CollectionChanged += StylesChangedHandler;
 
         }
@@ -93,24 +93,30 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
         }
 
-        protected void OnStyleInvalidated() {
+        protected void OnChildAdded(INode2 childNode) {
 
-            OnStyleInvalidated(new StyleInvalidatedEventArgs(this));
+            if (childNode is null)
+                throw new ArgumentNullException(nameof(childNode));
+
+            ChildAdded?.Invoke(this, new NodeCollectionChangedEventArgs(this, childNode));
 
         }
-        protected void OnStyleInvalidated(StyleInvalidatedEventArgs e) {
+        protected void OnChildRemoved(INode2 childNode) {
 
-            StyleInvalidated?.Invoke(this, e);
+            if (childNode is null)
+                throw new ArgumentNullException(nameof(childNode));
+
+            ChildRemoved?.Invoke(this, new NodeCollectionChangedEventArgs(this, childNode));
 
         }
         protected void OnStylesChanged() {
 
-            OnStylesChanged(new StylesChangedEventArgs(this));
+            StylesChanged?.Invoke(this, new NodeEventArgs(this));
 
         }
-        protected void OnStylesChanged(StylesChangedEventArgs e) {
+        protected void OnSelectorChanged() {
 
-            StylesChanged?.Invoke(this, e);
+            SelectorChanged?.Invoke(this, new NodeEventArgs(this));
 
         }
 
@@ -119,6 +125,27 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
         private IRuleset style;
         bool styleIsDirty = true;
 
+        private void ChildrenCollectionChangedHandler(object sender, CollectionChangedEventArgs<INode2> e) {
+
+            if (e.Action == CollectionChangedAction.Add && e.ChangedItems.Any()) {
+
+                OnChildAdded(e.ChangedItems.First());
+
+            }
+            else if (e.Action == CollectionChangedAction.Remove && e.ChangedItems.Any()) {
+
+                OnChildRemoved(e.ChangedItems.First());
+
+            }
+
+            OnSelectorChanged();
+
+        }
+        private void SelectorChangedHandler(object sender, EventArgs e) {
+
+            OnSelectorChanged();
+
+        }
         private void StylesChangedHandler(object sender, EventArgs e) {
 
             styleIsDirty = true;

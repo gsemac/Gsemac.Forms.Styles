@@ -75,7 +75,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             // - ListViews and DataGridViews are drawn through event handlers.
             // - ScrollBars are drawn by the operating system (but this can be worked around: https://stackoverflow.com/a/4656361/5383169).
 
-            if (control is DataGridView || control is ListView || control is NumericUpDown || control is RichTextBox || control is ScrollBar || control is TextBox || control is ToolStrip)
+            if (control is DataGridView || control is ListView || control is NumericUpDown || control is RichTextBox || control is TextBox || control is ScrollBar || control is ToolStrip)
                 return false;
 
             // Only ComboBoxes with the DropDownList style do not use a TextBox, and can be fully painted.

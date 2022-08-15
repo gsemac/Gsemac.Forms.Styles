@@ -9,7 +9,7 @@ namespace Gsemac.Forms.Styles {
 
         // Public members
 
-        public StyleManagerMessageFilter(IStyleManager styleManager) {
+        public StyleManagerMessageFilter(IControlStyleManager styleManager) {
 
             if (styleManager is null)
                 throw new ArgumentNullException(nameof(styleManager));
@@ -37,7 +37,7 @@ namespace Gsemac.Forms.Styles {
 
         // Private members
 
-        private readonly IStyleManager styleManager;
+        private readonly IControlStyleManager styleManager;
         private readonly HashSet<Form> seenForms = new HashSet<Form>();
 
         private void FormShownEventHandler(object sender, EventArgs e) {

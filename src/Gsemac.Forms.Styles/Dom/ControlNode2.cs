@@ -261,6 +261,11 @@ namespace Gsemac.Forms.Styles.Dom {
 
             RemoveEventHandlers((Control)sender);
 
+            // Remove this node from the DOM since it no longer refers to an valid control.
+
+            if (Parent is object)
+                Parent.Children.Remove(this);
+
         }
         private void EnabledChangedHandler(object sender, EventArgs e) {
 

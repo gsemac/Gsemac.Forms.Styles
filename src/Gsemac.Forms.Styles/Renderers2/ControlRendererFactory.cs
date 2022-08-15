@@ -36,6 +36,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             renderers.Add(typeof(CheckBox), new CheckBoxRenderer());
             renderers.Add(typeof(Label), new LabelRenderer());
             renderers.Add(typeof(RadioButton), new RadioButtonRenderer());
+            renderers.Add(typeof(TextBox), new TextBoxRenderer());
 
         }
 

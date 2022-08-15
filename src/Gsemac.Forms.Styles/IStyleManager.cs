@@ -1,7 +1,6 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles {
 
@@ -11,9 +10,7 @@ namespace Gsemac.Forms.Styles {
         ICollection<IStyleSheet> StyleSheets { get; }
 
         void ApplyStyles();
-        void ApplyStyles(Control control);
         void ResetStyles();
-        void ResetStyles(Control control);
 
     }
 

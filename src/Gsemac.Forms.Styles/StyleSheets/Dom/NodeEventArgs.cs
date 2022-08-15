@@ -2,21 +2,19 @@
 
 namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
-    public abstract class NodeEventArgs :
+    public class NodeEventArgs :
         EventArgs {
 
         // Public members
 
-        public INode2 Node { get; }
+        public INode2 CurrentNode { get; }
 
-        // Protected members
+        public NodeEventArgs(INode2 currentNode) {
 
-        protected NodeEventArgs(INode2 node) {
+            if (currentNode is null)
+                throw new ArgumentNullException(nameof(currentNode));
 
-            if (node is null)
-                throw new ArgumentNullException(nameof(node));
-
-            Node = node;
+            CurrentNode = currentNode;
 
         }
 

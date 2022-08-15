@@ -7,6 +7,8 @@ namespace Gsemac.Forms.Styles {
 
     public static class ControlUtilities2 {
 
+        // Public members
+
         public static bool FocusCuesShown(Control control) {
 
             if (control is null)
@@ -42,15 +44,13 @@ namespace Gsemac.Forms.Styles {
             return false;
 
         }
+
         public static void Inflate(Control control, int width, int height) {
 
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
-            if (control.Parent is object)
-                control.Parent.SuspendLayout();
-
-            control.SuspendLayout();
+            BeginRepositioning(control);
 
             AnchorStyles anchors = control.Anchor;
 
@@ -62,15 +62,72 @@ namespace Gsemac.Forms.Styles {
 
             control.Anchor = anchors;
 
-            control.ResumeLayout();
-
-            if (control.Parent is object)
-                control.Parent.ResumeLayout();
+            EndRepositioning(control);
 
         }
         public static void Inflate(Control control, Size size) {
 
             Inflate(control, size.Width, size.Height);
+
+        }
+        public static void Offset(Control control, int xOffset, int yOffset) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            BeginRepositioning(control);
+
+            AnchorStyles anchors = control.Anchor;
+
+            control.Anchor = AnchorStyles.None;
+
+            control.Location = new Point(control.Location.X + xOffset, control.Location.Y + yOffset);
+
+            control.Anchor = anchors;
+
+            EndRepositioning(control);
+
+        }
+        public static void Resize(Control control, int width, int height) {
+
+            Resize(control, new Size(width, height));
+
+        }
+        public static void Resize(Control control, Size size) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            BeginRepositioning(control);
+
+            AnchorStyles anchors = control.Anchor;
+
+            control.Anchor = AnchorStyles.None;
+
+            control.Size = size;
+
+            control.Anchor = anchors;
+
+            EndRepositioning(control);
+
+        }
+
+        // Private members
+
+        private static void BeginRepositioning(Control control) {
+
+            if (control.Parent is object)
+                control.Parent.SuspendLayout();
+
+            control.SuspendLayout();
+
+        }
+        private static void EndRepositioning(Control control) {
+
+            control.ResumeLayout();
+
+            if (control.Parent is object)
+                control.Parent.ResumeLayout();
 
         }
 
