@@ -34,20 +34,6 @@ namespace Gsemac.Forms.Styles.Dom {
 
         }
 
-        public override bool Equals(object obj) {
-
-            if (obj is ControlNode2 controlDomNode)
-                return controlDomNode.Control == Control;
-
-            return base.Equals(obj);
-
-        }
-        public override int GetHashCode() {
-
-            return Control.GetHashCode();
-
-        }
-
         // Protected members
 
         protected override IRuleset ComputeStyle(IStyleComputationContext context) {

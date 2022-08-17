@@ -40,7 +40,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
                 if (disposing) {
 
                     // Remove all event handlers.
+                    // Ignore event handlers 
 
+                    ignoreEventHandlers = true;
+                    //foreach (INode2 node in added.ToArray())
+                    //    RemoveEventHandlers(node, recursive: false);
                     RemoveEventHandlers(rootNode, recursive: true);
 
                 }
@@ -54,11 +58,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
         // Private members
 
         private readonly INode2 rootNode;
+        private bool ignoreEventHandlers = false;
         private bool disposedValue;
 
         private void EnsureNotDisposed() {
 
             // This is called at the beginning of all event handlers, and ensures that event handlers don't accidentally silently linger.
+            // I encountered a bug earlier that was causing event handlers to accumulate because they weren't being removed properly.
 
             if (disposedValue)
                 throw new ObjectDisposedException(nameof(DomObserver));
@@ -67,9 +73,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
         private void AddEventHandlers(INode2 node, bool recursive) {
 
+            if (ignoreEventHandlers)
+                return;
+
             // Remove event handlers before adding them to ensure that we never add them more than once per node.
 
-            RemoveEventHandlers(node, recursive: false);
+            RemoveEventHandlers(node, recursive: true);
 
             node.ChildAdded += ChildAddedHandler;
             node.ChildRemoved += ChildRemovedHandler;
@@ -78,11 +87,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
             if (recursive) {
 
-                foreach(INode2 child in node.Children)
+                foreach (INode2 child in node.Children)
                     AddEventHandlers(child, recursive);
 
             }
-               
+
         }
         private void RemoveEventHandlers(INode2 node, bool recursive) {
 
@@ -104,6 +113,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
             EnsureNotDisposed();
 
+            if (ignoreEventHandlers)
+                return;
+
             // Add event handlers to the DOM node that was just added.
 
             AddEventHandlers(e.AffectedNode, recursive: true);
@@ -114,6 +126,9 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
         private void ChildRemovedHandler(object sender, NodeCollectionChangedEventArgs e) {
 
             EnsureNotDisposed();
+
+            if (ignoreEventHandlers)
+                return;
 
             // Remove event handlers to the DOM node that was just removed.
 
@@ -126,12 +141,18 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
             EnsureNotDisposed();
 
+            if (ignoreEventHandlers)
+                return;
+
             SelectorChanged?.Invoke(this, e);
 
         }
         private void StylesChangedHandler(object sender, NodeEventArgs e) {
 
             EnsureNotDisposed();
+
+            if (ignoreEventHandlers)
+                return;
 
             StylesChanged?.Invoke(this, e);
 
