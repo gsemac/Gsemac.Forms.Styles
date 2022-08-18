@@ -21,9 +21,9 @@ namespace Gsemac.Forms.Styles.Applicators2 {
                 return applicator;
 
             if (typeof(Control).IsAssignableFrom(forType))
-                return new ControlStyleApplicator<Control>();
+                return new ControlPropertyStyleApplicator<Control>();
 
-            return new NoStyleApplicator();
+            return new NullStyleApplicator();
 
         }
 
@@ -33,8 +33,10 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         private void InitializeApplicatorDictionary() {
 
-            applicators.Add(typeof(Button), new ButtonStyleApplicator());
-            applicators.Add(typeof(TextBox), new TextBoxStyleApplicator());
+            applicators.Add(typeof(Button), new ButtonPropertyStyleApplicator());
+            applicators.Add(typeof(ListBox), new ListBoxPropertyStyleApplicator());
+            applicators.Add(typeof(NumericUpDown), new NumericUpDownPropertyStyleApplicator());
+            applicators.Add(typeof(TextBox), new TextBoxPropertyStyleApplicator());
 
         }
 

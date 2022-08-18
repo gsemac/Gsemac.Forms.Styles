@@ -5,8 +5,8 @@ using BorderStyle = Gsemac.Forms.Styles.StyleSheets.Properties.BorderStyle;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    internal class TextBoxStyleApplicator :
-         ControlStyleApplicator<TextBox> {
+    internal class TextBoxPropertyStyleApplicator :
+         ControlPropertyStyleApplicator<TextBox> {
 
         // Public members
 

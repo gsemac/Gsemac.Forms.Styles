@@ -2,7 +2,7 @@
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    internal class ControlStyleApplicator<T> :
+    internal class ControlPropertyStyleApplicator<T> :
         ControlStyleApplicatorBase<T> where T : Control {
     }
 
