@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers2 {
 
-    public abstract class CheckBoxRendererBase<TControl> :
+    internal abstract class CheckBoxRendererBase<TControl> :
         StyleRendererBase<TControl> where TControl : ButtonBase {
 
         // Public members

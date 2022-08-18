@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers2 {
 
-    public static class RenderContextExtensions {
+    internal static class RenderContextExtensions {
 
         // Public members
 

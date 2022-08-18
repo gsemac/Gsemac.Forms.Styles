@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Gsemac.Forms.Styles.Renderers2 {
 
-    public class RenderContext :
+    internal class RenderContext :
         IRenderContext {
 
         // Public members

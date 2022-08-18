@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers2 {
 
-    public class CheckBoxRenderer :
+    internal class CheckBoxRenderer :
         CheckBoxRendererBase<CheckBox> {
 
         // Protected members

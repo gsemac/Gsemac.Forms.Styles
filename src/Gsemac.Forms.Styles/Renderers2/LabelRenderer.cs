@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers2 {
 
-    public class LabelRenderer :
+    internal class LabelRenderer :
         StyleRendererBase<Label> {
 
         // Public members

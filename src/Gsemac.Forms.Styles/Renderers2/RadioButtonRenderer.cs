@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers2 {
 
-    public class RadioButtonRenderer :
+    internal class RadioButtonRenderer :
         CheckBoxRendererBase<RadioButton> {
 
         // Protected members
