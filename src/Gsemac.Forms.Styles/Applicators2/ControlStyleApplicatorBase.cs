@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    public abstract class ControlStyleApplicatorBase<T> :
+    internal abstract class ControlStyleApplicatorBase<T> :
         StyleApplicatorBase<T> where T : Control {
 
         // Public members

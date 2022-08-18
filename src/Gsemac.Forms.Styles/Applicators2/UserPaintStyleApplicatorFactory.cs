@@ -35,7 +35,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             applicators.Add(typeof(CheckBox), new UserPaintStyleApplicator<CheckBox>());
             applicators.Add(typeof(Label), new UserPaintStyleApplicator<Label>());
             applicators.Add(typeof(RadioButton), new UserPaintStyleApplicator<RadioButton>());
-            //applicators.Add(typeof(TextBox), new TextBoxUserPaintStyleApplicator());
+            applicators.Add(typeof(TextBox), new TextBoxUserPaintStyleApplicator());
 
         }
 

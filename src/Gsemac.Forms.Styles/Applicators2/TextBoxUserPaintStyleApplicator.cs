@@ -5,7 +5,7 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Applicators2 {
 
     internal class TextBoxUserPaintStyleApplicator :
-        ParentUserPaintStyleApplicator<TextBox> {
+        WrapperControlUserPaintStyleApplicator<TextBox> {
 
         // Public members
 
@@ -28,7 +28,9 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             BorderControl borderControl = base.WrapControl(textBox);
 
-            borderControl.Padding = new Padding(0, 0, 1, 0);
+            int bottomPadding = textBox.Multiline ? 3 : 0;
+
+            borderControl.Padding = new Padding(3, 3, 3, bottomPadding);
 
             ControlUtilities2.Resize(borderControl, originalSize);
 

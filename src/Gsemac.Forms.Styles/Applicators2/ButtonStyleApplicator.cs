@@ -6,7 +6,7 @@ using BorderStyle = Gsemac.Forms.Styles.StyleSheets.Properties.BorderStyle;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    public class ButtonStyleApplicator :
+    internal class ButtonStyleApplicator :
          ControlStyleApplicator<Button> {
 
         // Public members

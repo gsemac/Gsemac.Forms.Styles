@@ -24,6 +24,11 @@ namespace Gsemac.Forms.Styles.Dom {
             Control = control;
             Id = GetId(control);
 
+            // Some controls have default back colors that differ from Control.DefaultBackColor-- How can we determine if they have a custom BackColor set?
+
+            hasCustomBackColor = false; // !ColorUtilities2.AreEqual(control.BackColor, Control.DefaultBackColor);
+            hasCustomForeColor = !ColorUtilities2.AreEqual(control.ForeColor, Control.DefaultForeColor);
+
             AddClasses(control);
 
             if (populateChildren)
@@ -43,10 +48,10 @@ namespace Gsemac.Forms.Styles.Dom {
             // We'll use the control's BackColor and ForeColor properties if they haven't been set by any styles.
             // They will also be used in the event they were set to anything other than the default by the user.
 
-            if (!ruleset.ContainsKey(PropertyName.BackgroundColor))
+            if (!ruleset.ContainsKey(PropertyName.BackgroundColor) || hasCustomBackColor)
                 ruleset.Add(PropertyFactory.Default.Create(PropertyName.BackgroundColor, GetBackgroundColor(Control)));
 
-            if (!ruleset.ContainsKey(PropertyName.Color) || !Control.ForeColor.Equals(Control.DefaultForeColor))
+            if (!ruleset.ContainsKey(PropertyName.Color) || hasCustomForeColor)
                 ruleset.Add(PropertyFactory.Default.Create(PropertyName.Color, Control.ForeColor));
 
             // When rendering a control with child controls, "holes" clipped out around child controls.
@@ -66,6 +71,9 @@ namespace Gsemac.Forms.Styles.Dom {
         }
 
         // Private members
+
+        private bool hasCustomBackColor;
+        private bool hasCustomForeColor;
 
         private void AddClasses(Control control) {
 

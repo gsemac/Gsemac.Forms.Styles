@@ -6,15 +6,15 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    internal class ParentUserPaintStyleApplicator<T> :
+    internal class WrapperControlUserPaintStyleApplicator<T> :
         ControlStyleApplicatorBase<T> where T : Control {
 
         // Public members
 
-        public ParentUserPaintStyleApplicator() :
+        public WrapperControlUserPaintStyleApplicator() :
             this(ControlRendererFactory.Default) {
         }
-        public ParentUserPaintStyleApplicator(IStyleRendererFactory styleRendererFactory) {
+        public WrapperControlUserPaintStyleApplicator(IStyleRendererFactory styleRendererFactory) {
 
             if (styleRendererFactory is null)
                 throw new ArgumentNullException(nameof(styleRendererFactory));
@@ -134,7 +134,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             // When the wrapped control is invalidated, the parent control should be invalidated too.
 
-            control.Parent.Invalidate(control.ClientRectangle, invalidateChildren: false);
+            control.Parent.Invalidate(invalidateChildren: false);
 
         }
         private void PaintEventHandler(object sender, PaintEventArgs e) {
