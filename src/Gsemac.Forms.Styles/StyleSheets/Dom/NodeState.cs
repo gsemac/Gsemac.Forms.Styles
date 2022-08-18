@@ -8,6 +8,7 @@
         Enabled,
         Focus,
         FocusVisible,
+        FocusWithin,
         Hover,
     }
 

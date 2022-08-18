@@ -25,7 +25,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
 
             bool success = false;
 
-            if (Enum.TryParse(className, ignoreCase: true, out NodeState nodeState))
+            if (TryParseNodeState(className, out NodeState nodeState))
                 success = node.States.Contains(nodeState);
 
             return success ?
@@ -55,6 +55,13 @@ namespace Gsemac.Forms.Styles.StyleSheets.Selectors {
             className = className.Trim().ToLowerInvariant();
 
             return className;
+
+        }
+        private static bool TryParseNodeState(string className, out NodeState nodeState) {
+
+            className = className.Replace("-", string.Empty);
+
+            return Enum.TryParse(className, ignoreCase: true, out nodeState);
 
         }
 

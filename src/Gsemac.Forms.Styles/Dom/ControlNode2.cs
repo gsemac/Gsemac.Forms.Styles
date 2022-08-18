@@ -72,8 +72,8 @@ namespace Gsemac.Forms.Styles.Dom {
 
         // Private members
 
-        private bool hasCustomBackColor;
-        private bool hasCustomForeColor;
+        private readonly bool hasCustomBackColor;
+        private readonly bool hasCustomForeColor;
 
         private void AddClasses(Control control) {
 
@@ -181,9 +181,11 @@ namespace Gsemac.Forms.Styles.Dom {
             control.ControlRemoved += ControlRemovedHandler;
             control.Disposed += DisposedHandler;
             control.EnabledChanged += EnabledChangedHandler;
+            control.Enter += EnterHandler;
             control.GotFocus += GotFocusHandler;
             control.KeyDown += KeyDownHandler;
             control.KeyUp += KeyUpHandler;
+            control.Leave += LeaveHandler;
             control.LostFocus += LostFocusHandler;
             control.MouseDown += MouseDownHandler;
             control.MouseEnter += MouseEnterHandler;
@@ -211,9 +213,11 @@ namespace Gsemac.Forms.Styles.Dom {
             control.ControlRemoved -= ControlRemovedHandler;
             control.Disposed -= DisposedHandler;
             control.EnabledChanged -= EnabledChangedHandler;
+            control.Enter -= EnterHandler;
             control.GotFocus -= GotFocusHandler;
             control.KeyDown -= KeyDownHandler;
             control.KeyUp -= KeyUpHandler;
+            control.Leave -= LeaveHandler;
             control.LostFocus -= LostFocusHandler;
             control.MouseDown -= MouseDownHandler;
             control.MouseEnter -= MouseEnterHandler;
@@ -268,6 +272,11 @@ namespace Gsemac.Forms.Styles.Dom {
             SetEnabled(enabled);
 
         }
+        private void EnterHandler(object sender, EventArgs e) {
+
+            States.Add(NodeState.FocusWithin);
+
+        }
         private void GotFocusHandler(object sender, EventArgs e) {
 
             SetFocused(true);
@@ -298,6 +307,11 @@ namespace Gsemac.Forms.Styles.Dom {
                     States.Remove(NodeState.Active);
 
             }
+
+        }
+        private void LeaveHandler(object sender, EventArgs e) {
+
+            States.Remove(NodeState.FocusWithin);
 
         }
         private void LostFocusHandler(object sender, EventArgs e) {
