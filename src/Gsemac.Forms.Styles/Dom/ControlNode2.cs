@@ -4,6 +4,7 @@ using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Dom {
@@ -65,8 +66,31 @@ namespace Gsemac.Forms.Styles.Dom {
                 ruleset.Add(PropertyFactory.Default.Create(CustomPropertyName.ClearColor, clearColor));
 
             }
+            else if (Control.Parent is object) {
+
+                // IF a style is applied to a subset of controls instead of all of them, there might not be a corresponding node for the parent.
+
+                Color clearColor = GetBackgroundColor(Control.Parent);
+
+                ruleset.Add(PropertyFactory.Default.Create(CustomPropertyName.ClearColor, clearColor));
+
+            }
 
             return ruleset;
+
+        }
+
+        protected override void Dispose(bool disposing) {
+
+            base.Dispose(disposing);
+
+            if (disposing) {
+
+                // Remove all event handlers attached to the control.
+
+                RemoveEventHandlers(Control);
+
+            }
 
         }
 
@@ -98,11 +122,7 @@ namespace Gsemac.Forms.Styles.Dom {
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
-            ControlNode2 node = new ControlNode2(control);
-
-            control.Disposed += (sender, e) => Children.Remove(node);
-
-            Children.Add(node);
+            Children.Add(new ControlNode2(control));
 
         }
         private void AddChildren(Control control) {
@@ -133,7 +153,19 @@ namespace Gsemac.Forms.Styles.Dom {
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
-            Children.Remove(new ControlNode2(control));
+            // Find the corresponding node.
+
+            INode2 nodeToRemove = Children.OfType<ControlNode2>()
+                .Where(node => node.Control.Equals(control))
+                .FirstOrDefault();
+
+            if (nodeToRemove is object) {
+
+                Children.Remove(nodeToRemove);
+
+                nodeToRemove.Dispose();
+
+            }
 
         }
 
@@ -257,12 +289,7 @@ namespace Gsemac.Forms.Styles.Dom {
         }
         private void DisposedHandler(object sender, EventArgs e) {
 
-            RemoveEventHandlers((Control)sender);
-
-            // Remove this node from the DOM since it no longer refers to an valid control.
-
-            if (Parent is object)
-                Parent.Children.Remove(this);
+            Dispose();
 
         }
         private void EnabledChangedHandler(object sender, EventArgs e) {

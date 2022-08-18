@@ -142,6 +142,7 @@ namespace Gsemac.Forms.Styles {
             // Public members
 
             public IControlState ControlState { get; }
+            public INode2 Node { get; }
             public IStyleApplicator StyleApplicator { get; }
             public IDomSelectorObserver SelectorObserver { get; }
 
@@ -166,18 +167,20 @@ namespace Gsemac.Forms.Styles {
                 StyleApplicator = styleApplicator;
 
             }
-            public ControlNodeInfo(Control control, IStyleApplicator styleApplicator, IDomSelectorObserver stylesObserver) :
+            public ControlNodeInfo(Control control, IStyleApplicator styleApplicator, INode2 domNode) :
                 this(control, styleApplicator) {
 
-                if (stylesObserver is null)
-                    throw new ArgumentNullException(nameof(stylesObserver));
+                if (domNode is null)
+                    throw new ArgumentNullException(nameof(domNode));
 
-                SelectorObserver = stylesObserver;
+                Node = domNode;
+                SelectorObserver = new DomSelectorObserver(domNode);
 
             }
 
             public void Dispose() {
 
+                Node?.Dispose();
                 SelectorObserver?.Dispose();
 
             }
@@ -212,7 +215,7 @@ namespace Gsemac.Forms.Styles {
                 controlInfo.SelectorObserver.SelectorChanged -= SelectorChangedHandler;
                 controlInfo.SelectorObserver.Dispose();
 
-            }                
+            }
 
             if (controlInfo.StyleApplicator is object)
                 controlInfo.StyleApplicator.DeinitializeStyle(control);
@@ -251,12 +254,9 @@ namespace Gsemac.Forms.Styles {
 
                 // Only top-level controls (i.e. Forms) should have style watchers attached to them.
 
-                INode2 controlNode = new ControlNode2(control);
-                IDomSelectorObserver stylesObserver = new DomSelectorObserver(controlNode);
+                info = new ControlNodeInfo(control, styleApplicator, new ControlNode2(control));
 
-                stylesObserver.SelectorChanged += SelectorChangedHandler;
-
-                info = new ControlNodeInfo(control, styleApplicator, stylesObserver);
+                info.SelectorObserver.SelectorChanged += SelectorChangedHandler;
 
                 controlInfo.Add(control, info);
 

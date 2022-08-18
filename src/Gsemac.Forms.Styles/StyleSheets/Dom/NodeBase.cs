@@ -22,10 +22,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
         public string Tag { get; }
         public string Id { get; protected set; }
         public INode2 Parent { get; set; }
-        public ICollection<INode2> Children { get; }
-        public ICollection<string> Classes { get; }
-        public ICollection<NodeState> States { get; }
-        public ICollection<IRuleset> Styles { get; }
+        public ICollection<INode2> Children => children;
+        public ICollection<string> Classes => classes;
+        public ICollection<NodeState> States => states;
+        public ICollection<IRuleset> Styles => styles;
 
         public IRuleset GetComputedStyle(IStyleComputationContext context) {
 
@@ -38,6 +38,14 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
             }
 
             return style;
+
+        }
+
+        public void Dispose() {
+
+            Dispose(disposing: true);
+
+            GC.SuppressFinalize(this);
 
         }
 
@@ -68,22 +76,12 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
             // Initialize collections.
 
-            IObservableCollection<INode2> children = new ChildNodeCollection(this);
-            IObservableCollection<string> classes = new ObservableHashSet<string>();
-            IObservableCollection<NodeState> states = new ObservableHashSet<NodeState>();
-            IObservableCollection<IRuleset> styles = new ObservableHashSet<IRuleset>(new EquivalentRulesetEqualityComparer());
+            children = new ChildNodeCollection(this);
+            classes = new ObservableHashSet<string>();
+            states = new ObservableHashSet<NodeState>();
+            styles = new ObservableHashSet<IRuleset>(new EquivalentRulesetEqualityComparer());
 
-            Classes = classes;
-            Children = children;
-            States = states;
-            Styles = styles;
-
-            // Register event handlers.
-
-            children.CollectionChanged += ChildrenCollectionChangedHandler;
-            classes.CollectionChanged += SelectorChangedHandler;
-            states.CollectionChanged += SelectorChangedHandler;
-            styles.CollectionChanged += StylesChangedHandler;
+            AddEventHandlers();
 
         }
 
@@ -120,10 +118,60 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
         }
 
+        protected virtual void Dispose(bool disposing) {
+
+            if (!disposedValue && disposing) {
+
+                // Remove event handlers first so none of the following actions trigger events.
+
+                RemoveEventHandlers();
+
+                // Remove the node from the DOM.
+
+                if (Parent is object)
+                    Parent.Children.Remove(this);
+
+                // Dispose of all child nodes.
+
+                INode2[] childrenToDispose = children.ToArray();
+
+                children.Clear();
+
+                foreach (INode2 child in childrenToDispose)
+                    child.Dispose();
+
+                disposedValue = true;
+
+            }
+
+        }
+
         // Private members
 
+        private readonly IObservableCollection<INode2> children;
+        private readonly IObservableCollection<string> classes;
+        private readonly IObservableCollection<NodeState> states;
+        private readonly IObservableCollection<IRuleset> styles;
         private IRuleset style;
-        bool styleIsDirty = true;
+        private bool styleIsDirty = true;
+        private bool disposedValue = false;
+
+        private void AddEventHandlers() {
+
+            children.CollectionChanged += ChildrenCollectionChangedHandler;
+            classes.CollectionChanged += SelectorChangedHandler;
+            states.CollectionChanged += SelectorChangedHandler;
+            styles.CollectionChanged += StylesChangedHandler;
+
+        }
+        private void RemoveEventHandlers() {
+
+            children.CollectionChanged -= ChildrenCollectionChangedHandler;
+            classes.CollectionChanged -= SelectorChangedHandler;
+            states.CollectionChanged -= SelectorChangedHandler;
+            styles.CollectionChanged -= StylesChangedHandler;
+
+        }
 
         private void ChildrenCollectionChangedHandler(object sender, CollectionChangedEventArgs<INode2> e) {
 
