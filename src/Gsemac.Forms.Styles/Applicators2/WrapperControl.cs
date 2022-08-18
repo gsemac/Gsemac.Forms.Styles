@@ -6,12 +6,12 @@ using System.Windows.Forms;
 namespace Gsemac.Forms.Styles.Applicators2 {
 
     [DomHidden]
-    internal class BorderControl :
+    internal class WrapperControl :
         UserControl {
 
         // Public members
 
-        public BorderControl(Control childControl) {
+        public WrapperControl(Control childControl) {
 
             if (childControl is null)
                 throw new ArgumentNullException(nameof(childControl));

@@ -20,13 +20,13 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Protected members
 
-        protected override BorderControl WrapControl(TextBox textBox) {
+        protected override WrapperControl WrapControl(TextBox textBox) {
 
             Size originalSize = textBox.Size;
 
             textBox.BorderStyle = BorderStyle.None;
 
-            BorderControl borderControl = base.WrapControl(textBox);
+            WrapperControl borderControl = base.WrapControl(textBox);
 
             int bottomPadding = textBox.Multiline ? 3 : 0;
 

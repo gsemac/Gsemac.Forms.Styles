@@ -33,7 +33,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             // Wrap the control in a new control that allows us to paint on it.
 
-            BorderControl borderControl = WrapControl(control);
+            WrapperControl wrapperControl = WrapControl(control);
 
             base.InitializeStyle(control);
 
@@ -67,7 +67,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Protected members
 
-        protected virtual BorderControl WrapControl(T control) {
+        protected virtual WrapperControl WrapControl(T control) {
 
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
@@ -83,17 +83,17 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             }
 
-            BorderControl wrappedControl = new BorderControl(control);
+            WrapperControl wrapperControl = new WrapperControl(control);
 
             if (hasParent) {
 
-                parent.Controls.Add(wrappedControl);
+                parent.Controls.Add(wrapperControl);
 
                 parent.ResumeLayout();
 
             }
 
-            return wrappedControl;
+            return wrapperControl;
 
         }
         protected virtual T UnwrapControl(T control) {
@@ -101,20 +101,20 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
-            if (control.Parent is BorderControl borderControl && borderControl.Parent is object) {
+            if (control.Parent is WrapperControl wrapperControl && wrapperControl.Parent is object) {
 
-                Control parent = borderControl.Parent;
+                Control parent = wrapperControl.Parent;
 
                 parent.SuspendLayout();
 
-                parent.Controls.Remove(borderControl);
-                borderControl.Controls.Clear();
+                parent.Controls.Remove(wrapperControl);
+                wrapperControl.Controls.Clear();
 
                 parent.Controls.Add(control);
 
                 parent.ResumeLayout();
 
-                borderControl.Dispose();
+                wrapperControl.Dispose();
 
             }
 
@@ -141,13 +141,13 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             // This event handler is called by the parent control.
 
-            if (sender is BorderControl borderControl && borderControl.ChildControl is T childControl) {
+            if (sender is WrapperControl wrapperControl && wrapperControl.ChildControl is T childControl) {
 
                 IStyleRenderer renderer = styleRendererFactory.Create(childControl.GetType());
 
                 if (renderer is object && styles.TryGetValue(childControl, out IRuleset style)) {
 
-                    IRenderContext context = new RenderContext(e.Graphics, borderControl.ClientRectangle, style);
+                    IRenderContext context = new RenderContext(e.Graphics, wrapperControl.ClientRectangle, style);
 
                     renderer.Render(childControl, context);
 
