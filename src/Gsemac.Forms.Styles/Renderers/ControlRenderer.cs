@@ -120,7 +120,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             IRuleset ruleset = e.StyleSheet.GetRuleset(new ControlNode2(e.Control));
 
-            ControlRenderUtilities.ApplyColorProperties(e.Control, ruleset);
+            RenderUtilities.ApplyColorProperties(e.Control, ruleset);
 
             e.PaintBackground();
             e.PaintBorder();

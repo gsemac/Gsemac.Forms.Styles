@@ -1,6 +1,5 @@
 ﻿using Gsemac.Forms.Styles.Renderers.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Properties;
-using Gsemac.Forms.Styles.StyleSheets.Properties.Extensions;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Drawing;
@@ -21,6 +20,30 @@ namespace Gsemac.Forms.Styles.Renderers {
     internal static class RenderUtilities {
 
         // Public members
+
+        public static void ApplyColorProperties(Control control, IRuleset style) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            if (style is null)
+                throw new ArgumentNullException(nameof(style));
+
+            if (style.ContainsKey(PropertyName.BackgroundColor) && style.BackgroundColor != control.BackColor) {
+
+                Color backColor = style.BackgroundColor;
+
+                if (backColor.A != byte.MaxValue && !ControlUtilities.GetStyle(control, ControlStyles.SupportsTransparentBackColor))
+                    backColor = Color.FromArgb(backColor.R, backColor.G, backColor.B);
+
+                control.BackColor = backColor;
+
+            }
+
+            if (style.ContainsKey(PropertyName.Color) && style.Color != control.ForeColor)
+                control.ForeColor = style.Color;
+
+        }
 
         public static DashStyle GetDashStyle(StyleSheets.Properties.BorderStyle borderStyle) {
 

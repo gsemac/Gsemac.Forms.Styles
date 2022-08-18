@@ -42,7 +42,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
                 Rectangle focusRectangle = new Rectangle(clientRect.X + 2, clientRect.Y + 2, clientRect.Width - 5, clientRect.Height - 5);
 
-                ControlRenderUtilities.DrawFocusRectangle(context.Graphics, focusRectangle, context.Style);
+                RenderUtilities.DrawFocusRectangle(context.Graphics, focusRectangle, context.Style);
 
             }
 

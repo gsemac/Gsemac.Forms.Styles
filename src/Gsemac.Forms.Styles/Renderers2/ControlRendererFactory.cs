@@ -37,6 +37,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             renderers.Add(typeof(GroupBox), new GroupBoxRenderer());
             renderers.Add(typeof(Label), new LabelRenderer());
             renderers.Add(typeof(RadioButton), new RadioButtonRenderer());
+            renderers.Add(typeof(TabControl), new TabControlRenderer());
             renderers.Add(typeof(TextBox), new TextBoxRenderer());
 
         }

@@ -17,7 +17,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             // Update the color of the NumericUpdateDown, which updates the color of the UpDownEdit (inheriting from TextBox).
 
-            ControlRenderUtilities.ApplyColorProperties(control, ruleset);
+            RenderUtilities.ApplyColorProperties(control, ruleset);
 
             // Like TextBoxes, NumericUpDowns are 23 pixels high.
             // Because the NumericUpDown has BorderStyle.None, we need to adjust it to look like a bordered control.

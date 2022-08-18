@@ -16,7 +16,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             INode2 controlNode = new ControlNode2(control);
             IRuleset ruleset = args.StyleSheet.GetRuleset(controlNode);
 
-            ControlRenderUtilities.ApplyColorProperties(control, ruleset);
+            RenderUtilities.ApplyColorProperties(control, ruleset);
 
             Rectangle clientRect = control.ClientRectangle;
             Rectangle borderRect = new Rectangle(clientRect.X - 3, clientRect.Y - 3, clientRect.Width + 6, clientRect.Height + 6);

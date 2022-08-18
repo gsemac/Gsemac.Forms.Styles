@@ -17,7 +17,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
             // Update the color of the TextBox itself.
 
-            ControlRenderUtilities.ApplyColorProperties(control, ruleset);
+            RenderUtilities.ApplyColorProperties(control, ruleset);
 
             // Draw the background the TextBox.
             // The height of regular TextBoxes is 23 pixels, with 3 pixels of horizontal padding.

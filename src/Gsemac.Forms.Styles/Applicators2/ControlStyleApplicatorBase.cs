@@ -31,7 +31,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             Control control = obj;
 
-            ControlRenderUtilities.ApplyColorProperties(control, ruleset);
+            RenderUtilities.ApplyColorProperties(control, ruleset);
 
         }
 

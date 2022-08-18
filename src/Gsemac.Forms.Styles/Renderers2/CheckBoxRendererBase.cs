@@ -25,7 +25,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             DrawText(control, context);
 
             if (ControlUtilities2.FocusCuesShown(control))
-                ControlRenderUtilities.DrawFocusRectangle(context.Graphics, GetFocusRectangle(control, context), context.Style);
+                RenderUtilities.DrawFocusRectangle(context.Graphics, GetFocusRectangle(control, context), context.Style);
 
             context.DrawBorder();
 
