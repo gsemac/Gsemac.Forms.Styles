@@ -22,6 +22,9 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         protected override WrapperControl WrapControl(TextBox textBox) {
 
+            if (textBox is null)
+                throw new ArgumentNullException(nameof(textBox));
+
             Size originalSize = textBox.Size;
 
             textBox.BorderStyle = BorderStyle.None;

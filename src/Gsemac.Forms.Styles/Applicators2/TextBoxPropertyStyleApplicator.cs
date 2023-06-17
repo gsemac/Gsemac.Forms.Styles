@@ -1,4 +1,5 @@
 ﻿using Gsemac.Forms.Styles.StyleSheets.Rulesets;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 using BorderStyle = Gsemac.Forms.Styles.StyleSheets.Properties.BorderStyle;
@@ -11,6 +12,12 @@ namespace Gsemac.Forms.Styles.Applicators2 {
         // Public members
 
         public override void ApplyStyle(TextBox textBox, IRuleset style) {
+
+            if (textBox is null)
+                throw new ArgumentNullException(nameof(textBox));
+
+            if (style is null)
+                throw new ArgumentNullException(nameof(style));
 
             // Do not attempt to style TextBox instances nested inside of NumericUpDown controls.
 
