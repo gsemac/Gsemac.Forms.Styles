@@ -58,7 +58,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             const int requiredArguments = 3;
 
             if (arguments.Length != requiredArguments)
-                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.LinearGradient, requiredArguments, arguments.Length));
+                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.Rgb, requiredArguments, arguments.Length));
 
             int r = arguments[0].As<int>();
             int g = arguments[1].As<int>();
@@ -74,7 +74,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             const int requiredArguments = 4;
 
             if (arguments.Length != requiredArguments)
-                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.LinearGradient, requiredArguments, arguments.Length));
+                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.Rgba, requiredArguments, arguments.Length));
 
             int r = arguments[0].As<int>();
             int g = arguments[1].As<int>();
@@ -91,7 +91,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             const int requiredArguments = 1;
 
             if (arguments.Length != requiredArguments)
-                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.LinearGradient, requiredArguments, arguments.Length));
+                throw new ArgumentException(string.Format(ExceptionMessages.PropertyFunctionRequiresNArguments, FunctionName.Url, requiredArguments, arguments.Length));
 
             string resourcePath = arguments[0].As<string>();
 

@@ -20,7 +20,15 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             if (applicators.TryGetValue(forType, out var applicator))
                 return applicator;
 
-            return fallbackApplicatorFactory.Create(forType);
+            switch (forType.FullName) {
+
+                case "System.Windows.Forms.UpDownBase+UpDownButtons":
+                    return new UserPaintStyleApplicator<Control>(); ;
+
+                default:
+                    return fallbackApplicatorFactory.Create(forType);
+
+            }
 
         }
 
@@ -35,6 +43,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             applicators.Add(typeof(CheckBox), new UserPaintStyleApplicator<CheckBox>());
             applicators.Add(typeof(GroupBox), new UserPaintStyleApplicator<GroupBox>());
             applicators.Add(typeof(Label), new UserPaintStyleApplicator<Label>());
+            applicators.Add(typeof(NumericUpDown), new NumericUpDownUserPaintStyleApplicator());
             applicators.Add(typeof(RadioButton), new UserPaintStyleApplicator<RadioButton>());
             applicators.Add(typeof(TabControl), new UserPaintStyleApplicator<TabControl>());
             applicators.Add(typeof(TextBox), new TextBoxUserPaintStyleApplicator());

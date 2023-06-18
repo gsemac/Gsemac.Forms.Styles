@@ -10,28 +10,49 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Public members
 
-        public override void InitializeStyle(T obj) {
+        public override void InitializeStyle(T control) {
 
-            if (obj is null)
-                throw new ArgumentNullException(nameof(obj));
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
 
-            Control control = obj;
+            if (IsSupportedControl(control)) {
 
-            ControlUtilities.SetDoubleBuffered(control, true);
+                ControlUtilities.SetDoubleBuffered(control, true);
+
+            }
 
         }
 
-        public override void ApplyStyle(T obj, IRuleset ruleset) {
+        public override void ApplyStyle(T control, IRuleset ruleset) {
 
-            if (obj is null)
-                throw new ArgumentNullException(nameof(obj));
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
 
             if (ruleset is null)
                 throw new ArgumentNullException(nameof(ruleset));
 
-            Control control = obj;
+            if (IsSupportedControl(control)) {
 
-            RenderUtilities.ApplyColorProperties(control, ruleset);
+                RenderUtilities.ApplyColorProperties(control, ruleset);
+
+            }
+
+        }
+
+        // Private members
+
+        private static bool IsSupportedControl(Control control) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            // Do not apply styles directly to NumericUpDown's TextBox control.
+            // Instead, its properties will be set via the NumericUpDown.
+
+            if (control is TextBox && control.Parent is NumericUpDown)
+                return false;
+
+            return true;
 
         }
 

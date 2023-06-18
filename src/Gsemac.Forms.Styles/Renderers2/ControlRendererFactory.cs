@@ -19,10 +19,21 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         public IStyleRenderer Create(Type forType) {
 
+            if (forType is null)
+                throw new ArgumentNullException(nameof(forType));
+
             if (renderers.TryGetValue(forType, out var renderer))
                 return renderer;
 
-            return new NullStyleRenderer();
+            switch (forType.FullName) {
+
+                case "System.Windows.Forms.UpDownBase+UpDownButtons":
+                    return new UpDownButtonsRenderer(); ;
+
+                default:
+                    return new NullStyleRenderer();
+
+            }
 
         }
 
@@ -36,6 +47,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             renderers.Add(typeof(CheckBox), new CheckBoxRenderer());
             renderers.Add(typeof(GroupBox), new GroupBoxRenderer());
             renderers.Add(typeof(Label), new LabelRenderer());
+            renderers.Add(typeof(NumericUpDown), new NumericUpDownRenderer());
             renderers.Add(typeof(RadioButton), new RadioButtonRenderer());
             renderers.Add(typeof(TabControl), new TabControlRenderer());
             renderers.Add(typeof(TextBox), new TextBoxRenderer());

@@ -61,9 +61,25 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to checkbox {
-        ///    accent-color: white;
-        ///}.
+        ///   Looks up a localized string similar to /* 
+        ///    Colors were selected for the default style based on a default Windows 8.1 install.
+        ///*/
+        ///
+        ///.Control:disabled {
+        ///    color: rgb(85, 85, 85);
+        ///}
+        ///
+        ///button {
+        ///    background-color: rgb(240, 240, 240);
+        ///    background-image: linear-gradient(to bottom, transparent, rgb(229, 229, 229));
+        ///    border-color: rgb(172, 172, 172);
+        ///    border-style: solid;
+        ///    border-width: 1px;
+        ///}
+        ///
+        ///button:hover {
+        ///    background-color: rgb(235, 244, 252);
+        ///    background-image: linear-gradient(to bottom, transparent, rgb(22 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Default {
             get {

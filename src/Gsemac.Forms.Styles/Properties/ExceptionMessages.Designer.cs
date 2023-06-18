@@ -169,7 +169,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Function &apos;{0}&apos; requires {1} argument(s), but {2} were given..
+        ///   Looks up a localized string similar to Function &apos;{0}&apos; requires {1} argument(s), but {2} were provided..
         /// </summary>
         internal static string PropertyFunctionRequiresNArguments {
             get {
@@ -187,7 +187,7 @@ namespace Gsemac.Forms.Styles.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property &apos;{0}&apos; requires {1} argument(s), but {2} were given..
+        ///   Looks up a localized string similar to Property &apos;{0}&apos; requires {1} argument(s), but {2} were provided..
         /// </summary>
         internal static string PropertyRequiresNArguments {
             get {

@@ -154,13 +154,13 @@
     <value>Unable to parse string '{0}' as type '{1}'.</value>
   </data>
   <data name="PropertyFunctionRequiresNArguments" xml:space="preserve">
-    <value>Function '{0}' requires {1} argument(s), but {2} were given.</value>
+    <value>Function '{0}' requires {1} argument(s), but {2} were provided.</value>
   </data>
   <data name="PropertyNameCannotBeEmpty" xml:space="preserve">
     <value>Property name cannot be empty.</value>
   </data>
   <data name="PropertyRequiresNArguments" xml:space="preserve">
-    <value>Property '{0}' requires {1} argument(s), but {2} were given.</value>
+    <value>Property '{0}' requires {1} argument(s), but {2} were provided.</value>
   </data>
   <data name="UnexpectedToken" xml:space="preserve">
     <value>Encountered unexpected token '{0}'.</value>
