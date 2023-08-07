@@ -154,7 +154,10 @@ namespace Gsemac.Forms.Styles {
 
                 // Only store visual state for forms, because we don't want to reposition them when resetting the style.
 
-                ControlState = Forms.ControlState.Save(control, control is Form ? ControlStateOptions.StoreVisualProperties : ControlStateOptions.Default);
+                ControlState = Forms.ControlState.Save(control, new ControlStateOptions() {
+                    IncludeLayoutProperties = !(control is Form),
+                    IncludeVisualProperties = true,
+                });
 
             }
             public ControlNodeInfo(Control control, IStyleApplicator styleApplicator) :
@@ -212,7 +215,7 @@ namespace Gsemac.Forms.Styles {
                 controlInfo.SelectorObserver.SelectorChanged -= SelectorChangedHandler;
                 controlInfo.SelectorObserver.Dispose();
 
-            }                
+            }
 
             if (controlInfo.StyleApplicator is object)
                 controlInfo.StyleApplicator.DeinitializeStyle(control);
