@@ -283,7 +283,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
         public static void DrawText(Graphics graphics, Rectangle bounds, string text, Font font, IRuleset style) {
 
-            DrawText(graphics, bounds, text, font, TextFormatFlags.Left | TextFormatFlags.NoPrefix, style);
+            DrawText(graphics, bounds, text, font, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix, style);
 
         }
         public static void DrawText(Graphics graphics, Rectangle bounds, string text, Font font, TextFormatFlags textFormatFlags, IRuleset style) {

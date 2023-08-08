@@ -45,6 +45,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             renderers.Add(typeof(Button), new ButtonRenderer());
             renderers.Add(typeof(CheckBox), new CheckBoxRenderer());
+            renderers.Add(typeof(ComboBox), new ComboBoxRenderer());
             renderers.Add(typeof(GroupBox), new GroupBoxRenderer());
             renderers.Add(typeof(Label), new LabelRenderer());
             renderers.Add(typeof(NumericUpDown), new NumericUpDownRenderer());
