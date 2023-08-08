@@ -60,15 +60,20 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         }
         public IRuleset ComputeStyle(INode2 node, IEnumerable<IRuleset> styles) {
 
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
+
+            if (styles is null)
+                throw new ArgumentNullException(nameof(styles));
+
             IRuleset computedStyle = new Ruleset();
 
             // Assume the styles are already ordered by origin and specificity, and apply to the current node.
-            // We'll take the last instance of each property specified.
+            // Properties are computed and added to the style sequentially, even if this means we might end up processing multiple instances of the same property.
+            // We could just compute the last instance of each property (e.g. reverse the list and ignore properties we've seen before), but order is important when processing longhand/shorthand properties.
+            // E.g. the order in which "border-top-width" and "border-width" appear affects the final result.
 
-            foreach (IProperty property in styles.SelectMany(style => style).Reverse()) {
-
-                if (computedStyle.ContainsKey(property.Name))
-                    continue;
+            foreach (IProperty property in styles.SelectMany(style => style)) {
 
                 IProperty computedProperty = ComputeProperty(property, node, styles);
 
@@ -91,7 +96,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
             return computedStyle;
 
         }
- 
+
         // Private members
 
         private readonly ISystemColorPalette systemColorPalette;
