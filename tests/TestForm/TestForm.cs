@@ -72,8 +72,8 @@ namespace ThemeTesting {
 
             IStyleSheetFactory styleSheetFactory = StyleSheetFactory.Default;
 
-            styleManager.StyleSheets.Add(styleSheetFactory.FromFile("Test.css"));
-            //styleManager.StyleSheets.Add(styleSheetFactory.FromFile("DarkUI.css"));
+            //styleManager.StyleSheets.Add(styleSheetFactory.FromFile("Test.css"));
+            styleManager.StyleSheets.Add(styleSheetFactory.FromFile("DarkUI.css"));
 
         }
 
