@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace Gsemac.Forms.Styles.StyleSheets.Dom {
 
-    public interface INode2 {
+    public interface INode2 :
+        IDisposable {
 
         event EventHandler<NodeCollectionChangedEventArgs> ChildAdded;
         event EventHandler<NodeCollectionChangedEventArgs> ChildRemoved;

@@ -29,6 +29,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             childControl.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Left;
             childControl.Location = new Point(0, 0);
+            childControl.Parent = this;
 
             Controls.Add(childControl);
 
