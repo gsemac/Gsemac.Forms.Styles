@@ -165,7 +165,10 @@ namespace Gsemac.Forms.Styles.Applicators {
             // Only store visual properties for Forms to avoid resizing them when the style is cleared.
 
             ControlInfo info = new ControlInfo() {
-                ControlState = control.Save(control is Form ? ControlStateOptions.StoreVisualProperties : ControlStateOptions.Default)
+                ControlState = control.Save(new ControlStateOptions() {
+                    IncludeLayoutProperties = !(control is Form),
+                    IncludeVisualProperties = true,
+                })
             };
 
             control.ControlAdded += ControlAddedEventHandler;
