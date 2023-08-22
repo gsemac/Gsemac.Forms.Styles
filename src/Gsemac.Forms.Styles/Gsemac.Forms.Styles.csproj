@@ -19,7 +19,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Gsemac.Collections" Version="0.10.3" />
+		<PackageReference Include="Gsemac.Collections" Version="0.10.4" />
 		<PackageReference Include="Gsemac.Forms" Version="0.6.0" />
 		<PackageReference Include="Gsemac.Win32" Version="0.12.0" />
 	</ItemGroup>
