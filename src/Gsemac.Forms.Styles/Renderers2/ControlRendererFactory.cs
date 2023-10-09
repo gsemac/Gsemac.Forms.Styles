@@ -28,7 +28,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             switch (forType.FullName) {
 
                 case "System.Windows.Forms.UpDownBase+UpDownButtons":
-                    return new UpDownButtonsRenderer(); ;
+                    return new UpDownButtonsRenderer();
 
                 default:
                     return new NullStyleRenderer();
@@ -49,6 +49,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             renderers.Add(typeof(GroupBox), new GroupBoxRenderer());
             renderers.Add(typeof(Label), new LabelRenderer());
             renderers.Add(typeof(NumericUpDown), new NumericUpDownRenderer());
+            renderers.Add(typeof(ProgressBar), new ProgressBarRenderer());
             renderers.Add(typeof(RadioButton), new RadioButtonRenderer());
             renderers.Add(typeof(TabControl), new TabControlRenderer());
             renderers.Add(typeof(TextBox), new TextBoxRenderer());

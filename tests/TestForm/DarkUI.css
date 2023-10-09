@@ -77,13 +77,13 @@ checkbox:disabled .check, .radiobutton:disabled .check {
     color: #999999;
 }
 
-progressbar .progress {
+progressbar {
     border-color: #5c5c5c;
     border-width: 1px;
-    background-color: #4b6eaf;
+    accent-color: #6897bb;
 }
 
-progressbar:disabled .progress {
+progressbar:disabled {
     background-color: #999999;
 }
 

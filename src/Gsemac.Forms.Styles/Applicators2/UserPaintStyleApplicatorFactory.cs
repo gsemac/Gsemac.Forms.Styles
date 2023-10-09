@@ -45,6 +45,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             applicators.Add(typeof(GroupBox), new UserPaintStyleApplicator<GroupBox>());
             applicators.Add(typeof(Label), new UserPaintStyleApplicator<Label>());
             applicators.Add(typeof(NumericUpDown), new NumericUpDownUserPaintStyleApplicator());
+            applicators.Add(typeof(ProgressBar), new UserPaintStyleApplicator<ProgressBar>());
             applicators.Add(typeof(RadioButton), new UserPaintStyleApplicator<RadioButton>());
             applicators.Add(typeof(TabControl), new UserPaintStyleApplicator<TabControl>());
             applicators.Add(typeof(TextBox), new TextBoxUserPaintStyleApplicator());
