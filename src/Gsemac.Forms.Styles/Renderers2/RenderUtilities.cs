@@ -34,7 +34,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             }
 
-            if (style.ContainsKey(PropertyName.Color) && style.Color != control.ForeColor)
+            if (style.ContainsKey(PropertyName.Color))
                 control.ForeColor = style.Color;
 
         }
