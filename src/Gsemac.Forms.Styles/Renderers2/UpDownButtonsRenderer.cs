@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.Renderers.Extensions;
+﻿using Gsemac.Drawing;
+using Gsemac.Forms.Styles.Renderers.Extensions;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -30,22 +31,39 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             context.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            PaintButton(context, topButtonRect, TriangleOrientation.Up);
-            PaintButton(context, bottomButtonRect, TriangleOrientation.Down);
+            PaintButton(upDownButtons, context, topButtonRect, TriangleOrientation.Up);
+            PaintButton(upDownButtons, context, bottomButtonRect, TriangleOrientation.Down);
 
         }
 
         // Private members
 
-        private void PaintButton(IRenderContext context, Rectangle buttonRect, TriangleOrientation arrowOrientation) {
+        private void PaintButton(Control upDownButtons, IRenderContext context, Rectangle buttonRect, TriangleOrientation arrowOrientation) {
+
+            if (upDownButtons is null)
+                throw new ArgumentNullException(nameof(upDownButtons));
 
             if (context is null)
                 throw new ArgumentNullException(nameof(context));
 
+            // Paint the button background.
+
             Rectangle backgroundRect = new Rectangle(buttonRect.X, buttonRect.Y, buttonRect.Width - 1, buttonRect.Height - 1);
 
             context.DrawBackground(backgroundRect);
-            context.DrawBorder(buttonRect);
+
+            bool mouseOn = backgroundRect.Contains(upDownButtons.PointToClient(Cursor.Position));
+
+            if (mouseOn) {
+
+                Color hoverColor = ColorUtilities.Tint(context.Style.BackgroundColor, 0.5f);
+
+                using (Brush brush = new SolidBrush(Color.FromArgb(50, hoverColor)))
+                    context.Graphics.FillRectangle(brush, backgroundRect);
+
+            }
+
+            // Paint the button triangle.
 
             Rectangle triangleRect = backgroundRect;
 
@@ -53,6 +71,8 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             using (Brush brush = new SolidBrush(context.Style.AccentColor))
                 context.Graphics.FillTriangle(brush, triangleRect, arrowOrientation);
+
+            context.DrawBorder(buttonRect);
 
         }
 
