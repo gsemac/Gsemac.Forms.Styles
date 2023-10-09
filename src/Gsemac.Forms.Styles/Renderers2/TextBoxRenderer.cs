@@ -21,7 +21,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             Rectangle clientRect = context.ClientRectangle;
 
-            clientRect.Inflate(-1, -1);
+            // clientRect.Inflate(-1, -1);
 
             context.DrawBackground(clientRect);
 
