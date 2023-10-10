@@ -163,7 +163,9 @@ tabcontrol:focus-within .tab:checked {
 
 listbox, listview, treeview, datagridview {
     border-width: 1px;
+    border-style: solid;
     border-color: #333333;
+    accent-color: #6897bb;
 }
 
 listview .header, datagridview .header {

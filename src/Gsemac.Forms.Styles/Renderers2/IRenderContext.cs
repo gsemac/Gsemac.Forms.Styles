@@ -8,6 +8,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
         Rectangle ClientRectangle { get; }
         Graphics Graphics { get; }
         IRuleset Style { get; }
+        bool IsRenderingBackground { get; }
 
     }
 

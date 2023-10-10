@@ -12,6 +12,7 @@ namespace Gsemac.Forms.Styles.Renderers2 {
         public Rectangle ClientRectangle { get; }
         public Graphics Graphics { get; }
         public IRuleset Style { get; }
+        public bool IsRenderingBackground { get; set; } = false;
 
         public RenderContext(Graphics graphics, Rectangle clientRect, IRuleset style) {
 

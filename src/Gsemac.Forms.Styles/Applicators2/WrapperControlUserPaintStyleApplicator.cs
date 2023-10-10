@@ -14,12 +14,19 @@ namespace Gsemac.Forms.Styles.Applicators2 {
         public WrapperControlUserPaintStyleApplicator() :
             this(ControlRendererFactory.Default) {
         }
-        public WrapperControlUserPaintStyleApplicator(IStyleRendererFactory styleRendererFactory) {
+        public WrapperControlUserPaintStyleApplicator(bool forwardPaintEventsToChildControl) :
+            this(ControlRendererFactory.Default, forwardPaintEventsToChildControl) {
+        }
+        public WrapperControlUserPaintStyleApplicator(IStyleRendererFactory styleRendererFactory) :
+            this(styleRendererFactory, forwardPaintEventsToChildControl: false) {
+        }
+        public WrapperControlUserPaintStyleApplicator(IStyleRendererFactory styleRendererFactory, bool forwardPaintEventsToChildControl) {
 
             if (styleRendererFactory is null)
                 throw new ArgumentNullException(nameof(styleRendererFactory));
 
             this.styleRendererFactory = styleRendererFactory;
+            this.forwardPaintEventsToChildControl = forwardPaintEventsToChildControl;
 
         }
 
@@ -40,6 +47,18 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             control.Invalidated += InvalidatedHandler;
             control.Parent.Paint += PaintEventHandler;
 
+            if (forwardPaintEventsToChildControl) {
+
+                // This allows the child control to support custom rendering as well.
+                // This is for controls that need the border provided by the wrapper control while still using custom rendering (e.g. ListBox).
+
+                ControlUtilities.SetDoubleBuffered(control, true);
+                ControlUtilities.SetStyle(control, ControlStyles.UserPaint, true);
+
+                control.Paint += PaintEventHandler;
+
+            }
+
         }
         public override void DeinitializeStyle(T control) {
 
@@ -48,6 +67,8 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             control.Invalidated -= InvalidatedHandler;
             control.Parent.Paint -= PaintEventHandler;
+
+            control.Paint -= PaintEventHandler;
 
             styles.Remove(control);
 
@@ -126,6 +147,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         private readonly IStyleRendererFactory styleRendererFactory;
         private readonly IDictionary<T, IRuleset> styles = new Dictionary<T, IRuleset>();
+        private readonly bool forwardPaintEventsToChildControl = false;
 
         private void InvalidatedHandler(object sender, EventArgs e) {
 
@@ -143,13 +165,32 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             if (sender is WrapperControl wrapperControl && wrapperControl.ChildControl is T childControl) {
 
+                // We are rendering on the parent (wrapper) control.
+
                 IStyleRenderer renderer = styleRendererFactory.Create(childControl.GetType());
 
                 if (renderer is object && styles.TryGetValue(childControl, out IRuleset style)) {
 
-                    IRenderContext context = new RenderContext(e.Graphics, wrapperControl.ClientRectangle, style);
+                    IRenderContext context = new RenderContext(e.Graphics, wrapperControl.ClientRectangle, style) {
+                        IsRenderingBackground = true,
+                    };
 
                     renderer.Render(childControl, context);
+
+                }
+
+            }
+            else if (sender is T control) {
+
+                // We are rendering on the child control (only occurs if enabled).
+
+                IStyleRenderer renderer = styleRendererFactory.Create(control.GetType());
+
+                if (renderer is object && styles.TryGetValue(control, out IRuleset style)) {
+
+                    IRenderContext context = new RenderContext(e.Graphics, control.ClientRectangle, style);
+
+                    renderer.Render(control, context);
 
                 }
 
