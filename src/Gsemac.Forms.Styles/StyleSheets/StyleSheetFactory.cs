@@ -142,7 +142,7 @@ namespace Gsemac.Forms.Styles.StyleSheets {
 
                         break;
 
-                    case StyleSheetLexerTokenType.DeclarationEnd:
+                    default:
 
                         // Don't eat the token, so that it can be seen by ReadStream.
                         // Encountering this token means the style sheet is malformed, but we want to handle it gracefully.
