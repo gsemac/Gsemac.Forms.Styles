@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.Controls;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -10,7 +11,10 @@ namespace Gsemac.Forms.Styles.Applicators2 {
         // Public members
 
         public ListBoxUserPaintStyleApplicator() :
-            base(forwardPaintEventsToChildControl: true) {
+            base(new WrapperControlOptions() {
+                ForwardPaintEventsToChildControl = true,
+                OverrideScrollbars = true,
+            }) {
         }
 
         public override void InitializeStyle(ListBox listBox) {

@@ -1,7 +1,9 @@
-﻿using Gsemac.Forms.Styles.Renderers2;
+﻿using Gsemac.Forms.Styles.Controls;
+using Gsemac.Forms.Styles.Renderers2;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
@@ -14,19 +16,22 @@ namespace Gsemac.Forms.Styles.Applicators2 {
         public WrapperControlUserPaintStyleApplicator() :
             this(ControlRendererFactory.Default) {
         }
-        public WrapperControlUserPaintStyleApplicator(bool forwardPaintEventsToChildControl) :
-            this(ControlRendererFactory.Default, forwardPaintEventsToChildControl) {
+        public WrapperControlUserPaintStyleApplicator(IWrapperControlOptions options) :
+            this(ControlRendererFactory.Default, options) {
         }
         public WrapperControlUserPaintStyleApplicator(IStyleRendererFactory styleRendererFactory) :
-            this(styleRendererFactory, forwardPaintEventsToChildControl: false) {
+            this(styleRendererFactory, WrapperControlOptions.Default) {
         }
-        public WrapperControlUserPaintStyleApplicator(IStyleRendererFactory styleRendererFactory, bool forwardPaintEventsToChildControl) {
+        public WrapperControlUserPaintStyleApplicator(IStyleRendererFactory styleRendererFactory, IWrapperControlOptions options) {
 
             if (styleRendererFactory is null)
                 throw new ArgumentNullException(nameof(styleRendererFactory));
 
+            if (options is null)
+                throw new ArgumentNullException(nameof(options));
+
             this.styleRendererFactory = styleRendererFactory;
-            this.forwardPaintEventsToChildControl = forwardPaintEventsToChildControl;
+            this.options = options;
 
         }
 
@@ -47,7 +52,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             control.Invalidated += InvalidatedHandler;
             control.Parent.Paint += PaintEventHandler;
 
-            if (forwardPaintEventsToChildControl) {
+            if (options.ForwardPaintEventsToChildControl) {
 
                 // This allows the child control to support custom rendering as well.
                 // This is for controls that need the border provided by the wrapper control while still using custom rendering (e.g. ListBox).
@@ -106,6 +111,9 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             WrapperControl wrapperControl = new WrapperControl(control);
 
+            if (options.OverrideScrollbars)
+                AddScrollbar(wrapperControl);
+
             if (hasParent) {
 
                 parent.Controls.Add(wrapperControl);
@@ -146,8 +154,8 @@ namespace Gsemac.Forms.Styles.Applicators2 {
         // Private members
 
         private readonly IStyleRendererFactory styleRendererFactory;
+        private readonly IWrapperControlOptions options;
         private readonly IDictionary<T, IRuleset> styles = new Dictionary<T, IRuleset>();
-        private readonly bool forwardPaintEventsToChildControl = false;
 
         private void InvalidatedHandler(object sender, EventArgs e) {
 
@@ -195,6 +203,25 @@ namespace Gsemac.Forms.Styles.Applicators2 {
                 }
 
             }
+
+        }
+
+        private void AddScrollbar(WrapperControl wrapperControl) {
+
+            if (wrapperControl is null)
+                throw new ArgumentNullException(nameof(wrapperControl));
+
+            WrapperControlScrollBar verticalScrollBar = new WrapperControlScrollBar {
+                Width = SystemInformation.VerticalScrollBarWidth,
+                Height = wrapperControl.Height,
+            };
+
+            verticalScrollBar.Location = new Point(wrapperControl.Width - verticalScrollBar.Width, 0);
+            verticalScrollBar.Anchor = AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+
+            wrapperControl.Controls.Add(verticalScrollBar);
+
+            verticalScrollBar.BringToFront();
 
         }
 
