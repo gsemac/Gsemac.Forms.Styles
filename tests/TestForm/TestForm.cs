@@ -20,14 +20,14 @@ namespace ThemeTesting {
 
         private void ApplyUserPaintStylesButton_Click(object sender, EventArgs e) {
 
-            styleManagerOptions.EnableCustomRendering = true;
+            styleManagerOptions.CustomRenderingEnabled = true;
 
             styleManager.ApplyStyles();
 
         }
         private void ApplyPropertiesStylesButton_Click(object sender, EventArgs e) {
 
-            styleManagerOptions.EnableCustomRendering = false;
+            styleManagerOptions.CustomRenderingEnabled = false;
 
             styleManager.ApplyStyles();
 
