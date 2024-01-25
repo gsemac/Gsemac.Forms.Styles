@@ -166,7 +166,7 @@ listbox, listview, treeview, datagridview {
     border-style: solid;
     border-color: #333333;
     accent-color: #6897bb;
-    scrollbar-color: #4b6eaf #4b6eaf;
+    scrollbar-color: yellow #4b6eaf;
 }
 
 listview .header, datagridview .header {

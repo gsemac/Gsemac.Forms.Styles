@@ -36,6 +36,7 @@ namespace Gsemac.Forms.Styles.Controls {
             // Enable user paint so that the control can be custom painted.
 
             SetStyle(ControlStyles.UserPaint, true);
+
             DoubleBuffered = true;
 
         }
