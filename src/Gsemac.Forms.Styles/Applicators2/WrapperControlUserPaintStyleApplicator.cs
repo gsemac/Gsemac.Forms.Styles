@@ -1,9 +1,11 @@
 ﻿using Gsemac.Forms.Styles.Controls;
 using Gsemac.Forms.Styles.Renderers2;
+using Gsemac.Forms.Styles.StyleSheets.Properties;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
@@ -184,6 +186,24 @@ namespace Gsemac.Forms.Styles.Applicators2 {
                     };
 
                     renderer.Render(childControl, context);
+
+                    // Apply scroll bar styling (if applicable).
+
+                    if (style.ContainsKey(PropertyName.ScrollbarColor)) {
+
+                        ScrollBarColors colors = style.ScrollbarColor;
+
+                        foreach (WrapperControlScrollBar scrollBar in wrapperControl.Controls.OfType<WrapperControlScrollBar>()) {
+
+                            if (scrollBar.BackColor != colors.Track)
+                                scrollBar.BackColor = colors.Track;
+
+                            if (scrollBar.ForeColor != colors.Thumb)
+                                scrollBar.ForeColor = colors.Thumb;
+
+                        }
+
+                    }
 
                 }
 

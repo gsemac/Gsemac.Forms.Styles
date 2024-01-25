@@ -58,6 +58,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         public BorderWidths BorderWidth => GetPropertyValueOrDefault<BorderWidths>(PropertyName.BorderWidth);
         public Color Color => GetPropertyValueOrDefault<Color>(PropertyName.Color);
         public double Opacity => GetPropertyValueOrDefault<double>(PropertyName.Opacity);
+        public ScrollBarColors ScrollbarColor => GetPropertyValueOrDefault<ScrollBarColors>(PropertyName.ScrollbarColor);
 
         public void Add(IProperty property) {
 

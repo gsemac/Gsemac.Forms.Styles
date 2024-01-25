@@ -131,6 +131,11 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 propertyValue = PropertyValue.Create(CreateBorderWidths(arguments));
 
             }
+            else if (definition.ValueType.Equals(typeof(ScrollBarColors))) {
+
+                propertyValue = PropertyValue.Create(CreateScrollBarColors(arguments));
+
+            }
             else if (arguments.Length == 1) {
 
                 // We have a single argument, but its type is not the one we need.
@@ -258,6 +263,10 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
             AddDefinition(Define(PropertyName.Opacity)
                 .WithType<double>()
                 .WithInitial(1.0));
+
+            AddDefinition(Define(PropertyName.ScrollbarColor)
+                .WithType<ScrollBarColors>()
+                .WithInitial(PropertyValue.Auto));
 
         }
 
@@ -442,6 +451,18 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties {
                 return new BorderWidths(measurments[0], measurments[1]);
             else
                 return new BorderWidths(measurments[0]);
+
+        }
+        private static ScrollBarColors CreateScrollBarColors(IPropertyValue[] arguments) {
+
+            if (arguments is null)
+                throw new ArgumentNullException(nameof(arguments));
+
+            Color[] colors = arguments
+                .Select(arg => arg.As<Color>())
+                .ToArray();
+
+            return new ScrollBarColors(colors[0], colors[1]);
 
         }
 

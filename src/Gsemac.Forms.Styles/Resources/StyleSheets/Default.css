@@ -2,6 +2,10 @@
     Colors were selected for the default style based on a default Windows 8.1 install.
 */
 
+.Control {
+    scrollbar-color: #cdcdcd #f0f0f0;
+}
+
 .Control:disabled {
     color: rgb(85, 85, 85);
 }

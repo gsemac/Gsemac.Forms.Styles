@@ -57,6 +57,7 @@
         public const string Opacity = "opacity";
         public const string Orphans = "orphans";
         public const string Quotes = "quotes";
+        public const string ScrollbarColor = "scrollbar-color";
         public const string TabSize = "tab-size";
         public const string TextAlign = "text-align";
         public const string TextAlignLast = "text-align-last";

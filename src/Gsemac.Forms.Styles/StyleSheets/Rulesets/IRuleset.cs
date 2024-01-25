@@ -39,6 +39,7 @@ namespace Gsemac.Forms.Styles.StyleSheets.Rulesets {
         BorderWidths BorderWidth { get; }
         Color Color { get; }
         double Opacity { get; }
+        ScrollBarColors ScrollbarColor { get; }
 
         bool ContainsKey(string propertyName);
         bool Remove(string propertyName);
