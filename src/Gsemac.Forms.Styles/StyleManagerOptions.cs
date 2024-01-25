@@ -5,7 +5,7 @@
 
         // Public members
 
-        public bool EnableCustomRendering { get; set; } = true;
+        public bool CustomRenderingEnabled { get; set; } = true;
         public bool EnableDefaultStyles { get; set; } = true;
         public bool RequireNonDefaultStyles { get; set; } = true;
 

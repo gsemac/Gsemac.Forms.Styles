@@ -2,7 +2,7 @@
 
     public interface IStyleManagerOptions {
 
-        bool EnableCustomRendering { get; }
+        bool CustomRenderingEnabled { get; }
         bool EnableDefaultStyles { get; }
         bool RequireNonDefaultStyles { get; }
 

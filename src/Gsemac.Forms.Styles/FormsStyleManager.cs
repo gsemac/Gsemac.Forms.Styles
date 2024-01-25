@@ -341,7 +341,7 @@ namespace Gsemac.Forms.Styles {
 
         private void InitializeStyleApplicatorFactory() {
 
-            if (options.EnableCustomRendering)
+            if (options.CustomRenderingEnabled)
                 styleApplicatorFactory = new UserPaintStyleApplicatorFactory();
             else
                 styleApplicatorFactory = new PropertyStyleApplicatorFactory();
