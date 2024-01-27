@@ -31,14 +31,14 @@ namespace Gsemac.Forms.Styles.Renderers2 {
 
             context.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-            PaintButton(upDownButtons, context, topButtonRect, TriangleOrientation.Up);
-            PaintButton(upDownButtons, context, bottomButtonRect, TriangleOrientation.Down);
+            PaintButton(upDownButtons, context, topButtonRect, ArrowDirection.Up);
+            PaintButton(upDownButtons, context, bottomButtonRect, ArrowDirection.Down);
 
         }
 
         // Private members
 
-        private void PaintButton(Control upDownButtons, IRenderContext context, Rectangle buttonRect, TriangleOrientation arrowOrientation) {
+        private void PaintButton(Control upDownButtons, IRenderContext context, Rectangle buttonRect, ArrowDirection arrowOrientation) {
 
             if (upDownButtons is null)
                 throw new ArgumentNullException(nameof(upDownButtons));

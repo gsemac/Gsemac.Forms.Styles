@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers.Extensions {
-
-    internal enum TriangleOrientation {
-        Up,
-        Left,
-        Right,
-        Down
-    }
 
     public enum ImageSizeMode {
         Normal = 0,
@@ -75,7 +69,7 @@ namespace Gsemac.Forms.Styles.Renderers.Extensions {
             return path;
         }
 
-        public static GraphicsPath CreateTriangle(Rectangle bounds, TriangleOrientation orientation) {
+        public static GraphicsPath CreateTriangle(Rectangle bounds, ArrowDirection orientation) {
 
             GraphicsPath path = new GraphicsPath();
 
@@ -84,14 +78,14 @@ namespace Gsemac.Forms.Styles.Renderers.Extensions {
 
             switch (orientation) {
 
-                case TriangleOrientation.Up:
+                case ArrowDirection.Up:
 
                     path.AddLine(bounds.X, bounds.Y + bounds.Height, bounds.X + halfX, bounds.Y); // bottom-left to top
                     path.AddLine(bounds.X + halfX, bounds.Y, bounds.X + bounds.Width, bounds.Y + bounds.Height); // top to bottom-right
 
                     break;
 
-                case TriangleOrientation.Down:
+                case ArrowDirection.Down:
 
                     path.AddLine(bounds.X, bounds.Y, bounds.X + halfX, bounds.Y + bounds.Height); // top-left to bottom
                     path.AddLine(bounds.X + halfX, bounds.Y + bounds.Height, bounds.X + bounds.Width, bounds.Y); // bottom to top-right
@@ -137,7 +131,7 @@ namespace Gsemac.Forms.Styles.Renderers.Extensions {
 
         }
 
-        public static void DrawTriangle(this Graphics graphics, Pen pen, Rectangle bounds, TriangleOrientation orientation) {
+        public static void DrawTriangle(this Graphics graphics, Pen pen, Rectangle bounds, ArrowDirection orientation) {
 
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
@@ -149,7 +143,7 @@ namespace Gsemac.Forms.Styles.Renderers.Extensions {
                 graphics.DrawPath(pen, path);
 
         }
-        public static void FillTriangle(this Graphics graphics, Brush brush, Rectangle bounds, TriangleOrientation orientation) {
+        public static void FillTriangle(this Graphics graphics, Brush brush, Rectangle bounds, ArrowDirection orientation) {
 
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));

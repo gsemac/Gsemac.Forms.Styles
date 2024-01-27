@@ -1,5 +1,6 @@
 ﻿using Gsemac.Drawing;
 using Gsemac.Forms.Styles.Dom;
+using Gsemac.Forms.Styles.Renderers.Extensions;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -45,7 +46,17 @@ namespace Gsemac.Forms.Styles.Controls {
         }
         public int Value {
             get => value;
-            set => SetValue(value);
+            set {
+
+                // Updating the value by property will only work if we're not currently dragging.
+                // This is so controls bound to the scroll bar that update this value when scrolled don't update it while the user is scolling.
+
+                if (isDragging)
+                    return;
+
+                SetValue(value);
+
+            }
         }
 
         public WrapperControlScrollBar() {
@@ -66,8 +77,8 @@ namespace Gsemac.Forms.Styles.Controls {
 
                 // Paint the scroll arrows.
 
-                e.Graphics.FillRectangle(brush, GetUpperScrollArrowBounds());
-                e.Graphics.FillRectangle(brush, GetLowerScrollArrowBounds());
+                PaintScrollArrow(e.Graphics, GetUpperScrollArrowBounds(), Orientation == Orientation.Vertical ? ArrowDirection.Up : ArrowDirection.Left);
+                PaintScrollArrow(e.Graphics, GetLowerScrollArrowBounds(), Orientation == Orientation.Vertical ? ArrowDirection.Down : ArrowDirection.Right);
 
                 // Paint the thumb.
 
@@ -84,13 +95,18 @@ namespace Gsemac.Forms.Styles.Controls {
             bool newIsMouseOnThumb = isDragging ||
                 GetThumbBounds().Contains(e.Location);
 
-            if (newIsMouseOnThumb != isMouseOnThumb) {
+            bool newIsMouseOnUpperArrow = !isDragging &&
+                GetUpperScrollArrowBounds().Contains(e.Location);
 
-                isMouseOnThumb = newIsMouseOnThumb;
+            bool newIsMouseOnLowerArrow = !isDragging &&
+                GetLowerScrollArrowBounds().Contains(e.Location);
 
+            if (newIsMouseOnThumb != isMouseOnThumb || newIsMouseOnUpperArrow != isMouseOnUpperArrow || newIsMouseOnLowerArrow != isMouseOnLowerArrow)
                 Invalidate();
 
-            }
+            isMouseOnThumb = newIsMouseOnThumb;
+            isMouseOnUpperArrow = newIsMouseOnUpperArrow;
+            isMouseOnLowerArrow = newIsMouseOnLowerArrow;
 
             if (isDragging) {
 
@@ -110,6 +126,8 @@ namespace Gsemac.Forms.Styles.Controls {
             if (isMouseOnThumb) {
 
                 isMouseOnThumb = false;
+                isMouseOnUpperArrow = false;
+                isMouseOnLowerArrow = false;
 
                 Invalidate();
 
@@ -127,6 +145,40 @@ namespace Gsemac.Forms.Styles.Controls {
                 draggingThumbOrigin = GetThumbOffset();
 
             }
+            else if (GetUpperScrollArrowBounds().Contains(e.Location)) {
+
+                Value -= SmallChange;
+
+            }
+            else if (GetLowerScrollArrowBounds().Contains(e.Location)) {
+
+                Value += SmallChange;
+
+            }
+            else if (GetTrackBounds().Contains(e.Location)) {
+
+                Rectangle thumbBounds = GetThumbBounds();
+
+                int thumbOffset = Orientation == Orientation.Vertical ?
+                    thumbBounds.Y :
+                    thumbBounds.X;
+
+                int clickOffset = Orientation == Orientation.Vertical ?
+                    e.Location.Y :
+                    e.Location.X;
+
+                if (clickOffset < thumbOffset) {
+
+                    Value -= LargeChange;
+
+                }
+                else if (clickOffset > thumbOffset) {
+
+                    Value += LargeChange;
+
+                }
+
+            }
 
         }
         protected override void OnMouseUp(MouseEventArgs e) {
@@ -142,6 +194,8 @@ namespace Gsemac.Forms.Styles.Controls {
         private int value = 0;
 
         private bool isMouseOnThumb = false;
+        private bool isMouseOnUpperArrow = false;
+        private bool isMouseOnLowerArrow = false;
         private bool isDragging = false;
         private Point draggingMouseOrigin = new Point(0, 0);
         private int draggingThumbOrigin = 0;
@@ -289,6 +343,43 @@ namespace Gsemac.Forms.Styles.Controls {
 
             using (SolidBrush brush = new SolidBrush(thumbColor))
                 graphics.FillRectangle(brush, GetThumbBounds());
+
+        }
+        private void PaintScrollArrow(Graphics graphics, Rectangle bounds, ArrowDirection direction) {
+
+            if (graphics is null)
+                throw new ArgumentNullException(nameof(graphics));
+
+            // Paint the background.
+
+            if (isMouseOnUpperArrow && (direction == ArrowDirection.Up || direction == ArrowDirection.Left) ||
+                isMouseOnLowerArrow && (direction == ArrowDirection.Down || direction == ArrowDirection.Right)) {
+
+                Color backgroundColor = ColorUtilities.Shade(BackColor, 0.2f);
+
+                using (SolidBrush brush = new SolidBrush(backgroundColor))
+                    graphics.FillRectangle(brush, bounds);
+
+            }
+
+            // Paint the button triangle.
+
+            int arrowBoundsWidth = bounds.Width / 2;
+            int arrowBoundsHeight = bounds.Height / 3;
+
+            Rectangle arrowBounds = new Rectangle(
+                bounds.X + (bounds.Width / 2) - (arrowBoundsWidth / 2),
+                bounds.Y + (bounds.Height / 2) - (arrowBoundsHeight / 2),
+                arrowBoundsWidth,
+                arrowBoundsHeight
+                );
+
+            Color arrowColor = ColorUtilities.Tint(ForeColor, 0.5f);
+
+            graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+            using (Brush brush = new SolidBrush(arrowColor))
+                graphics.FillTriangle(brush, arrowBounds, direction);
 
         }
 

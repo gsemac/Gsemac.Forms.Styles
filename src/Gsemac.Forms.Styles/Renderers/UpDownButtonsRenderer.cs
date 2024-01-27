@@ -43,7 +43,7 @@ namespace Gsemac.Forms.Styles.Renderers {
 
         // Private members
 
-        private void PaintButton(ControlPaintArgs e, Rectangle clientRect, TriangleOrientation arrowOrientation, IRuleset ruleset) {
+        private void PaintButton(ControlPaintArgs e, Rectangle clientRect, ArrowDirection arrowOrientation, IRuleset ruleset) {
 
             //e.StyleRenderer.PaintBackground(e.Graphics, clientRect, ruleset);
             //e.StyleRenderer.PaintBorder(e.Graphics, clientRect, ruleset);
