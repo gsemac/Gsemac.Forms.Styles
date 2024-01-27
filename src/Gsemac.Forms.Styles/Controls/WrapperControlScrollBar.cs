@@ -20,13 +20,33 @@ namespace Gsemac.Forms.Styles.Controls {
         }
         public Orientation Orientation { get; set; } = Orientation.Vertical;
         public int Minimum { get; set; } = 0;
-        public int Maximum { get; set; } = DefaultMaximum;
+        public int Maximum { get; set; } = 100;
+        public int SmallChange {
+            get => smallChange;
+            set {
+
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value));
+
+                smallChange = value;
+
+            }
+        }
+        public int LargeChange {
+            get => largeChange;
+            set {
+
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value));
+
+                largeChange = value;
+
+            }
+        }
         public int Value {
             get => value;
             set => SetValue(value);
         }
-        public int SmallChange { get; set; } = DefaultMaximum / 20;
-        public int LargeChange { get; set; } = DefaultMaximum / 10; // See https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.scrollbar.maximum
 
         public WrapperControlScrollBar() {
 
@@ -117,94 +137,65 @@ namespace Gsemac.Forms.Styles.Controls {
 
         // Private members
 
-        private const int DefaultMaximum = 100;
+        private int smallChange = 1;
+        private int largeChange = 10;
+        private int value = 0;
 
         private bool isMouseOnThumb = false;
         private bool isDragging = false;
         private Point draggingMouseOrigin = new Point(0, 0);
         private int draggingThumbOrigin = 0;
-        private int value = 50;
-
-        private Rectangle GetUpperScrollArrowBounds() {
-
-            Size scrollArrowSize = GetScrollArrowSize();
-
-            if (Orientation == Orientation.Vertical)
-                return new Rectangle(0, 0, Width, scrollArrowSize.Height);
-
-            return new Rectangle(0, 0, scrollArrowSize.Width, Height);
-
-        }
-        private Rectangle GetLowerScrollArrowBounds() {
-
-            Size scrollArrowSize = GetScrollArrowSize();
-
-            if (Orientation == Orientation.Vertical)
-                return new Rectangle(0, Height - scrollArrowSize.Height, Width, scrollArrowSize.Height);
-
-            return new Rectangle(Width - scrollArrowSize.Width, 0, scrollArrowSize.Width, Height);
-
-        }
-        private Rectangle GetTrackBounds() {
-
-            Size scrollArrowSize = GetScrollArrowSize();
-
-            if (Orientation == Orientation.Vertical) {
-
-                int trackLength = Height - (scrollArrowSize.Height * 2);
-
-                return new Rectangle(0, scrollArrowSize.Height, Width, trackLength);
-
-            }
-            else {
-
-                int trackLength = Width - (scrollArrowSize.Width * 2);
-
-                return new Rectangle(scrollArrowSize.Width, 0, trackLength, Height);
-
-            }
-
-        }
-        private Rectangle GetThumbBounds() {
-
-            Size minimumThumbSize = GetMinimumThumbSize();
-            Rectangle trackRect = GetTrackBounds();
-
-            int minimumThumbLength = Orientation == Orientation.Vertical ?
-                minimumThumbSize.Height :
-                minimumThumbSize.Width;
-
-            int trackLength = Orientation == Orientation.Vertical ?
-                trackRect.Height :
-                trackRect.Width;
-
-            int thumbLength = MathUtilities.Clamp((int)(trackLength * (LargeChange / (double)Maximum)), minimumThumbLength, trackLength);
-            int scrollableTrackLength = trackLength - thumbLength;
-
-            int thumbOffset = (int)(scrollableTrackLength * (value - Minimum) / ((double)Maximum - Minimum));
-
-            return Orientation == Orientation.Vertical ?
-                new Rectangle(trackRect.X, trackRect.Y + thumbOffset, Width, thumbLength) :
-                new Rectangle(trackRect.X + thumbOffset, trackRect.Y, thumbLength, Height);
-
-        }
 
         private int GetTrackLength() {
 
-            Rectangle bounds = GetTrackBounds();
+            Size scrollArrowSize = GetScrollArrowSize();
 
             return Orientation == Orientation.Vertical ?
-                bounds.Height :
-                bounds.Width;
+                Height - (scrollArrowSize.Height * 2) :
+                Width - (scrollArrowSize.Width * 2);
+
+        }
+        private int GetScrollableTrackLength() {
+
+            return GetTrackLength() - GetThumbLength();
 
         }
         private int GetThumbLength() {
 
-            Rectangle bounds = GetThumbBounds();
+            int minimumThumbLength = GetMinimumThumbLength();
+            int trackLength = GetTrackLength();
+            int viewportLength = GetViewportLength();
+            int contentLength = GetContentLength();
+
+            return Maximum > 0 ?
+                MathUtilities.Clamp((int)(trackLength * (viewportLength / (double)contentLength)), minimumThumbLength, trackLength) :
+                0;
+
+        }
+        private int GetMinimumThumbLength() {
+
+            Size minimumThumbSize = GetMinimumThumbSize();
 
             return Orientation == Orientation.Vertical ?
-                bounds.Height :
-                bounds.Width;
+                minimumThumbSize.Height :
+                minimumThumbSize.Width;
+
+        }
+        private int GetViewportLength() {
+
+            // Assume the length of the scrollbar matches the viewport.
+
+            return Orientation == Orientation.Vertical ?
+                Height :
+                Width;
+
+        }
+        private int GetContentLength() {
+
+            // Assume Maximum is set to the content size minus the viewport size.
+            // https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.scrollbar.largechange
+
+            return Maximum + GetViewportLength();
 
         }
         private void SetValue(int value) {
@@ -239,12 +230,50 @@ namespace Gsemac.Forms.Styles.Controls {
         }
         private int GetThumbOffset() {
 
-            Rectangle trackBounds = GetTrackBounds();
-            Rectangle bounds = GetThumbBounds();
+            return Maximum > 0 ?
+                (int)(GetScrollableTrackLength() * (value - Minimum) / ((double)Maximum - Minimum)) :
+                0;
+
+        }
+
+        private Rectangle GetUpperScrollArrowBounds() {
+
+            Size scrollArrowSize = GetScrollArrowSize();
+
+            if (Orientation == Orientation.Vertical)
+                return new Rectangle(0, 0, Width, scrollArrowSize.Height);
+
+            return new Rectangle(0, 0, scrollArrowSize.Width, Height);
+
+        }
+        private Rectangle GetLowerScrollArrowBounds() {
+
+            Size scrollArrowSize = GetScrollArrowSize();
+
+            if (Orientation == Orientation.Vertical)
+                return new Rectangle(0, Height - scrollArrowSize.Height, Width, scrollArrowSize.Height);
+
+            return new Rectangle(Width - scrollArrowSize.Width, 0, scrollArrowSize.Width, Height);
+
+        }
+        private Rectangle GetTrackBounds() {
+
+            Size scrollArrowSize = GetScrollArrowSize();
 
             return Orientation == Orientation.Vertical ?
-                bounds.Y - trackBounds.Y :
-                bounds.X - trackBounds.X;
+                new Rectangle(0, scrollArrowSize.Height, Width, GetTrackLength()) :
+                new Rectangle(scrollArrowSize.Width, 0, GetTrackLength(), Height);
+
+        }
+        private Rectangle GetThumbBounds() {
+
+            Rectangle trackRect = GetTrackBounds();
+            int thumbLength = GetThumbLength();
+            int thumbOffset = GetThumbOffset();
+
+            return Orientation == Orientation.Vertical ?
+                new Rectangle(trackRect.X, trackRect.Y + thumbOffset, Width, thumbLength) :
+                new Rectangle(trackRect.X + thumbOffset, trackRect.Y, thumbLength, Height);
 
         }
 
