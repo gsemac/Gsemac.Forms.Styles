@@ -31,7 +31,7 @@ namespace Gsemac.Forms.Styles {
 
             messageFilter = new StyleManagerMessageFilter(this);
 
-            if (options.EnableDefaultStyles)
+            if (options.DefaultStylesEnabled)
                 InitializeDefaultStyles();
 
         }
@@ -341,10 +341,18 @@ namespace Gsemac.Forms.Styles {
 
         private void InitializeStyleApplicatorFactory() {
 
-            if (options.CustomRenderingEnabled)
-                styleApplicatorFactory = new UserPaintStyleApplicatorFactory();
-            else
+            if (options.CustomRenderingEnabled) {
+
+                styleApplicatorFactory = new UserPaintStyleApplicatorFactory(new UserPaintStyleApplicatorFactoryOptions() {
+                    CustomScrollBarsEnabled = options.CustomScrollBarsEnabled,
+                });
+
+            }
+            else {
+
                 styleApplicatorFactory = new PropertyStyleApplicatorFactory();
+
+            }
 
         }
         private void InitializeDefaultStyles() {

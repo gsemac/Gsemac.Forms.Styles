@@ -3,7 +3,8 @@
     public interface IStyleManagerOptions {
 
         bool CustomRenderingEnabled { get; }
-        bool EnableDefaultStyles { get; }
+        bool CustomScrollBarsEnabled { get; }
+        bool DefaultStylesEnabled { get; }
         bool RequireNonDefaultStyles { get; }
 
     }

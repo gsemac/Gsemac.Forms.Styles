@@ -10,10 +10,10 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Public members
 
-        public ListBoxUserPaintStyleApplicator() :
+        public ListBoxUserPaintStyleApplicator(bool customScrollBarsEnabled) :
             base(new WrapperControlOptions() {
                 ForwardPaintEventsToChildControl = true,
-                OverrideScrollbars = true,
+                CustomScrollBarsEnabled = customScrollBarsEnabled,
             }) {
         }
 

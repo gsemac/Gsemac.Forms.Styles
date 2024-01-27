@@ -9,7 +9,15 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Public members
 
-        public UserPaintStyleApplicatorFactory() {
+        public UserPaintStyleApplicatorFactory() :
+            this(UserPaintStyleApplicatorFactoryOptions.Default) {
+        }
+        public UserPaintStyleApplicatorFactory(IUserPaintStyleApplicatorFactoryOptions options) {
+
+            if (options is null)
+                throw new ArgumentNullException(nameof(options));
+
+            this.options = options;
 
             InitializeApplicatorDictionary();
 
@@ -23,7 +31,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             switch (forType.FullName) {
 
                 case "System.Windows.Forms.UpDownBase+UpDownButtons":
-                    return new UserPaintStyleApplicator<Control>(); ;
+                    return new UserPaintStyleApplicator<Control>();
 
                 default:
                     return fallbackApplicatorFactory.Create(forType);
@@ -34,6 +42,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         // Private members
 
+        private readonly IUserPaintStyleApplicatorFactoryOptions options;
         private readonly IDictionary<Type, IStyleApplicator> applicators = new Dictionary<Type, IStyleApplicator>();
         private readonly IStyleApplicatorFactory fallbackApplicatorFactory = new PropertyStyleApplicatorFactory();
 
@@ -44,7 +53,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
             applicators.Add(typeof(ComboBox), new UserPaintStyleApplicator<ComboBox>());
             applicators.Add(typeof(GroupBox), new UserPaintStyleApplicator<GroupBox>());
             applicators.Add(typeof(Label), new UserPaintStyleApplicator<Label>());
-            applicators.Add(typeof(ListBox), new ListBoxUserPaintStyleApplicator());
+            applicators.Add(typeof(ListBox), new ListBoxUserPaintStyleApplicator(options.CustomScrollBarsEnabled));
             applicators.Add(typeof(NumericUpDown), new NumericUpDownUserPaintStyleApplicator());
             applicators.Add(typeof(ProgressBar), new UserPaintStyleApplicator<ProgressBar>());
             applicators.Add(typeof(RadioButton), new UserPaintStyleApplicator<RadioButton>());
