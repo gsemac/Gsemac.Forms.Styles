@@ -20,13 +20,13 @@ namespace Gsemac.Forms.Styles.Controls {
         }
         public Orientation Orientation { get; set; } = Orientation.Vertical;
         public int Minimum { get; set; } = 0;
-        public int Maximum { get; set; } = 100;
+        public int Maximum { get; set; } = DefaultMaximum;
         public int Value {
             get => value;
             set => SetValue(value);
         }
-        public int SmallChange { get; set; } = 1;
-        public int LargeChange { get; set; } = 10;
+        public int SmallChange { get; set; } = DefaultMaximum / 20;
+        public int LargeChange { get; set; } = DefaultMaximum / 10; // See https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.scrollbar.maximum
 
         public WrapperControlScrollBar() {
 
@@ -117,6 +117,8 @@ namespace Gsemac.Forms.Styles.Controls {
 
         // Private members
 
+        private const int DefaultMaximum = 100;
+
         private bool isMouseOnThumb = false;
         private bool isDragging = false;
         private Point draggingMouseOrigin = new Point(0, 0);
@@ -168,22 +170,22 @@ namespace Gsemac.Forms.Styles.Controls {
             Size minimumThumbSize = GetMinimumThumbSize();
             Rectangle trackRect = GetTrackBounds();
 
-            if (Orientation == Orientation.Vertical) {
+            int minimumThumbLength = Orientation == Orientation.Vertical ?
+                minimumThumbSize.Height :
+                minimumThumbSize.Width;
 
-                int trackLength = trackRect.Height;
-                int thumbLength = MathUtilities.Clamp((int)(trackLength * (LargeChange / (double)Maximum)), minimumThumbSize.Height, trackLength);
+            int trackLength = Orientation == Orientation.Vertical ?
+                trackRect.Height :
+                trackRect.Width;
 
-                return new Rectangle(trackRect.X, trackRect.Y + (int)((trackLength - thumbLength) * (value / (double)Maximum)), Width, thumbLength);
+            int thumbLength = MathUtilities.Clamp((int)(trackLength * (LargeChange / (double)Maximum)), minimumThumbLength, trackLength);
+            int scrollableTrackLength = trackLength - thumbLength;
 
-            }
-            else {
+            int thumbOffset = (int)(scrollableTrackLength * (value - Minimum) / ((double)Maximum - Minimum));
 
-                int trackLength = trackRect.Width;
-                int thumbLength = MathUtilities.Clamp((int)(trackLength * (LargeChange / (double)Maximum)), minimumThumbSize.Width, trackLength);
-
-                return new Rectangle(trackRect.X + (int)((trackLength - thumbLength) * (value / (double)Maximum)), trackRect.Y, thumbLength, Height);
-
-            }
+            return Orientation == Orientation.Vertical ?
+                new Rectangle(trackRect.X, trackRect.Y + thumbOffset, Width, thumbLength) :
+                new Rectangle(trackRect.X + thumbOffset, trackRect.Y, thumbLength, Height);
 
         }
 
