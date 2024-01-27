@@ -123,15 +123,14 @@ namespace Gsemac.Forms.Styles.Controls {
 
             base.OnMouseLeave(e);
 
-            if (isMouseOnThumb) {
+            bool invalidateRequired = isMouseOnThumb || isMouseOnUpperArrow || isMouseOnLowerArrow;
 
-                isMouseOnThumb = false;
-                isMouseOnUpperArrow = false;
-                isMouseOnLowerArrow = false;
+            isMouseOnThumb = false;
+            isMouseOnUpperArrow = false;
+            isMouseOnLowerArrow = false;
 
+            if (invalidateRequired)
                 Invalidate();
-
-            }
 
         }
         protected override void OnMouseDown(MouseEventArgs e) {
@@ -144,13 +143,19 @@ namespace Gsemac.Forms.Styles.Controls {
                 draggingMouseOrigin = e.Location;
                 draggingThumbOrigin = GetThumbOffset();
 
+                Invalidate();
+
             }
             else if (GetUpperScrollArrowBounds().Contains(e.Location)) {
+
+                isUpperArrowDown = true;
 
                 Value -= SmallChange;
 
             }
             else if (GetLowerScrollArrowBounds().Contains(e.Location)) {
+
+                isLowerArrowDown = true;
 
                 Value += SmallChange;
 
@@ -184,6 +189,10 @@ namespace Gsemac.Forms.Styles.Controls {
         protected override void OnMouseUp(MouseEventArgs e) {
 
             isDragging = false;
+            isUpperArrowDown = false;
+            isLowerArrowDown = false;
+
+            Invalidate();
 
         }
 
@@ -196,6 +205,8 @@ namespace Gsemac.Forms.Styles.Controls {
         private bool isMouseOnThumb = false;
         private bool isMouseOnUpperArrow = false;
         private bool isMouseOnLowerArrow = false;
+        private bool isUpperArrowDown = false;
+        private bool isLowerArrowDown = false;
         private bool isDragging = false;
         private Point draggingMouseOrigin = new Point(0, 0);
         private int draggingThumbOrigin = 0;
@@ -339,7 +350,7 @@ namespace Gsemac.Forms.Styles.Controls {
             Color thumbColor = ForeColor;
 
             if (isMouseOnThumb)
-                thumbColor = ColorUtilities.Shade(thumbColor, 0.2f);
+                thumbColor = ColorUtilities.Shade(thumbColor, isDragging ? 0.2f : 0.1f);
 
             using (SolidBrush brush = new SolidBrush(thumbColor))
                 graphics.FillRectangle(brush, GetThumbBounds());
@@ -352,10 +363,14 @@ namespace Gsemac.Forms.Styles.Controls {
 
             // Paint the background.
 
-            if (isMouseOnUpperArrow && (direction == ArrowDirection.Up || direction == ArrowDirection.Left) ||
-                isMouseOnLowerArrow && (direction == ArrowDirection.Down || direction == ArrowDirection.Right)) {
+            bool isUpperArrow = direction == ArrowDirection.Up || direction == ArrowDirection.Left;
+            bool isLowerArrow = direction == ArrowDirection.Down || direction == ArrowDirection.Right;
+            bool isMouseOnArrow = (isMouseOnUpperArrow && isUpperArrow) || (isMouseOnLowerArrow && isLowerArrow);
+            bool isArrowDown = (isUpperArrowDown && isUpperArrow) || (isLowerArrowDown && isLowerArrow);
 
-                Color backgroundColor = ColorUtilities.Shade(BackColor, 0.2f);
+            if (isMouseOnArrow || isArrowDown) {
+
+                Color backgroundColor = ColorUtilities.Shade(BackColor, isArrowDown ? 0.2f : 0.1f);
 
                 using (SolidBrush brush = new SolidBrush(backgroundColor))
                     graphics.FillRectangle(brush, bounds);
