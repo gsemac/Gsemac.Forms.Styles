@@ -19,7 +19,10 @@ namespace Gsemac.Forms.Styles.Controls {
             get => base.AutoSize;
             set => base.AutoSize = value;
         }
-        public Orientation Orientation { get; set; } = Orientation.Vertical;
+        public Orientation Orientation {
+            get => orientation;
+            set => SetOrientation(value);
+        }
         public int Minimum { get; set; } = 0;
         public int Maximum { get; set; } = 100;
         public int SmallChange {
@@ -51,7 +54,7 @@ namespace Gsemac.Forms.Styles.Controls {
                 // Updating the value by property will only work if we're not currently dragging.
                 // This is so controls bound to the scroll bar that update this value when scrolled don't update it while the user is scolling.
 
-                if (isDragging)
+                if (isThumbPressed)
                     return;
 
                 SetValue(value);
@@ -61,9 +64,8 @@ namespace Gsemac.Forms.Styles.Controls {
 
         public WrapperControlScrollBar() {
 
-            // Enable user paint so that the control can be custom painted.
-
             DoubleBuffered = true;
+            ForeColor = Color.FromArgb(205, 205, 205);
 
         }
 
@@ -92,23 +94,25 @@ namespace Gsemac.Forms.Styles.Controls {
 
             base.OnMouseMove(e);
 
-            bool newIsMouseOnThumb = isDragging ||
-                GetThumbBounds().Contains(e.Location);
+            bool isThumbHoveredNewValue = !(isUpperArrowPressed || isLowerArrowPressed) &&
+                (isThumbPressed || GetThumbBounds().Contains(e.Location));
 
-            bool newIsMouseOnUpperArrow = !isDragging &&
+            bool isUpperArrowHoveredNewValue = !isThumbHoveredNewValue &&
+                !isLowerArrowPressed &&
                 GetUpperScrollArrowBounds().Contains(e.Location);
 
-            bool newIsMouseOnLowerArrow = !isDragging &&
+            bool isLowerArrowHoveredNewValue = !isThumbHoveredNewValue &&
+                !isUpperArrowPressed &&
                 GetLowerScrollArrowBounds().Contains(e.Location);
 
-            if (newIsMouseOnThumb != isMouseOnThumb || newIsMouseOnUpperArrow != isMouseOnUpperArrow || newIsMouseOnLowerArrow != isMouseOnLowerArrow)
+            if (isThumbHoveredNewValue != isThumbHovered || isUpperArrowHoveredNewValue != isUpperArrowHovered || isLowerArrowHoveredNewValue != isLowerArrowHovered)
                 Invalidate();
 
-            isMouseOnThumb = newIsMouseOnThumb;
-            isMouseOnUpperArrow = newIsMouseOnUpperArrow;
-            isMouseOnLowerArrow = newIsMouseOnLowerArrow;
+            isThumbHovered = isThumbHoveredNewValue;
+            isUpperArrowHovered = isUpperArrowHoveredNewValue;
+            isLowerArrowHovered = isLowerArrowHoveredNewValue;
 
-            if (isDragging) {
+            if (isThumbPressed) {
 
                 int dragDistance = Orientation == Orientation.Vertical ?
                     e.Y - draggingMouseOrigin.Y :
@@ -123,11 +127,11 @@ namespace Gsemac.Forms.Styles.Controls {
 
             base.OnMouseLeave(e);
 
-            bool invalidateRequired = isMouseOnThumb || isMouseOnUpperArrow || isMouseOnLowerArrow;
+            bool invalidateRequired = isThumbHovered || isUpperArrowHovered || isLowerArrowHovered;
 
-            isMouseOnThumb = false;
-            isMouseOnUpperArrow = false;
-            isMouseOnLowerArrow = false;
+            isThumbHovered = false;
+            isUpperArrowHovered = false;
+            isLowerArrowHovered = false;
 
             if (invalidateRequired)
                 Invalidate();
@@ -137,9 +141,9 @@ namespace Gsemac.Forms.Styles.Controls {
 
             base.OnMouseDown(e);
 
-            if (isMouseOnThumb) {
+            if (isThumbHovered) {
 
-                isDragging = true;
+                isThumbPressed = true;
                 draggingMouseOrigin = e.Location;
                 draggingThumbOrigin = GetThumbOffset();
 
@@ -148,14 +152,14 @@ namespace Gsemac.Forms.Styles.Controls {
             }
             else if (GetUpperScrollArrowBounds().Contains(e.Location)) {
 
-                isUpperArrowDown = true;
+                isUpperArrowPressed = true;
 
                 Value -= SmallChange;
 
             }
             else if (GetLowerScrollArrowBounds().Contains(e.Location)) {
 
-                isLowerArrowDown = true;
+                isLowerArrowPressed = true;
 
                 Value += SmallChange;
 
@@ -188,26 +192,36 @@ namespace Gsemac.Forms.Styles.Controls {
         }
         protected override void OnMouseUp(MouseEventArgs e) {
 
-            isDragging = false;
-            isUpperArrowDown = false;
-            isLowerArrowDown = false;
+            base.OnMouseUp(e);
+
+            isThumbPressed = false;
+            isUpperArrowPressed = false;
+            isLowerArrowPressed = false;
 
             Invalidate();
+
+        }
+        protected override void OnMouseWheel(MouseEventArgs e) {
+
+            base.OnMouseWheel(e);
+
+            Value -= e.Delta;
 
         }
 
         // Private members
 
+        private Orientation orientation = Orientation.Vertical;
         private int smallChange = 1;
         private int largeChange = 10;
         private int value = 0;
 
-        private bool isMouseOnThumb = false;
-        private bool isMouseOnUpperArrow = false;
-        private bool isMouseOnLowerArrow = false;
-        private bool isUpperArrowDown = false;
-        private bool isLowerArrowDown = false;
-        private bool isDragging = false;
+        private bool isUpperArrowHovered = false;
+        private bool isUpperArrowPressed = false;
+        private bool isLowerArrowHovered = false;
+        private bool isLowerArrowPressed = false;
+        private bool isThumbHovered = false;
+        private bool isThumbPressed = false;
         private Point draggingMouseOrigin = new Point(0, 0);
         private int draggingThumbOrigin = 0;
 
@@ -263,6 +277,24 @@ namespace Gsemac.Forms.Styles.Controls {
             return Maximum + GetViewportLength();
 
         }
+        private int GetThumbOffset() {
+
+            return Maximum > 0 ?
+                (int)(GetScrollableTrackLength() * (value - Minimum) / ((double)Maximum - Minimum)) :
+                0;
+
+        }
+
+        private void SetOrientation(Orientation orientation) {
+
+            if (this.orientation == orientation)
+                return;
+
+            this.orientation = orientation;
+
+            Invalidate();
+
+        }
         private void SetValue(int value) {
 
             value = MathUtilities.Clamp(value, Minimum, Maximum);
@@ -291,13 +323,6 @@ namespace Gsemac.Forms.Styles.Controls {
             int newScrollValue = (int)(Minimum + (Maximum - Minimum) * (value / (double)maxOffset));
 
             SetValue(newScrollValue);
-
-        }
-        private int GetThumbOffset() {
-
-            return Maximum > 0 ?
-                (int)(GetScrollableTrackLength() * (value - Minimum) / ((double)Maximum - Minimum)) :
-                0;
 
         }
 
@@ -349,8 +374,8 @@ namespace Gsemac.Forms.Styles.Controls {
 
             Color thumbColor = ForeColor;
 
-            if (isMouseOnThumb)
-                thumbColor = ColorUtilities.Shade(thumbColor, isDragging ? 0.2f : 0.1f);
+            if (isThumbHovered)
+                thumbColor = ColorUtilities.Shade(thumbColor, isThumbPressed ? 0.2f : 0.1f);
 
             using (SolidBrush brush = new SolidBrush(thumbColor))
                 graphics.FillRectangle(brush, GetThumbBounds());
@@ -365,8 +390,8 @@ namespace Gsemac.Forms.Styles.Controls {
 
             bool isUpperArrow = direction == ArrowDirection.Up || direction == ArrowDirection.Left;
             bool isLowerArrow = direction == ArrowDirection.Down || direction == ArrowDirection.Right;
-            bool isMouseOnArrow = (isMouseOnUpperArrow && isUpperArrow) || (isMouseOnLowerArrow && isLowerArrow);
-            bool isArrowDown = (isUpperArrowDown && isUpperArrow) || (isLowerArrowDown && isLowerArrow);
+            bool isMouseOnArrow = (isUpperArrowHovered && isUpperArrow) || (isLowerArrowHovered && isLowerArrow);
+            bool isArrowDown = (isUpperArrowPressed && isUpperArrow) || (isLowerArrowPressed && isLowerArrow);
 
             if (isMouseOnArrow || isArrowDown) {
 
