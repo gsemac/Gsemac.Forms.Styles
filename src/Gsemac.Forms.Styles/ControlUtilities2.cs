@@ -132,19 +132,53 @@ namespace Gsemac.Forms.Styles {
                 int maxItemWidth = 0;
                 int totalItemsHeight = 0;
 
-                for (int i = 0; i < control.Items.Count; ++i) {
+                if (control.DrawMode == DrawMode.OwnerDrawVariable || control.HorizontalScrollbar) {
 
-                    Rectangle itemRect = control.GetItemRectangle(i);
+                    // Items can vary in size, so we need to measure each one individually.
+                    // This is slow for very large numbers of items.
 
-                    maxItemWidth = Math.Max(maxItemWidth, itemRect.Width);
-                    totalItemsHeight += itemRect.Height;
+                    // We have to measure the text instead of using GetItemRectangle because it only returns the visible bounds.
+
+                    using (Graphics graphics = control.CreateGraphics()) {
+
+                        for (int i = 0; i < control.Items.Count; ++i) {
+
+                            string itemText = control.GetItemText(control.Items[i]);
+                            SizeF itemSize = graphics.MeasureString(itemText, control.Font);
+
+                            maxItemWidth = Math.Max(maxItemWidth, (int)Math.Ceiling(itemSize.Width));
+                            totalItemsHeight += control.GetItemHeight(i);
+
+                        }
+
+                    }
+
+                }
+                else {
+
+                    // All items are the same size, so we only need to measure one of them.
+
+                    Rectangle itemRect = control.GetItemRectangle(0);
+
+                    totalItemsHeight = control.Items.Count * itemRect.Height;
 
                 }
 
-                if (maxItemWidth > control.Width)
+                int viewportWidth = control.Width;
+                int viewportHeight = control.Height;
+
+                // Adjust the viewport size depending on what scrollbars are visible.
+
+                if (maxItemWidth > viewportWidth)
+                    viewportHeight -= SystemInformation.HorizontalScrollBarHeight;
+
+                if (totalItemsHeight > viewportHeight)
+                    viewportWidth -= SystemInformation.VerticalScrollBarWidth;
+
+                if (control.HorizontalScrollbar && maxItemWidth > viewportWidth)
                     scrollBars |= ScrollBars.Horizontal;
 
-                if (totalItemsHeight > control.Height)
+                if (totalItemsHeight > viewportHeight)
                     scrollBars |= ScrollBars.Vertical;
 
             }
