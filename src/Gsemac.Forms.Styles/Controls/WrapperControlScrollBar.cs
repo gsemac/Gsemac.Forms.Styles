@@ -151,9 +151,15 @@ namespace Gsemac.Forms.Styles.Controls {
 
             base.OnMouseDown(e);
 
-            bool startAutoScrollDelayTimer = true;
-
             mouseClickPosition = e.Location;
+
+            if (e.Button == MouseButtons.Right)
+                contextMenu.Show(this, e.Location);
+
+            if (e.Button != MouseButtons.Left)
+                return;
+
+            bool startAutoScrollDelayTimer = true;
 
             if (isThumbHovered) {
 
@@ -260,26 +266,107 @@ namespace Gsemac.Forms.Styles.Controls {
         private Timer autoScrollTimer;
         private IContainer components;
         private Timer autoScrollDelayTimer;
+        private ContextMenuStrip contextMenu;
+        private ToolStripMenuItem scrollHereToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripMenuItem topToolStripMenuItem;
+        private ToolStripMenuItem bottomToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem pageUpToolStripMenuItem;
+        private ToolStripMenuItem pageDownToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem scrollUpToolStripMenuItem;
+        private ToolStripMenuItem scrollDownToolStripMenuItem;
         private int draggingThumbOrigin = 0;
 
         private void InitializeComponent() {
-            this.components = new System.ComponentModel.Container();
-            this.autoScrollTimer = new System.Windows.Forms.Timer(this.components);
-            this.autoScrollDelayTimer = new System.Windows.Forms.Timer(this.components);
-            this.SuspendLayout();
-            // 
-            // autoScrollTimer
-            // 
-            this.autoScrollTimer.Tick += new System.EventHandler(this.AutoScrollTimerTick);
-            // 
-            // autoScrollDelayTimer
-            // 
-            this.autoScrollDelayTimer.Tick += new System.EventHandler(this.AutoScrollDelayTimerTick);
-            // 
-            // WrapperControlScrollBar
-            // 
-            this.Name = "WrapperControlScrollBar";
-            this.ResumeLayout(false);
+
+            components = new Container();
+            autoScrollTimer = new Timer(components);
+            autoScrollDelayTimer = new Timer(components);
+            contextMenu = new ContextMenuStrip(components);
+            scrollHereToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            topToolStripMenuItem = new ToolStripMenuItem();
+            bottomToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            pageUpToolStripMenuItem = new ToolStripMenuItem();
+            pageDownToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator3 = new ToolStripSeparator();
+            scrollUpToolStripMenuItem = new ToolStripMenuItem();
+            scrollDownToolStripMenuItem = new ToolStripMenuItem();
+
+            contextMenu.SuspendLayout();
+
+            SuspendLayout();
+
+            autoScrollTimer.Tick += new EventHandler(AutoScrollTimerTick);
+
+            autoScrollDelayTimer.Tick += new EventHandler(AutoScrollDelayTimerTick);
+
+            contextMenu.Items.AddRange(new ToolStripItem[] {
+            scrollHereToolStripMenuItem,
+            toolStripSeparator1,
+            topToolStripMenuItem,
+            bottomToolStripMenuItem,
+            toolStripSeparator2,
+            pageUpToolStripMenuItem,
+            pageDownToolStripMenuItem,
+            toolStripSeparator3,
+            scrollUpToolStripMenuItem,
+            scrollDownToolStripMenuItem});
+            contextMenu.Name = "contextMenuStrip1";
+            contextMenu.Size = new Size(181, 198);
+
+            scrollHereToolStripMenuItem.Name = "scrollHereToolStripMenuItem";
+            scrollHereToolStripMenuItem.Size = new Size(180, 22);
+            scrollHereToolStripMenuItem.Text = "Scroll Here";
+            scrollHereToolStripMenuItem.Click += new EventHandler(ScrollHereToolStripMenuItemClick);
+
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(177, 6);
+
+            topToolStripMenuItem.Name = "topToolStripMenuItem";
+            topToolStripMenuItem.Size = new Size(180, 22);
+            topToolStripMenuItem.Text = "Top";
+            topToolStripMenuItem.Click += new EventHandler(TopToolStripMenuItemClick);
+
+            bottomToolStripMenuItem.Name = "bottomToolStripMenuItem";
+            bottomToolStripMenuItem.Size = new Size(180, 22);
+            bottomToolStripMenuItem.Text = "Bottom";
+            bottomToolStripMenuItem.Click += new EventHandler(BottomToolStripMenuItemClick);
+
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(177, 6);
+
+            pageUpToolStripMenuItem.Name = "pageUpToolStripMenuItem";
+            pageUpToolStripMenuItem.Size = new Size(180, 22);
+            pageUpToolStripMenuItem.Text = "Page Up";
+            pageUpToolStripMenuItem.Click += new EventHandler(PageUpToolStripMenuItemClick);
+
+            pageDownToolStripMenuItem.Name = "pageDownToolStripMenuItem";
+            pageDownToolStripMenuItem.Size = new Size(180, 22);
+            pageDownToolStripMenuItem.Text = "Page Down";
+            pageDownToolStripMenuItem.Click += new EventHandler(PageDownToolStripMenuItemClick);
+
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(177, 6);
+
+            scrollUpToolStripMenuItem.Name = "scrollUpToolStripMenuItem";
+            scrollUpToolStripMenuItem.Size = new Size(180, 22);
+            scrollUpToolStripMenuItem.Text = "Scroll Up";
+            scrollUpToolStripMenuItem.Click += new EventHandler(ScrollUpToolStripMenuItemClick);
+
+            scrollDownToolStripMenuItem.Name = "scrollDownToolStripMenuItem";
+            scrollDownToolStripMenuItem.Size = new Size(180, 22);
+            scrollDownToolStripMenuItem.Text = "Scroll Down";
+            scrollDownToolStripMenuItem.Click += new EventHandler(ScrollDownToolStripMenuItemClick);
+
+            Name = "WrapperControlScrollBar";
+
+            contextMenu.ResumeLayout(false);
+
+            ResumeLayout(false);
 
         }
 
@@ -381,6 +468,22 @@ namespace Gsemac.Forms.Styles.Controls {
             int newScrollValue = (int)(Minimum + (Maximum - Minimum) * (value / (double)maxOffset));
 
             SetValue(newScrollValue);
+
+        }
+
+        private static Size GetScrollArrowSize() {
+
+            return new Size(15, 17);
+
+        }
+        private static Size GetMinimumThumbSize() {
+
+            // https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.track.thumb
+
+            return new Size(
+                (int)Math.Ceiling(SystemInformation.HorizontalScrollBarThumbWidth / 2.0),
+                (int)Math.Ceiling(SystemInformation.VerticalScrollBarThumbHeight / 2.0)
+                );
 
         }
 
@@ -501,22 +604,6 @@ namespace Gsemac.Forms.Styles.Controls {
 
         }
 
-        private static Size GetScrollArrowSize() {
-
-            return new Size(15, 17);
-
-        }
-        private static Size GetMinimumThumbSize() {
-
-            // https://learn.microsoft.com/en-us/dotnet/api/system.windows.controls.primitives.track.thumb
-
-            return new Size(
-                (int)Math.Ceiling(SystemInformation.HorizontalScrollBarThumbWidth / 2.0),
-                (int)Math.Ceiling(SystemInformation.VerticalScrollBarThumbHeight / 2.0)
-                );
-
-        }
-
         private void AutoScrollDelayTimerTick(object sender, EventArgs e) {
 
             if (sender is Timer timer)
@@ -553,6 +640,55 @@ namespace Gsemac.Forms.Styles.Controls {
                 isLowerTrackHovered = GetLowerTrackBounds().Contains(mouseClickPosition);
 
             }
+
+        }
+
+        private void ScrollHereToolStripMenuItemClick(object sender, EventArgs e) {
+
+            Rectangle trackBounds = GetTrackBounds();
+
+            int x = mouseClickPosition.X - trackBounds.X;
+            int y = mouseClickPosition.Y - trackBounds.Y;
+
+            double percentage = Orientation == Orientation.Vertical ?
+                y / (double)trackBounds.Height :
+                x / (double)trackBounds.Width;
+
+            int newValue = (int)(percentage * (Maximum - Minimum) + Minimum);
+
+            newValue = MathUtilities.Clamp(newValue, Minimum, Maximum);
+
+            Value = newValue;
+
+        }
+        private void TopToolStripMenuItemClick(object sender, EventArgs e) {
+
+            Value = Minimum;
+
+        }
+        private void BottomToolStripMenuItemClick(object sender, EventArgs e) {
+
+            Value = Maximum;
+
+        }
+        private void PageUpToolStripMenuItemClick(object sender, EventArgs e) {
+
+            Value -= LargeChange;
+
+        }
+        private void PageDownToolStripMenuItemClick(object sender, EventArgs e) {
+
+            Value += LargeChange;
+
+        }
+        private void ScrollUpToolStripMenuItemClick(object sender, EventArgs e) {
+
+            Value -= SmallChange;
+
+        }
+        private void ScrollDownToolStripMenuItemClick(object sender, EventArgs e) {
+
+            Value += SmallChange;
 
         }
 
