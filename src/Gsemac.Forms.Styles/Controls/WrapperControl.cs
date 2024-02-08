@@ -41,7 +41,7 @@ namespace Gsemac.Forms.Styles.Controls {
 
         }
 
-        public Control ChildControl {
+        public Control InnerControl {
             get => childControl;
         }
         public override string Text {

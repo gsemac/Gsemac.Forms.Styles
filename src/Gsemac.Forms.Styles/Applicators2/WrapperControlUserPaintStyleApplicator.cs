@@ -113,8 +113,8 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             WrapperControl wrapperControl = new WrapperControl(control);
 
-            if (options.OverrideScrollbars)
-                AddScrollbar(wrapperControl);
+            if (options.CustomScrollBarsEnabled)
+                AddScrollbars(wrapperControl);
 
             if (hasParent) {
 
@@ -173,7 +173,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             // This event handler is called by the parent control.
 
-            if (sender is WrapperControl wrapperControl && wrapperControl.ChildControl is T childControl) {
+            if (sender is WrapperControl wrapperControl && wrapperControl.InnerControl is T childControl) {
 
                 // We are rendering on the parent (wrapper) control.
 
@@ -226,20 +226,18 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
         }
 
-        private void AddScrollbar(WrapperControl wrapperControl) {
+        private void AddScrollbars(WrapperControl wrapperControl) {
 
             if (wrapperControl is null)
                 throw new ArgumentNullException(nameof(wrapperControl));
 
             WrapperControlScrollBar verticalScrollBar = new WrapperControlScrollBar {
-                Width = SystemInformation.VerticalScrollBarWidth,
-                Height = wrapperControl.Height,
+                Orientation = Orientation.Vertical,
             };
 
-            verticalScrollBar.Location = new Point(wrapperControl.Width - verticalScrollBar.Width, 0);
-            verticalScrollBar.Anchor = AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
-
             wrapperControl.Controls.Add(verticalScrollBar);
+
+            ScrollBarUtilities.BindToControl(wrapperControl.InnerControl, verticalScrollBar);
 
             verticalScrollBar.BringToFront();
 

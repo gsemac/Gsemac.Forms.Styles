@@ -3,7 +3,7 @@
     internal interface IWrapperControlOptions {
 
         bool ForwardPaintEventsToChildControl { get; }
-        bool OverrideScrollbars { get; }
+        bool CustomScrollBarsEnabled { get; }
 
     }
 
