@@ -2,6 +2,7 @@
 using Gsemac.Forms.Styles.Dom;
 using Gsemac.Forms.Styles.Renderers.Extensions;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -64,6 +65,11 @@ namespace Gsemac.Forms.Styles.Controls {
 
         public WrapperControlScrollBar() {
 
+            InitializeComponent();
+
+            autoScrollDelayTimer.Interval = 100;
+            autoScrollTimer.Interval = 50;
+
             DoubleBuffered = true;
             ForeColor = Color.FromArgb(205, 205, 205);
 
@@ -94,15 +100,17 @@ namespace Gsemac.Forms.Styles.Controls {
 
             base.OnMouseMove(e);
 
-            bool isThumbHoveredNewValue = !(isUpperArrowPressed || isLowerArrowPressed) &&
-                (isThumbPressed || GetThumbBounds().Contains(e.Location));
+            Rectangle thumbBounds = GetThumbBounds();
+
+            bool isThumbHoveredNewValue = !(isUpperArrowPressed || isLowerArrowPressed || isUpperTrackPressed || isLowerTrackPressed) &&
+                (isThumbPressed || thumbBounds.Contains(e.Location));
 
             bool isUpperArrowHoveredNewValue = !isThumbHoveredNewValue &&
-                !isLowerArrowPressed &&
+                !(isLowerArrowPressed || isUpperTrackPressed || isLowerTrackPressed) &&
                 GetUpperScrollArrowBounds().Contains(e.Location);
 
             bool isLowerArrowHoveredNewValue = !isThumbHoveredNewValue &&
-                !isUpperArrowPressed &&
+                !(isUpperArrowPressed || isUpperTrackPressed || isLowerTrackPressed) &&
                 GetLowerScrollArrowBounds().Contains(e.Location);
 
             if (isThumbHoveredNewValue != isThumbHovered || isUpperArrowHoveredNewValue != isUpperArrowHovered || isLowerArrowHoveredNewValue != isLowerArrowHovered)
@@ -111,12 +119,14 @@ namespace Gsemac.Forms.Styles.Controls {
             isThumbHovered = isThumbHoveredNewValue;
             isUpperArrowHovered = isUpperArrowHoveredNewValue;
             isLowerArrowHovered = isLowerArrowHoveredNewValue;
+            isUpperTrackHovered = GetUpperTrackBounds().Contains(e.Location);
+            isLowerTrackHovered = GetLowerTrackBounds().Contains(e.Location);
 
             if (isThumbPressed) {
 
                 int dragDistance = Orientation == Orientation.Vertical ?
-                    e.Y - draggingMouseOrigin.Y :
-                    e.X - draggingMouseOrigin.X;
+                    e.Y - mouseClickPosition.Y :
+                    e.X - mouseClickPosition.X;
 
                 SetThumbOffset(draggingThumbOrigin + dragDistance);
 
@@ -141,10 +151,13 @@ namespace Gsemac.Forms.Styles.Controls {
 
             base.OnMouseDown(e);
 
+            bool startAutoScrollDelayTimer = true;
+
+            mouseClickPosition = e.Location;
+
             if (isThumbHovered) {
 
                 isThumbPressed = true;
-                draggingMouseOrigin = e.Location;
                 draggingThumbOrigin = GetThumbOffset();
 
                 Invalidate();
@@ -172,22 +185,34 @@ namespace Gsemac.Forms.Styles.Controls {
                     thumbBounds.Y :
                     thumbBounds.X;
 
-                int clickOffset = Orientation == Orientation.Vertical ?
+                int mouseOffset = Orientation == Orientation.Vertical ?
                     e.Location.Y :
                     e.Location.X;
 
-                if (clickOffset < thumbOffset) {
+                if (mouseOffset < thumbOffset) {
 
                     Value -= LargeChange;
 
+                    isUpperTrackPressed = true;
+
                 }
-                else if (clickOffset > thumbOffset) {
+                else if (mouseOffset > thumbOffset) {
 
                     Value += LargeChange;
+
+                    isLowerTrackPressed = true;
 
                 }
 
             }
+            else {
+
+                startAutoScrollDelayTimer = false;
+
+            }
+
+            if (startAutoScrollDelayTimer)
+                autoScrollDelayTimer.Start();
 
         }
         protected override void OnMouseUp(MouseEventArgs e) {
@@ -197,6 +222,11 @@ namespace Gsemac.Forms.Styles.Controls {
             isThumbPressed = false;
             isUpperArrowPressed = false;
             isLowerArrowPressed = false;
+            isUpperTrackPressed = false;
+            isLowerTrackPressed = false;
+
+            autoScrollDelayTimer.Stop();
+            autoScrollTimer.Stop();
 
             Invalidate();
 
@@ -220,10 +250,38 @@ namespace Gsemac.Forms.Styles.Controls {
         private bool isUpperArrowPressed = false;
         private bool isLowerArrowHovered = false;
         private bool isLowerArrowPressed = false;
+        private bool isUpperTrackHovered = false;
+        private bool isUpperTrackPressed = false;
+        private bool isLowerTrackPressed = false;
+        private bool isLowerTrackHovered = false;
         private bool isThumbHovered = false;
         private bool isThumbPressed = false;
-        private Point draggingMouseOrigin = new Point(0, 0);
+        private Point mouseClickPosition = new Point(0, 0);
+        private Timer autoScrollTimer;
+        private IContainer components;
+        private Timer autoScrollDelayTimer;
         private int draggingThumbOrigin = 0;
+
+        private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
+            this.autoScrollTimer = new System.Windows.Forms.Timer(this.components);
+            this.autoScrollDelayTimer = new System.Windows.Forms.Timer(this.components);
+            this.SuspendLayout();
+            // 
+            // autoScrollTimer
+            // 
+            this.autoScrollTimer.Tick += new System.EventHandler(this.AutoScrollTimerTick);
+            // 
+            // autoScrollDelayTimer
+            // 
+            this.autoScrollDelayTimer.Tick += new System.EventHandler(this.AutoScrollDelayTimerTick);
+            // 
+            // WrapperControlScrollBar
+            // 
+            this.Name = "WrapperControlScrollBar";
+            this.ResumeLayout(false);
+
+        }
 
         private int GetTrackLength() {
 
@@ -355,6 +413,26 @@ namespace Gsemac.Forms.Styles.Controls {
                 new Rectangle(scrollArrowSize.Width, 0, GetTrackLength(), Height);
 
         }
+        private Rectangle GetUpperTrackBounds() {
+
+            Rectangle trackBounds = GetTrackBounds();
+            Rectangle thumbBounds = GetThumbBounds();
+
+            return Orientation == Orientation.Vertical ?
+                new Rectangle(trackBounds.Left, trackBounds.Top, trackBounds.Width, thumbBounds.Top - trackBounds.Top) :
+                new Rectangle(trackBounds.Left, trackBounds.Top, thumbBounds.Left - trackBounds.Left, trackBounds.Height);
+
+        }
+        private Rectangle GetLowerTrackBounds() {
+
+            Rectangle trackBounds = GetTrackBounds();
+            Rectangle thumbBounds = GetThumbBounds();
+
+            return Orientation == Orientation.Vertical ?
+                new Rectangle(trackBounds.Left, thumbBounds.Bottom, trackBounds.Width, trackBounds.Bottom - thumbBounds.Bottom) :
+                new Rectangle(thumbBounds.Right, trackBounds.Top, trackBounds.Right - thumbBounds.Right, trackBounds.Height);
+
+        }
         private Rectangle GetThumbBounds() {
 
             Rectangle trackRect = GetTrackBounds();
@@ -436,6 +514,45 @@ namespace Gsemac.Forms.Styles.Controls {
                 (int)Math.Ceiling(SystemInformation.HorizontalScrollBarThumbWidth / 2.0),
                 (int)Math.Ceiling(SystemInformation.VerticalScrollBarThumbHeight / 2.0)
                 );
+
+        }
+
+        private void AutoScrollDelayTimerTick(object sender, EventArgs e) {
+
+            if (sender is Timer timer)
+                timer.Stop();
+
+            autoScrollTimer.Start();
+
+        }
+        private void AutoScrollTimerTick(object sender, EventArgs e) {
+
+            // Note that the scroll value changes, the bounds of the upper/lower tracks will also change.
+
+            if (isUpperArrowPressed && isUpperArrowHovered) {
+
+                Value -= SmallChange;
+
+            }
+            else if (isLowerArrowPressed && isLowerArrowHovered) {
+
+                Value += SmallChange;
+
+            }
+            else if (isUpperTrackPressed && isUpperTrackHovered) {
+
+                Value -= LargeChange;
+
+                isUpperTrackHovered = GetUpperTrackBounds().Contains(mouseClickPosition);
+
+            }
+            else if (isLowerTrackPressed && isLowerTrackHovered) {
+
+                Value += LargeChange;
+
+                isLowerTrackHovered = GetLowerTrackBounds().Contains(mouseClickPosition);
+
+            }
 
         }
 
