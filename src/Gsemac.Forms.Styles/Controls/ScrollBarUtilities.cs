@@ -131,7 +131,7 @@ namespace Gsemac.Forms.Styles.Controls {
                 ScrollBars.Horizontal;
 
             scrollBar.Value = ControlUtilities.GetScrollPosition(control);
-            scrollBar.Visible = ControlUtilities.GetVisibleScrollBars(control).HasFlag(scrollBarOrientation);
+            scrollBar.Visible = ControlUtilities2.GetVisibleScrollBars(control).HasFlag(scrollBarOrientation);
 
         }
 

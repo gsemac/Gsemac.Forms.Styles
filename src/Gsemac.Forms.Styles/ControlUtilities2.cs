@@ -112,6 +112,92 @@ namespace Gsemac.Forms.Styles {
 
         }
 
+        public static ScrollBars GetVisibleScrollBars(ListBox control) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            ScrollBars scrollBars = ScrollBars.None;
+
+            if (control.ScrollAlwaysVisible) {
+
+                scrollBars |= ScrollBars.Vertical;
+
+                if (control.HorizontalScrollbar)
+                    scrollBars |= ScrollBars.Horizontal;
+
+            }
+            else if (control.Items.Count > 0) {
+
+                int maxItemWidth = 0;
+                int totalItemsHeight = 0;
+
+                for (int i = 0; i < control.Items.Count; ++i) {
+
+                    Rectangle itemRect = control.GetItemRectangle(i);
+
+                    maxItemWidth = Math.Max(maxItemWidth, itemRect.Width);
+                    totalItemsHeight += itemRect.Height;
+
+                }
+
+                if (maxItemWidth > control.Width)
+                    scrollBars |= ScrollBars.Horizontal;
+
+                if (totalItemsHeight > control.Height)
+                    scrollBars |= ScrollBars.Vertical;
+
+            }
+
+            return scrollBars;
+
+        }
+        public static ScrollBars GetVisibleScrollBars(TextBox control) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            ScrollBars scrollBars = ScrollBars.None;
+
+            if (control.Multiline) {
+
+                scrollBars = control.ScrollBars;
+
+                // If WordWrap is enabled, the horizontal scroll bar never appears, even if it is enabled.
+
+                if (control.WordWrap)
+                    scrollBars &= ~ScrollBars.Horizontal;
+
+            }
+
+            return scrollBars;
+
+        }
+        public static ScrollBars GetVisibleScrollBars(Control control) {
+
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
+            if (control is ListBox listBox)
+                return GetVisibleScrollBars(listBox);
+
+            if (control is TextBox textBox)
+                return GetVisibleScrollBars(textBox);
+
+            ScrollBars scrollBars = ScrollBars.None;
+
+            Size size = control.GetPreferredSize(Size.Empty);
+
+            if (size.Height > control.Height)
+                scrollBars |= ScrollBars.Vertical;
+
+            if (size.Width > control.Width)
+                scrollBars |= ScrollBars.Horizontal;
+
+            return scrollBars;
+
+        }
+
         // Private members
 
         private static void BeginRepositioning(Control control) {
