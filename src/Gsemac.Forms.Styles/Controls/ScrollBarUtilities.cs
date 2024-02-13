@@ -54,11 +54,22 @@ namespace Gsemac.Forms.Styles.Controls {
 
             }
 
+            // Initialize the scrollbar appearance.
+
             RefreshScrollBar(control, scrollBar);
+
+            // Add event handlers.
 
             scrollBar.ValueChanged += (sender, e) => ControlUtilities.SetScrollPosition(control, scrollBar.Value);
 
-            control.Paint += (sender, e) => RefreshScrollBar(control, scrollBar);
+            void controlPaintHandler(object sender, EventArgs e) => RefreshScrollBar(control, scrollBar);
+
+            control.Disposed += (sender, e) => scrollBar.Dispose();
+            control.Paint += controlPaintHandler;
+
+            // Make sure to remove event handlers when the scrollbar is disposed to prevent them from accumulating.
+
+            scrollBar.Disposed += (sender, e) => control.Paint -= controlPaintHandler;
 
         }
 

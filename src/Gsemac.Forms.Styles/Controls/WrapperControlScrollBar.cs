@@ -263,6 +263,8 @@ namespace Gsemac.Forms.Styles.Controls {
         private bool isThumbHovered = false;
         private bool isThumbPressed = false;
         private Point mouseClickPosition = new Point(0, 0);
+        private int draggingThumbOrigin = 0;
+
         private Timer autoScrollTimer;
         private IContainer components;
         private Timer autoScrollDelayTimer;
@@ -277,7 +279,6 @@ namespace Gsemac.Forms.Styles.Controls {
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem scrollUpToolStripMenuItem;
         private ToolStripMenuItem scrollDownToolStripMenuItem;
-        private int draggingThumbOrigin = 0;
 
         private void InitializeComponent() {
 

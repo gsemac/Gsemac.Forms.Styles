@@ -139,7 +139,8 @@ namespace Gsemac.Forms.Styles.Applicators2 {
                 parent.SuspendLayout();
 
                 parent.Controls.Remove(wrapperControl);
-                wrapperControl.Controls.Clear();
+
+                wrapperControl.Controls.Remove(wrapperControl.InnerControl);
 
                 parent.Controls.Add(control);
 
