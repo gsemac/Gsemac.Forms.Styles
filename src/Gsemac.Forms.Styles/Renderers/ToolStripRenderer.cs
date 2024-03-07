@@ -51,7 +51,7 @@ namespace Gsemac.Forms.Styles.Renderers {
             // This method is called when rendering the border around the ToolStripDropDown.
 
             IRuleset ruleset = GetToolStripDropDownRuleset(e.ToolStrip);
-
+            
             styleRenderer.PaintBackground(e.Graphics, e.ToolStrip.ClientRectangle, ruleset);
             styleRenderer.PaintBorder(e.Graphics, e.ToolStrip.ClientRectangle, ruleset);
 
