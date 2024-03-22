@@ -44,8 +44,13 @@ namespace Gsemac.Forms.Styles.Renderers2 {
             Rectangle progressRect = new Rectangle(clientRect.X, clientRect.Y, (int)Math.Floor(clientRect.Width * progress), clientRect.Height);
             Color progressColor = context.Style.AccentColor;
 
-            using (Brush brush = new SolidBrush(progressColor))
+            using (Brush brush = new SolidBrush(progressColor)) {
+
+                RenderUtilities.ClipToBorder(context.Graphics, context.ClientRectangle, context.Style);
+
                 context.Graphics.FillRectangle(brush, progressRect);
+
+            }
 
         }
 
