@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    internal class ToolStripStyleApplicator :
+    internal sealed class ToolStripPropertyStyleApplicator :
         ControlStyleApplicatorBase<ToolStrip> {
 
         // Public members

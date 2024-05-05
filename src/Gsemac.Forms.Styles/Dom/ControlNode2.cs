@@ -22,6 +22,9 @@ namespace Gsemac.Forms.Styles.Dom {
         public ControlNode2(Control control, bool populateChildren) :
             base(GetTagName(control)) {
 
+            if (control is null)
+                throw new ArgumentNullException(nameof(control));
+
             Control = control;
             Id = GetId(control);
 
@@ -132,6 +135,12 @@ namespace Gsemac.Forms.Styles.Dom {
 
             foreach (Control childControl in control.Controls)
                 AddChild(childControl);
+
+            if (control.ContextMenuStrip is object)
+                AddChild(control.ContextMenuStrip);
+
+            foreach(ToolTip toolTip in ControlUtilities.GetToolTips(control))
+                Children.Add(new ToolTipNode(toolTip));
 
         }
         private void AddStates(Control control) {

@@ -35,10 +35,11 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
             applicators.Add(typeof(Button), new ButtonPropertyStyleApplicator());
             applicators.Add(typeof(ListBox), new ListBoxPropertyStyleApplicator());
-            applicators.Add(typeof(MenuStrip), new ToolStripStyleApplicator());
+            applicators.Add(typeof(MenuStrip), new ToolStripPropertyStyleApplicator());
             applicators.Add(typeof(NumericUpDown), new NumericUpDownPropertyStyleApplicator());
             applicators.Add(typeof(TextBox), new TextBoxPropertyStyleApplicator());
-            applicators.Add(typeof(ToolStrip), new ToolStripStyleApplicator());
+            applicators.Add(typeof(ToolStrip), new ToolStripPropertyStyleApplicator());
+            applicators.Add(typeof(ToolTip), new ToolTipPropertyStyleApplicator());
 
         }
 

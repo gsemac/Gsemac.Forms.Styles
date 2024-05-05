@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Gsemac.Forms.Styles.Renderers2 {
 
-    public class ControlRendererFactory :
+    public sealed class ControlRendererFactory :
         IStyleRendererFactory {
 
         // Public members

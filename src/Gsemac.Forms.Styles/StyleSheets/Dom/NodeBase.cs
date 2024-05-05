@@ -19,8 +19,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Dom {
         public event EventHandler<NodeEventArgs> SelectorChanged;
         public event EventHandler<NodeEventArgs> StylesChanged;
 
-        public string Tag { get; }
-        public string Id { get; protected set; }
+        public string Tag { get; } = string.Empty;
+        public string Id { get; protected set; } = string.Empty;
         public INode2 Parent { get; set; }
         public ICollection<INode2> Children => children;
         public ICollection<string> Classes => classes;

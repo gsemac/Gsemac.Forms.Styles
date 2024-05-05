@@ -11,7 +11,7 @@ namespace Gsemac.Forms.Styles.Dom {
         // Public members
 
         public UserNode(Rectangle clientRectangle, Point cursorPosition) :
-            base("") {
+            base(string.Empty) {
 
             Rectangle cursorRect = new Rectangle(cursorPosition.X, cursorPosition.Y, 1, 1);
 

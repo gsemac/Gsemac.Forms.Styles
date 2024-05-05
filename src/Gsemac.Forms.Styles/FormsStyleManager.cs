@@ -6,6 +6,7 @@ using Gsemac.Forms.Styles.StyleSheets.Dom;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -136,7 +137,7 @@ namespace Gsemac.Forms.Styles {
 
         // Private members
 
-        private sealed class ControlNodeInfo :
+        private sealed class NodeData :
             IDisposable {
 
             // Public members
@@ -148,7 +149,7 @@ namespace Gsemac.Forms.Styles {
 
             public bool StyleInitialized { get; set; } = false;
 
-            public ControlNodeInfo(Control control) {
+            public NodeData(Control control) {
 
                 if (control is null)
                     throw new ArgumentNullException(nameof(control));
@@ -161,7 +162,7 @@ namespace Gsemac.Forms.Styles {
                 });
 
             }
-            public ControlNodeInfo(Control control, IStyleApplicator styleApplicator) :
+            public NodeData(Control control, IStyleApplicator styleApplicator) :
                 this(control) {
 
                 if (styleApplicator is null)
@@ -170,7 +171,7 @@ namespace Gsemac.Forms.Styles {
                 StyleApplicator = styleApplicator;
 
             }
-            public ControlNodeInfo(Control control, IStyleApplicator styleApplicator, INode2 domNode) :
+            public NodeData(Control control, IStyleApplicator styleApplicator, INode2 domNode) :
                 this(control, styleApplicator) {
 
                 if (domNode is null)
@@ -178,6 +179,14 @@ namespace Gsemac.Forms.Styles {
 
                 Node = domNode;
                 SelectorObserver = new DomSelectorObserver(domNode);
+
+            }
+            public NodeData(IStyleApplicator styleApplicator) {
+
+                if (styleApplicator is null)
+                    throw new ArgumentNullException(nameof(styleApplicator));
+
+                StyleApplicator = styleApplicator;
 
             }
 
@@ -190,7 +199,7 @@ namespace Gsemac.Forms.Styles {
 
         }
 
-        private readonly IDictionary<Control, ControlNodeInfo> controlInfo = new Dictionary<Control, ControlNodeInfo>();
+        private readonly IDictionary<IComponent, NodeData> componentNodeData = new Dictionary<IComponent, NodeData>();
         private readonly IStyleManagerOptions options = StyleManagerOptions.Default;
         private readonly IMessageFilter messageFilter;
         private IStyleApplicatorFactory styleApplicatorFactory;
@@ -203,7 +212,7 @@ namespace Gsemac.Forms.Styles {
 
         }
 
-        private void RestoreControlState(Control control, ControlNodeInfo controlInfo) {
+        private void RestoreControlState(Control control, NodeData controlInfo) {
 
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
@@ -226,7 +235,6 @@ namespace Gsemac.Forms.Styles {
             controlInfo.StyleInitialized = false;
 
             controlInfo.ControlState.Restore(control);
-
 
         }
         private IEnumerable<Control> GetChildControls(Control control) {
@@ -251,24 +259,24 @@ namespace Gsemac.Forms.Styles {
 
             IStyleApplicator styleApplicator = styleApplicatorFactory.Create(control.GetType());
 
-            ControlNodeInfo info;
+            NodeData info;
 
             if (isTopLevelControl) {
 
                 // Only top-level controls (i.e. Forms) should have style watchers attached to them.
 
-                info = new ControlNodeInfo(control, styleApplicator, new ControlNode2(control));
+                info = new NodeData(control, styleApplicator, new ControlNode2(control));
 
                 info.SelectorObserver.SelectorChanged += SelectorChangedHandler;
 
-                controlInfo.Add(control, info);
+                componentNodeData.Add(control, info);
 
             }
             else {
 
-                info = new ControlNodeInfo(control, styleApplicator);
+                info = new NodeData(control, styleApplicator);
 
-                controlInfo.Add(control, info);
+                componentNodeData.Add(control, info);
 
             }
 
@@ -279,6 +287,9 @@ namespace Gsemac.Forms.Styles {
 
                 foreach (Control childControl in GetChildControls(control).ToArray())
                     ApplyStylesInternal(childControl, isTopLevelControl: false, recursive: recursive);
+
+                foreach (ToolTip toolTip in ControlUtilities.GetToolTips(control))
+                    componentNodeData.Add(toolTip, new NodeData(styleApplicatorFactory.Create<ToolTip>()));
 
             }
 
@@ -302,13 +313,13 @@ namespace Gsemac.Forms.Styles {
 
             bool enableRecursion = false;
 
-            if (controlInfo.TryGetValue(control, out ControlNodeInfo info)) {
+            if (componentNodeData.TryGetValue(control, out NodeData nodeData)) {
 
                 enableRecursion = true;
 
                 // Restore the control to its default appearance.
 
-                RestoreControlState(control, info);
+                RestoreControlState(control, nodeData);
 
                 // Some controls need to be invalidated manually to update the appearance (e.g. Panel).
 
@@ -316,9 +327,9 @@ namespace Gsemac.Forms.Styles {
 
                 // Remove the metadata we have stored.
 
-                controlInfo.Remove(control);
+                componentNodeData.Remove(control);
 
-                info.Dispose();
+                nodeData.Dispose();
 
             }
 
@@ -334,6 +345,21 @@ namespace Gsemac.Forms.Styles {
 
                 foreach (Control childControl in GetChildControls(control).ToArray())
                     ResetStylesInternal(childControl, recursive: recursive);
+
+                foreach (ToolTip toolTip in ControlUtilities.GetToolTips(control)) {
+
+                    if (componentNodeData.TryGetValue(toolTip, out NodeData toolTipNodeData)) {
+
+                        if (toolTipNodeData.StyleApplicator is object)
+                            toolTipNodeData.StyleApplicator.DeinitializeStyle(toolTip);
+
+                        componentNodeData.Remove(toolTip);
+
+                        toolTipNodeData.Dispose();
+
+                    }
+
+                }
 
             }
 
@@ -372,9 +398,9 @@ namespace Gsemac.Forms.Styles {
 
             control.Disposed -= ControlDisposedHandler;
 
-            if (controlInfo.TryGetValue(control, out ControlNodeInfo info)) {
+            if (componentNodeData.TryGetValue(control, out NodeData info)) {
 
-                controlInfo.Remove(control);
+                componentNodeData.Remove(control);
 
                 info.Dispose();
 
@@ -408,42 +434,68 @@ namespace Gsemac.Forms.Styles {
 
         private void RedrawNode(INode2 node) {
 
-            ControlNode2 controlNode = (ControlNode2)node;
+            if (node is null)
+                throw new ArgumentNullException(nameof(node));
 
-            if (controlInfo.TryGetValue(controlNode.Control, out ControlNodeInfo info)) {
+            IComponent component = null;
+            Control control = null;
 
-                if (controlNode.Styles.Any(style => !options.RequireNonDefaultStyles || style.Origin != StyleOrigin.UserAgent) && info.StyleApplicator is object) {
+            if (node is ControlNode2 controlNode) {
+
+                component = controlNode.Control;
+                control = controlNode.Control;
+
+            }
+            else if (node is ToolTipNode toolTipNode) {
+
+                component = toolTipNode.ToolTip;
+
+            }
+
+            if (component is null)
+                return;
+
+            if (componentNodeData.TryGetValue(component, out NodeData nodeData)) {
+
+                if (node.Styles.Any(style => !options.RequireNonDefaultStyles || style.Origin != StyleOrigin.UserAgent) && nodeData.StyleApplicator is object) {
 
                     // Apply the new styles to the control.
 
-                    if (!info.StyleInitialized) {
+                    if (!nodeData.StyleInitialized) {
 
-                        info.StyleApplicator.InitializeStyle(controlNode.Control);
+                        nodeData.StyleApplicator.InitializeStyle(component);
 
-                        info.StyleInitialized = true;
+                        nodeData.StyleInitialized = true;
 
                     }
 
                     IStyleComputationContext context = new StyleComputationContext();
 
-                    info.StyleApplicator.ApplyStyle(controlNode.Control, controlNode.GetComputedStyle(context));
+                    nodeData.StyleApplicator.ApplyStyle(component, node.GetComputedStyle(context));
 
                 }
-                else if (info.StyleInitialized) {
+                else if (nodeData.StyleInitialized) {
 
                     // Restore the control to its default appearance.
 
-                    RestoreControlState(controlNode.Control, info);
+                    if (control is object)
+                        RestoreControlState(control, nodeData);
 
                 }
 
-                controlNode.Control.Invalidate();
+                // Make the control redraw itself.
+
+                if (control is object)
+                    control.Invalidate();
 
             }
 
         }
 
         private static int GetStylesHashCode(IEnumerable<IRuleset> styles) {
+
+            if (styles is null)
+                throw new ArgumentNullException(nameof(styles));
 
             IEqualityComparer<IRuleset> styleComparer = new EquivalentRulesetEqualityComparer();
 

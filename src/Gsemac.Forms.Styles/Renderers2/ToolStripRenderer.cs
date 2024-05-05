@@ -1,6 +1,5 @@
 ﻿using Gsemac.Drawing;
 using Gsemac.Forms.Styles.StyleSheets.Rulesets;
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,8 +11,6 @@ namespace Gsemac.Forms.Styles.Renderers2 {
         // Public members
 
         public IRuleset Ruleset { get; set; }
-
-        public ToolStripRenderer() { }
 
         // Protected members
 
