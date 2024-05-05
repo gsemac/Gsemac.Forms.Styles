@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Applicators2 {
+namespace Gsemac.Forms.Styles.Applicators2.UserPaint {
 
     internal class WrapperControlUserPaintStyleApplicator<T> :
         ControlStyleApplicatorBase<T> where T : Control {

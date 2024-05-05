@@ -1,4 +1,5 @@
-﻿using Gsemac.Forms.Styles.StyleSheets.Rulesets;
+﻿using Gsemac.Forms.Styles.Applicators2.Properties;
+using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -6,7 +7,7 @@ using BorderStyle = Gsemac.Forms.Styles.StyleSheets.Properties.BorderStyle;
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    internal class TextBoxPropertyStyleApplicator :
+    internal sealed class TextBoxPropertyStyleApplicator :
          ControlPropertyStyleApplicator<TextBox> {
 
         // Public members

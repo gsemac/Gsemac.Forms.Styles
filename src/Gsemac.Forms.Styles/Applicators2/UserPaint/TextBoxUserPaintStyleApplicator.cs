@@ -3,9 +3,10 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Applicators2 {
+namespace Gsemac.Forms.Styles.Applicators2.UserPaint
+{
 
-    internal class TextBoxUserPaintStyleApplicator :
+    internal sealed class TextBoxUserPaintStyleApplicator :
         WrapperControlUserPaintStyleApplicator<TextBox> {
 
         // Public members

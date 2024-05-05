@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Applicators2 {
+namespace Gsemac.Forms.Styles.Applicators2.Properties {
 
-    public class PropertyStyleApplicatorFactory :
+    internal sealed class PropertyStyleApplicatorFactory :
         IStyleApplicatorFactory {
 
         // Public members

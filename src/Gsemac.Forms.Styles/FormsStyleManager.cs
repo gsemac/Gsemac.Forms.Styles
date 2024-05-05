@@ -1,5 +1,7 @@
 ﻿using Gsemac.Core;
 using Gsemac.Forms.Styles.Applicators2;
+using Gsemac.Forms.Styles.Applicators2.Properties;
+using Gsemac.Forms.Styles.Applicators2.UserPaint;
 using Gsemac.Forms.Styles.Dom;
 using Gsemac.Forms.Styles.StyleSheets;
 using Gsemac.Forms.Styles.StyleSheets.Dom;

@@ -2,7 +2,7 @@
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    public interface IStyleApplicatorFactory {
+    internal interface IStyleApplicatorFactory {
 
         IStyleApplicator Create(Type forType);
 

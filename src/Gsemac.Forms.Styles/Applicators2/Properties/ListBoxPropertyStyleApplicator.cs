@@ -3,9 +3,9 @@ using System.Linq;
 using System.Windows.Forms;
 using BorderStyle = Gsemac.Forms.Styles.StyleSheets.Properties.BorderStyle;
 
-namespace Gsemac.Forms.Styles.Applicators2 {
+namespace Gsemac.Forms.Styles.Applicators2.Properties {
 
-    internal class ListBoxPropertyStyleApplicator :
+    internal sealed class ListBoxPropertyStyleApplicator :
          ControlPropertyStyleApplicator<ListBox> {
 
         // Public members

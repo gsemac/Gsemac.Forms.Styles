@@ -2,7 +2,7 @@
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    public static class StyleApplicatorFactoryExtensions {
+    internal static class StyleApplicatorFactoryExtensions {
 
         // Public members
 

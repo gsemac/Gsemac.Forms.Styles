@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Gsemac.Forms.Styles.Applicators2.Properties;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Applicators2 {
+namespace Gsemac.Forms.Styles.Applicators2.UserPaint {
 
-    public class UserPaintStyleApplicatorFactory :
+    internal sealed class UserPaintStyleApplicatorFactory :
         IStyleApplicatorFactory {
 
         // Public members

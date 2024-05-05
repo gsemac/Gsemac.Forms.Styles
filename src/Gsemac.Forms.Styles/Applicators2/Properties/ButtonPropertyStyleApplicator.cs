@@ -4,9 +4,9 @@ using System.Linq;
 using System.Windows.Forms;
 using BorderStyle = Gsemac.Forms.Styles.StyleSheets.Properties.BorderStyle;
 
-namespace Gsemac.Forms.Styles.Applicators2 {
+namespace Gsemac.Forms.Styles.Applicators2.Properties {
 
-    internal class ButtonPropertyStyleApplicator :
+    internal sealed class ButtonPropertyStyleApplicator :
          ControlPropertyStyleApplicator<Button> {
 
         // Public members

@@ -2,7 +2,7 @@
 
 namespace Gsemac.Forms.Styles.Applicators2 {
 
-    public interface IStyleApplicator {
+    internal interface IStyleApplicator {
 
         void InitializeStyle(object obj);
         void DeinitializeStyle(object obj);
@@ -11,7 +11,7 @@ namespace Gsemac.Forms.Styles.Applicators2 {
 
     }
 
-    public interface IStyleApplicator<T> :
+    internal interface IStyleApplicator<T> :
         IStyleApplicator {
 
         void InitializeStyle(T obj);

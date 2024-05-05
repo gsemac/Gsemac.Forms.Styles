@@ -1,4 +1,4 @@
-﻿namespace Gsemac.Forms.Styles.Applicators2 {
+﻿namespace Gsemac.Forms.Styles.Applicators2.UserPaint {
 
     public class UserPaintStyleApplicatorFactoryOptions :
         IUserPaintStyleApplicatorFactoryOptions {

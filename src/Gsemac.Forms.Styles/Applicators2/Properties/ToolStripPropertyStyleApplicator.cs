@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Gsemac.Forms.Styles.Applicators2 {
+namespace Gsemac.Forms.Styles.Applicators2.Properties {
 
     internal sealed class ToolStripPropertyStyleApplicator :
         ControlStyleApplicatorBase<ToolStrip> {
