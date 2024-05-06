@@ -36,8 +36,8 @@ namespace Gsemac.Forms.Styles.StyleSheets.Properties.ValueConversion {
         private static IValueConverterFactoryOptions CreateOptions() {
 
             return new ValueConverterFactoryOptions() {
-                EnableDerivedClassLookup = true,
-                EnableTransitiveLookup = true,
+                DerivedClassLookupEnabled = true,
+                TransitiveLookupEnabled = true,
             };
 
         }
