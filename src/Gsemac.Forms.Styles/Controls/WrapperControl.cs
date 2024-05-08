@@ -38,6 +38,7 @@ namespace Gsemac.Forms.Styles.Controls {
             SetStyle(ControlStyles.UserPaint, true);
 
             DoubleBuffered = true;
+            ResizeRedraw = true; // Prevents smearing when resizing
 
         }
 

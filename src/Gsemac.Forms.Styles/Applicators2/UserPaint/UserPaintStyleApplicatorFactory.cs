@@ -56,6 +56,7 @@ namespace Gsemac.Forms.Styles.Applicators2.UserPaint {
             applicators.Add(typeof(Label), new UserPaintStyleApplicator<Label>());
             applicators.Add(typeof(ListBox), new ListBoxUserPaintStyleApplicator(options.CustomScrollBarsEnabled));
             applicators.Add(typeof(NumericUpDown), new NumericUpDownUserPaintStyleApplicator());
+            applicators.Add(typeof(Panel), new PanelUserPaintStyleApplicator());
             applicators.Add(typeof(ProgressBar), new UserPaintStyleApplicator<ProgressBar>());
             applicators.Add(typeof(RadioButton), new UserPaintStyleApplicator<RadioButton>());
             applicators.Add(typeof(RichTextBox), new RichTextBoxUserPaintStyleApplicator());
