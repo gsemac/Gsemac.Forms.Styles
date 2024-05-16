@@ -56,6 +56,8 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         public void ApplyStyles(Control control, IStyleApplicationOptions options = null) {
 
+            options = options ?? StyleApplicationOptions.Default;
+
             MakeThisCurrentApplicator();
 
             if (StyleSheet != null) {
@@ -80,6 +82,8 @@ namespace Gsemac.Forms.Styles.Applicators {
 
         }
         public void ClearStyles(Control control, IStyleApplicationOptions options = null) {
+
+            options = options ?? StyleApplicationOptions.Default;
 
             OnClearStyles(control);
 
@@ -244,7 +248,7 @@ namespace Gsemac.Forms.Styles.Applicators {
         }
 
         private void ControlAddedEventHandler(object sender, ControlEventArgs e) {
-
+            Console.WriteLine($"added {e.Control}");
             ApplyStyles(e.Control);
 
         }
