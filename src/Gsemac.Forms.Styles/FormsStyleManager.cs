@@ -9,6 +9,7 @@ using Gsemac.Forms.Styles.StyleSheets.Rulesets;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -259,6 +260,11 @@ namespace Gsemac.Forms.Styles {
             if (control is null)
                 throw new ArgumentNullException(nameof(control));
 
+            // Ignore this control if we've already applied styles to it.
+
+            if (componentNodeData.ContainsKey(control))
+                return;
+
             IStyleApplicator styleApplicator = styleApplicatorFactory.Create(control.GetType());
 
             NodeData info;
@@ -302,6 +308,10 @@ namespace Gsemac.Forms.Styles {
                 info.SelectorObserver.Refresh();
 
             }
+
+            // When new child controls are added, make sure to apply styles to them as well.
+
+            control.ControlAdded += ControlAddedHandler;
 
             // Remove the control information we've saved if the control is disposed.
 
@@ -394,10 +404,16 @@ namespace Gsemac.Forms.Styles {
 
         }
 
+        private void ControlAddedHandler(object sender, ControlEventArgs e) {
+
+            ApplyStylesInternal(e.Control, isTopLevelControl: e.Control is Form, recursive: true);
+
+        }
         private void ControlDisposedHandler(object sender, EventArgs e) {
 
             Control control = (Control)sender;
 
+            control.ControlAdded -= ControlAddedHandler;
             control.Disposed -= ControlDisposedHandler;
 
             if (componentNodeData.TryGetValue(control, out NodeData info)) {
